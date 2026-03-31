@@ -21,16 +21,20 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Upload, BarChart3, FileText, Settings as SettingsIcon } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Page 1", path: "/" },
-  { icon: Users, label: "Page 2", path: "/some-path" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: Upload, label: "Data Upload", path: "/upload" },
+  { icon: BarChart3, label: "Inventory Intelligence", path: "/inventory" },
+  { icon: FileText, label: "Reports & Insights", path: "/reports" },
+  { icon: SettingsIcon, label: "Settings", path: "/settings" },
 ];
+
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
 const DEFAULT_WIDTH = 280;
@@ -47,7 +51,6 @@ export default function DashboardLayout({
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
   const { loading, user } = useAuth();
-
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
   }, [sidebarWidth]);
@@ -55,6 +58,8 @@ export default function DashboardLayout({
   if (loading) {
     return <DashboardLayoutSkeleton />
   }
+
+  const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/ppi-logo-d2hc4Ly38HBq4HMxQA5qtx.webp';
 
   if (!user) {
     return (
@@ -114,6 +119,7 @@ function DashboardLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
+  const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/ppi-logo-d2hc4Ly38HBq4HMxQA5qtx.webp';
 
   useEffect(() => {
     if (isCollapsed) {
@@ -170,8 +176,9 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Navigation
+                  <img src={PPILogoUrl} alt="PPI" className="h-5 w-5 flex-shrink-0" />
+                  <span className="font-semibold tracking-tight truncate text-sm">
+                    PPI
                   </span>
                 </div>
               ) : null}

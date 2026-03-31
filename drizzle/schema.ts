@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { decimal, int, mysqlEnum, mysqlTable, text, timestamp, varchar, date, boolean } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -25,4 +25,84 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Inventory table stores product information.
+ * Each product can have multiple sales transactions.
+ */
+export const inventory = mysqlTable("inventory", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  productName: varchar("productName", { length: 255 }).notNull(),
+  sku: varchar("sku", { length: 100 }),
+  quantity: int("quantity").default(0).notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  costPrice: decimal("costPrice", { precision: 10, scale: 2 }),
+  expiryDate: date("expiryDate"),
+  lastSaleDate: timestamp("lastSaleDate"),
+  totalSalesQuantity: int("totalSalesQuantity").default(0).notNull(),
+  totalSalesValue: decimal("totalSalesValue", { precision: 15, scale: 2 }).default("0").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Inventory = typeof inventory.$inferSelect;
+export type InsertInventory = typeof inventory.$inferInsert;
+
+/**
+ * Sales_Transactions table stores individual sales records.
+ * Each transaction references an inventory item.
+ */
+export const salesTransactions = mysqlTable("sales_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  inventoryId: int("inventoryId").notNull(),
+  productName: varchar("productName", { length: 255 }).notNull(),
+  quantitySold: int("quantitySold").notNull(),
+  salePrice: decimal("salePrice", { precision: 10, scale: 2 }).notNull(),
+  totalSaleValue: decimal("totalSaleValue", { precision: 15, scale: 2 }).notNull(),
+  costPrice: decimal("costPrice", { precision: 10, scale: 2 }),
+  profit: decimal("profit", { precision: 15, scale: 2 }),
+  saleDate: timestamp("saleDate").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SalesTransaction = typeof salesTransactions.$inferSelect;
+export type InsertSalesTransaction = typeof salesTransactions.$inferInsert;
+
+/**
+ * Alerts table stores alert records for expiry risk, dead stock, and low margin products.
+ */
+export const alerts = mysqlTable("alerts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  inventoryId: int("inventoryId").notNull(),
+  productName: varchar("productName", { length: 255 }).notNull(),
+  alertType: mysqlEnum("alertType", ["expiry_risk", "dead_stock", "low_margin"]).notNull(),
+  severity: mysqlEnum("severity", ["critical", "warning", "info"]).default("info").notNull(),
+  value: decimal("value", { precision: 15, scale: 2 }),
+  message: text("message"),
+  isResolved: boolean("isResolved").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Alert = typeof alerts.$inferSelect;
+export type InsertAlert = typeof alerts.$inferInsert;
+
+/**
+ * FileUploads table tracks all file uploads for audit and data lineage.
+ */
+export const fileUploads = mysqlTable("file_uploads", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  fileName: varchar("fileName", { length: 255 }).notNull(),
+  fileType: varchar("fileType", { length: 50 }).notNull(),
+  rowsProcessed: int("rowsProcessed").default(0).notNull(),
+  status: mysqlEnum("status", ["pending", "processing", "completed", "failed"]).default("pending").notNull(),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type FileUpload = typeof fileUploads.$inferSelect;
+export type InsertFileUpload = typeof fileUploads.$inferInsert;

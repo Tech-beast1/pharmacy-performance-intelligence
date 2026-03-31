@@ -1,7 +1,11 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
+import { z } from "zod";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus } from "./db";
+import { parseCSV, transformRow, validateMapping, detectColumns, type ColumnMapping } from "./utils/fileParser";
+import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -17,12 +21,168 @@ export const appRouter = router({
     }),
   }),
 
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+  // File upload and data management
+  upload: router({
+    detectColumns: protectedProcedure
+      .input(z.object({ csvContent: z.string() }))
+      .mutation(async ({ input }) => {
+        try {
+          const data = await parseCSV(input.csvContent);
+          const columns = detectColumns(data);
+          return { success: true, columns, sampleRow: data[0] || {} };
+        } catch (error) {
+          console.error('Column detection error:', error);
+          return { success: false, error: 'Failed to detect columns' };
+        }
+      }),
+
+    processFile: protectedProcedure
+      .input(
+        z.object({
+          csvContent: z.string(),
+          mapping: z.object({
+            productName: z.string(),
+            price: z.string(),
+            quantity: z.string(),
+            expiryDate: z.string(),
+            costPrice: z.string().optional(),
+            sku: z.string().optional(),
+            saleQuantity: z.string().optional(),
+            saleDate: z.string().optional(),
+          }),
+          fileName: z.string(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const validation = validateMapping(input.mapping);
+          if (!validation.valid) {
+            return { success: false, errors: validation.errors };
+          }
+
+          // Parse CSV
+          const data = await parseCSV(input.csvContent);
+          let processedCount = 0;
+          let errorCount = 0;
+
+          // Process each row
+          for (const row of data) {
+            try {
+              const parsed = transformRow(row, input.mapping as ColumnMapping);
+              if (!parsed) {
+                errorCount++;
+                continue;
+              }
+
+              // Upsert inventory item
+              const sku = parsed.sku || parsed.productName;
+              await upsertInventoryItem({
+                userId: ctx.user!.id,
+                productName: parsed.productName,
+                sku,
+                quantity: parsed.quantity,
+                price: parsed.price,
+                costPrice: parsed.costPrice,
+                expiryDate: parsed.expiryDate,
+              });
+
+              // If sales data provided, insert transaction
+              if (parsed.saleQuantity && parsed.saleDate) {
+                const profit = (parsed.price - (parsed.costPrice || 0)) * parsed.saleQuantity;
+                await insertSalesTransaction({
+                  userId: ctx.user!.id,
+                  inventoryId: 0, // Will be linked after inventory insert
+                  productName: parsed.productName,
+                  quantitySold: parsed.saleQuantity,
+                  salePrice: parsed.price,
+                  totalSaleValue: parsed.price * parsed.saleQuantity,
+                  costPrice: parsed.costPrice,
+                  profit,
+                  saleDate: parsed.saleDate,
+                });
+              }
+
+              processedCount++;
+            } catch (error) {
+              console.error('Error processing row:', error);
+              errorCount++;
+            }
+          }
+
+          return {
+            success: true,
+            processedCount,
+            errorCount,
+            message: `Successfully processed ${processedCount} items`,
+          };
+        } catch (error) {
+          console.error('File processing error:', error);
+          return { success: false, error: 'Failed to process file' };
+        }
+      }),
+  }),
+
+  // Dashboard analytics
+  analytics: router({
+    getDashboardMetrics: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        const metrics = calculateDashboardMetrics(inventory, sales);
+        return { success: true, data: metrics };
+      } catch (error) {
+        console.error('Dashboard metrics error:', error);
+        return { success: false, error: 'Failed to calculate metrics' };
+      }
+    }),
+
+    getAlerts: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        const alerts = identifyAlerts(inventory, sales);
+        return { success: true, data: alerts };
+      } catch (error) {
+        console.error('Alerts error:', error);
+        return { success: false, error: 'Failed to fetch alerts' };
+      }
+    }),
+
+    getTopProducts: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const topProducts = getTopProfitableProducts(inventory);
+        return { success: true, data: topProducts };
+      } catch (error) {
+        console.error('Top products error:', error);
+        return { success: false, error: 'Failed to fetch top products' };
+      }
+    }),
+
+    getRevenueTrend: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        const trend = getRevenueProfitTrend(sales);
+        return { success: true, data: trend };
+      } catch (error) {
+        console.error('Revenue trend error:', error);
+        return { success: false, error: 'Failed to fetch revenue trend' };
+      }
+    }),
+  }),
+
+  // Inventory management
+  inventory: router({
+    getAll: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const items = await getInventoryByUserId(ctx.user!.id);
+        return { success: true, data: items };
+      } catch (error) {
+        console.error('Inventory fetch error:', error);
+        return { success: false, error: 'Failed to fetch inventory' };
+      }
+    }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
