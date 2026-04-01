@@ -33,7 +33,8 @@ export default function Dashboard() {
   const metricCards: MetricCard[] = metrics ? [
     {
       title: 'Total Revenue',
-      value: `₦${metrics.totalRevenue.toLocaleString()}`,
+      value: `₵${metrics.totalRevenue.toLocaleString()}`,
+      // Ghanaian Cedis currency
       trend: metrics.revenueTrend,
       icon: <DollarSign className="w-8 h-8" />,
       color: 'text-blue-600',
@@ -41,7 +42,8 @@ export default function Dashboard() {
     },
     {
       title: 'Estimated Profit',
-      value: `₦${metrics.estimatedProfit.toLocaleString()}`,
+      value: `₵${metrics.estimatedProfit.toLocaleString()}`,
+      // Ghanaian Cedis currency
       trend: metrics.profitTrend,
       icon: <TrendingUp className="w-8 h-8" />,
       color: 'text-green-600',
@@ -49,7 +51,8 @@ export default function Dashboard() {
     },
     {
       title: 'Expiry Risk Loss',
-      value: `₦${metrics.expiryRiskLoss.toLocaleString()}`,
+      value: `₵${metrics.expiryRiskLoss.toLocaleString()}`,
+      // Ghanaian Cedis currency
       trend: metrics.expiryRiskTrend,
       icon: <AlertTriangle className="w-8 h-8" />,
       color: 'text-red-600',
@@ -57,7 +60,8 @@ export default function Dashboard() {
     },
     {
       title: 'Dead Stock Value',
-      value: `₦${metrics.deadStockValue.toLocaleString()}`,
+      value: `₵${metrics.deadStockValue.toLocaleString()}`,
+      // Ghanaian Cedis currency
       trend: metrics.deadStockTrend,
       icon: <Package className="w-8 h-8" />,
       color: 'text-orange-600',
@@ -228,7 +232,7 @@ export default function Dashboard() {
             <div>
               <p className="text-sm font-medium text-gray-900">Slow-Moving Stock</p>
               <p className="text-xs text-gray-600 mt-1">
-                ₦{metrics?.deadStockValue.toLocaleString()} tied up in products with no recent sales
+                ₵{metrics?.deadStockValue.toLocaleString()} tied up in products with no recent sales
               </p>
             </div>
           </div>

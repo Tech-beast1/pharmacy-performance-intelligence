@@ -175,10 +175,10 @@ function DashboardLayoutContent({
                 <PanelLeft className="h-4 w-4 text-muted-foreground" />
               </button>
               {!isCollapsed ? (
-                <div className="flex items-center gap-2 min-w-0">
-                  <img src={PPILogoUrl} alt="PPI" className="h-5 w-5 flex-shrink-0" />
-                  <span className="font-semibold tracking-tight truncate text-sm">
-                    PPI
+                <div className="flex items-center gap-3 min-w-0">
+                  <img src={PPILogoUrl} alt="PPI" className="h-8 w-8 flex-shrink-0" />
+                  <span className="font-bold tracking-tight truncate text-xs">
+                    Pharmacy Performance Intelligence
                   </span>
                 </div>
               ) : null}

@@ -69,3 +69,14 @@
 - [x] Test alert filtering and data table interactions
 - [x] Create sample data for demonstration
 - [x] Final QA and bug fixes
+
+
+## User Enhancement Requests (Phase 2)
+
+- [x] Extract drug list from VICANCHEMISTSDRUGLIST.pdf and integrate into system
+- [x] Increase logo size in header and replace "PPI" text with "Pharmacy Performance Intelligence"
+- [x] Add Ghanaian Cedis (₵) currency formatting to all monetary values
+- [x] Implement modern, professional color scheme (replace plain white background)
+- [x] Add graph/chart session to dashboard (Revenue vs Profit Trend chart)
+- [x] Ensure all file uploads immediately update all dashboard metrics and visualizations
+- [x] Optimize dashboard responsiveness and visual hierarchy

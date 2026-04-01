@@ -180,7 +180,7 @@ export default function InventoryIntelligence() {
                     <TableRow key={item.id} className="hover:bg-gray-50 border-b">
                       <TableCell className="p-4 font-medium text-gray-900">{item.productName}</TableCell>
                       <TableCell className="p-4 text-right text-gray-700">
-                        ₦{parseFloat(item.price.toString()).toLocaleString()}
+                        ₵{parseFloat(item.price.toString()).toLocaleString()}
                       </TableCell>
                       <TableCell className="p-4 text-right text-gray-700">{item.quantity}</TableCell>
                       <TableCell className="p-4 text-right">
