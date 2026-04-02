@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
@@ -87,7 +87,7 @@ export const appRouter = router({
               });
 
               // If sales data provided, insert transaction
-              if (parsed.saleQuantity && parsed.saleDate) {
+              if (parsed.saleQuantity && parsed.saleDate && parsed.price) {
                 const profit = (parsed.price - (parsed.costPrice || 0)) * parsed.saleQuantity;
                 await insertSalesTransaction({
                   userId: ctx.user!.id,
@@ -182,6 +182,45 @@ export const appRouter = router({
         return { success: false, error: 'Failed to fetch inventory' };
       }
     }),
+  }),
+
+  // Overhead Costs Management
+  overheadCosts: router({
+    getByMonth: protectedProcedure
+      .input(z.object({ month: z.number().min(1).max(12), year: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const data = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year);
+        return { success: true, data: data || { rent: 0, salaries: 0, electricity: 0, others: 0 } };
+      }),
+
+    save: protectedProcedure
+      .input(
+        z.object({
+          month: z.number().min(1).max(12),
+          year: z.number(),
+          rent: z.number().min(0),
+          salaries: z.number().min(0),
+          electricity: z.number().min(0),
+          others: z.number().min(0),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        try {
+          await upsertOverheadCosts({
+            userId: ctx.user!.id,
+            month: input.month,
+            year: input.year,
+            rent: input.rent.toString(),
+            salaries: input.salaries.toString(),
+            electricity: input.electricity.toString(),
+            others: input.others.toString(),
+          } as any);
+          return { success: true, message: 'Overhead costs saved successfully' };
+        } catch (error) {
+          console.error('Error saving overhead costs:', error);
+          return { success: false, error: 'Failed to save overhead costs' };
+        }
+      }),
   }),
 });
 

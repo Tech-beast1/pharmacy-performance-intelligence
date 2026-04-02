@@ -1,9 +1,9 @@
 import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads } from "../drizzle/schema";
+import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-import type { Inventory, SalesTransaction, Alert, FileUpload } from "../drizzle/schema";
+import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost } from "../drizzle/schema";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -176,4 +176,45 @@ export async function updateFileUploadStatus(uploadId: number, status: string, r
   if (rowsProcessed !== undefined) updates.rowsProcessed = rowsProcessed;
   if (status === 'completed') updates.completedAt = new Date();
   return db.update(fileUploads).set(updates).where(eq(fileUploads.id, uploadId));
+}
+
+
+// Overhead costs queries
+export async function getOverheadCostsByMonth(userId: number, month: number, year: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(overheadCosts)
+    .where(
+      and(
+        eq(overheadCosts.userId, userId),
+        eq(overheadCosts.month, month),
+        eq(overheadCosts.year, year)
+      )
+    )
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function upsertOverheadCosts(data: InsertOverheadCost) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const existing = await getOverheadCostsByMonth(data.userId, data.month, data.year);
+  
+  if (existing) {
+    await db.update(overheadCosts).set(data).where(eq(overheadCosts.id, existing.id));
+    return existing;
+  } else {
+    const result = await db.insert(overheadCosts).values(data);
+    return result;
+  }
+}
+
+export async function getCurrentMonthOverheadCosts(userId: number) {
+  const now = new Date();
+  return getOverheadCostsByMonth(userId, now.getMonth() + 1, now.getFullYear());
 }

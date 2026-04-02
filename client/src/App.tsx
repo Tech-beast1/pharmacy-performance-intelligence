@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import DataUpload from "./pages/DataUpload";
 import InventoryIntelligence from "./pages/InventoryIntelligence";
 import ReportsInsights from "./pages/ReportsInsights";
+import OverheadCosts from "./pages/OverheadCosts";
 import Settings from "./pages/Settings";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
             <Route path="/upload" component={DataUpload} />
             <Route path="/inventory" component={InventoryIntelligence} />
             <Route path="/reports" component={ReportsInsights} />
+            <Route path="/overhead" component={OverheadCosts} />
             <Route path="/settings" component={Settings} />
             <Route component={NotFound} />
           </Switch>

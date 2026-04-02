@@ -3,6 +3,7 @@ import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2 } from 'lucide-
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
+import DownloadReport from '@/components/DownloadReport';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 interface MetricCard {

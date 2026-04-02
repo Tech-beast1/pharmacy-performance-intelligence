@@ -80,3 +80,16 @@
 - [x] Add graph/chart session to dashboard (Revenue vs Profit Trend chart)
 - [x] Ensure all file uploads immediately update all dashboard metrics and visualizations
 - [x] Optimize dashboard responsiveness and visual hierarchy
+
+
+## Phase 3: Overhead Costs & Advanced Features
+
+- [x] Update database schema to add OverheadCosts table with Rent, Salaries, Electricity, Others fields
+- [x] Create Overhead Costs management page with input form
+- [x] Update CSV/Excel parser to support Sales data columns (Item Name, Quantity, Unit Cost, Selling Price)
+- [x] Update CSV/Excel parser to support Inventory data columns (Item/Product Name, Unit Cost, Selling Cost, Stock on Hand, Expiry Date, Qty Sold 90days)
+- [x] Update profit calculation formula: Profit = Selling Price - (Cost Price + Overhead Cost)
+- [x] Add Download Report button to dashboard
+- [x] Implement PDF/CSV export with all metrics and insights
+- [x] Add Overhead Costs menu item to sidebar navigation
+- [x] Test all new features end-to-end

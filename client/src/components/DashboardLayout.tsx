@@ -32,6 +32,7 @@ const menuItems = [
   { icon: Upload, label: "Data Upload", path: "/upload" },
   { icon: BarChart3, label: "Inventory Intelligence", path: "/inventory" },
   { icon: FileText, label: "Reports & Insights", path: "/reports" },
+  { icon: SettingsIcon, label: "Overhead Costs", path: "/overhead" },
   { icon: SettingsIcon, label: "Settings", path: "/settings" },
 ];
 

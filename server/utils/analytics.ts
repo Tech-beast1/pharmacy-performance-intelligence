@@ -19,11 +19,16 @@ export interface AlertData {
 
 /**
  * Calculate dashboard metrics from inventory and sales data
+ * @param inventory - Array of inventory items
+ * @param sales - Array of sales transactions
+ * @param previousPeriodSales - Optional sales from previous period for trend calculation
+ * @param monthlyOverheadCosts - Optional monthly overhead costs (Rent + Salaries + Electricity + Others)
  */
 export function calculateDashboardMetrics(
   inventory: Inventory[],
   sales: SalesTransaction[],
-  previousPeriodSales?: SalesTransaction[]
+  previousPeriodSales?: SalesTransaction[],
+  monthlyOverheadCosts?: number
 ): DashboardMetrics {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -33,7 +38,15 @@ export function calculateDashboardMetrics(
   // Current period sales (last 30 days)
   const currentSales = sales.filter(s => new Date(s.saleDate) >= thirtyDaysAgo);
   const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
-  const totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
+  let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
+  
+  // Deduct overhead costs from profit if provided
+  if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
+    const daysInPeriod = Math.ceil((now.getTime() - thirtyDaysAgo.getTime()) / (1000 * 60 * 60 * 24));
+    const dailyOverheadCost = monthlyOverheadCosts / 30;
+    const periodOverheadCost = dailyOverheadCost * daysInPeriod;
+    totalProfit -= periodOverheadCost;
+  }
 
   // Previous period sales (30-60 days ago)
   const previousSales = (previousPeriodSales || sales).filter(

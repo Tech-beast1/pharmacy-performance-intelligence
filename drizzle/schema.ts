@@ -106,3 +106,23 @@ export const fileUploads = mysqlTable("file_uploads", {
 
 export type FileUpload = typeof fileUploads.$inferSelect;
 export type InsertFileUpload = typeof fileUploads.$inferInsert;
+
+/**
+ * OverheadCosts table stores operational costs for the pharmacy.
+ * Includes Rent, Salaries, Electricity, and Other costs.
+ */
+export const overheadCosts = mysqlTable("overhead_costs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  rent: decimal("rent", { precision: 12, scale: 2 }).default("0").notNull(),
+  salaries: decimal("salaries", { precision: 12, scale: 2 }).default("0").notNull(),
+  electricity: decimal("electricity", { precision: 12, scale: 2 }).default("0").notNull(),
+  others: decimal("others", { precision: 12, scale: 2 }).default("0").notNull(),
+  month: int("month").notNull(), // 1-12
+  year: int("year").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type OverheadCost = typeof overheadCosts.$inferSelect;
+export type InsertOverheadCost = typeof overheadCosts.$inferInsert;
