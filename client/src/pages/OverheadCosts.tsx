@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, Save, Loader2 } from 'lucide-react';
+import { Home, Users, Zap, MoreHorizontal, Save, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -105,7 +105,7 @@ export default function OverheadCosts() {
           <div className="border-b pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-blue-600" />
+                <Home className="w-5 h-5 text-blue-600" />
               </div>
               <label className="text-lg font-medium text-gray-900">Rent</label>
             </div>
@@ -125,7 +125,7 @@ export default function OverheadCosts() {
           <div className="border-b pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-green-600" />
+                <Users className="w-5 h-5 text-green-600" />
               </div>
               <label className="text-lg font-medium text-gray-900">Salaries</label>
             </div>
@@ -145,7 +145,7 @@ export default function OverheadCosts() {
           <div className="border-b pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-yellow-600" />
+                <Zap className="w-5 h-5 text-yellow-600" />
               </div>
               <label className="text-lg font-medium text-gray-900">Electricity</label>
             </div>
@@ -165,7 +165,7 @@ export default function OverheadCosts() {
           <div className="pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-purple-600" />
+                <MoreHorizontal className="w-5 h-5 text-purple-600" />
               </div>
               <label className="text-lg font-medium text-gray-900">Others</label>
             </div>

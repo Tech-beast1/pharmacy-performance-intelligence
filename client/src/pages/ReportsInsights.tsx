@@ -159,19 +159,19 @@ export default function ReportsInsights() {
           <div className="space-y-4">
             <div className="flex justify-between items-center pb-3 border-b">
               <span className="text-gray-600">Total Revenue</span>
-              <span className="font-bold text-gray-900">₦{metrics?.totalRevenue.toLocaleString()}</span>
+              <span className="font-bold text-gray-900">₵{metrics?.totalRevenue.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center pb-3 border-b">
               <span className="text-gray-600">Total Profit</span>
-              <span className="font-bold text-gray-900">₦{metrics?.estimatedProfit.toLocaleString()}</span>
+              <span className="font-bold text-gray-900">₵{metrics?.estimatedProfit.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center pb-3 border-b">
               <span className="text-gray-600">Expiry Risk Loss</span>
-              <span className="font-bold text-red-600">₦{metrics?.expiryRiskLoss.toLocaleString()}</span>
+              <span className="font-bold text-red-600">₵{metrics?.expiryRiskLoss.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Dead Stock Value</span>
-              <span className="font-bold text-orange-600">₦{metrics?.deadStockValue.toLocaleString()}</span>
+              <span className="font-bold text-orange-600">₵{metrics?.deadStockValue.toLocaleString()}</span>
             </div>
           </div>
         </Card>
@@ -188,7 +188,7 @@ export default function ReportsInsights() {
             <div>
               <p className="font-medium text-gray-900">Focus on Expiry Management</p>
               <p className="text-sm text-gray-600 mt-1">
-                You have ₦{metrics?.expiryRiskLoss.toLocaleString()} worth of products expiring soon. Implement promotional strategies to clear these items.
+                You have ₵{metrics?.expiryRiskLoss.toLocaleString()} worth of products expiring soon. Implement promotional strategies to clear these items.
               </p>
             </div>
           </div>
@@ -200,7 +200,7 @@ export default function ReportsInsights() {
             <div>
               <p className="font-medium text-gray-900">Optimize Slow-Moving Stock</p>
               <p className="text-sm text-gray-600 mt-1">
-                ₦{metrics?.deadStockValue.toLocaleString()} is tied up in products with no recent sales. Consider bundling or discounting these items.
+                ₵{metrics?.deadStockValue.toLocaleString()} is tied up in products with no recent sales. Consider bundling or discounting these items.
               </p>
             </div>
           </div>

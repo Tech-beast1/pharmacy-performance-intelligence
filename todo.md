@@ -105,3 +105,11 @@
 - [x] Implement proper column detection for Inventory data (Item/Product Name, Unit Cost, Selling Cost, Stock on Hand, Expiry Date, Qty Sold 90days)
 - [x] Verify dashboard updates with real data from uploaded files
 - [x] Test upload with sample CSV and Excel files
+
+
+## Phase 5: Final UI Refinements
+
+- [x] Update Reports & Insights page to display currency in Ghanaian Cedis
+- [x] Replace dollar sign icons in Overhead Costs page with appropriate icons (Rent, Salaries, Electricity, Others)
+- [x] Add Data Analyst footer with clickable email and phone number
+- [x] Test all changes and verify responsive design
