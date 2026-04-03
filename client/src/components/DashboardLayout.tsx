@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Upload, BarChart3, FileText, Settings as SettingsIcon } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Upload, BarChart3, FileText, Settings as SettingsIcon, Calculator } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -30,9 +30,9 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Upload, label: "Data Upload", path: "/upload" },
+  { icon: Calculator, label: "Overhead Costs", path: "/overhead" },
   { icon: BarChart3, label: "Inventory Intelligence", path: "/inventory" },
   { icon: FileText, label: "Reports & Insights", path: "/reports" },
-  { icon: SettingsIcon, label: "Overhead Costs", path: "/overhead" },
   { icon: SettingsIcon, label: "Settings", path: "/settings" },
 ];
 

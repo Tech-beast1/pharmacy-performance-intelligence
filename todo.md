@@ -93,3 +93,15 @@
 - [x] Implement PDF/CSV export with all metrics and insights
 - [x] Add Overhead Costs menu item to sidebar navigation
 - [x] Test all new features end-to-end
+
+
+## Phase 4: Bug Fixes & Critical Functionality
+
+- [x] Reorder sidebar menu - move Overhead Costs right after Data Upload
+- [x] Update Overhead Costs icon from Settings to Calculator/DollarSign
+- [x] Replace Ghanaian Cedis symbol (₵) with proper logo throughout UI
+- [x] Debug file upload functionality - ensure CSV/Excel files are properly read
+- [x] Implement proper column detection for Sales data (Item Name, Quantity, Unit Cost, Selling Price)
+- [x] Implement proper column detection for Inventory data (Item/Product Name, Unit Cost, Selling Cost, Stock on Hand, Expiry Date, Qty Sold 90days)
+- [x] Verify dashboard updates with real data from uploaded files
+- [x] Test upload with sample CSV and Excel files
