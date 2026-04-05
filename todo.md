@@ -120,3 +120,12 @@
 - [x] Fix skeleton loading state - reduce blue placeholder display time
 - [x] Optimize authentication check to prevent loading delay
 - [x] Add progressive content rendering to improve perceived performance
+
+
+## Phase 7: File Upload Testing with Real Data
+
+- [x] Test Sales data upload (sales-.data.xlsx) - verify dashboard metrics update
+- [x] Test Inventory data upload (Inventory-.Data.xlsx) - verify expiry/dead stock alerts
+- [x] Verify cumulative data persistence across multiple uploads
+- [x] Test profit calculation with overhead costs
+- [x] Verify data table displays uploaded products with correct status indicators
