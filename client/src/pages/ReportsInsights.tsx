@@ -4,25 +4,23 @@ import { AlertCircle, TrendingUp, Target, Zap } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 
 export default function ReportsInsights() {
-  const metricsQuery = trpc.dashboard.getMetrics.useQuery();
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
+  const alertsQuery = trpc.analytics.getAlerts.useQuery();
+  const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
+  const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
 
-  const metrics = metricsQuery.data?.metrics;
-  const alerts = metricsQuery.data?.alerts || [];
-  const topProducts = metricsQuery.data?.topProducts || [];
-  const revenueTrend = metricsQuery.data?.trend || [];
+  const metrics = metricsQuery.data?.data;
+  const alerts = alertsQuery.data?.data;
+  const topProducts = topProductsQuery.data?.data || [];
+  const revenueTrend = revenueTrendQuery.data?.data || [];
 
   const COLORS = ['#2563eb', '#16a34a', '#dc2626', '#ea580c', '#eab308'];
 
-  // Count alerts by type
-  const expiryCount = alerts.filter((a: any) => a.alertType === 'expiry_risk').length;
-  const deadStockCount = alerts.filter((a: any) => a.alertType === 'dead_stock').length;
-  const lowMarginCount = alerts.filter((a: any) => a.alertType === 'low_margin').length;
-
   // Prepare alert distribution data
   const alertDistribution = [
-    { name: 'Expiry Risk', value: expiryCount },
-    { name: 'Dead Stock', value: deadStockCount },
-    { name: 'Low Margin', value: lowMarginCount },
+    { name: 'Expiry Risk', value: alerts?.expiryRiskProducts.length || 0 },
+    { name: 'Dead Stock', value: alerts?.deadStockProducts.length || 0 },
+    { name: 'Low Margin', value: alerts?.lowMarginProducts.length || 0 },
   ];
 
   return (
@@ -52,7 +50,7 @@ export default function ReportsInsights() {
               <p className="text-sm text-gray-600 font-medium">Avg Margin</p>
               <p className="text-3xl font-bold text-gray-900 mt-2">
                 {topProducts.length > 0
-                  ? Math.round(topProducts.reduce((sum: number, p: any) => sum + (p.margin || 0), 0) / topProducts.length)
+                  ? Math.round(topProducts.reduce((sum: number, p: any) => sum + p.margin, 0) / topProducts.length)
                   : 0}%
               </p>
             </div>
@@ -67,7 +65,9 @@ export default function ReportsInsights() {
             <div>
               <p className="text-sm text-gray-600 font-medium">Alert Items</p>
               <p className="text-3xl font-bold text-gray-900 mt-2">
-                {expiryCount + deadStockCount + lowMarginCount}
+                {(alerts?.expiryRiskProducts.length || 0) +
+                  (alerts?.deadStockProducts.length || 0) +
+                  (alerts?.lowMarginProducts.length || 0)}
               </p>
             </div>
             <div className="p-3 bg-red-100 rounded-lg">
@@ -81,7 +81,7 @@ export default function ReportsInsights() {
             <div>
               <p className="text-sm text-gray-600 font-medium">Profit Margin</p>
               <p className="text-3xl font-bold text-gray-900 mt-2">
-                {metrics && metrics.totalRevenue > 0 ? Math.round((metrics.estimatedProfit / metrics.totalRevenue) * 100) : 0}%
+                {metrics ? Math.round((metrics.estimatedProfit / metrics.totalRevenue) * 100) : 0}%
               </p>
             </div>
             <div className="p-3 bg-purple-100 rounded-lg">
@@ -159,19 +159,19 @@ export default function ReportsInsights() {
           <div className="space-y-4">
             <div className="flex justify-between items-center pb-3 border-b">
               <span className="text-gray-600">Total Revenue</span>
-              <span className="font-bold text-gray-900">₵{metrics?.totalRevenue.toLocaleString() || '0'}</span>
+              <span className="font-bold text-gray-900">₵{metrics?.totalRevenue.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center pb-3 border-b">
               <span className="text-gray-600">Total Profit</span>
-              <span className="font-bold text-gray-900">₵{metrics?.estimatedProfit.toLocaleString() || '0'}</span>
+              <span className="font-bold text-gray-900">₵{metrics?.estimatedProfit.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center pb-3 border-b">
               <span className="text-gray-600">Expiry Risk Loss</span>
-              <span className="font-bold text-red-600">₵{metrics?.expiryRiskLoss.toLocaleString() || '0'}</span>
+              <span className="font-bold text-red-600">₵{metrics?.expiryRiskLoss.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Dead Stock Value</span>
-              <span className="font-bold text-orange-600">₵{metrics?.deadStockValue.toLocaleString() || '0'}</span>
+              <span className="font-bold text-orange-600">₵{metrics?.deadStockValue.toLocaleString()}</span>
             </div>
           </div>
         </Card>
@@ -188,7 +188,7 @@ export default function ReportsInsights() {
             <div>
               <p className="font-medium text-gray-900">Focus on Expiry Management</p>
               <p className="text-sm text-gray-600 mt-1">
-                You have ₵{metrics?.expiryRiskLoss.toLocaleString() || '0'} worth of products expiring soon. Implement promotional strategies to clear these items.
+                You have ₵{metrics?.expiryRiskLoss.toLocaleString()} worth of products expiring soon. Implement promotional strategies to clear these items.
               </p>
             </div>
           </div>
@@ -200,7 +200,7 @@ export default function ReportsInsights() {
             <div>
               <p className="font-medium text-gray-900">Optimize Slow-Moving Stock</p>
               <p className="text-sm text-gray-600 mt-1">
-                ₵{metrics?.deadStockValue.toLocaleString() || '0'} is tied up in products with no recent sales. Consider bundling or discounting these items.
+                ₵{metrics?.deadStockValue.toLocaleString()} is tied up in products with no recent sales. Consider bundling or discounting these items.
               </p>
             </div>
           </div>
@@ -212,7 +212,7 @@ export default function ReportsInsights() {
             <div>
               <p className="font-medium text-gray-900">Review Low-Margin Products</p>
               <p className="text-sm text-gray-600 mt-1">
-                {lowMarginCount} products have margins below 20%. Review pricing or reduce costs to improve profitability.
+                {alerts?.lowMarginProducts.length || 0} products have margins below 20%. Review pricing or reduce costs to improve profitability.
               </p>
             </div>
           </div>

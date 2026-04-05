@@ -53,26 +53,11 @@ export default function DashboardLayout({
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
   const { loading, user } = useAuth();
-  const [cachedUser, setCachedUser] = useState<any>(null);
-  
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
   }, [sidebarWidth]);
 
-  // Load cached user info on mount to avoid skeleton flash
-  useEffect(() => {
-    const cached = localStorage.getItem('manus-runtime-user-info');
-    if (cached) {
-      try {
-        setCachedUser(JSON.parse(cached));
-      } catch (e) {
-        // ignore parse errors
-      }
-    }
-  }, []);
-
-  // Show skeleton only on initial load if no cached user
-  if (loading && !cachedUser && !user) {
+  if (loading) {
     return <DashboardLayoutSkeleton />
   }
 

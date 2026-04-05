@@ -18,7 +18,7 @@ export default function OverheadCosts() {
 
   // Fetch overhead costs for the selected month/year
   const overheadQuery = trpc.overheadCosts.getByMonth.useQuery({ month, year });
-  const saveMutation = trpc.overheadCosts.upsert.useMutation();
+  const saveMutation = trpc.overheadCosts.save.useMutation();
 
   // Load existing data when query returns
   useEffect(() => {
@@ -37,10 +37,10 @@ export default function OverheadCosts() {
       await saveMutation.mutateAsync({
         month,
         year,
-        rent: rent || '0',
-        salaries: salaries || '0',
-        electricity: electricity || '0',
-        others: others || '0',
+        rent: parseFloat(rent) || 0,
+        salaries: parseFloat(salaries) || 0,
+        electricity: parseFloat(electricity) || 0,
+        others: parseFloat(others) || 0,
       });
       toast.success('Overhead costs saved successfully');
     } catch (error) {

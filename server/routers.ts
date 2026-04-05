@@ -5,7 +5,6 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, type ColumnMapping } from "./utils/fileParser";
-import { parseExcelBuffer, excelToCSV } from "./utils/excelParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
 export const appRouter = router({
@@ -25,21 +24,10 @@ export const appRouter = router({
   // File upload and data management
   upload: router({
     detectColumns: protectedProcedure
-      .input(z.object({ csvContent: z.string(), isExcel: z.boolean().optional() }))
+      .input(z.object({ csvContent: z.string() }))
       .mutation(async ({ input }) => {
         try {
-          let data: any[] = [];
-          
-          if (input.isExcel) {
-            // Parse as Excel from base64
-            const buffer = Buffer.from(input.csvContent, 'base64');
-            const { data: excelData } = parseExcelBuffer(buffer);
-            data = excelData;
-          } else {
-            // Parse as CSV
-            data = await parseCSV(input.csvContent);
-          }
-          
+          const data = await parseCSV(input.csvContent);
           const columns = detectColumns(data);
           return { success: true, columns, sampleRow: data[0] || {} };
         } catch (error) {
@@ -54,39 +42,26 @@ export const appRouter = router({
           csvContent: z.string(),
           mapping: z.object({
             productName: z.string(),
-            price: z.string().optional(),
-            quantity: z.string().optional(),
-            expiryDate: z.string().optional(),
+            price: z.string(),
+            quantity: z.string(),
+            expiryDate: z.string(),
             costPrice: z.string().optional(),
-            sellingPrice: z.string().optional(),
-            stockOnHand: z.string().optional(),
-            qtySold90Days: z.string().optional(),
             sku: z.string().optional(),
             saleQuantity: z.string().optional(),
             saleDate: z.string().optional(),
-            dataType: z.enum(['sales', 'inventory']).optional(),
           }),
           fileName: z.string(),
-          isExcel: z.boolean().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
         try {
-          let csvContent = input.csvContent;
-          
-          // If Excel file, convert to CSV
-          if (input.isExcel) {
-            const buffer = Buffer.from(input.csvContent, 'base64');
-            csvContent = excelToCSV(buffer);
-          }
-          
-          const validation = validateMapping(input.mapping as ColumnMapping);
+          const validation = validateMapping(input.mapping);
           if (!validation.valid) {
             return { success: false, errors: validation.errors };
           }
 
           // Parse CSV
-          const data = await parseCSV(csvContent);
+          const data = await parseCSV(input.csvContent);
           let processedCount = 0;
           let errorCount = 0;
 
@@ -105,8 +80,8 @@ export const appRouter = router({
                 userId: ctx.user!.id,
                 productName: parsed.productName,
                 sku,
-                quantity: parsed.quantity || parsed.stockOnHand || 0,
-                price: parsed.price || parsed.sellingPrice || 0,
+                quantity: parsed.quantity,
+                price: parsed.price,
                 costPrice: parsed.costPrice,
                 expiryDate: parsed.expiryDate,
               });
@@ -128,8 +103,8 @@ export const appRouter = router({
               }
 
               processedCount++;
-            } catch (rowError) {
-              console.error('Row processing error:', rowError);
+            } catch (error) {
+              console.error('Error processing row:', error);
               errorCount++;
             }
           }
@@ -147,115 +122,105 @@ export const appRouter = router({
       }),
   }),
 
-  // Dashboard metrics
-  dashboard: router({
-    getMetrics: protectedProcedure.query(async ({ ctx }) => {
+  // Dashboard analytics
+  analytics: router({
+    getDashboardMetrics: protectedProcedure.query(async ({ ctx }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const alerts = await getAlertsByUserId(ctx.user!.id);
-        const now = new Date();
-        const overhead = await getOverheadCostsByMonth(ctx.user!.id, now.getMonth() + 1, now.getFullYear());
-
         const metrics = calculateDashboardMetrics(inventory, sales);
-        const topProducts = getTopProfitableProducts(inventory, 10);
-        const trend = getRevenueProfitTrend(sales || []);
-
-        return {
-          success: true,
-          metrics,
-          alerts,
-          topProducts,
-          trend,
-        };
+        return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);
-        return { success: false, error: 'Failed to fetch metrics' };
+        return { success: false, error: 'Failed to calculate metrics' };
+      }
+    }),
+
+    getAlerts: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        const alerts = identifyAlerts(inventory, sales);
+        return { success: true, data: alerts };
+      } catch (error) {
+        console.error('Alerts error:', error);
+        return { success: false, error: 'Failed to fetch alerts' };
+      }
+    }),
+
+    getTopProducts: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const topProducts = getTopProfitableProducts(inventory);
+        return { success: true, data: topProducts };
+      } catch (error) {
+        console.error('Top products error:', error);
+        return { success: false, error: 'Failed to fetch top products' };
+      }
+    }),
+
+    getRevenueTrend: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        const trend = getRevenueProfitTrend(sales);
+        return { success: true, data: trend };
+      } catch (error) {
+        console.error('Revenue trend error:', error);
+        return { success: false, error: 'Failed to fetch revenue trend' };
       }
     }),
   }),
 
-  // Overhead costs management
-  overheadCosts: router({
-    getByMonth: protectedProcedure
-      .input(z.object({ month: z.number().min(1).max(12), year: z.number() }))
-      .query(async ({ input, ctx }) => {
-        try {
-          const costs = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year);
-          return { success: true, data: costs };
-        } catch (error) {
-          console.error('Get overhead costs error:', error);
-          return { success: false, data: null, error: 'Failed to fetch overhead costs' };
-        }
-      }),
-
-    upsert: protectedProcedure
-      .input(
-        z.object({
-          month: z.number().min(1).max(12),
-          year: z.number(),
-          rent: z.string().default('0'),
-          salaries: z.string().default('0'),
-          electricity: z.string().default('0'),
-          others: z.string().default('0'),
-        })
-      )
-      .mutation(async ({ input, ctx }) => {
-        try {
-          await upsertOverheadCosts({
-            userId: ctx.user!.id,
-            month: input.month,
-            year: input.year,
-            rent: input.rent,
-            salaries: input.salaries,
-            electricity: input.electricity,
-            others: input.others,
-          });
-          return { success: true, message: 'Overhead costs updated' };
-        } catch (error) {
-          console.error('Upsert overhead costs error:', error);
-          return { success: false, error: 'Failed to update overhead costs' };
-        }
-      }),
-  }),
-
   // Inventory management
   inventory: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
+    getAll: protectedProcedure.query(async ({ ctx }) => {
       try {
-        const inventory = await getInventoryByUserId(ctx.user!.id);
-        return { success: true, data: inventory };
+        const items = await getInventoryByUserId(ctx.user!.id);
+        return { success: true, data: items };
       } catch (error) {
-        console.error('List inventory error:', error);
+        console.error('Inventory fetch error:', error);
         return { success: false, error: 'Failed to fetch inventory' };
       }
     }),
   }),
 
-  // Sales transactions
-  sales: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
-      try {
-        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        return { success: true, data: sales };
-      } catch (error) {
-        console.error('List sales error:', error);
-        return { success: false, error: 'Failed to fetch sales' };
-      }
-    }),
-  }),
+  // Overhead Costs Management
+  overheadCosts: router({
+    getByMonth: protectedProcedure
+      .input(z.object({ month: z.number().min(1).max(12), year: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const data = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year);
+        return { success: true, data: data || { rent: 0, salaries: 0, electricity: 0, others: 0 } };
+      }),
 
-  // Alerts
-  alerts: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
-      try {
-        const alerts = await getAlertsByUserId(ctx.user!.id);
-        return { success: true, data: alerts };
-      } catch (error) {
-        console.error('List alerts error:', error);
-        return { success: false, error: 'Failed to fetch alerts' };
-      }
-    }),
+    save: protectedProcedure
+      .input(
+        z.object({
+          month: z.number().min(1).max(12),
+          year: z.number(),
+          rent: z.number().min(0),
+          salaries: z.number().min(0),
+          electricity: z.number().min(0),
+          others: z.number().min(0),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        try {
+          await upsertOverheadCosts({
+            userId: ctx.user!.id,
+            month: input.month,
+            year: input.year,
+            rent: input.rent.toString(),
+            salaries: input.salaries.toString(),
+            electricity: input.electricity.toString(),
+            others: input.others.toString(),
+          } as any);
+          return { success: true, message: 'Overhead costs saved successfully' };
+        } catch (error) {
+          console.error('Error saving overhead costs:', error);
+          return { success: false, error: 'Failed to save overhead costs' };
+        }
+      }),
   }),
 });
 
