@@ -1,4 +1,5 @@
 import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 
 export interface ColumnMapping {
   productName: string;
@@ -56,7 +57,6 @@ export async function parseCSV(fileContent: string): Promise<any[]> {
       }
       
       // Use xlsx to parse the Excel file
-      const XLSX = require('xlsx');
       const workbook = XLSX.read(bytes, { type: 'array' });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       
@@ -70,8 +70,8 @@ export async function parseCSV(fileContent: string): Promise<any[]> {
       // Look for the header row by checking for common column names
       const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
       for (let i = 0; i < Math.min(5, rawData.length); i++) {
-        const row = rawData[i];
-        const rowStr = row.join(' ').toLowerCase();
+        const row = rawData[i] as any[];
+        const rowStr = (row || []).join(' ').toLowerCase();
         if (commonHeaders.some(h => rowStr.includes(h.toLowerCase()))) {
           headerRowIndex = i;
           dataStartIndex = i + 1;
@@ -80,15 +80,15 @@ export async function parseCSV(fileContent: string): Promise<any[]> {
       }
       
       // Extract headers and data
-      const headers = rawData[headerRowIndex];
-      const dataRows = rawData.slice(dataStartIndex);
+      const headers = rawData[headerRowIndex] as any[];
+      const dataRows = rawData.slice(dataStartIndex) as any[][];
       
       // Convert to array of objects
       const data = dataRows
         .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
         .map((row: any[]) => {
           const obj: any = {};
-          headers.forEach((header: any, index: number) => {
+          (headers || []).forEach((header: any, index: number) => {
             if (header && header.toString().trim()) {
               obj[header.toString().trim()] = row[index] || '';
             }
@@ -124,7 +124,6 @@ export async function parseCSV(fileContent: string): Promise<any[]> {
  */
 export async function parseExcel(buffer: Buffer): Promise<any[]> {
   try {
-    const XLSX = require('xlsx');
     const workbook = XLSX.read(buffer, { type: 'buffer' });
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     
@@ -138,8 +137,8 @@ export async function parseExcel(buffer: Buffer): Promise<any[]> {
     // Look for the header row by checking for common column names
     const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
     for (let i = 0; i < Math.min(5, rawData.length); i++) {
-      const row = rawData[i];
-      const rowStr = row.join(' ').toLowerCase();
+      const row = rawData[i] as any[];
+      const rowStr = (row || []).join(' ').toLowerCase();
       if (commonHeaders.some(h => rowStr.includes(h.toLowerCase()))) {
         headerRowIndex = i;
         dataStartIndex = i + 1;
@@ -148,15 +147,15 @@ export async function parseExcel(buffer: Buffer): Promise<any[]> {
     }
     
     // Extract headers and data
-    const headers = rawData[headerRowIndex];
-    const dataRows = rawData.slice(dataStartIndex);
+    const headers = rawData[headerRowIndex] as any[];
+    const dataRows = rawData.slice(dataStartIndex) as any[][];
     
     // Convert to array of objects
     const data = dataRows
       .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
       .map((row: any[]) => {
         const obj: any = {};
-        headers.forEach((header: any, index: number) => {
+        (headers || []).forEach((header: any, index: number) => {
           if (header && header.toString().trim()) {
             obj[header.toString().trim()] = row[index] || '';
           }

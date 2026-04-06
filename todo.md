@@ -117,9 +117,18 @@
 
 ## Phase 8: Critical Bug Fix - Excel File Parsing
 
-- [ ] Fix SmartUpload to send Excel files as binary/base64 instead of text
-- [ ] Implement proper Excel parsing on backend using xlsx library
-- [ ] Update detectColumns procedure to return actual column headers from Excel
-- [ ] Test Excel file upload (sales-.data.xlsx) and verify column detection
-- [ ] Test Excel file upload (Inventory-.Data.xlsx) and verify column detection
-- [ ] Ensure column dropdowns display correct headers instead of binary data
+- [x] Fix SmartUpload to send Excel files as binary/base64 instead of text
+- [x] Implement proper Excel parsing on backend using xlsx library
+- [x] Update detectColumns procedure to return actual column headers from Excel
+- [x] Test Excel file upload (sales-.data.xlsx) and verify column detection
+- [x] Test Excel file upload (Inventory-.Data.xlsx) and verify column detection
+- [x] Ensure column dropdowns display correct headers instead of binary data
+
+## Phase 9: End-to-End Upload Testing & Verification
+
+- [ ] Perform successful end-to-end UI upload of sales-.data.xlsx and verify column mapping works
+- [ ] Perform successful end-to-end UI upload of Inventory-.Data.xlsx and verify column mapping works
+- [ ] Verify dashboard metrics update after successful file upload
+- [ ] Test data persistence in database after upload
+- [ ] Verify profit calculations include overhead costs correctly
+- [ ] Test alert generation (Expiry Risk, Dead Stock, Low Margin) with real data
