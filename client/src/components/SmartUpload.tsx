@@ -55,6 +55,11 @@ export default function SmartUpload() {
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
   const processFileMutation = trpc.upload.processFile.useMutation();
 
+  // Helper function to get a safe value for Select (never empty string)
+  const getSafeSelectValue = (value: string | undefined, defaultCol: string) => {
+    return value && value.trim() ? value : defaultCol;
+  };
+
   const handleFileSelect = async (file: File) => {
     if (!file) return;
 
@@ -239,6 +244,8 @@ export default function SmartUpload() {
     }
   };
 
+  const defaultCol = columns[0] || '';
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Upload Step */}
@@ -283,7 +290,7 @@ export default function SmartUpload() {
                       ? 'border-blue-600 bg-blue-50'
                       : 'border-gray-200 hover:border-blue-300'
                   }`}
-                  onClick={() => handleSheetSelect(sheet.name)}
+                  onClick={() => setSelectedSheet(sheet.name)}
                 >
                   <div className="flex items-start justify-between">
                     <div>
@@ -388,7 +395,7 @@ export default function SmartUpload() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Product Name <span className="text-red-500">*</span>
                 </label>
-                <Select value={mapping.productName} onValueChange={(value) => handleMappingChange('productName', value)}>
+                <Select value={getSafeSelectValue(mapping.productName, defaultCol)} onValueChange={(value) => handleMappingChange('productName', value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select product name column" />
                   </SelectTrigger>
@@ -409,7 +416,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Quantity <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.quantity || ''} onValueChange={(value) => handleMappingChange('quantity', value)}>
+                    <Select value={getSafeSelectValue(mapping.quantity, defaultCol)} onValueChange={(value) => handleMappingChange('quantity', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select quantity column" />
                       </SelectTrigger>
@@ -427,7 +434,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Unit Cost <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.costPrice || ''} onValueChange={(value) => handleMappingChange('costPrice', value)}>
+                    <Select value={getSafeSelectValue(mapping.costPrice, defaultCol)} onValueChange={(value) => handleMappingChange('costPrice', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select unit cost column" />
                       </SelectTrigger>
@@ -445,7 +452,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Selling Price <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.price || ''} onValueChange={(value) => handleMappingChange('price', value)}>
+                    <Select value={getSafeSelectValue(mapping.price, defaultCol)} onValueChange={(value) => handleMappingChange('price', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select selling price column" />
                       </SelectTrigger>
@@ -468,7 +475,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Unit Cost <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.costPrice || ''} onValueChange={(value) => handleMappingChange('costPrice', value)}>
+                    <Select value={getSafeSelectValue(mapping.costPrice, defaultCol)} onValueChange={(value) => handleMappingChange('costPrice', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select unit cost column" />
                       </SelectTrigger>
@@ -486,7 +493,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Selling Price <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.sellingPrice || ''} onValueChange={(value) => handleMappingChange('sellingPrice', value)}>
+                    <Select value={getSafeSelectValue(mapping.sellingPrice, defaultCol)} onValueChange={(value) => handleMappingChange('sellingPrice', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select selling price column" />
                       </SelectTrigger>
@@ -504,7 +511,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Stock on Hand <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.stockOnHand || ''} onValueChange={(value) => handleMappingChange('stockOnHand', value)}>
+                    <Select value={getSafeSelectValue(mapping.stockOnHand, defaultCol)} onValueChange={(value) => handleMappingChange('stockOnHand', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select stock on hand column" />
                       </SelectTrigger>
@@ -522,7 +529,7 @@ export default function SmartUpload() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Expiry Date <span className="text-red-500">*</span>
                     </label>
-                    <Select value={mapping.expiryDate || ''} onValueChange={(value) => handleMappingChange('expiryDate', value)}>
+                    <Select value={getSafeSelectValue(mapping.expiryDate, defaultCol)} onValueChange={(value) => handleMappingChange('expiryDate', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select expiry date column" />
                       </SelectTrigger>
@@ -538,14 +545,13 @@ export default function SmartUpload() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Qty Sold (90 Days)
+                      Qty Sold (90 Days) <span className="text-gray-500 text-xs">(optional)</span>
                     </label>
-                    <Select value={mapping.qtySold90Days || ''} onValueChange={(value) => handleMappingChange('qtySold90Days', value)}>
+                    <Select value={getSafeSelectValue(mapping.qtySold90Days, defaultCol)} onValueChange={(value) => handleMappingChange('qtySold90Days', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select qty sold column (optional)" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
                         {columns.map((col) => (
                           <SelectItem key={col} value={col}>
                             {col}

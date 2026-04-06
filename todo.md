@@ -142,3 +142,11 @@
 - [x] Display correct columns for selected sheet (Inventory vs Sales)
 - [x] Test Inventory-.Data.xlsx shows Inventory columns (Stock on Hand, Expiry Date, etc.)
 - [x] Test sales-.data.xlsx shows Sales columns (Quantity, Unit Cost, Selling Price)
+
+
+## Phase 11: UI Bug Fix - Sheet Selection Error
+
+- [x] Fix Select component error when mapping fields are empty
+- [x] Remove "None" option from optional mapping fields to avoid empty value error
+- [x] Test Inventory Data sheet selection works without errors
+- [x] Verify all mapping dropdowns populate correctly for selected sheet
