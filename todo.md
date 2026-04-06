@@ -222,3 +222,15 @@
 - [x] Verify circular badges display correctly (green pharmacy, red date, blue owner)
 - [ ] Apply database migration for pharmacy_profiles table via Manus platform UI
 - [ ] Test complete flow: setup profile → see badges on all pages → click to edit
+
+
+## Phase 18: Background Motion Animations
+
+- [x] Add animated gradient background to main pages
+- [x] Create floating orb/blob animations
+- [x] Add smooth fade-in animations for page elements
+- [x] Add subtle moving background shapes
+- [x] Create AnimatedBackground component with floating blobs
+- [x] Integrate animations into App.tsx so they display on all pages
+- [x] Ensure animations don't impact performance (using CSS animations)
+- [x] Verify animations work on all screen sizes

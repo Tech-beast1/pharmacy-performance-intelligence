@@ -11,6 +11,7 @@ import InventoryIntelligence from "./pages/InventoryIntelligence";
 import ReportsInsights from "./pages/ReportsInsights";
 import OverheadCosts from "./pages/OverheadCosts";
 import Settings from "./pages/Settings";
+import { AnimatedBackground } from "./components/AnimatedBackground";
 
 function Router() {
   return (
@@ -39,6 +40,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
+          <AnimatedBackground />
           <Toaster />
           <Router />
         </TooltipProvider>
