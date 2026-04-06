@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import DownloadReport from '@/components/DownloadReport';
-import { PharmacyProfileDisplay } from '@/components/PharmacyProfileDisplay';
+import { PharmacyProfileHeader } from '@/components/PharmacyProfileHeader';
 import { OnboardingModal } from '@/components/OnboardingModal';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
@@ -92,22 +92,14 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-1">Welcome to Pharmacy Performance Intelligence</p>
-      </div>
-
-      {/* Pharmacy Profile Section */}
-      <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Pharmacy Information</h2>
-        </div>
-        <PharmacyProfileDisplay onEditClick={() => setIsOnboardingOpen(true)} />
-      </Card>
+      {/* Pharmacy Profile Header */}
+      <PharmacyProfileHeader onEditClick={() => setIsOnboardingOpen(true)} />
 
       {/* Onboarding Modal */}
       <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
+
+      {/* Dashboard Metrics */}
+      <h2 className="text-2xl font-bold text-gray-900 mt-8">Performance Metrics</h2>
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

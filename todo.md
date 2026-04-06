@@ -189,3 +189,11 @@
 - [x] Implement backend procedures to save/retrieve pharmacy profile
 - [x] Test onboarding flow and profile display on dashboard
 - [x] Verify pharmacy info persists and displays correctly
+
+
+## Phase 15: Pharmacy Profile Header Redesign
+
+- [x] Move pharmacy profile from card section to page header
+- [x] Style as prominent banner with circular badges
+- [x] Ensure header displays at top of dashboard page
+- [x] Test header displays correctly with pharmacy info
