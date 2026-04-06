@@ -1,66 +1,103 @@
 export function AnimatedBackground() {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-white">
-      {/* Animated gradient background - more visible */}
-      <div className="absolute inset-0 animated-gradient-bg opacity-40"></div>
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+      <style>{`
+        @keyframes float1 {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-40px) translateX(20px); }
+        }
+        @keyframes float2 {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-50px) translateX(-30px); }
+        }
+        @keyframes float3 {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(30px) translateX(40px); }
+        }
+        @keyframes float4 {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-30px) translateX(-20px); }
+        }
+        
+        .blob-1 {
+          animation: float1 8s ease-in-out infinite;
+        }
+        .blob-2 {
+          animation: float2 10s ease-in-out infinite;
+        }
+        .blob-3 {
+          animation: float3 12s ease-in-out infinite;
+        }
+        .blob-4 {
+          animation: float4 9s ease-in-out infinite;
+        }
+      `}</style>
 
-      {/* Floating blob 1 - Purple/Pink - Top Right */}
+      {/* Background base */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
+
+      {/* Blob 1 - Purple/Pink - Top Right */}
       <div 
-        className="absolute w-96 h-96 rounded-full animate-blob"
+        className="blob-1 absolute"
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          width: '400px',
+          height: '400px',
+          background: 'radial-gradient(circle, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.4) 100%)',
+          borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%',
           top: '-100px',
           right: '-100px',
-          filter: 'blur(60px)',
-          opacity: 0.4,
-          mixBlendMode: 'multiply'
+          filter: 'blur(80px)',
+          opacity: 0.6,
         }}
       ></div>
 
-      {/* Floating blob 2 - Pink/Red - Bottom Left */}
+      {/* Blob 2 - Pink/Red - Bottom Left */}
       <div 
-        className="absolute w-80 h-80 rounded-full animate-blob-2"
+        className="blob-2 absolute"
         style={{
-          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+          width: '350px',
+          height: '350px',
+          background: 'radial-gradient(circle, rgba(240, 147, 251, 0.8) 0%, rgba(245, 87, 108, 0.4) 100%)',
+          borderRadius: '50% 40% 30% 70% / 60% 50% 40% 50%',
           bottom: '-80px',
           left: '-80px',
-          filter: 'blur(60px)',
-          opacity: 0.4,
-          mixBlendMode: 'multiply'
+          filter: 'blur(80px)',
+          opacity: 0.6,
         }}
       ></div>
 
-      {/* Floating blob 3 - Blue/Cyan - Center */}
+      {/* Blob 3 - Blue/Cyan - Center Right */}
       <div 
-        className="absolute w-72 h-72 rounded-full animate-blob"
+        className="blob-3 absolute"
         style={{
-          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          filter: 'blur(60px)',
-          opacity: 0.3,
-          mixBlendMode: 'screen',
-          animationDelay: '2s'
+          width: '300px',
+          height: '300px',
+          background: 'radial-gradient(circle, rgba(79, 172, 254, 0.8) 0%, rgba(0, 242, 254, 0.4) 100%)',
+          borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+          top: '40%',
+          right: '10%',
+          filter: 'blur(80px)',
+          opacity: 0.5,
         }}
       ></div>
 
-      {/* Floating blob 4 - Green - Top Left */}
+      {/* Blob 4 - Green - Top Left */}
       <div 
-        className="absolute w-64 h-64 rounded-full animate-blob-2"
+        className="blob-4 absolute"
         style={{
-          background: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+          width: '280px',
+          height: '280px',
+          background: 'radial-gradient(circle, rgba(132, 250, 176, 0.8) 0%, rgba(143, 211, 244, 0.4) 100%)',
+          borderRadius: '70% 30% 50% 50% / 50% 50% 30% 70%',
           top: '-50px',
-          left: '10%',
-          filter: 'blur(60px)',
-          opacity: 0.3,
-          mixBlendMode: 'multiply',
-          animationDelay: '1s'
+          left: '5%',
+          filter: 'blur(80px)',
+          opacity: 0.5,
         }}
       ></div>
 
-      {/* Subtle overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/30"></div>
+      {/* Overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-white/10"></div>
     </div>
   );
 }
