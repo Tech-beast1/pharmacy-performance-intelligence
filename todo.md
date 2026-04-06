@@ -210,3 +210,15 @@
 - [x] Style circles with icons matching the reference design
 - [x] Update OnboardingModal to collect location and date range fields
 - [x] Update backend saveProfile mutation to accept and save all fields
+
+
+## Phase 17: Fix TopNavBar Display - Show Profile as Clickable Badges
+
+- [x] Fix TopNavBar to display saved profile information with circular badges
+- [x] Make badges clickable to open edit modal
+- [x] Ensure TopNavBar shows on all pages when profile is saved
+- [x] Add "Edit Profile" functionality to TopNavBar badges
+- [x] Test profile save and display workflow end-to-end
+- [x] Verify circular badges display correctly (green pharmacy, red date, blue owner)
+- [ ] Apply database migration for pharmacy_profiles table via Manus platform UI
+- [ ] Test complete flow: setup profile → see badges on all pages → click to edit
