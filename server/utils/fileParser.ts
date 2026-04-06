@@ -36,13 +36,74 @@ export interface ParsedRow {
 export function detectColumns(data: any[]): string[] {
   if (!data || data.length === 0) return [];
   const firstRow = data[0];
-  return Object.keys(firstRow).filter(key => key && key.trim());
+  return Object.keys(firstRow).filter(key => key && key.trim() && !key.startsWith('__EMPTY'));
 }
 
 /**
- * Parse CSV file content
+ * Parse CSV or Excel file content
+ * @param fileContent - CSV text or base64-encoded Excel file
  */
-export function parseCSV(fileContent: string): Promise<any[]> {
+export async function parseCSV(fileContent: string): Promise<any[]> {
+  // Check if this is likely base64-encoded Excel (contains non-text characters when decoded)
+  try {
+    // Try to detect if it's base64 (Excel file)
+    if (fileContent.length > 100 && !fileContent.includes('\n') && !fileContent.includes(',')) {
+      // Likely base64-encoded Excel file
+      const binaryString = atob(fileContent);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      // Use xlsx to parse the Excel file
+      const XLSX = require('xlsx');
+      const workbook = XLSX.read(bytes, { type: 'array' });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      
+      // Get raw data to find where actual headers are
+      const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+      
+      // Find the row with actual column headers (usually row 2 in pharmacy data)
+      let headerRowIndex = 0;
+      let dataStartIndex = 1;
+      
+      // Look for the header row by checking for common column names
+      const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
+      for (let i = 0; i < Math.min(5, rawData.length); i++) {
+        const row = rawData[i];
+        const rowStr = row.join(' ').toLowerCase();
+        if (commonHeaders.some(h => rowStr.includes(h.toLowerCase()))) {
+          headerRowIndex = i;
+          dataStartIndex = i + 1;
+          break;
+        }
+      }
+      
+      // Extract headers and data
+      const headers = rawData[headerRowIndex];
+      const dataRows = rawData.slice(dataStartIndex);
+      
+      // Convert to array of objects
+      const data = dataRows
+        .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
+        .map((row: any[]) => {
+          const obj: any = {};
+          headers.forEach((header: any, index: number) => {
+            if (header && header.toString().trim()) {
+              obj[header.toString().trim()] = row[index] || '';
+            }
+          });
+          return obj;
+        });
+      
+      return data;
+    }
+  } catch (e) {
+    // If base64 decode fails, treat as CSV
+    console.error('Error parsing as Excel, falling back to CSV:', e);
+  }
+  
+  // Parse as CSV
   return new Promise((resolve, reject) => {
     Papa.parse(fileContent, {
       header: true,
@@ -59,12 +120,54 @@ export function parseCSV(fileContent: string): Promise<any[]> {
 }
 
 /**
- * Parse Excel file (convert to CSV first)
- * Note: For production, use xlsx library
+ * Parse Excel file from buffer
  */
 export async function parseExcel(buffer: Buffer): Promise<any[]> {
-  // For now, we'll handle this in the API route using xlsx
-  throw new Error('Excel parsing should be handled via xlsx library in the API route');
+  try {
+    const XLSX = require('xlsx');
+    const workbook = XLSX.read(buffer, { type: 'buffer' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    
+    // Get raw data to find where actual headers are
+    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+    
+    // Find the row with actual column headers (usually row 2 in pharmacy data)
+    let headerRowIndex = 0;
+    let dataStartIndex = 1;
+    
+    // Look for the header row by checking for common column names
+    const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
+    for (let i = 0; i < Math.min(5, rawData.length); i++) {
+      const row = rawData[i];
+      const rowStr = row.join(' ').toLowerCase();
+      if (commonHeaders.some(h => rowStr.includes(h.toLowerCase()))) {
+        headerRowIndex = i;
+        dataStartIndex = i + 1;
+        break;
+      }
+    }
+    
+    // Extract headers and data
+    const headers = rawData[headerRowIndex];
+    const dataRows = rawData.slice(dataStartIndex);
+    
+    // Convert to array of objects
+    const data = dataRows
+      .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
+      .map((row: any[]) => {
+        const obj: any = {};
+        headers.forEach((header: any, index: number) => {
+          if (header && header.toString().trim()) {
+            obj[header.toString().trim()] = row[index] || '';
+          }
+        });
+        return obj;
+      });
+    
+    return data;
+  } catch (error) {
+    throw new Error(`Failed to parse Excel file: ${error}`);
+  }
 }
 
 /**

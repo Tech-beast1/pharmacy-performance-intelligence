@@ -19,6 +19,8 @@ interface ColumnMapping {
   saleQuantity?: string;
   saleDate?: string;
   dataType?: 'sales' | 'inventory';
+  unitCost?: string;
+  sellingCost?: string;
 }
 
 interface UploadStep {
@@ -55,10 +57,20 @@ export default function SmartUpload() {
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
-          const content = e.target?.result as string;
+          // For Excel files, send as base64; for CSV, send as text
+          let content: string;
+          if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+            // For Excel files, use readAsArrayBuffer and convert to base64
+            const arrayBuffer = e.target?.result as ArrayBuffer;
+            const bytes = new Uint8Array(arrayBuffer);
+            content = btoa(String.fromCharCode.apply(null, Array.from(bytes)));
+          } else {
+            // For CSV files, use text
+            content = e.target?.result as string;
+          }
           setCsvContent(content);
 
-          // Detect columns from CSV content
+          // Detect columns from file content
           const result = await detectColumnsMutation.mutateAsync({ csvContent: content });
           if (result.success) {
             setColumns(result.columns || []);
@@ -74,7 +86,12 @@ export default function SmartUpload() {
           setIsLoading(false);
         }
       };
-      reader.readAsText(file);
+      // Use appropriate read method based on file type
+      if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+        reader.readAsArrayBuffer(file);
+      } else {
+        reader.readAsText(file);
+      }
     } catch (error) {
       console.error('File read error:', error);
       toast.error('Failed to read file');
@@ -132,7 +149,6 @@ export default function SmartUpload() {
       const result = await processFileMutation.mutateAsync({
         csvContent,
         mapping: mapping as any,
-        fileName,
       });
 
       if (result.success) {

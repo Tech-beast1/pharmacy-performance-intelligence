@@ -42,15 +42,17 @@ export const appRouter = router({
           csvContent: z.string(),
           mapping: z.object({
             productName: z.string(),
-            price: z.string(),
-            quantity: z.string(),
-            expiryDate: z.string(),
+            price: z.string().optional(),
+            quantity: z.string().optional(),
+            expiryDate: z.string().optional(),
             costPrice: z.string().optional(),
+            sellingPrice: z.string().optional(),
+            stockOnHand: z.string().optional(),
+            qtySold90Days: z.string().optional(),
             sku: z.string().optional(),
             saleQuantity: z.string().optional(),
             saleDate: z.string().optional(),
           }),
-          fileName: z.string(),
         })
       )
       .mutation(async ({ input, ctx }) => {

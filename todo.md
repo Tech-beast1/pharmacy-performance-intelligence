@@ -113,3 +113,13 @@
 - [x] Replace dollar sign icons in Overhead Costs page with appropriate icons (Rent, Salaries, Electricity, Others)
 - [x] Add Data Analyst footer with clickable email and phone number
 - [x] Test all changes and verify responsive design
+
+
+## Phase 8: Critical Bug Fix - Excel File Parsing
+
+- [ ] Fix SmartUpload to send Excel files as binary/base64 instead of text
+- [ ] Implement proper Excel parsing on backend using xlsx library
+- [ ] Update detectColumns procedure to return actual column headers from Excel
+- [ ] Test Excel file upload (sales-.data.xlsx) and verify column detection
+- [ ] Test Excel file upload (Inventory-.Data.xlsx) and verify column detection
+- [ ] Ensure column dropdowns display correct headers instead of binary data
