@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Upload, CheckCircle2, Loader2, ChevronRight, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -54,6 +54,7 @@ export default function SmartUpload() {
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
   const processFileMutation = trpc.upload.processFile.useMutation();
+  const utils = trpc.useUtils();
 
   // Helper function to get a safe value for Select (never empty string)
   const getSafeSelectValue = (value: string | undefined, defaultCol: string) => {
@@ -212,6 +213,13 @@ export default function SmartUpload() {
         if ((result.errorCount || 0) > 0) {
           toast.warning(`${result.errorCount} rows had errors and were skipped`);
         }
+        
+        // Invalidate analytics queries to refresh dashboard with new data
+        await utils.analytics.getDashboardMetrics.invalidate();
+        await utils.analytics.getAlerts.invalidate();
+        await utils.analytics.getTopProducts.invalidate();
+        await utils.analytics.getRevenueTrend.invalidate();
+        
         // Reset after 2 seconds
         setTimeout(() => {
           resetUpload();

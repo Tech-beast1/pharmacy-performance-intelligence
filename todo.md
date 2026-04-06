@@ -150,3 +150,22 @@
 - [x] Remove "None" option from optional mapping fields to avoid empty value error
 - [x] Test Inventory Data sheet selection works without errors
 - [x] Verify all mapping dropdowns populate correctly for selected sheet
+
+
+## Phase 12: Dashboard Metrics Not Updating After Upload
+
+- [x] Dashboard shows ₵0 for Total Revenue after sales upload (should show actual revenue)
+- [x] Dashboard shows ₵0 for Estimated Profit after sales upload (should show calculated profit)
+- [x] Dashboard shows ₵0 for Expiry Risk Loss after inventory upload (should show risk value)
+- [x] Verify dashboard queries use actual imported data, not sample data
+- [x] Add automatic dashboard refresh after successful file upload
+- [x] Test dashboard metrics update correctly for both Sales and Inventory data imports
+
+
+## Phase 13: Final End-to-End Testing & Validation
+
+- [ ] Perform real UI upload of sales data and verify dashboard updates with correct metrics
+- [ ] Perform real UI upload of inventory data and verify dead stock value updates
+- [ ] Verify profit calculations include overhead costs correctly
+- [ ] Test alert generation (Expiry Risk, Dead Stock, Low Margin) with real data
+- [ ] Verify all tests pass (30+ tests across all phases)

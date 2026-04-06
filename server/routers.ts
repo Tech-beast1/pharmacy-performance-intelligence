@@ -105,23 +105,44 @@ export const appRouter = router({
                 userId: ctx.user!.id,
                 productName: parsed.productName,
                 sku,
-                quantity: parsed.quantity,
-                price: parsed.price,
-                costPrice: parsed.costPrice,
+                quantity: parsed.quantity || parsed.stockOnHand || 0,
+                price: parsed.price || parsed.sellingPrice || 0,
+                costPrice: parsed.costPrice || 0,
                 expiryDate: parsed.expiryDate,
               });
 
-              // If sales data provided, insert transaction
-              if (parsed.saleQuantity && parsed.saleDate && parsed.price) {
-                const profit = (parsed.price - (parsed.costPrice || 0)) * parsed.saleQuantity;
+              // For SALES data: create sales transaction from quantity and price
+              // If saleQuantity/saleDate not explicitly mapped, use quantity as saleQuantity and today as saleDate
+              const dataType = (input.mapping as any).dataType || 'sales';
+              if (dataType === 'sales' && parsed.quantity && parsed.price) {
+                const saleQuantity = parsed.quantity;
+                const saleDate = parsed.saleDate || new Date(); // Use today if no date provided
+                const costPrice = parsed.costPrice || 0;
+                const profit = (parsed.price - costPrice) * saleQuantity;
+                
                 await insertSalesTransaction({
                   userId: ctx.user!.id,
                   inventoryId: 0, // Will be linked after inventory insert
                   productName: parsed.productName,
-                  quantitySold: parsed.saleQuantity,
+                  quantitySold: saleQuantity,
                   salePrice: parsed.price,
-                  totalSaleValue: parsed.price * parsed.saleQuantity,
-                  costPrice: parsed.costPrice,
+                  totalSaleValue: parsed.price * saleQuantity,
+                  costPrice,
+                  profit,
+                  saleDate,
+                });
+              }
+              // For INVENTORY data: only create sales transaction if explicitly mapped
+              else if (dataType === 'inventory' && parsed.saleQuantity && parsed.saleDate && parsed.sellingPrice) {
+                const profit = (parsed.sellingPrice - (parsed.costPrice || 0)) * parsed.saleQuantity;
+                await insertSalesTransaction({
+                  userId: ctx.user!.id,
+                  inventoryId: 0,
+                  productName: parsed.productName,
+                  quantitySold: parsed.saleQuantity,
+                  salePrice: parsed.sellingPrice,
+                  totalSaleValue: parsed.sellingPrice * parsed.saleQuantity,
+                  costPrice: parsed.costPrice || 0,
                   profit,
                   saleDate: parsed.saleDate,
                 });
