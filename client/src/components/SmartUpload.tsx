@@ -23,8 +23,14 @@ interface ColumnMapping {
   sellingCost?: string;
 }
 
+interface SheetInfo {
+  name: string;
+  columns: string[];
+  dataType: 'sales' | 'inventory' | 'unknown';
+}
+
 interface UploadStep {
-  step: 'upload' | 'dataType' | 'mapping' | 'preview' | 'processing' | 'complete';
+  step: 'upload' | 'sheetSelect' | 'dataType' | 'mapping' | 'preview' | 'processing' | 'complete';
 }
 
 export default function SmartUpload() {
@@ -42,6 +48,8 @@ export default function SmartUpload() {
     dataType: 'sales',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [sheets, setSheets] = useState<SheetInfo[]>([]);
+  const [selectedSheet, setSelectedSheet] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
@@ -73,9 +81,26 @@ export default function SmartUpload() {
           // Detect columns from file content
           const result = await detectColumnsMutation.mutateAsync({ csvContent: content });
           if (result.success) {
-            setColumns(result.columns || []);
-            setSampleRow(result.sampleRow || {});
-            setUploadStep('dataType');
+            // Check if it's a multi-sheet file
+            if (result.multiSheet && result.sheets && result.sheets.length > 1) {
+              setSheets(result.sheets);
+              setSelectedSheet(result.sheets[0].name);
+              setUploadStep('sheetSelect');
+            } else {
+              // Single sheet or CSV file
+              setColumns(result.columns || []);
+              setSampleRow(result.sampleRow || {});
+              
+              // Auto-detect data type if possible
+              if (result.sheets && result.sheets.length === 1) {
+                const detectedType = result.sheets[0].dataType;
+                if (detectedType !== 'unknown') {
+                  setDataType(detectedType);
+                }
+              }
+              
+              setUploadStep('dataType');
+            }
           } else {
             toast.error(result.error || 'Failed to detect columns');
           }
@@ -110,6 +135,30 @@ export default function SmartUpload() {
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       handleFileSelect(files[0]);
+    }
+  };
+
+  const handleSheetSelect = async (sheetName: string) => {
+    setSelectedSheet(sheetName);
+    setIsLoading(true);
+
+    try {
+      // Re-detect columns for the selected sheet
+      const result = await detectColumnsMutation.mutateAsync({ csvContent: csvContent });
+      
+      if (result.success && result.sheets) {
+        const selectedSheetInfo = result.sheets.find(s => s.name === sheetName);
+        if (selectedSheetInfo) {
+          setColumns(selectedSheetInfo.columns);
+          setDataType(selectedSheetInfo.dataType !== 'unknown' ? selectedSheetInfo.dataType : 'sales');
+          setUploadStep('dataType');
+        }
+      }
+    } catch (error) {
+      console.error('Sheet selection error:', error);
+      toast.error('Failed to load sheet');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -148,6 +197,7 @@ export default function SmartUpload() {
     try {
       const result = await processFileMutation.mutateAsync({
         csvContent,
+        sheetName: selectedSheet || undefined,
         mapping: mapping as any,
       });
 
@@ -182,6 +232,8 @@ export default function SmartUpload() {
     setSampleRow({});
     setDataType('sales');
     setMapping({ productName: '', dataType: 'sales' });
+    setSheets([]);
+    setSelectedSheet('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -211,6 +263,57 @@ export default function SmartUpload() {
             />
           </div>
         </Card>
+      )}
+
+      {/* Sheet Selection Step (for multi-sheet files) */}
+      {uploadStep === 'sheetSelect' && (
+        <div className="space-y-6">
+          <Card className="p-6 bg-blue-50 border-blue-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Select Sheet to Import</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              This file contains multiple sheets. Please select which one to import.
+            </p>
+
+            <div className="space-y-3">
+              {sheets.map((sheet) => (
+                <Card
+                  key={sheet.name}
+                  className={`p-4 cursor-pointer border-2 transition-all ${
+                    selectedSheet === sheet.name
+                      ? 'border-blue-600 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
+                  }`}
+                  onClick={() => handleSheetSelect(sheet.name)}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{sheet.name}</h4>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Type: <span className="font-medium">{sheet.dataType}</span>
+                      </p>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Columns: {sheet.columns.slice(0, 3).join(', ')}
+                        {sheet.columns.length > 3 ? '...' : ''}
+                      </p>
+                    </div>
+                    {selectedSheet === sheet.name && (
+                      <CheckCircle2 className="w-5 h-5 text-blue-600 mt-1" />
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <Button
+              onClick={() => handleSheetSelect(selectedSheet)}
+              disabled={!selectedSheet || isLoading}
+              className="mt-6 w-full"
+            >
+              {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <ChevronRight className="w-4 h-4 mr-2" />}
+              Continue with {selectedSheet}
+            </Button>
+          </Card>
+        </div>
       )}
 
       {/* Data Type Selection Step */}
@@ -255,15 +358,14 @@ export default function SmartUpload() {
               >
                 <h4 className="font-semibold text-gray-900 mb-2">Inventory Data</h4>
                 <p className="text-sm text-gray-600 mb-4">
-                  Upload inventory items with Stock on Hand, Expiry Date, and Sales History
+                  Upload inventory with Item Name, Cost, Selling Price, Stock, and Expiry Date
                 </p>
                 <div className="text-xs text-gray-500 space-y-1">
-                  <p>• Item/Product Name</p>
+                  <p>• Item Name/Product</p>
                   <p>• Unit Cost</p>
-                  <p>• Selling Cost</p>
+                  <p>• Selling Price</p>
                   <p>• Stock on Hand</p>
                   <p>• Expiry Date</p>
-                  <p>• Qty Sold (90 days)</p>
                 </div>
               </Card>
             </div>
@@ -271,45 +373,36 @@ export default function SmartUpload() {
         </div>
       )}
 
-      {/* Mapping Step */}
+      {/* Column Mapping Step */}
       {uploadStep === 'mapping' && (
         <div className="space-y-6">
-          <Card className="p-6 bg-blue-50 border-blue-200">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Map Your Columns</h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  {dataType === 'sales' ? 'Sales Data' : 'Inventory Data'} - {columns.length} columns detected
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setUploadStep('dataType')}
-              >
-                Change Type
-              </Button>
-            </div>
+          <Card className="p-6 bg-green-50 border-green-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Map Columns</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Match your file columns to the system fields
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Product Name - Required for both */}
+            <div className="space-y-4">
+              {/* Product Name - Required */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Product Name <span className="text-red-500">*</span>
                 </label>
                 <Select value={mapping.productName} onValueChange={(value) => handleMappingChange('productName', value)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select column" />
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select product name column" />
                   </SelectTrigger>
                   <SelectContent>
-                    {columns.map(col => (
-                      <SelectItem key={col} value={col}>{col}</SelectItem>
+                    {columns.map((col) => (
+                      <SelectItem key={col} value={col}>
+                        {col}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* Sales Data Columns */}
+              {/* Sales Data Fields */}
               {dataType === 'sales' && (
                 <>
                   <div>
@@ -317,12 +410,14 @@ export default function SmartUpload() {
                       Quantity <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.quantity || ''} onValueChange={(value) => handleMappingChange('quantity', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select quantity column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -333,12 +428,14 @@ export default function SmartUpload() {
                       Unit Cost <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.costPrice || ''} onValueChange={(value) => handleMappingChange('costPrice', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select unit cost column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -349,12 +446,14 @@ export default function SmartUpload() {
                       Selling Price <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.price || ''} onValueChange={(value) => handleMappingChange('price', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select selling price column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -362,7 +461,7 @@ export default function SmartUpload() {
                 </>
               )}
 
-              {/* Inventory Data Columns */}
+              {/* Inventory Data Fields */}
               {dataType === 'inventory' && (
                 <>
                   <div>
@@ -370,12 +469,14 @@ export default function SmartUpload() {
                       Unit Cost <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.costPrice || ''} onValueChange={(value) => handleMappingChange('costPrice', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select unit cost column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -383,15 +484,17 @@ export default function SmartUpload() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Selling Cost <span className="text-red-500">*</span>
+                      Selling Price <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.sellingPrice || ''} onValueChange={(value) => handleMappingChange('sellingPrice', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select selling price column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -402,12 +505,14 @@ export default function SmartUpload() {
                       Stock on Hand <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.stockOnHand || ''} onValueChange={(value) => handleMappingChange('stockOnHand', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select stock on hand column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -418,12 +523,14 @@ export default function SmartUpload() {
                       Expiry Date <span className="text-red-500">*</span>
                     </label>
                     <Select value={mapping.expiryDate || ''} onValueChange={(value) => handleMappingChange('expiryDate', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select expiry date column" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -431,15 +538,18 @@ export default function SmartUpload() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Qty Sold (90 days) <span className="text-red-500">*</span>
+                      Qty Sold (90 Days)
                     </label>
                     <Select value={mapping.qtySold90Days || ''} onValueChange={(value) => handleMappingChange('qtySold90Days', value)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select column" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select qty sold column (optional)" />
                       </SelectTrigger>
                       <SelectContent>
-                        {columns.map(col => (
-                          <SelectItem key={col} value={col}>{col}</SelectItem>
+                        <SelectItem value="">None</SelectItem>
+                        {columns.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -448,31 +558,14 @@ export default function SmartUpload() {
               )}
             </div>
 
-            <div className="mt-6 flex gap-3">
-              <Button
-                onClick={() => setUploadStep('dataType')}
-                variant="outline"
-              >
-                Back
-              </Button>
-              <Button
-                onClick={handleProcessFile}
-                disabled={isLoading}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    Process File
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </>
-                )}
-              </Button>
-            </div>
+            <Button
+              onClick={handleProcessFile}
+              disabled={isLoading}
+              className="mt-6 w-full bg-green-600 hover:bg-green-700"
+            >
+              {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <ChevronRight className="w-4 h-4 mr-2" />}
+              Import Data
+            </Button>
           </Card>
         </div>
       )}
@@ -480,9 +573,9 @@ export default function SmartUpload() {
       {/* Processing Step */}
       {uploadStep === 'processing' && (
         <Card className="p-8 text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Processing Your File</h3>
-          <p className="text-gray-600">Please wait while we process your data...</p>
+          <Loader2 className="w-12 h-12 text-blue-600 mx-auto mb-4 animate-spin" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Processing File</h3>
+          <p className="text-gray-600">Please wait while we import your data...</p>
         </Card>
       )}
 
@@ -491,13 +584,7 @@ export default function SmartUpload() {
         <Card className="p-8 text-center bg-green-50 border-green-200">
           <CheckCircle2 className="w-12 h-12 text-green-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Successful!</h3>
-          <p className="text-gray-600 mb-6">Your data has been processed and added to the system.</p>
-          <Button
-            onClick={resetUpload}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            Upload Another File
-          </Button>
+          <p className="text-gray-600">Your data has been imported successfully. The dashboard will update shortly.</p>
         </Card>
       )}
     </div>

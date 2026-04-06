@@ -4,7 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts } from "./db";
-import { parseCSV, transformRow, validateMapping, detectColumns, type ColumnMapping } from "./utils/fileParser";
+import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
 export const appRouter = router({
@@ -27,9 +27,31 @@ export const appRouter = router({
       .input(z.object({ csvContent: z.string() }))
       .mutation(async ({ input }) => {
         try {
+          // First, check if it's an Excel file with multiple sheets
+          let sheets = null;
+          try {
+            sheets = await getExcelSheets(input.csvContent);
+          } catch (e) {
+            // Not an Excel file, continue with CSV parsing
+          }
+
+          // If we have multiple sheets, return sheet information
+          if (sheets && sheets.length > 1) {
+            return { 
+              success: true, 
+              sheets: sheets.map(s => ({
+                name: s.name,
+                columns: s.columns,
+                dataType: s.dataType
+              })),
+              multiSheet: true
+            };
+          }
+
+          // Otherwise parse as single sheet/CSV
           const data = await parseCSV(input.csvContent);
           const columns = detectColumns(data);
-          return { success: true, columns, sampleRow: data[0] || {} };
+          return { success: true, columns, sampleRow: data[0] || {}, multiSheet: false };
         } catch (error) {
           console.error('Column detection error:', error);
           return { success: false, error: 'Failed to detect columns' };
@@ -40,6 +62,7 @@ export const appRouter = router({
       .input(
         z.object({
           csvContent: z.string(),
+          sheetName: z.string().optional(),
           mapping: z.object({
             productName: z.string(),
             price: z.string().optional(),
@@ -62,8 +85,8 @@ export const appRouter = router({
             return { success: false, errors: validation.errors };
           }
 
-          // Parse CSV
-          const data = await parseCSV(input.csvContent);
+          // Parse CSV or Excel sheet
+          const data = await parseCSV(input.csvContent, input.sheetName);
           let processedCount = 0;
           let errorCount = 0;
 

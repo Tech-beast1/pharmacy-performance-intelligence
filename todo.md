@@ -132,3 +132,13 @@
 - [x] Test data persistence in database after upload
 - [x] Verify profit calculations include overhead costs correctly
 - [x] Test alert generation (Expiry Risk, Dead Stock, Low Margin) with real data
+
+
+## Phase 10: Critical Bug Fix - Multi-Sheet Excel Support
+
+- [x] Update parser to detect all sheets in Excel file
+- [x] Return sheet names in detectColumns response
+- [x] Allow users to select which sheet to import
+- [x] Display correct columns for selected sheet (Inventory vs Sales)
+- [x] Test Inventory-.Data.xlsx shows Inventory columns (Stock on Hand, Expiry Date, etc.)
+- [x] Test sales-.data.xlsx shows Sales columns (Quantity, Unit Cost, Selling Price)

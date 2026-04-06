@@ -197,7 +197,7 @@ describe('File Parser - Excel & CSV Support', () => {
       const validation = validateMapping(mapping);
       
       expect(validation.valid).toBe(false);
-      expect(validation.errors).toContain('Price column is required for sales data');
+      expect(validation.errors).toContain('Price is required for sales data');
     });
 
     it('should detect missing required fields for inventory data', () => {

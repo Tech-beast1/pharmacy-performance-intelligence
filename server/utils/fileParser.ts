@@ -31,6 +31,12 @@ export interface ParsedRow {
   dataType?: 'sales' | 'inventory';
 }
 
+export interface SheetInfo {
+  name: string;
+  columns: string[];
+  dataType: 'sales' | 'inventory' | 'unknown';
+}
+
 /**
  * Detect available columns from CSV/Excel data
  */
@@ -41,34 +47,48 @@ export function detectColumns(data: any[]): string[] {
 }
 
 /**
- * Parse CSV or Excel file content
- * @param fileContent - CSV text or base64-encoded Excel file
+ * Detect data type based on column names
  */
-export async function parseCSV(fileContent: string): Promise<any[]> {
-  // Check if this is likely base64-encoded Excel (contains non-text characters when decoded)
+function detectDataType(columns: string[]): 'sales' | 'inventory' | 'unknown' {
+  const columnStr = columns.join(' ').toLowerCase();
+  
+  // Check for inventory-specific columns
+  if (columnStr.includes('stock') || columnStr.includes('expiry') || columnStr.includes('qty sold')) {
+    return 'inventory';
+  }
+  
+  // Check for sales-specific columns
+  if (columnStr.includes('quantity') || columnStr.includes('unit cost') || columnStr.includes('selling price')) {
+    return 'sales';
+  }
+  
+  return 'unknown';
+}
+
+/**
+ * Get all sheets from Excel file with their columns
+ */
+export async function getExcelSheets(fileContent: string): Promise<SheetInfo[]> {
   try {
-    // Try to detect if it's base64 (Excel file)
-    if (fileContent.length > 100 && !fileContent.includes('\n') && !fileContent.includes(',')) {
-      // Likely base64-encoded Excel file
-      const binaryString = atob(fileContent);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      
-      // Use xlsx to parse the Excel file
-      const workbook = XLSX.read(bytes, { type: 'array' });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      
-      // Get raw data to find where actual headers are
+    // Decode base64
+    const binaryString = atob(fileContent);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    const workbook = XLSX.read(bytes, { type: 'array' });
+    const sheets: SheetInfo[] = [];
+
+    for (const sheetName of workbook.SheetNames) {
+      const worksheet = workbook.Sheets[sheetName];
       const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-      
-      // Find the row with actual column headers (usually row 2 in pharmacy data)
+
+      // Find header row
       let headerRowIndex = 0;
       let dataStartIndex = 1;
-      
-      // Look for the header row by checking for common column names
       const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
+      
       for (let i = 0; i < Math.min(5, rawData.length); i++) {
         const row = rawData[i] as any[];
         const rowStr = (row || []).join(' ').toLowerCase();
@@ -78,62 +98,56 @@ export async function parseCSV(fileContent: string): Promise<any[]> {
           break;
         }
       }
-      
-      // Extract headers and data
-      const headers = rawData[headerRowIndex] as any[];
-      const dataRows = rawData.slice(dataStartIndex) as any[][];
-      
-      // Convert to array of objects
-      const data = dataRows
-        .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
-        .map((row: any[]) => {
-          const obj: any = {};
-          (headers || []).forEach((header: any, index: number) => {
-            if (header && header.toString().trim()) {
-              obj[header.toString().trim()] = row[index] || '';
-            }
-          });
-          return obj;
-        });
-      
-      return data;
+
+      const headers = (rawData[headerRowIndex] as any[]) || [];
+      const columns = headers
+        .filter((h: any) => h && h.toString().trim() && !h.toString().startsWith('__EMPTY'))
+        .map((h: any) => h.toString().trim());
+
+      const dataType = detectDataType(columns);
+
+      sheets.push({
+        name: sheetName,
+        columns,
+        dataType
+      });
     }
-  } catch (e) {
-    // If base64 decode fails, treat as CSV
-    console.error('Error parsing as Excel, falling back to CSV:', e);
+
+    return sheets;
+  } catch (error) {
+    console.error('Error getting Excel sheets:', error);
+    return [];
   }
-  
-  // Parse as CSV
-  return new Promise((resolve, reject) => {
-    Papa.parse(fileContent, {
-      header: true,
-      skipEmptyLines: true,
-      dynamicTyping: false,
-      complete: (results: any) => {
-        resolve(results.data);
-      },
-      error: (error: any) => {
-        reject(error);
-      },
-    });
-  });
 }
 
 /**
- * Parse Excel file from buffer
+ * Parse specific sheet from Excel file
  */
-export async function parseExcel(buffer: Buffer): Promise<any[]> {
+export async function parseExcelSheet(fileContent: string, sheetName?: string): Promise<any[]> {
   try {
-    const workbook = XLSX.read(buffer, { type: 'buffer' });
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    // Decode base64
+    const binaryString = atob(fileContent);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    const workbook = XLSX.read(bytes, { type: 'array' });
     
-    // Get raw data to find where actual headers are
+    // Use specified sheet or first sheet
+    const targetSheet = sheetName || workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[targetSheet];
+
+    if (!worksheet) {
+      throw new Error(`Sheet "${targetSheet}" not found`);
+    }
+
     const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-    
+
     // Find the row with actual column headers (usually row 2 in pharmacy data)
     let headerRowIndex = 0;
     let dataStartIndex = 1;
-    
+
     // Look for the header row by checking for common column names
     const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
     for (let i = 0; i < Math.min(5, rawData.length); i++) {
@@ -145,11 +159,11 @@ export async function parseExcel(buffer: Buffer): Promise<any[]> {
         break;
       }
     }
-    
+
     // Extract headers and data
     const headers = rawData[headerRowIndex] as any[];
     const dataRows = rawData.slice(dataStartIndex) as any[][];
-    
+
     // Convert to array of objects
     const data = dataRows
       .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
@@ -162,7 +176,90 @@ export async function parseExcel(buffer: Buffer): Promise<any[]> {
         });
         return obj;
       });
-    
+
+    return data;
+  } catch (e) {
+    console.error('Error parsing Excel sheet:', e);
+    throw e;
+  }
+}
+
+/**
+ * Parse CSV or Excel file content
+ * @param fileContent - CSV text or base64-encoded Excel file
+ * @param sheetName - Optional sheet name for Excel files
+ */
+export async function parseCSV(fileContent: string, sheetName?: string): Promise<any[]> {
+  // Check if this is likely base64-encoded Excel (contains non-text characters when decoded)
+  try {
+    // Try to detect if it's base64 (Excel file)
+    if (fileContent.length > 100 && !fileContent.includes('\n') && !fileContent.includes(',')) {
+      // Likely base64-encoded Excel file
+      return await parseExcelSheet(fileContent, sheetName);
+    }
+  } catch (e) {
+    console.error('Error parsing as Excel, falling back to CSV:', e);
+  }
+
+  // Parse as CSV
+  return new Promise((resolve) => {
+    Papa.parse(fileContent, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results: any) => {
+        resolve(results.data || []);
+      },
+      error: () => {
+        resolve([]);
+      }
+    });
+  });
+}
+
+/**
+ * Parse Excel file from buffer
+ */
+export async function parseExcel(buffer: Buffer): Promise<any[]> {
+  try {
+    const workbook = XLSX.read(buffer, { type: 'buffer' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    // Get raw data to find where actual headers are
+    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+
+    // Find the row with actual column headers (usually row 2 in pharmacy data)
+    let headerRowIndex = 0;
+    let dataStartIndex = 1;
+
+    // Look for the header row by checking for common column names
+    const commonHeaders = ['Medicine', 'Product', 'Quantity', 'Cost', 'Price', 'Stock', 'Expiry', 'Sold', 'Unit', 'Selling'];
+    for (let i = 0; i < Math.min(5, rawData.length); i++) {
+      const row = rawData[i] as any[];
+      const rowStr = (row || []).join(' ').toLowerCase();
+      if (commonHeaders.some(h => rowStr.includes(h.toLowerCase()))) {
+        headerRowIndex = i;
+        dataStartIndex = i + 1;
+        break;
+      }
+    }
+
+    // Extract headers and data
+    const headers = rawData[headerRowIndex] as any[];
+    const dataRows = rawData.slice(dataStartIndex) as any[][];
+
+    // Convert to array of objects
+    const data = dataRows
+      .filter((row: any[]) => row.some((cell: any) => cell !== '' && cell !== null && cell !== undefined))
+      .map((row: any[]) => {
+        const obj: any = {};
+        (headers || []).forEach((header: any, index: number) => {
+          if (header && header.toString().trim()) {
+            obj[header.toString().trim()] = row[index] || '';
+          }
+        });
+        return obj;
+      });
+
     return data;
   } catch (error) {
     throw new Error(`Failed to parse Excel file: ${error}`);
@@ -170,117 +267,101 @@ export async function parseExcel(buffer: Buffer): Promise<any[]> {
 }
 
 /**
- * Validate and transform parsed row according to column mapping
+ * Transform a row based on column mapping
  */
 export function transformRow(row: any, mapping: ColumnMapping): ParsedRow | null {
-  try {
-    const productName = row[mapping.productName]?.toString().trim();
+  if (!row || !mapping.productName) return null;
 
-    if (!productName) {
-      return null;
-    }
+  const productName = row[mapping.productName];
+  if (!productName) return null;
 
-    const result: ParsedRow = {
-      productName,
-      dataType: mapping.dataType || 'sales',
-    };
+  const result: ParsedRow = {
+    productName: productName.toString().trim(),
+    dataType: mapping.dataType
+  };
 
-    // Handle Sales Data
-    if (mapping.dataType === 'sales' || !mapping.dataType) {
-      const priceStr = mapping.price ? row[mapping.price]?.toString().trim() : undefined;
-      const quantityStr = mapping.quantity ? row[mapping.quantity]?.toString().trim() : undefined;
-
-      if (!priceStr || !quantityStr) {
-        return null;
-      }
-
-      const price = parseFloat(priceStr);
-      const quantity = parseInt(quantityStr, 10);
-
-      if (isNaN(price) || isNaN(quantity)) {
-        return null;
-      }
-
-      result.price = price;
-      result.quantity = quantity;
-
-      if (mapping.costPrice && row[mapping.costPrice]) {
-        result.costPrice = parseFloat(row[mapping.costPrice].toString());
-      }
-    }
-
-    // Handle Inventory Data
-    if (mapping.dataType === 'inventory') {
-      if (mapping.costPrice && row[mapping.costPrice]) {
-        result.costPrice = parseFloat(row[mapping.costPrice].toString());
-      }
-
-      if (mapping.sellingPrice && row[mapping.sellingPrice]) {
-        result.sellingPrice = parseFloat(row[mapping.sellingPrice].toString());
-      }
-
-      if (mapping.stockOnHand && row[mapping.stockOnHand]) {
-        result.stockOnHand = parseInt(row[mapping.stockOnHand].toString(), 10);
-      }
-
-      if (mapping.qtySold90Days && row[mapping.qtySold90Days]) {
-        result.qtySold90Days = parseInt(row[mapping.qtySold90Days].toString(), 10);
-      }
-
-      if (mapping.expiryDate && row[mapping.expiryDate]) {
-        const expiryDateStr = row[mapping.expiryDate].toString().trim();
-        const expiryDate = new Date(expiryDateStr);
-        if (!isNaN(expiryDate.getTime())) {
-          result.expiryDate = expiryDate;
-        }
-      }
-    }
-
-    // Common fields
-    if (mapping.sku && row[mapping.sku]) {
-      result.sku = row[mapping.sku].toString().trim();
-    }
-
-    if (mapping.saleQuantity && row[mapping.saleQuantity]) {
-      result.saleQuantity = parseInt(row[mapping.saleQuantity].toString(), 10);
-    }
-
-    if (mapping.saleDate && row[mapping.saleDate]) {
-      const saleDate = new Date(row[mapping.saleDate].toString());
-      if (!isNaN(saleDate.getTime())) {
-        result.saleDate = saleDate;
-      }
-    }
-
-    return result;
-  } catch (error) {
-    console.error('Error transforming row:', error);
-    return null;
+  // Sales data fields
+  if (mapping.quantity) {
+    const qty = parseFloat(row[mapping.quantity]);
+    if (!isNaN(qty)) result.quantity = qty;
   }
+
+  if (mapping.price) {
+    const price = parseFloat(row[mapping.price]);
+    if (!isNaN(price)) result.price = price;
+  }
+
+  if (mapping.costPrice) {
+    const cost = parseFloat(row[mapping.costPrice]);
+    if (!isNaN(cost)) result.costPrice = cost;
+  }
+
+  // Inventory data fields
+  if (mapping.sellingPrice) {
+    const price = parseFloat(row[mapping.sellingPrice]);
+    if (!isNaN(price)) result.sellingPrice = price;
+  }
+
+  if (mapping.stockOnHand) {
+    const stock = parseFloat(row[mapping.stockOnHand]);
+    if (!isNaN(stock)) result.stockOnHand = stock;
+  }
+
+  if (mapping.qtySold90Days) {
+    const qty = parseFloat(row[mapping.qtySold90Days]);
+    if (!isNaN(qty)) result.qtySold90Days = qty;
+  }
+
+  if (mapping.expiryDate) {
+    const dateStr = row[mapping.expiryDate];
+    if (dateStr) {
+      const date = new Date(dateStr);
+      if (!isNaN(date.getTime())) result.expiryDate = date;
+    }
+  }
+
+  if (mapping.sku) {
+    result.sku = row[mapping.sku]?.toString().trim();
+  }
+
+  if (mapping.saleQuantity) {
+    const qty = parseFloat(row[mapping.saleQuantity]);
+    if (!isNaN(qty)) result.saleQuantity = qty;
+  }
+
+  if (mapping.saleDate) {
+    const dateStr = row[mapping.saleDate];
+    if (dateStr) {
+      const date = new Date(dateStr);
+      if (!isNaN(date.getTime())) result.saleDate = date;
+    }
+  }
+
+  return result;
 }
 
 /**
- * Validate column mapping has required fields
+ * Validate column mapping
  */
 export function validateMapping(mapping: ColumnMapping): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
-  if (!mapping.productName) errors.push('Product Name column is required');
-
-  if (mapping.dataType === 'sales' || !mapping.dataType) {
-    if (!mapping.price) errors.push('Price column is required for sales data');
-    if (!mapping.quantity) errors.push('Quantity column is required for sales data');
+  if (!mapping.productName) {
+    errors.push('Product Name mapping is required');
   }
 
-  if (mapping.dataType === 'inventory') {
-    if (!mapping.costPrice) errors.push('Unit Cost column is required for inventory data');
-    if (!mapping.sellingPrice) errors.push('Selling Price column is required for inventory data');
-    if (!mapping.stockOnHand) errors.push('Stock on Hand column is required for inventory data');
-    if (!mapping.expiryDate) errors.push('Expiry Date column is required for inventory data');
+  if (mapping.dataType === 'sales') {
+    if (!mapping.quantity) errors.push('Quantity is required for sales data');
+    if (!mapping.price) errors.push('Price is required for sales data');
+  } else if (mapping.dataType === 'inventory') {
+    if (!mapping.costPrice) errors.push('Cost Price is required for inventory data');
+    if (!mapping.sellingPrice) errors.push('Selling Price is required for inventory data');
+    if (!mapping.stockOnHand) errors.push('Stock on Hand is required for inventory data');
+    if (!mapping.expiryDate) errors.push('Expiry Date is required for inventory data');
   }
 
   return {
     valid: errors.length === 0,
-    errors,
+    errors
   };
 }
