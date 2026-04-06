@@ -126,9 +126,9 @@
 
 ## Phase 9: End-to-End Upload Testing & Verification
 
-- [ ] Perform successful end-to-end UI upload of sales-.data.xlsx and verify column mapping works
-- [ ] Perform successful end-to-end UI upload of Inventory-.Data.xlsx and verify column mapping works
-- [ ] Verify dashboard metrics update after successful file upload
-- [ ] Test data persistence in database after upload
-- [ ] Verify profit calculations include overhead costs correctly
-- [ ] Test alert generation (Expiry Risk, Dead Stock, Low Margin) with real data
+- [x] Perform successful end-to-end UI upload of sales-.data.xlsx and verify column mapping works
+- [x] Perform successful end-to-end UI upload of Inventory-.Data.xlsx and verify column mapping works
+- [x] Verify dashboard metrics update after successful file upload
+- [x] Test data persistence in database after upload
+- [x] Verify profit calculations include overhead costs correctly
+- [x] Test alert generation (Expiry Risk, Dead Stock, Low Margin) with real data
