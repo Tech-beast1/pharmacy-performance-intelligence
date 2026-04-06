@@ -197,3 +197,16 @@
 - [x] Style as prominent banner with circular badges
 - [x] Ensure header displays at top of dashboard page
 - [x] Test header displays correctly with pharmacy info
+
+
+## Phase 16: Persistent Top Navigation Header
+
+- [x] Create TopNavBar component with three circular badges (pharmacy, date range, owner)
+- [x] Add pharmacy location field to pharmacy_profiles schema
+- [x] Display pharmacy name and location in green circle
+- [x] Display date range (Jan 1 - Jan 31, 2025) in red circle
+- [x] Display owner name and title in blue circle
+- [x] Integrate TopNavBar into DashboardLayout so it shows on all pages
+- [x] Style circles with icons matching the reference design
+- [x] Update OnboardingModal to collect location and date range fields
+- [x] Update backend saveProfile mutation to accept and save all fields

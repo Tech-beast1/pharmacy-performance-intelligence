@@ -27,6 +27,7 @@ import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 import DataAnalystFooter from './DataAnalystFooter';
+import { TopNavBar } from './TopNavBar';
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -266,6 +267,8 @@ function DashboardLayoutContent({
             </div>
           </div>
         )}
+        {/* Persistent Top Navigation Header */}
+        <TopNavBar />
         <main className="flex-1 flex flex-col">
           <div className="flex-1 p-4">{children}</div>
           <DataAnalystFooter />

@@ -13,7 +13,10 @@ interface OnboardingModalProps {
 export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
   const [pharmacyName, setPharmacyName] = useState('');
   const [ownerName, setOwnerName] = useState('');
+  const [location, setLocation] = useState('');
   const [setupDate, setSetupDate] = useState(new Date().toISOString().split('T')[0]);
+  const [reportStartDate, setReportStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [reportEndDate, setReportEndDate] = useState(new Date().toISOString().split('T')[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -27,8 +30,17 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
     if (profileData?.profile) {
       setPharmacyName(profileData.profile.pharmacyName);
       setOwnerName(profileData.profile.ownerName);
+      setLocation(profileData.profile.location || '');
       const date = new Date(profileData.profile.setupDate);
       setSetupDate(date.toISOString().split('T')[0]);
+      if (profileData.profile.reportStartDate) {
+        const startDate = new Date(profileData.profile.reportStartDate);
+        setReportStartDate(startDate.toISOString().split('T')[0]);
+      }
+      if (profileData.profile.reportEndDate) {
+        const endDate = new Date(profileData.profile.reportEndDate);
+        setReportEndDate(endDate.toISOString().split('T')[0]);
+      }
     }
   }, [profileData, isOpen]);
 
@@ -51,7 +63,10 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
       await saveProfile.mutateAsync({
         pharmacyName: pharmacyName.trim(),
         ownerName: ownerName.trim(),
+        location: location.trim(),
         setupDate,
+        reportStartDate,
+        reportEndDate,
       });
 
       onClose();
@@ -103,12 +118,45 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="location">Pharmacy Location</Label>
+            <Input
+              id="location"
+              placeholder="e.g., Accra, Ghana"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="setupDate">Setup Date</Label>
             <Input
               id="setupDate"
               type="date"
               value={setupDate}
               onChange={(e) => setSetupDate(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="reportStartDate">Report Start Date</Label>
+            <Input
+              id="reportStartDate"
+              type="date"
+              value={reportStartDate}
+              onChange={(e) => setReportStartDate(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="reportEndDate">Report End Date</Label>
+            <Input
+              id="reportEndDate"
+              type="date"
+              value={reportEndDate}
+              onChange={(e) => setReportEndDate(e.target.value)}
               disabled={isLoading}
             />
           </div>

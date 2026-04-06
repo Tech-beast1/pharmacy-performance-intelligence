@@ -286,7 +286,10 @@ export const appRouter = router({
       .input(z.object({
         pharmacyName: z.string().min(1, 'Pharmacy name is required'),
         ownerName: z.string().min(1, 'Owner name is required'),
+        location: z.string().optional(),
         setupDate: z.string().or(z.date()),
+        reportStartDate: z.string().or(z.date()).optional(),
+        reportEndDate: z.string().or(z.date()).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         try {
@@ -294,11 +297,26 @@ export const appRouter = router({
             ? new Date(input.setupDate) 
             : input.setupDate;
           
+          const reportStartDate = input.reportStartDate
+            ? (typeof input.reportStartDate === 'string' 
+              ? new Date(input.reportStartDate) 
+              : input.reportStartDate)
+            : null;
+          
+          const reportEndDate = input.reportEndDate
+            ? (typeof input.reportEndDate === 'string' 
+              ? new Date(input.reportEndDate) 
+              : input.reportEndDate)
+            : null;
+          
           await upsertPharmacyProfile({
             userId: ctx.user!.id,
             pharmacyName: input.pharmacyName,
             ownerName: input.ownerName,
+            location: input.location,
             setupDate: setupDate as any,
+            reportStartDate: reportStartDate as any,
+            reportEndDate: reportEndDate as any,
           });
           
           return { success: true, message: 'Pharmacy profile saved successfully' };

@@ -133,10 +133,13 @@ export type InsertOverheadCost = typeof overheadCosts.$inferInsert;
  */
 export const pharmacyProfiles = mysqlTable("pharmacy_profiles", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().unique(), // One profile per user
+  userId: int("userId").notNull().unique(),
   pharmacyName: varchar("pharmacyName", { length: 255 }).notNull(),
   ownerName: varchar("ownerName", { length: 255 }).notNull(),
+  location: varchar("location", { length: 255 }),
   setupDate: date("setupDate").notNull(),
+  reportStartDate: date("reportStartDate"),
+  reportEndDate: date("reportEndDate"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
