@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import DownloadReport from '@/components/DownloadReport';
+import { PharmacyProfileDisplay } from '@/components/PharmacyProfileDisplay';
+import { OnboardingModal } from '@/components/OnboardingModal';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 interface MetricCard {
@@ -17,6 +19,7 @@ interface MetricCard {
 
 export default function Dashboard() {
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   // Fetch dashboard data
   const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
@@ -94,6 +97,17 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600 mt-1">Welcome to Pharmacy Performance Intelligence</p>
       </div>
+
+      {/* Pharmacy Profile Section */}
+      <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">Pharmacy Information</h2>
+        </div>
+        <PharmacyProfileDisplay onEditClick={() => setIsOnboardingOpen(true)} />
+      </Card>
+
+      {/* Onboarding Modal */}
+      <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

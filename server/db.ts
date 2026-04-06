@@ -1,9 +1,9 @@
 import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts } from "../drizzle/schema";
+import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost } from "../drizzle/schema";
+import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile } from "../drizzle/schema";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -217,4 +217,33 @@ export async function upsertOverheadCosts(data: InsertOverheadCost) {
 export async function getCurrentMonthOverheadCosts(userId: number) {
   const now = new Date();
   return getOverheadCostsByMonth(userId, now.getMonth() + 1, now.getFullYear());
+}
+
+// Pharmacy profile queries
+export async function getPharmacyProfileByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(pharmacyProfiles)
+    .where(eq(pharmacyProfiles.userId, userId))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function upsertPharmacyProfile(data: InsertPharmacyProfile) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const existing = await getPharmacyProfileByUserId(data.userId);
+  
+  if (existing) {
+    await db.update(pharmacyProfiles).set(data).where(eq(pharmacyProfiles.userId, data.userId));
+    return existing;
+  } else {
+    const result = await db.insert(pharmacyProfiles).values(data);
+    return result;
+  }
 }

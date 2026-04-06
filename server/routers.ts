@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
@@ -265,6 +265,46 @@ export const appRouter = router({
         } catch (error) {
           console.error('Error saving overhead costs:', error);
           return { success: false, error: 'Failed to save overhead costs' };
+        }
+      }),
+  }),
+
+  // Pharmacy profile management
+  pharmacy: router({
+    getProfile: protectedProcedure
+      .query(async ({ ctx }) => {
+        try {
+          const profile = await getPharmacyProfileByUserId(ctx.user!.id);
+          return { success: true, profile };
+        } catch (error) {
+          console.error('Error fetching pharmacy profile:', error);
+          return { success: false, error: 'Failed to fetch pharmacy profile' };
+        }
+      }),
+    
+    saveProfile: protectedProcedure
+      .input(z.object({
+        pharmacyName: z.string().min(1, 'Pharmacy name is required'),
+        ownerName: z.string().min(1, 'Owner name is required'),
+        setupDate: z.string().or(z.date()),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        try {
+          const setupDate = typeof input.setupDate === 'string' 
+            ? new Date(input.setupDate) 
+            : input.setupDate;
+          
+          await upsertPharmacyProfile({
+            userId: ctx.user!.id,
+            pharmacyName: input.pharmacyName,
+            ownerName: input.ownerName,
+            setupDate: setupDate as any,
+          });
+          
+          return { success: true, message: 'Pharmacy profile saved successfully' };
+        } catch (error) {
+          console.error('Error saving pharmacy profile:', error);
+          return { success: false, error: 'Failed to save pharmacy profile' };
         }
       }),
   }),

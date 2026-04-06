@@ -22,6 +22,13 @@
       "when": 1775039374842,
       "tag": "0002_oval_winter_soldier",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1775499148124,
+      "tag": "0003_flat_giant_man",
+      "breakpoints": true
     }
   ]
 }

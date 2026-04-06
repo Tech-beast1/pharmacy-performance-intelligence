@@ -126,3 +126,20 @@ export const overheadCosts = mysqlTable("overhead_costs", {
 
 export type OverheadCost = typeof overheadCosts.$inferSelect;
 export type InsertOverheadCost = typeof overheadCosts.$inferInsert;
+
+/**
+ * PharmacyProfile table stores pharmacy information and setup details.
+ * One profile per user/pharmacy.
+ */
+export const pharmacyProfiles = mysqlTable("pharmacy_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(), // One profile per user
+  pharmacyName: varchar("pharmacyName", { length: 255 }).notNull(),
+  ownerName: varchar("ownerName", { length: 255 }).notNull(),
+  setupDate: date("setupDate").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PharmacyProfile = typeof pharmacyProfiles.$inferSelect;
+export type InsertPharmacyProfile = typeof pharmacyProfiles.$inferInsert;

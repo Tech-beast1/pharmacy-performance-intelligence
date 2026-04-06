@@ -179,3 +179,13 @@
 - [ ] Add upload history/audit trail page showing all imported files and timestamps
 - [ ] Implement data validation preview before final commit to database
 - [ ] Add bulk edit capability for imported data before final commit
+
+
+## Phase 14: Pharmacy Profile Onboarding Feature
+
+- [x] Add pharmacy_profile table to schema (pharmacyName, ownerName, setupDate, userId)
+- [x] Create onboarding modal component for signup flow
+- [x] Add pharmacy profile display on dashboard with circular badges
+- [x] Implement backend procedures to save/retrieve pharmacy profile
+- [x] Test onboarding flow and profile display on dashboard
+- [x] Verify pharmacy info persists and displays correctly
