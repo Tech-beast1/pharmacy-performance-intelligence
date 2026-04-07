@@ -25,7 +25,7 @@ export function TopNavBar() {
 
   return (
     <>
-      <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+      <div className="border-b border-gray-200 px-6 py-4 shadow-sm" style={{ backgroundColor: '#a46060' }}>
         <div className="flex items-center justify-between gap-8">
           {/* Pharmacy Info - Green Circle - Clickable */}
           <button
@@ -36,9 +36,9 @@ export function TopNavBar() {
               <Building2 className="w-8 h-8" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">{profile.pharmacyName}</p>
+              <p className="font-semibold text-white text-sm">{profile.pharmacyName}</p>
               {profile.location && (
-                <p className="text-gray-600 text-xs">{profile.location}</p>
+                <p className="text-white/80 text-xs">{profile.location}</p>
               )}
             </div>
           </button>
@@ -52,8 +52,8 @@ export function TopNavBar() {
               <Calendar className="w-8 h-8" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">{dateRangeText}</p>
-              <p className="text-gray-600 text-xs">Reporting Period</p>
+              <p className="font-semibold text-white text-sm">{dateRangeText}</p>
+              <p className="text-white/80 text-xs">Reporting Period</p>
             </div>
           </button>
 
@@ -66,8 +66,8 @@ export function TopNavBar() {
               <User className="w-8 h-8" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">{profile.ownerName}</p>
-              <p className="text-gray-600 text-xs">Pharmacy Owner</p>
+              <p className="font-semibold text-white text-sm">{profile.ownerName}</p>
+              <p className="text-white/80 text-xs">Pharmacy Owner</p>
             </div>
           </button>
         </div>

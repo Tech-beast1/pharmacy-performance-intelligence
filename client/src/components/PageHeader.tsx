@@ -2,7 +2,7 @@ export function PageHeader() {
   const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/ppi-logo-d2hc4Ly38HBq4HMxQA5qtx.webp';
 
   return (
-    <div className="sticky top-0 z-40 bg-gradient-to-r from-blue-900/80 via-purple-900/80 to-blue-900/80 backdrop-blur-md border-b border-white/10">
+    <div className="sticky top-0 z-40 backdrop-blur-md border-b border-white/10" style={{ backgroundColor: '#a46060' }}>
       <div className="flex items-center justify-between gap-2 md:gap-4 px-3 md:px-6 py-2 md:py-4">
         {/* Header Text - Hidden on Mobile */}
         <div className="flex-1 min-w-0 hidden md:block">

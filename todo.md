@@ -289,3 +289,14 @@
 - [x] Add confirmation dialog before clearing data
 - [x] Implement data deletion logic
 - [x] Test Clear All button clears all data successfully
+
+
+## Phase 25: Color Consistency - Match Blue Backgrounds to PPI Logo Color
+
+- [x] Update PageHeader background from blue-900/purple-900 gradient to match PPI logo background (#a46060)
+- [x] Update DashboardLayout sidebar header background to match PPI logo color
+- [x] Update TopNavBar background to match PPI logo color
+- [x] Update TopNavBar text colors to white for contrast on new background
+- [x] Update all other blue gradient backgrounds to use consistent brownish-red color
+- [x] Verify color consistency across all pages (Dashboard, Upload, Overhead, Inventory, Reports, Settings)
+- [x] Test on mobile and desktop to ensure colors display correctly
