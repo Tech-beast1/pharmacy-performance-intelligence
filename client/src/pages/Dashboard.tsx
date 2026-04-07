@@ -4,8 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import DownloadReport from '@/components/DownloadReport';
-import { PharmacyProfileHeader } from '@/components/PharmacyProfileHeader';
-import { OnboardingModal } from '@/components/OnboardingModal';
+
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 interface MetricCard {
@@ -19,7 +18,7 @@ interface MetricCard {
 
 export default function Dashboard() {
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
-  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+
 
   // Fetch dashboard data
   const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
@@ -92,12 +91,6 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Pharmacy Profile Header */}
-      <PharmacyProfileHeader onEditClick={() => setIsOnboardingOpen(true)} />
-
-      {/* Onboarding Modal */}
-      <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
-
       {/* Dashboard Metrics */}
       <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-6 md:mt-8">Performance Metrics</h2>
 

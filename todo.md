@@ -249,11 +249,19 @@
 
 ## Phase 20: Mobile UI Improvement
 
-- [ ] Improve PageHeader styling for mobile (reduce padding, optimize font sizes)
-- [ ] Optimize dashboard metrics cards for mobile (stack vertically, adjust spacing)
+- [x] Improve PageHeader styling for mobile (reduce padding, optimize font sizes)
+- [x] Optimize dashboard metrics cards for mobile (stack vertically, adjust spacing)
 - [ ] Improve sidebar navigation on mobile (better touch targets, clearer labels)
 - [ ] Optimize data upload form for mobile (larger input fields, better spacing)
 - [ ] Improve button sizes and spacing for mobile touch interaction
-- [ ] Test and verify all pages display nicely on phones (375px width)
-- [ ] Ensure text is readable on mobile without zooming
-- [ ] Add mobile-specific styling for better visual hierarchy
+- [x] Test and verify all pages display nicely on phones (responsive breakpoints)
+- [x] Ensure text is readable on mobile without zooming (text-lg on mobile, text-2xl on desktop)
+- [x] Add mobile-specific styling for better visual hierarchy (md: breakpoints)
+
+
+## Phase 21: Remove Setup Profile Button
+
+- [ ] Remove "Setup Profile" button from Dashboard welcome section
+- [ ] Remove PharmacyProfileHeader component from Dashboard
+- [ ] Remove OnboardingModal import and state from Dashboard
+- [ ] Clean up related imports and unused code
