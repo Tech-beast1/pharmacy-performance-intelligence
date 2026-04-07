@@ -261,7 +261,15 @@
 
 ## Phase 21: Remove Setup Profile Button
 
-- [ ] Remove "Setup Profile" button from Dashboard welcome section
-- [ ] Remove PharmacyProfileHeader component from Dashboard
-- [ ] Remove OnboardingModal import and state from Dashboard
-- [ ] Clean up related imports and unused code
+- [x] Remove "Setup Profile" button from Dashboard welcome section
+- [x] Remove PharmacyProfileHeader component from Dashboard
+- [x] Remove OnboardingModal import and state from Dashboard
+- [x] Clean up related imports and unused code
+
+
+## Phase 22: Mobile Header Optimization
+
+- [ ] Hide pharmacy name text on mobile (show only logo)
+- [ ] Move hamburger menu to left corner of sidebar
+- [ ] Position menu bar on top of pharmacy background
+- [ ] Ensure header looks clean and professional on mobile

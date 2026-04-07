@@ -16,8 +16,8 @@ export function PageHeader() {
           />
         </div>
         
-        {/* Header Text */}
-        <div className="flex-1 min-w-0">
+        {/* Header Text - Hidden on Mobile */}
+        <div className="flex-1 min-w-0 hidden md:block">
           <h1 className="text-lg md:text-2xl font-bold text-white tracking-tight truncate">
             Pharmacy Performance Intelligence
           </h1>
