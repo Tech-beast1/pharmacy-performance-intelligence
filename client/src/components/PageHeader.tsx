@@ -11,7 +11,7 @@ export function PageHeader() {
             alt="PPI" 
             className="h-8 md:h-12 w-8 md:w-12 drop-shadow-lg"
             style={{
-              filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.3))'
+              filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.3))', backgroundColor: '#a46060', borderColor: '#f9fafa'
             }}
           />
         </div>

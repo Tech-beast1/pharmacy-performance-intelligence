@@ -269,7 +269,14 @@
 
 ## Phase 22: Mobile Header Optimization
 
-- [ ] Hide pharmacy name text on mobile (show only logo)
-- [ ] Move hamburger menu to left corner of sidebar
-- [ ] Position menu bar on top of pharmacy background
-- [ ] Ensure header looks clean and professional on mobile
+- [x] Hide pharmacy name text on mobile (show only logo)
+- [x] Move hamburger menu to left corner of sidebar
+- [x] Position menu bar on top of pharmacy background (gradient background added)
+- [x] Ensure header looks clean and professional on mobile
+
+
+## Phase 23: Remove PageHeader
+
+- [ ] Remove PageHeader component from all pages
+- [ ] Remove PageHeader import from DashboardLayout
+- [ ] Clean up related code
