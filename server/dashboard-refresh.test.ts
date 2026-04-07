@@ -50,7 +50,7 @@ describe('Dashboard Refresh After Upload', () => {
             productName: parsed.productName,
             quantitySold: saleQuantity,
             salePrice,
-            totalSaleValue: salePrice * saleQuantity,
+            totalRevenue: salePrice * saleQuantity,
             costPrice,
             profit,
             saleDate: new Date(),
@@ -113,7 +113,7 @@ describe('Dashboard Refresh After Upload', () => {
             productName: parsed.productName,
             quantitySold: saleQuantity,
             salePrice,
-            totalSaleValue: salePrice * saleQuantity,
+            totalRevenue: salePrice * saleQuantity,
             costPrice,
             profit,
             saleDate: new Date(),
@@ -134,7 +134,6 @@ describe('Dashboard Refresh After Upload', () => {
             totalSalesQuantity: saleQuantity,
             totalSalesValue: salePrice * saleQuantity,
             createdAt: new Date(),
-            updatedAt: new Date(),
           } as any);
         }
       }
@@ -185,7 +184,7 @@ describe('Dashboard Refresh After Upload', () => {
             productName: parsed.productName,
             quantitySold: saleQuantity,
             salePrice,
-            totalSaleValue: salePrice * saleQuantity,
+            totalRevenue: salePrice * saleQuantity,
             costPrice,
             profit,
             saleDate: new Date(),

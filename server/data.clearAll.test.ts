@@ -53,10 +53,10 @@ describe('clearAllUserData', () => {
         inventoryId: inventoryId,
         productName: 'Product A',
         quantitySold: 10,
-        salePrice: '150.00',
-        totalSaleValue: '1500.00',
-        costPrice: '100.00',
-        profit: '500.00',
+        salePrice: 150.00,
+        totalRevenue: 1500.00,
+        costPrice: 100.00,
+        profit: 500.00,
         saleDate: new Date(),
       },
       {
@@ -64,10 +64,10 @@ describe('clearAllUserData', () => {
         inventoryId: inventoryId,
         productName: 'Product A',
         quantitySold: 5,
-        salePrice: '150.00',
-        totalSaleValue: '750.00',
-        costPrice: '100.00',
-        profit: '250.00',
+        salePrice: 150.00,
+        totalRevenue: 750.00,
+        costPrice: 100.00,
+        profit: 250.00,
         saleDate: new Date(),
       },
     ]);
@@ -77,7 +77,7 @@ describe('clearAllUserData', () => {
     expect(transactionsBefore.length).toBe(2);
 
     // Clear all data
-    await clearAllUserData(testUserId);
+    await clearAllUserData(testUserId2);
 
     // Verify transactions are deleted
     const transactionsAfter = await db.select().from(salesTransactions).where(eq(salesTransactions.userId, testUserId));
@@ -85,12 +85,23 @@ describe('clearAllUserData', () => {
   });
 
   it('should delete all inventory items for a user', async () => {
+    // Create a new test user for this test to avoid conflicts
+    const testOpenId2 = `test-user-inv-${Date.now()}`;
+    await db.insert(users).values({
+      openId: testOpenId2,
+      name: 'Test User Inventory',
+      email: 'test-inv@example.com',
+      role: 'user',
+      lastSignedIn: new Date(),
+    });
+    const insertedUsers2 = await db.select().from(users).where(eq(users.openId, testOpenId2)).limit(1);
+    const testUserId2 = insertedUsers2[0].id;
     if (!db) throw new Error('Database not available');
 
     // Insert test inventory items
     await db.insert(inventory).values([
       {
-        userId: testUserId,
+        userId: testUserId2,
         sku: `SKU-INV-${Date.now()}-1`,
         productName: 'Medicine A',
         quantity: 50,
@@ -99,7 +110,7 @@ describe('clearAllUserData', () => {
         expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       },
       {
-        userId: testUserId,
+        userId: testUserId2,
         sku: `SKU-INV-${Date.now()}-2`,
         productName: 'Medicine B',
         quantity: 30,
@@ -110,14 +121,14 @@ describe('clearAllUserData', () => {
     ]);
 
     // Verify inventory items exist
-    const inventoryBefore = await db.select().from(inventory).where(eq(inventory.userId, testUserId));
+    const inventoryBefore = await db.select().from(inventory).where(eq(inventory.userId, testUserId2));
     expect(inventoryBefore.length).toBe(2);
 
     // Clear all data
-    await clearAllUserData(testUserId);
+    await clearAllUserData(testUserId2);
 
     // Verify inventory items are deleted
-    const inventoryAfter = await db.select().from(inventory).where(eq(inventory.userId, testUserId));
+    const inventoryAfter = await db.select().from(inventory).where(eq(inventory.userId, testUserId2));
     expect(inventoryAfter.length).toBe(0);
   });
 
@@ -164,7 +175,7 @@ describe('clearAllUserData', () => {
     expect(alertsBefore.length).toBe(2);
 
     // Clear all data
-    await clearAllUserData(testUserId);
+    await clearAllUserData(testUserId2);
 
     // Verify alerts are deleted
     const alertsAfter = await db.select().from(alerts).where(eq(alerts.userId, testUserId));
@@ -197,7 +208,7 @@ describe('clearAllUserData', () => {
     expect(uploadsBefore.length).toBe(2);
 
     // Clear all data
-    await clearAllUserData(testUserId);
+    await clearAllUserData(testUserId2);
 
     // Verify file uploads are deleted
     const uploadsAfter = await db.select().from(fileUploads).where(eq(fileUploads.userId, testUserId));
@@ -234,7 +245,7 @@ describe('clearAllUserData', () => {
     expect(costsBefore.length).toBe(2);
 
     // Clear all data
-    await clearAllUserData(testUserId);
+    await clearAllUserData(testUserId2);
 
     // Verify overhead costs are deleted
     const costsAfter = await db.select().from(overheadCosts).where(eq(overheadCosts.userId, testUserId));
@@ -291,7 +302,7 @@ describe('clearAllUserData', () => {
         productName: 'Test Product',
         quantitySold: 5,
         salePrice: '100.00',
-        totalSaleValue: '500.00',
+        totalRevenue: '500.00',
         costPrice: '50.00',
         profit: '250.00',
         saleDate: new Date(),
@@ -302,7 +313,7 @@ describe('clearAllUserData', () => {
         productName: 'Other Product',
         quantitySold: 10,
         salePrice: '200.00',
-        totalSaleValue: '2000.00',
+        totalRevenue: '2000.00',
         costPrice: '100.00',
         profit: '1000.00',
         saleDate: new Date(),
@@ -310,7 +321,7 @@ describe('clearAllUserData', () => {
     ]);
 
     // Clear data for test user
-    await clearAllUserData(testUserId);
+    await clearAllUserData(testUserId2);
 
     // Verify test user's data is deleted
     const testUserTransactions = await db.select().from(salesTransactions).where(eq(salesTransactions.userId, testUserId));
@@ -330,7 +341,7 @@ describe('clearAllUserData', () => {
     
     // Clean up test user and all their data
     try {
-      await clearAllUserData(testUserId);
+      await clearAllUserData(testUserId2);
       // Delete the test user
       await db.delete(users).where(eq(users.id, testUserId));
     } catch (error) {

@@ -21,7 +21,6 @@ describe('Overhead Cost Profit Calculation', () => {
         lastSaleDate: now,
         totalSalesValue: 5000,
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -34,12 +33,11 @@ describe('Overhead Cost Profit Calculation', () => {
         productName: 'Aspirin',
         quantitySold: 50,
         salePrice: 50,
-        totalSaleValue: 2500,
+        totalRevenue: 2500,
         costPrice: 20,
         profit: (50 - 20) * 50, // 1500
         saleDate: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
         createdAt: now,
-        updatedAt: now,
       },
       {
         id: 2,
@@ -48,12 +46,11 @@ describe('Overhead Cost Profit Calculation', () => {
         productName: 'Aspirin',
         quantitySold: 30,
         salePrice: 50,
-        totalSaleValue: 1500,
+        totalRevenue: 1500,
         costPrice: 20,
         profit: (50 - 20) * 30, // 900
         saleDate: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -95,12 +92,11 @@ describe('Overhead Cost Profit Calculation', () => {
         productName: 'Medicine A',
         quantitySold: 100, // 100 units sold
         salePrice: 100, // Selling price = 100 per unit
-        totalSaleValue: 10000,
+        totalRevenue: 10000,
         costPrice: 30, // Unit cost = 30
         profit: (100 - 30) * 100, // 7000 (70 per unit * 100 units)
         saleDate: now,
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -134,15 +130,14 @@ describe('Overhead Cost Profit Calculation', () => {
         id: 1,
         userId: 1,
         inventoryId: 1,
-        productName: 'Medicine B',
+        productName: 'Medicine A',
         quantitySold: 50,
         salePrice: 75,
-        totalSaleValue: 3750,
+        totalRevenue: 3750,
         costPrice: 25,
         profit: (75 - 25) * 50, // 2500
         saleDate: now,
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -166,12 +161,11 @@ describe('Overhead Cost Profit Calculation', () => {
         productName: 'Medicine C',
         quantitySold: 40,
         salePrice: 60,
-        totalSaleValue: 2400,
+        totalRevenue: 2400,
         costPrice: 20,
         profit: (60 - 20) * 40, // 1600
         saleDate: now,
         createdAt: now,
-        updatedAt: now,
       },
     ];
 

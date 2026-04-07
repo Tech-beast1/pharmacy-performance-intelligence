@@ -24,7 +24,6 @@ describe('Formula Calculations', () => {
           saleDate: new Date(),
           totalRevenue: 1000,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           id: '2',
@@ -36,7 +35,6 @@ describe('Formula Calculations', () => {
           saleDate: new Date(),
           totalRevenue: 1000,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 
@@ -67,7 +65,6 @@ describe('Formula Calculations', () => {
           saleDate: new Date(),
           totalRevenue: 1000,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 
@@ -89,7 +86,6 @@ describe('Formula Calculations', () => {
           saleDate: new Date(),
           totalRevenue: 500,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 
@@ -139,7 +135,6 @@ describe('Formula Calculations', () => {
           qtySold120days: 8,
           stockValue: 500,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 
@@ -173,7 +168,6 @@ describe('Formula Calculations', () => {
           qtySold120days: 8,
           stockValue: 500,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 
@@ -207,7 +201,6 @@ describe('Formula Calculations', () => {
           qtySold120days: 5,
           stockValue: 500,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 
@@ -241,7 +234,6 @@ describe('Formula Calculations', () => {
           qtySold120days: 8,
           stockValue: 500,
           createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ];
 

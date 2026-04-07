@@ -215,6 +215,7 @@ export default function SmartUpload() {
       const result = await processFileMutation.mutateAsync({
         csvContent,
         sheetName: selectedSheet || undefined,
+        dataType: dataType as 'sales' | 'inventory',
         mapping: mapping as any,
         threshold: dataType === 'inventory' ? finalThreshold : undefined,
       });

@@ -18,12 +18,11 @@ describe('Dashboard Period Selector', () => {
         productName: 'Medicine A',
         quantitySold: 100,
         salePrice: 100,
-        totalSaleValue: 10000,
+        totalRevenue: 10000,
         costPrice: 30,
         profit: (100 - 30) * 100, // 7000
         saleDate: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -58,12 +57,11 @@ describe('Dashboard Period Selector', () => {
         productName: 'Product A',
         quantitySold: 50,
         salePrice: 200,
-        totalSaleValue: 10000,
+        totalRevenue: 10000,
         costPrice: 100,
         profit: (200 - 100) * 50, // 5000
         saleDate: now,
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -98,12 +96,11 @@ describe('Dashboard Period Selector', () => {
         productName: 'Product B',
         quantitySold: 30,
         salePrice: 150,
-        totalSaleValue: 4500,
+        totalRevenue: 4500,
         costPrice: 50,
         profit: (150 - 50) * 30, // 3000
         saleDate: now,
         createdAt: now,
-        updatedAt: now,
       },
     ];
 
@@ -128,12 +125,11 @@ describe('Dashboard Period Selector', () => {
         productName: 'Medicine X',
         quantitySold: 200,
         salePrice: 50,
-        totalSaleValue: 10000,
+        totalRevenue: 10000,
         costPrice: 20,
         profit: (50 - 20) * 200, // 6000
         saleDate: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
         createdAt: now,
-        updatedAt: now,
       },
       {
         id: 2,
@@ -142,12 +138,11 @@ describe('Dashboard Period Selector', () => {
         productName: 'Medicine Y',
         quantitySold: 100,
         salePrice: 75,
-        totalSaleValue: 7500,
+        totalRevenue: 7500,
         costPrice: 25,
         profit: (75 - 25) * 100, // 5000
         saleDate: new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000),
         createdAt: now,
-        updatedAt: now,
       },
     ];
 

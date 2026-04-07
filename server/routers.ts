@@ -63,6 +63,7 @@ export const appRouter = router({
         z.object({
           csvContent: z.string(),
           sheetName: z.string().optional(),
+          dataType: z.enum(['sales', 'inventory']).optional(),
           mapping: z.object({
             productName: z.string(),
             price: z.string().optional(),
@@ -114,7 +115,7 @@ export const appRouter = router({
 
               // For SALES data: create sales transaction from quantity and price
               // If saleQuantity/saleDate not explicitly mapped, use quantity as saleQuantity and today as saleDate
-              const dataType = (input.mapping as any).dataType || 'sales';
+              const dataType = input.dataType || 'sales';
               if (dataType === 'sales' && parsed.quantity && parsed.price) {
                 const saleQuantity = parsed.quantity;
                 const saleDate = parsed.saleDate || new Date(); // Use today if no date provided
@@ -127,7 +128,7 @@ export const appRouter = router({
                   productName: parsed.productName,
                   quantitySold: saleQuantity,
                   salePrice: parsed.price,
-                  totalSaleValue: parsed.price * saleQuantity,
+                  totalRevenue: parsed.price * saleQuantity,
                   costPrice,
                   profit,
                   saleDate,
@@ -142,7 +143,7 @@ export const appRouter = router({
                   productName: parsed.productName,
                   quantitySold: parsed.saleQuantity,
                   salePrice: parsed.sellingPrice,
-                  totalSaleValue: parsed.sellingPrice * parsed.saleQuantity,
+                  totalRevenue: parsed.sellingPrice * parsed.saleQuantity,
                   costPrice: parsed.costPrice || 0,
                   profit,
                   saleDate: parsed.saleDate,

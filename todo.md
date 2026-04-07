@@ -351,3 +351,14 @@
 - [x] Test getDashboardMetrics returns data correctly
 - [x] Verify Total Revenue and Profit metrics display on dashboard (showing 0 because no sales data for selected period)
 - [x] Check browser console for any errors (resolved - schema updated)
+
+
+## BUG FIX: Only Dead Stock Value Showing, Other Metrics are 0
+
+- [ ] Debug getDashboardMetrics to check if sales transactions are being fetched
+- [ ] Verify sales transaction query is working correctly
+- [ ] Check if totalRevenue field is being populated correctly
+- [ ] Fix Total Revenue calculation
+- [ ] Fix Estimated Profit calculation
+- [ ] Fix Expiry Risk Loss calculation
+- [ ] Verify all metrics display correctly on dashboard
