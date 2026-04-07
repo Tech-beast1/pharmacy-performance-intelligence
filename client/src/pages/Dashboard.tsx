@@ -17,9 +17,6 @@ interface MetricCard {
 }
 
 export default function Dashboard() {
-  const currentDate = new Date();
-  const [month, setMonth] = useState(currentDate.getMonth() + 1);
-  const [year, setYear] = useState(currentDate.getFullYear());
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
@@ -42,7 +39,7 @@ export default function Dashboard() {
 
 
   // Fetch dashboard data
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ month, year });
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
   const alertsQuery = trpc.analytics.getAlerts.useQuery();
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
@@ -146,36 +143,6 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
-
-      {/* Period Selector */}
-      <Card className="p-4 md:p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Select Period</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Month</label>
-            <select
-              value={month}
-              onChange={(e) => setMonth(parseInt(e.target.value))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((name, index) => (
-                <option key={index + 1} value={index + 1}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(parseInt(e.target.value))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-        </div>
-      </Card>
 
       {/* Dashboard Metrics */}
       <div className="flex items-center justify-between">

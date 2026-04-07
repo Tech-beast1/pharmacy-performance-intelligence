@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getCurrentMonthOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
@@ -63,7 +63,6 @@ export const appRouter = router({
         z.object({
           csvContent: z.string(),
           sheetName: z.string().optional(),
-          dataType: z.enum(['sales', 'inventory']).optional(),
           mapping: z.object({
             productName: z.string(),
             price: z.string().optional(),
@@ -77,7 +76,6 @@ export const appRouter = router({
             saleQuantity: z.string().optional(),
             saleDate: z.string().optional(),
           }),
-          threshold: z.number().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
@@ -115,7 +113,7 @@ export const appRouter = router({
 
               // For SALES data: create sales transaction from quantity and price
               // If saleQuantity/saleDate not explicitly mapped, use quantity as saleQuantity and today as saleDate
-              const dataType = input.dataType || 'sales';
+              const dataType = (input.mapping as any).dataType || 'sales';
               if (dataType === 'sales' && parsed.quantity && parsed.price) {
                 const saleQuantity = parsed.quantity;
                 const saleDate = parsed.saleDate || new Date(); // Use today if no date provided
@@ -128,7 +126,7 @@ export const appRouter = router({
                   productName: parsed.productName,
                   quantitySold: saleQuantity,
                   salePrice: parsed.price,
-                  totalRevenue: parsed.price * saleQuantity,
+                  totalSaleValue: parsed.price * saleQuantity,
                   costPrice,
                   profit,
                   saleDate,
@@ -143,7 +141,7 @@ export const appRouter = router({
                   productName: parsed.productName,
                   quantitySold: parsed.saleQuantity,
                   salePrice: parsed.sellingPrice,
-                  totalRevenue: parsed.sellingPrice * parsed.saleQuantity,
+                  totalSaleValue: parsed.sellingPrice * parsed.saleQuantity,
                   costPrice: parsed.costPrice || 0,
                   profit,
                   saleDate: parsed.saleDate,
@@ -172,23 +170,11 @@ export const appRouter = router({
 
   // Dashboard analytics
   analytics: router({
-    getDashboardMetrics: protectedProcedure
-      .input(z.object({ month: z.number().optional(), year: z.number().optional() }))
-      .query(async ({ ctx, input }) => {
+    getDashboardMetrics: protectedProcedure.query(async ({ ctx }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        
-        // Use provided month/year or current month
-        const now = new Date();
-        const queryMonth = input.month || now.getMonth() + 1;
-        const queryYear = input.year || now.getFullYear();
-        
-        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, queryMonth, queryYear);
-        const monthlyOverheadTotal = overheadCosts 
-          ? Number(overheadCosts.rent) + Number(overheadCosts.salaries) + Number(overheadCosts.electricity) + Number(overheadCosts.others)
-          : 0;
-        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadTotal, queryMonth, queryYear);
+        const metrics = calculateDashboardMetrics(inventory, sales);
         return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);

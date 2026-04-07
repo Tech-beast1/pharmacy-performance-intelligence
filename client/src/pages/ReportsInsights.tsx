@@ -1,14 +1,10 @@
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { AlertCircle, TrendingUp, Target, Zap } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 
 export default function ReportsInsights() {
-  const currentDate = new Date();
-  const [month, setMonth] = useState(currentDate.getMonth() + 1);
-  const [year, setYear] = useState(currentDate.getFullYear());
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ month, year });
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
   const alertsQuery = trpc.analytics.getAlerts.useQuery();
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();

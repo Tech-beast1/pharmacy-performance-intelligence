@@ -9,12 +9,7 @@ export interface ColumnMapping {
   costPrice?: string; // Unit cost
   sellingPrice?: string; // Selling cost (for inventory data)
   stockOnHand?: string; // Stock on hand (for inventory data)
-  qtySold30Days?: string; // Qty sold in 30 days (for inventory data)
-  qtySold60Days?: string; // Qty sold in 60 days (for inventory data)
   qtySold90Days?: string; // Qty sold in 90 days (for inventory data)
-  qtySold120Days?: string; // Qty sold in 120 days (for inventory data)
-  stockValue?: string; // Stock value (for inventory data)
-  totalRevenue?: string; // Total revenue (for sales data)
   sku?: string;
   saleQuantity?: string;
   saleDate?: string;
@@ -29,12 +24,7 @@ export interface ParsedRow {
   costPrice?: number;
   sellingPrice?: number;
   stockOnHand?: number;
-  qtySold30Days?: number;
-  qtySold60Days?: number;
   qtySold90Days?: number;
-  qtySold120Days?: number;
-  stockValue?: number;
-  totalRevenue?: number;
   sku?: string;
   saleQuantity?: number;
   saleDate?: Date;

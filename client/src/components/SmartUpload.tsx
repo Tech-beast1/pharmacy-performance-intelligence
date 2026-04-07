@@ -50,8 +50,6 @@ export default function SmartUpload() {
   const [isLoading, setIsLoading] = useState(false);
   const [sheets, setSheets] = useState<SheetInfo[]>([]);
   const [selectedSheet, setSelectedSheet] = useState<string>('');
-  const [threshold, setThreshold] = useState<number>(90);
-  const [customThreshold, setCustomThreshold] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
@@ -199,25 +197,14 @@ export default function SmartUpload() {
       }
     }
 
-    // Validate custom threshold if selected
-    let finalThreshold = threshold;
-    if (threshold === 999 && customThreshold) {
-      finalThreshold = parseInt(customThreshold, 10);
-      if (isNaN(finalThreshold) || finalThreshold <= 0) {
-        toast.error('Please enter a valid number of days');
-        return;
-      }
-    }
-
     setIsLoading(true);
+    setUploadStep('processing');
 
     try {
       const result = await processFileMutation.mutateAsync({
         csvContent,
         sheetName: selectedSheet || undefined,
-        dataType: dataType as 'sales' | 'inventory',
         mapping: mapping as any,
-        threshold: dataType === 'inventory' ? finalThreshold : undefined,
       });
 
       if (result.success) {
@@ -581,44 +568,6 @@ export default function SmartUpload() {
                       </SelectContent>
                     </Select>
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      📊 Calculation Threshold (Days) <span className="text-gray-500 text-xs">(for qty sold calculation)</span>
-                    </label>
-                    <Select value={threshold.toString()} onValueChange={(value) => {
-                      console.log('Threshold changed to:', value);
-                      setThreshold(parseInt(value, 10));
-                      setCustomThreshold('');
-                    }}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select threshold (30, 60, 90, 120 days or custom)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="30">📅 Last 30 Days</SelectItem>
-                        <SelectItem value="60">📅 Last 60 Days</SelectItem>
-                        <SelectItem value="90">📅 Last 90 Days</SelectItem>
-                        <SelectItem value="120">📅 Last 120 Days</SelectItem>
-                        <SelectItem value="999">✏️ Custom Days</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {threshold === 999 && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Enter Number of Days <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={customThreshold}
-                        onChange={(e) => setCustomThreshold(e.target.value)}
-                        placeholder="e.g., 45"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                  )}
                 </>
               )}
             </div>

@@ -23,71 +23,36 @@ export interface AlertData {
  * @param sales - Array of sales transactions
  * @param previousPeriodSales - Optional sales from previous period for trend calculation
  * @param monthlyOverheadCosts - Optional monthly overhead costs (Rent + Salaries + Electricity + Others)
- * @param month - Optional month (1-12) to filter sales for. If provided, uses calendar month instead of last 30 days
- * @param year - Optional year to filter sales for. Required if month is provided
  */
 export function calculateDashboardMetrics(
   inventory: Inventory[],
   sales: SalesTransaction[],
   previousPeriodSales?: SalesTransaction[],
-  monthlyOverheadCosts?: number,
-  month?: number,
-  year?: number
+  monthlyOverheadCosts?: number
 ): DashboardMetrics {
   const now = new Date();
-  
-  // Determine period boundaries
-  let periodStart: Date;
-  let periodEnd: Date;
-  let previousPeriodStart: Date;
-  let previousPeriodEnd: Date;
-  
-  if (month && year) {
-    // Use calendar month
-    periodStart = new Date(year, month - 1, 1);
-    periodEnd = new Date(year, month, 0, 23, 59, 59, 999);
-    
-    // Previous month
-    const prevMonth = month === 1 ? 12 : month - 1;
-    const prevYear = month === 1 ? year - 1 : year;
-    previousPeriodStart = new Date(prevYear, prevMonth - 1, 1);
-    previousPeriodEnd = new Date(prevYear, prevMonth, 0, 23, 59, 59, 999);
-  } else {
-    // Use last 30 days
-    periodStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    periodEnd = now;
-    previousPeriodStart = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
-    previousPeriodEnd = periodStart;
-  }
-  
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
 
-  // Current period sales
-  const currentSales = sales.filter(s => {
-    const saleDate = new Date(s.saleDate);
-    return saleDate >= periodStart && saleDate <= periodEnd;
-  });
-  const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalRevenue?.toString() || '0'), 0);
+  // Current period sales (last 30 days)
+  const currentSales = sales.filter(s => new Date(s.saleDate) >= thirtyDaysAgo);
+  const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
   let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
   
   // Deduct overhead costs from profit if provided
   if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
-    const daysInPeriod = Math.ceil((periodEnd.getTime() - periodStart.getTime()) / (1000 * 60 * 60 * 24));
+    const daysInPeriod = Math.ceil((now.getTime() - thirtyDaysAgo.getTime()) / (1000 * 60 * 60 * 24));
     const dailyOverheadCost = monthlyOverheadCosts / 30;
     const periodOverheadCost = dailyOverheadCost * daysInPeriod;
     totalProfit -= periodOverheadCost;
   }
 
-  // Previous period sales
+  // Previous period sales (30-60 days ago)
   const previousSales = (previousPeriodSales || sales).filter(
-    s => {
-      const saleDate = new Date(s.saleDate);
-      return saleDate >= previousPeriodStart && saleDate <= previousPeriodEnd;
-    }
+    s => new Date(s.saleDate) >= sixtyDaysAgo && new Date(s.saleDate) < thirtyDaysAgo
   );
-  const previousRevenue = previousSales.reduce((sum, s) => sum + parseFloat(s.totalRevenue?.toString() || '0'), 0);
+  const previousRevenue = previousSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
   const previousProfit = previousSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
 
   // Calculate trends
@@ -197,7 +162,7 @@ export function identifyAlerts(
     .map(item => ({
       ...item,
       margin: calculateMargin(item),
-      profitValue: parseFloat(item.totalSalesValue?.toString() || '0'),
+      profitValue: parseFloat(item.totalSalesValue.toString()),
     }));
 
   return {
@@ -225,7 +190,7 @@ export function getTopProfitableProducts(inventory: Inventory[]): any[] {
     .map(item => ({
       ...item,
       margin: calculateMargin(item),
-      totalProfit: parseFloat(item.totalSalesValue?.toString() || '0') * (calculateMargin(item) / 100),
+      totalProfit: parseFloat(item.totalSalesValue.toString()) * (calculateMargin(item) / 100),
     }))
     .sort((a, b) => b.totalProfit - a.totalProfit)
     .slice(0, 10);
@@ -245,7 +210,7 @@ export function getRevenueProfitTrend(sales: SalesTransaction[]): any[] {
       trendData[dateKey] = { revenue: 0, profit: 0 };
     }
 
-    trendData[dateKey].revenue += parseFloat(sale.totalRevenue?.toString() || '0');
+    trendData[dateKey].revenue += parseFloat(sale.totalSaleValue.toString());
     trendData[dateKey].profit += parseFloat(sale.profit?.toString() || '0');
   });
 
