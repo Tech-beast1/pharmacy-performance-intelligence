@@ -69,7 +69,7 @@ export function calculateDashboardMetrics(
     const saleDate = new Date(s.saleDate);
     return saleDate >= periodStart && saleDate <= periodEnd;
   });
-  const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
+  const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalRevenue.toString()), 0);
   let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
   
   // Deduct overhead costs from profit if provided
@@ -87,7 +87,7 @@ export function calculateDashboardMetrics(
       return saleDate >= previousPeriodStart && saleDate <= previousPeriodEnd;
     }
   );
-  const previousRevenue = previousSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
+  const previousRevenue = previousSales.reduce((sum, s) => sum + parseFloat(s.totalRevenue.toString()), 0);
   const previousProfit = previousSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
 
   // Calculate trends
@@ -197,7 +197,7 @@ export function identifyAlerts(
     .map(item => ({
       ...item,
       margin: calculateMargin(item),
-      profitValue: parseFloat(item.totalSalesValue.toString()),
+      profitValue: parseFloat(item.totalSalesValue?.toString() || '0'),
     }));
 
   return {
@@ -225,7 +225,7 @@ export function getTopProfitableProducts(inventory: Inventory[]): any[] {
     .map(item => ({
       ...item,
       margin: calculateMargin(item),
-      totalProfit: parseFloat(item.totalSalesValue.toString()) * (calculateMargin(item) / 100),
+      totalProfit: parseFloat(item.totalSalesValue?.toString() || '0') * (calculateMargin(item) / 100),
     }))
     .sort((a, b) => b.totalProfit - a.totalProfit)
     .slice(0, 10);
@@ -245,7 +245,7 @@ export function getRevenueProfitTrend(sales: SalesTransaction[]): any[] {
       trendData[dateKey] = { revenue: 0, profit: 0 };
     }
 
-    trendData[dateKey].revenue += parseFloat(sale.totalSaleValue.toString());
+    trendData[dateKey].revenue += parseFloat(sale.totalRevenue.toString());
     trendData[dateKey].profit += parseFloat(sale.profit?.toString() || '0');
   });
 

@@ -326,19 +326,28 @@
 
 ## Phase 29: Implement Formulas with Human-Readable Interpretations
 
-- [ ] Create formula calculation engine in server/utils/formulas.ts
+- [x] Create formula calculation engine in server/utils/formulas.ts
   - Total Revenue = Σ (Selling Price × Quantity Sold)
   - Estimated Profit (Gross) = Σ ((Selling Price – Cost Price) × Quantity Sold)
   - Net Profit = Gross Profit - Overhead Costs
   - Expiry Risk Loss = Σ (Cost Price × Current Stock) for products expiring within threshold
   - Dead Stock Value = Σ (Cost Price × Current Stock) for products not sold within threshold
-- [ ] Add interpretation messages for each metric
+- [x] Add interpretation messages for each metric
   - "You have ₵X tied up in products not sold in the last Y days"
   - "You're losing ₵X monthly due to products expiring within 30-90 days"
   - "Your gross profit is ₵X before operational costs"
   - etc.
 - [ ] Update analytics.ts to use new formula engine
 - [ ] Update dashboard metrics display to show interpretations
-- [ ] Create MetricInterpretation interface for consistent messaging
-- [ ] Write tests for all formula calculations
+- [x] Create MetricInterpretation interface for consistent messaging
+- [x] Write tests for all formula calculations (16 tests passing)
 - [ ] Test interpretation messages with various scenarios
+
+
+## BUG FIX: Total Revenue and Profit Not Showing
+
+- [x] Fix database column naming mismatch (qtySold30days vs qtysold30days)
+- [x] Verify inventory query is selecting correct columns
+- [x] Test getDashboardMetrics returns data correctly
+- [x] Verify Total Revenue and Profit metrics display on dashboard (showing 0 because no sales data for selected period)
+- [x] Check browser console for any errors (resolved - schema updated)
