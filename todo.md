@@ -322,3 +322,23 @@
 - [ ] Update dashboard metrics to reflect new data structure
 - [ ] Write tests for new schema fields and calculations
 - [ ] Verify all existing functionality works with new schema
+
+
+## Phase 29: Implement Formulas with Human-Readable Interpretations
+
+- [ ] Create formula calculation engine in server/utils/formulas.ts
+  - Total Revenue = Σ (Selling Price × Quantity Sold)
+  - Estimated Profit (Gross) = Σ ((Selling Price – Cost Price) × Quantity Sold)
+  - Net Profit = Gross Profit - Overhead Costs
+  - Expiry Risk Loss = Σ (Cost Price × Current Stock) for products expiring within threshold
+  - Dead Stock Value = Σ (Cost Price × Current Stock) for products not sold within threshold
+- [ ] Add interpretation messages for each metric
+  - "You have ₵X tied up in products not sold in the last Y days"
+  - "You're losing ₵X monthly due to products expiring within 30-90 days"
+  - "Your gross profit is ₵X before operational costs"
+  - etc.
+- [ ] Update analytics.ts to use new formula engine
+- [ ] Update dashboard metrics display to show interpretations
+- [ ] Create MetricInterpretation interface for consistent messaging
+- [ ] Write tests for all formula calculations
+- [ ] Test interpretation messages with various scenarios

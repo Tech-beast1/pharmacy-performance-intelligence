@@ -76,6 +76,7 @@ export const appRouter = router({
             saleQuantity: z.string().optional(),
             saleDate: z.string().optional(),
           }),
+          threshold: z.number().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
