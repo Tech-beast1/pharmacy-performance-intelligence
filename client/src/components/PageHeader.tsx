@@ -10,6 +10,9 @@ export function PageHeader() {
             src={PPILogoUrl} 
             alt="PPI" 
             className="h-12 w-12 drop-shadow-lg"
+            style={{
+              filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.3))'
+            }}
           />
         </div>
         
