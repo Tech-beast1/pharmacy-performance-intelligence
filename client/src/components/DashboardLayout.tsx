@@ -180,7 +180,7 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <img src={PPILogoUrl} alt="PPI" className="h-10 w-10 flex-shrink-0 brightness-200" style={{filter: 'brightness(200%)'}} />
+                  <img src={PPILogoUrl} alt="PPI" className="h-10 w-10 flex-shrink-0" />
                 </div>
               ) : null}
             </div>

@@ -4,15 +4,12 @@ export function PageHeader() {
   return (
     <div className="sticky top-0 z-40 bg-gradient-to-r from-blue-900/80 via-purple-900/80 to-blue-900/80 backdrop-blur-md border-b border-white/10">
       <div className="flex items-center gap-4 px-6 py-4">
-        {/* Logo - White colored */}
+        {/* Logo - Original Blue Color */}
         <div className="flex-shrink-0">
           <img 
             src={PPILogoUrl} 
             alt="PPI" 
-            className="h-12 w-12 brightness-200 drop-shadow-lg"
-            style={{
-              filter: 'brightness(200%) drop-shadow(0 0 8px rgba(255,255,255,0.5))'
-            }}
+            className="h-12 w-12 drop-shadow-lg"
           />
         </div>
         
