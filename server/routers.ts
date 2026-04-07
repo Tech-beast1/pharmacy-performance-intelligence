@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getCurrentMonthOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
@@ -174,7 +174,11 @@ export const appRouter = router({
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const metrics = calculateDashboardMetrics(inventory, sales);
+        const overheadCosts = await getCurrentMonthOverheadCosts(ctx.user!.id);
+        const monthlyOverheadTotal = overheadCosts 
+          ? Number(overheadCosts.rent) + Number(overheadCosts.salaries) + Number(overheadCosts.electricity) + Number(overheadCosts.others)
+          : 0;
+        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadTotal);
         return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);

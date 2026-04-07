@@ -289,3 +289,13 @@
 - [x] Add confirmation dialog before clearing data
 - [x] Implement data deletion logic
 - [x] Test Clear All button clears all data successfully
+
+
+## Phase 26: Update Profit Calculation Formula
+
+- [x] Update profit calculation to use formula: Profit = Selling Price - (Unit Cost Price + Daily Overhead Cost)
+- [x] Modify getDashboardMetrics to calculate per-product profit with overhead
+- [x] Update profit calculation in sales transaction processing
+- [x] Update profit margin calculation to reflect new formula
+- [x] Test profit calculations with various overhead costs
+- [x] Verify dashboard metrics reflect correct profit values
