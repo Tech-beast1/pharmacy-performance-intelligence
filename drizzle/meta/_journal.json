@@ -29,6 +29,13 @@
       "when": 1775499148124,
       "tag": "0003_flat_giant_man",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1775557963455,
+      "tag": "0004_empty_nemesis",
+      "breakpoints": true
     }
   ]
 }
