@@ -28,6 +28,7 @@ import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 import DataAnalystFooter from './DataAnalystFooter';
 import { TopNavBar } from './TopNavBar';
+import { PageHeader } from './PageHeader';
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -178,11 +179,8 @@ function DashboardLayoutContent({
                 <PanelLeft className="h-4 w-4 text-muted-foreground" />
               </button>
               {!isCollapsed ? (
-                <div className="flex items-center gap-3 min-w-0">
-                  <img src={PPILogoUrl} alt="PPI" className="h-8 w-8 flex-shrink-0" />
-                  <span className="font-bold tracking-tight truncate text-xs">
-                    Pharmacy Performance Intelligence
-                  </span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <img src={PPILogoUrl} alt="PPI" className="h-10 w-10 flex-shrink-0 brightness-200" style={{filter: 'brightness(200%)'}} />
                 </div>
               ) : null}
             </div>
@@ -267,6 +265,8 @@ function DashboardLayoutContent({
             </div>
           </div>
         )}
+        {/* Page Header */}
+        <PageHeader />
         {/* Persistent Top Navigation Header */}
         <TopNavBar />
         <main className="flex-1 flex flex-col">

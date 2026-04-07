@@ -96,8 +96,8 @@ export function AnimatedBackground() {
         }}
       ></div>
 
-      {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-white/10"></div>
+      {/* Subtle overlay for better content readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/5"></div>
     </div>
   );
 }
