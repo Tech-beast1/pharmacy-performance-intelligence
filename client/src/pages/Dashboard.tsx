@@ -99,22 +99,22 @@ export default function Dashboard() {
       <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
 
       {/* Dashboard Metrics */}
-      <h2 className="text-2xl font-bold text-gray-900 mt-8">Performance Metrics</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-6 md:mt-8">Performance Metrics</h2>
 
       {/* Metric Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {metricCards.map((card, index) => (
-          <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{card.title}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{card.value}</p>
-                <div className={`mt-2 text-sm font-medium ${getTrendColor(card.trend)}`}>
+          <Card key={index} className="p-4 md:p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs md:text-sm font-medium text-gray-600 truncate">{card.title}</p>
+                <p className="text-lg md:text-2xl font-bold text-gray-900 mt-1 md:mt-2 truncate">{card.value}</p>
+                <div className={`mt-1 md:mt-2 text-xs md:text-sm font-medium ${getTrendColor(card.trend)}`}>
                   {getTrendIcon(card.trend)} {Math.abs(card.trend).toFixed(1)}% vs last month
                 </div>
               </div>
-              <div className={`${card.bgColor} p-3 rounded-lg`}>
-                <div className={card.color}>{card.icon}</div>
+              <div className={`${card.bgColor} p-2 md:p-3 rounded-lg flex-shrink-0`}>
+                <div className={`${card.color} w-6 h-6 md:w-8 md:h-8`}>{card.icon}</div>
               </div>
             </div>
           </Card>
@@ -124,11 +124,11 @@ export default function Dashboard() {
       {/* Alerts Banner */}
       {alerts && (
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-red-600" />
+          <h2 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <AlertTriangle className="w-4 md:w-5 h-4 md:h-5 text-red-600" />
             Immediate Attention Required
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {/* Expiry Risk Alert */}
             <Card
               className={`p-4 cursor-pointer transition-all ${selectedAlert === 'expiry' ? 'ring-2 ring-red-500' : ''}`}
@@ -136,8 +136,8 @@ export default function Dashboard() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Expiry Risk</p>
-                  <p className="text-2xl font-bold text-red-600 mt-1">
+                  <p className="text-xs md:text-sm font-medium text-gray-600">Expiry Risk</p>
+                  <p className="text-lg md:text-2xl font-bold text-red-600 mt-1">
                     {alerts.expiryRiskProducts.length}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">products expiring soon</p>
