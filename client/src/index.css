@@ -388,3 +388,9 @@
 .delay-500 {
   animation-delay: 0.5s;
 }
+
+
+/* Sidebar Gradient Background */
+[data-sidebar="sidebar"] {
+  background: linear-gradient(to bottom, #1e293b, #0f172a, #1e293b) !important;
+}
