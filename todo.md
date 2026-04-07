@@ -309,3 +309,16 @@
 - [x] Update all dashboard charts and metrics to reflect selected period
 - [x] Test dashboard metrics with different time periods
 - [x] Ensure period selector is user-friendly and matches Overhead Costs UI style
+
+
+## Phase 28: Update Schema to Match User Specifications
+
+- [ ] Update Inventory table to add qty_sold_30days, qty_sold_60days, qty_sold_90days, qty_sold_120days fields
+- [ ] Update Inventory table to add stockValue field (calculated as: Unit Cost × Stock on Hand)
+- [ ] Update SalesTransactions table to add totalRevenue field
+- [ ] Update file parser to extract new fields from Excel uploads
+- [ ] Update data processing logic to calculate qty_sold for different time periods
+- [ ] Update analytics calculations to use new fields
+- [ ] Update dashboard metrics to reflect new data structure
+- [ ] Write tests for new schema fields and calculations
+- [ ] Verify all existing functionality works with new schema
