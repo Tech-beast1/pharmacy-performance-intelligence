@@ -247,3 +247,32 @@ export async function upsertPharmacyProfile(data: InsertPharmacyProfile) {
     return result;
   }
 }
+
+
+// Clear all user data
+export async function clearAllUserData(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  try {
+    // Delete all sales transactions
+    await db.delete(salesTransactions).where(eq(salesTransactions.userId, userId));
+    
+    // Delete all inventory items
+    await db.delete(inventory).where(eq(inventory.userId, userId));
+    
+    // Delete all alerts
+    await db.delete(alerts).where(eq(alerts.userId, userId));
+    
+    // Delete all file uploads
+    await db.delete(fileUploads).where(eq(fileUploads.userId, userId));
+    
+    // Delete all overhead costs
+    await db.delete(overheadCosts).where(eq(overheadCosts.userId, userId));
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Error clearing user data:", error);
+    throw error;
+  }
+}

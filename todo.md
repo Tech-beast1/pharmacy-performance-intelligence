@@ -280,3 +280,12 @@
 - [ ] Remove PageHeader component from all pages
 - [ ] Remove PageHeader import from DashboardLayout
 - [ ] Clean up related code
+
+
+## Phase 24: Add Clear All Button
+
+- [x] Create backend procedure to clear all user data (sales transactions, inventory items, etc.)
+- [x] Add "Clear All" button to Dashboard or Settings page
+- [x] Add confirmation dialog before clearing data
+- [x] Implement data deletion logic
+- [x] Test Clear All button clears all data successfully

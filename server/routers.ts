@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 
@@ -323,6 +323,20 @@ export const appRouter = router({
         } catch (error) {
           console.error('Error saving pharmacy profile:', error);
           return { success: false, error: 'Failed to save pharmacy profile' };
+        }
+      }),
+  }),
+
+  // Data management
+  data: router({
+    clearAll: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        try {
+          await clearAllUserData(ctx.user!.id);
+          return { success: true, message: 'All data cleared successfully' };
+        } catch (error) {
+          console.error('Error clearing user data:', error);
+          return { success: false, error: 'Failed to clear data' };
         }
       }),
   }),

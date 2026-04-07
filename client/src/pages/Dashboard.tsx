@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2 } from 'lucide-react';
+import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
@@ -18,6 +18,24 @@ interface MetricCard {
 
 export default function Dashboard() {
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+
+  const clearAllMutation = trpc.data.clearAll.useMutation();
+
+  const handleClearAll = async () => {
+    setIsClearing(true);
+    try {
+      await clearAllMutation.mutateAsync();
+      setShowClearConfirm(false);
+      // Invalidate all queries to refresh the dashboard
+      await trpc.useUtils().analytics.invalidate();
+    } catch (error) {
+      console.error('Error clearing data:', error);
+    } finally {
+      setIsClearing(false);
+    }
+  };
 
 
   // Fetch dashboard data
@@ -91,8 +109,54 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Clear All Confirmation Dialog */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="p-6 max-w-sm mx-4">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Clear All Data?</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              This will permanently delete all sales transactions, inventory data, and alerts. This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setShowClearConfirm(false)}
+                disabled={isClearing}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleClearAll}
+                disabled={isClearing}
+              >
+                {isClearing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Clearing...
+                  </>
+                ) : (
+                  <>Clear All</>
+                )}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
       {/* Dashboard Metrics */}
-      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-6 md:mt-8">Performance Metrics</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-6 md:mt-8">Performance Metrics</h2>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowClearConfirm(true)}
+          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Clear All
+        </Button>
+      </div>
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
