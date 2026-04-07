@@ -299,3 +299,13 @@
 - [x] Update profit margin calculation to reflect new formula
 - [x] Test profit calculations with various overhead costs
 - [x] Verify dashboard metrics reflect correct profit values
+
+
+## Phase 27: Add Period Selector to Dashboard
+
+- [x] Add month/year selector to Dashboard page (like Overhead Costs page)
+- [x] Update getDashboardMetrics procedure to accept month and year parameters
+- [x] Modify calculateDashboardMetrics to calculate metrics for selected period instead of last 30 days
+- [x] Update all dashboard charts and metrics to reflect selected period
+- [x] Test dashboard metrics with different time periods
+- [x] Ensure period selector is user-friendly and matches Overhead Costs UI style

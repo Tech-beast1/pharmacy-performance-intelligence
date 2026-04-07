@@ -170,15 +170,23 @@ export const appRouter = router({
 
   // Dashboard analytics
   analytics: router({
-    getDashboardMetrics: protectedProcedure.query(async ({ ctx }) => {
+    getDashboardMetrics: protectedProcedure
+      .input(z.object({ month: z.number().optional(), year: z.number().optional() }))
+      .query(async ({ ctx, input }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const overheadCosts = await getCurrentMonthOverheadCosts(ctx.user!.id);
+        
+        // Use provided month/year or current month
+        const now = new Date();
+        const queryMonth = input.month || now.getMonth() + 1;
+        const queryYear = input.year || now.getFullYear();
+        
+        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, queryMonth, queryYear);
         const monthlyOverheadTotal = overheadCosts 
           ? Number(overheadCosts.rent) + Number(overheadCosts.salaries) + Number(overheadCosts.electricity) + Number(overheadCosts.others)
           : 0;
-        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadTotal);
+        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadTotal, queryMonth, queryYear);
         return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);
