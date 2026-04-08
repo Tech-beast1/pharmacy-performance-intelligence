@@ -385,3 +385,13 @@
 - [x] Removed .slice(0, 10) limit from getTopProfitableProducts function
 - [x] Restarted dev server to apply changes
 - [x] All 66 tests passing ✅
+
+
+## Phase 38: Fix Performance Metrics Duration and Product Count
+
+- [x] Rename "Dead Stock Duration" dropdown to "Performance Metrics Duration"
+- [x] Verify duration affects ALL metrics (Revenue, Profit, Dead Stock, Expiry Risk) - getDashboardMetrics already passes durationDays to calculateDashboardMetrics
+- [x] Update getDashboardMetrics to use durationDays for all calculations (verified in routers.ts)
+- [x] Debug total products count display - getTopProducts correctly calls getInventoryByUserId and getTopProfitableProducts (no .slice limit)
+- [x] Verify topProducts.length is being calculated correctly from database (Reports & Insights line 69)
+- [x] All 66 tests passing ✅

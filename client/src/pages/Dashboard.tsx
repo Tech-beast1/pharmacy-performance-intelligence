@@ -160,7 +160,7 @@ export default function Dashboard() {
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4 items-end">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Dead Stock Duration</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Performance Metrics Duration</label>
             <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>
               <SelectTrigger className="w-full">
                 <SelectValue />
