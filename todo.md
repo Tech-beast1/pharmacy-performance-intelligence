@@ -289,3 +289,13 @@
 - [x] Add confirmation dialog before clearing data
 - [x] Implement data deletion logic
 - [x] Test Clear All button clears all data successfully
+
+
+## Phase 30: Implement Core Performance Metrics
+
+- [x] Verify Total Revenue calculation from Sales Data (sum of all sales)
+- [x] Verify Gross Profit calculation from Sales Data (sum of profit per item)
+- [x] Verify Dead Stock Value calculation from Inventory Data (products not sold within threshold)
+- [x] Ensure all three metrics display on dashboard
+- [x] Test metrics update correctly when new data is uploaded
+- [x] Verify metrics are calculated for selected period (month/year)
