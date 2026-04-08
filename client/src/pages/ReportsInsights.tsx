@@ -4,8 +4,8 @@ import { AlertCircle, TrendingUp, Target, Zap } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 
 export default function ReportsInsights() {
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
-  const alertsQuery = trpc.analytics.getAlerts.useQuery();
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays: 60 });
+  const alertsQuery = trpc.analytics.getAlerts.useQuery({ durationDays: 60 });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
 

@@ -171,7 +171,9 @@ export const appRouter = router({
 
   // Dashboard analytics
   analytics: router({
-    getDashboardMetrics: protectedProcedure.query(async ({ ctx }) => {
+    getDashboardMetrics: protectedProcedure
+      .input(z.object({ durationDays: z.number().optional().default(60) }))
+      .query(async ({ ctx, input }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
@@ -192,7 +194,7 @@ export const appRouter = router({
             parseFloat(overheadCosts.others?.toString() || '0');
         }
         
-        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadCosts);
+        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadCosts, input.durationDays);
         return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);
@@ -200,11 +202,13 @@ export const appRouter = router({
       }
     }),
 
-    getAlerts: protectedProcedure.query(async ({ ctx }) => {
+    getAlerts: protectedProcedure
+      .input(z.object({ durationDays: z.number().optional().default(60) }))
+      .query(async ({ ctx, input }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const alerts = identifyAlerts(inventory, sales);
+        const alerts = identifyAlerts(inventory, sales, input.durationDays);
         return { success: true, data: alerts };
       } catch (error) {
         console.error('Alerts error:', error);

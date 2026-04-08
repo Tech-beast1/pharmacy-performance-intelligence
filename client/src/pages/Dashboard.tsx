@@ -3,6 +3,13 @@ import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2, Trash2, Trendi
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import DownloadReport from '@/components/DownloadReport';
 
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
@@ -20,6 +27,7 @@ export default function Dashboard() {
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [durationDays, setDurationDays] = useState<number>(60);
 
   const clearAllMutation = trpc.data.clearAll.useMutation();
 
@@ -39,8 +47,8 @@ export default function Dashboard() {
 
 
   // Fetch dashboard data
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery();
-  const alertsQuery = trpc.analytics.getAlerts.useQuery();
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays });
+  const alertsQuery = trpc.analytics.getAlerts.useQuery({ durationDays });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
   const insightsQuery = trpc.analytics.getKeyInsights.useQuery();
@@ -145,6 +153,26 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
+
+      {/* Duration Selector */}
+      <Card className="p-4">
+        <div className="flex flex-col md:flex-row gap-4 items-end">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Dead Stock Duration</label>
+            <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="30">Last 30 Days</SelectItem>
+                <SelectItem value="60">Last 60 Days</SelectItem>
+                <SelectItem value="90">Last 90 Days</SelectItem>
+                <SelectItem value="120">Last 120 Days</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </Card>
 
       {/* Dashboard Metrics */}
       <div className="flex items-center justify-between">

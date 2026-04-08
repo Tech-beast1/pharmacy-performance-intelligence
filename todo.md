@@ -315,3 +315,18 @@
 - [x] Create comprehensive test suite for insights generation (8 tests)
 - [x] Verify all tests passing (62 total tests)
 - [x] Dashboard displays all 5 insight categories dynamically based on metrics
+
+
+## Phase 32: Add Duration Dropdown for Inventory Calculations
+
+- [x] Add durationDays parameter to analytics calculation functions
+- [x] Update calculateDashboardMetrics to accept durationDays parameter (default 60)
+- [x] Update identifyAlerts to accept durationDays parameter
+- [x] Update getAlerts tRPC procedure to accept durationDays parameter
+- [x] Build duration dropdown component (30, 60, 90, 120 days)
+- [x] Add duration dropdown to Inventory Intelligence page
+- [x] Update Dashboard and ReportsInsights to pass default duration
+- [x] Create comprehensive test suite for duration-based calculations (4 tests)
+- [x] Verify dead stock values change based on selected duration
+- [x] Verify alerts update based on selected duration
+- [x] All 66 tests passing

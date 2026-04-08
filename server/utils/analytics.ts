@@ -23,12 +23,14 @@ export interface AlertData {
  * @param sales - Array of sales transactions
  * @param previousPeriodSales - Optional sales from previous period for trend calculation
  * @param monthlyOverheadCosts - Optional monthly overhead costs (Rent + Salaries + Electricity + Others)
+ * @param durationDays - Number of days to consider for dead stock calculation (default: 60)
  */
 export function calculateDashboardMetrics(
   inventory: Inventory[],
   sales: SalesTransaction[],
   previousPeriodSales?: SalesTransaction[],
-  monthlyOverheadCosts?: number
+  monthlyOverheadCosts?: number,
+  durationDays: number = 60
 ): DashboardMetrics {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -77,10 +79,11 @@ export function calculateDashboardMetrics(
     ? ((expiryRiskLoss - previousExpiryRiskLoss) / previousExpiryRiskLoss) * 100 
     : 0;
 
-  // Dead stock: products with 0 sales in last 60 days
+  // Dead stock: products with 0 sales in last N days (configurable)
+  const durationDaysAgo = new Date(now.getTime() - durationDays * 24 * 60 * 60 * 1000);
   const deadStockProducts = inventory.filter(item => {
     const lastSale = new Date(item.lastSaleDate || 0);
-    return lastSale < sixtyDaysAgo;
+    return lastSale < durationDaysAgo;
   });
   const deadStockValue = deadStockProducts.reduce(
     (sum, item) => sum + parseFloat(item.price.toString()) * item.quantity,
@@ -110,10 +113,12 @@ export function calculateDashboardMetrics(
 
 /**
  * Identify alert products
+ * @param durationDays - Number of days to consider for dead stock calculation (default: 60)
  */
 export function identifyAlerts(
   inventory: Inventory[],
-  sales: SalesTransaction[]
+  sales: SalesTransaction[],
+  durationDays: number = 60
 ): AlertData {
   const now = new Date();
   const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
@@ -134,11 +139,12 @@ export function identifyAlerts(
       riskValue: parseFloat(item.price.toString()) * item.quantity,
     }));
 
-  // Dead stock: products with 0 sales in last 60 days
+  // Dead stock: products with 0 sales in last N days (configurable)
+  const durationDaysAgo = new Date(now.getTime() - durationDays * 24 * 60 * 60 * 1000);
   const deadStockProducts = inventory
     .filter(item => {
       const lastSale = new Date(item.lastSaleDate || 0);
-      return lastSale < sixtyDaysAgo;
+      return lastSale < durationDaysAgo;
     })
     .map(item => ({
       ...item,
