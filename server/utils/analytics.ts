@@ -203,7 +203,7 @@ export function calculateMargin(item: Inventory): number {
 }
 
 /**
- * Generate top 10 profitable products
+ * Generate all profitable products sorted by profitability
  */
 export function getTopProfitableProducts(inventory: Inventory[]): any[] {
   return inventory
@@ -212,8 +212,7 @@ export function getTopProfitableProducts(inventory: Inventory[]): any[] {
       margin: calculateMargin(item),
       totalProfit: parseFloat(item.totalSalesValue.toString()) * (calculateMargin(item) / 100),
     }))
-    .sort((a, b) => b.totalProfit - a.totalProfit)
-    .slice(0, 10);
+    .sort((a, b) => b.totalProfit - a.totalProfit);
 }
 
 /**
