@@ -173,8 +173,8 @@
 
 ## Known Issues & Future Improvements
 
-- [ ] Integrate overhead costs into dashboard metrics (currently not wired from DB)
-- [ ] Fix expiry risk calculation logic (should be: now <= expiryDate <= now+90days, not <=ninetyDaysAgo)
+- [x] Integrate overhead costs into dashboard metrics (now fetched from DB for current month)
+- [x] Fix expiry risk calculation logic (now correctly: now <= expiryDate <= now+90days)
 - [ ] Add real browser UI upload test with screenshot evidence of dashboard update
 - [ ] Add upload history/audit trail page showing all imported files and timestamps
 - [ ] Implement data validation preview before final commit to database
@@ -277,9 +277,9 @@
 
 ## Phase 23: Remove PageHeader
 
-- [ ] Remove PageHeader component from all pages
-- [ ] Remove PageHeader import from DashboardLayout
-- [ ] Clean up related code
+- [x] Remove PageHeader component from all pages
+- [x] Remove PageHeader import from DashboardLayout
+- [x] Clean up related code
 
 
 ## Phase 24: Add Clear All Button

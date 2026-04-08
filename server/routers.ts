@@ -174,7 +174,24 @@ export const appRouter = router({
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const metrics = calculateDashboardMetrics(inventory, sales);
+        
+        // Get current month's overhead costs
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const year = now.getFullYear();
+        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, month, year);
+        
+        // Calculate total overhead costs for the month
+        let monthlyOverheadCosts = 0;
+        if (overheadCosts) {
+          monthlyOverheadCosts = 
+            parseFloat(overheadCosts.rent?.toString() || '0') +
+            parseFloat(overheadCosts.salaries?.toString() || '0') +
+            parseFloat(overheadCosts.electricity?.toString() || '0') +
+            parseFloat(overheadCosts.others?.toString() || '0');
+        }
+        
+        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadCosts);
         return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);

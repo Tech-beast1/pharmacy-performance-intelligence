@@ -28,7 +28,7 @@ import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 import DataAnalystFooter from './DataAnalystFooter';
 import { TopNavBar } from './TopNavBar';
-import { PageHeader } from './PageHeader';
+
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -265,8 +265,6 @@ function DashboardLayoutContent({
             </div>
           </div>
         )}
-        {/* Page Header */}
-        <PageHeader />
         {/* Persistent Top Navigation Header */}
         <TopNavBar />
         <main className="flex-1 flex flex-col">

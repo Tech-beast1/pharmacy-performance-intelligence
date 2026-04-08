@@ -34,6 +34,7 @@ export function calculateDashboardMetrics(
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+  const ninetyDaysFromNow = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
 
   // Current period sales (last 30 days)
   const currentSales = sales.filter(s => new Date(s.saleDate) >= thirtyDaysAgo);
@@ -59,11 +60,11 @@ export function calculateDashboardMetrics(
   const revenueTrend = previousRevenue > 0 ? ((totalRevenue - previousRevenue) / previousRevenue) * 100 : 0;
   const profitTrend = previousProfit > 0 ? ((totalProfit - previousProfit) / previousProfit) * 100 : 0;
 
-  // Expiry risk: products expiring within 90 days
+  // Expiry risk: products expiring within 90 days (from now until 90 days in future)
   const expiryRiskProducts = inventory.filter(item => {
     if (!item.expiryDate) return false;
     const expiryDate = new Date(item.expiryDate);
-    return expiryDate >= now && expiryDate <= ninetyDaysAgo;
+    return expiryDate >= now && expiryDate <= ninetyDaysFromNow;
   });
   const expiryRiskLoss = expiryRiskProducts.reduce(
     (sum, item) => sum + parseFloat(item.price.toString()) * item.quantity,
