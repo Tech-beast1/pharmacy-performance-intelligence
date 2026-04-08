@@ -299,3 +299,19 @@
 - [x] Ensure all three metrics display on dashboard
 - [x] Test metrics update correctly when new data is uploaded
 - [x] Verify metrics are calculated for selected period (month/year)
+
+
+## Phase 31: Implement Dynamic Key Insights Based on Dashboard Metrics
+
+- [x] Create insights generation utility (server/utils/insights.ts) with 5 insight types
+- [x] Profitability Insights: Alert on low margin (<10%), highlight strong (>30%), show healthy (10-30%)
+- [x] Inventory Insights: Alert on high dead stock (>20%), moderate (10-20%), healthy (<10%)
+- [x] Expiry Risk Insights: Critical alert (>5% of revenue), monitor (1-5%), no risk
+- [x] Pricing Insights: Review strategy if low-margin products >30% of revenue
+- [x] Sales Performance Insights: Excellent growth (>20%), positive, stable, declining, critical decline
+- [x] Add getKeyInsights tRPC procedure to analytics router
+- [x] Update Dashboard component to display dynamic insights with icons and colors
+- [x] Implement insight priority sorting (high → medium → low)
+- [x] Create comprehensive test suite for insights generation (8 tests)
+- [x] Verify all tests passing (62 total tests)
+- [x] Dashboard displays all 5 insight categories dynamically based on metrics

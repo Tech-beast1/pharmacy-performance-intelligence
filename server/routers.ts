@@ -6,6 +6,7 @@ import { z } from "zod";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
+import { generateKeyInsights } from "./utils/insights";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -230,6 +231,20 @@ export const appRouter = router({
       } catch (error) {
         console.error('Revenue trend error:', error);
         return { success: false, error: 'Failed to fetch revenue trend' };
+      }
+    }),
+
+    getKeyInsights: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        const metrics = calculateDashboardMetrics(inventory, sales);
+        const alerts = identifyAlerts(inventory, sales);
+        const insights = generateKeyInsights(metrics, alerts, inventory, sales);
+        return { success: true, data: insights };
+      } catch (error) {
+        console.error('Key insights error:', error);
+        return { success: false, error: 'Failed to generate key insights' };
       }
     }),
   }),

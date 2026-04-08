@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2, Trash2 } from 'lucide-react';
+import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2, Trash2, TrendingDown, BarChart3, CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
@@ -43,11 +43,13 @@ export default function Dashboard() {
   const alertsQuery = trpc.analytics.getAlerts.useQuery();
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
+  const insightsQuery = trpc.analytics.getKeyInsights.useQuery();
 
   const metrics = metricsQuery.data?.data;
   const alerts = alertsQuery.data?.data;
   const topProducts = topProductsQuery.data?.data || [];
   const revenueTrend = revenueTrendQuery.data?.data || [];
+  const insights = insightsQuery.data?.data || [];
 
   const isLoading = metricsQuery.isLoading || alertsQuery.isLoading;
 
@@ -286,46 +288,41 @@ export default function Dashboard() {
       {/* Key Insights */}
       <Card className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Insights</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex gap-3">
-            <div className="flex-shrink-0">
-              <div className="flex items-center justify-center h-10 w-10 rounded-md bg-blue-600 text-white">
-                <Package className="w-5 h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {insights.map((insight, index) => {
+            const iconMap: Record<string, React.ReactNode> = {
+              'TrendingUp': <TrendingUp className="w-5 h-5" />,
+              'TrendingDown': <TrendingDown className="w-5 h-5" />,
+              'Package': <Package className="w-5 h-5" />,
+              'AlertTriangle': <AlertTriangle className="w-5 h-5" />,
+              'DollarSign': <DollarSign className="w-5 h-5" />,
+              'BarChart3': <BarChart3 className="w-5 h-5" />,
+              'CheckCircle': <CheckCircle className="w-5 h-5" />,
+            };
+
+            const colorMap: Record<string, string> = {
+              'red': 'bg-red-600',
+              'green': 'bg-green-600',
+              'orange': 'bg-orange-600',
+              'blue': 'bg-blue-600',
+            };
+
+            return (
+              <div key={index} className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className={`flex items-center justify-center h-10 w-10 rounded-md ${colorMap[insight.color]} text-white`}>
+                    {iconMap[insight.icon]}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{insight.title}</p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    {insight.description}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">Slow-Moving Stock</p>
-              <p className="text-xs text-gray-600 mt-1">
-                ₵{metrics?.deadStockValue.toLocaleString()} tied up in products with no recent sales
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <div className="flex-shrink-0">
-              <div className="flex items-center justify-center h-10 w-10 rounded-md bg-green-600 text-white">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">Profit Opportunity</p>
-              <p className="text-xs text-gray-600 mt-1">
-                20% of revenue comes from low-margin products
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <div className="flex-shrink-0">
-              <div className="flex items-center justify-center h-10 w-10 rounded-md bg-red-600 text-white">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">Expiry Management</p>
-              <p className="text-xs text-gray-600 mt-1">
-                Reducing expiry losses can increase your profit by 12%
-              </p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </Card>
     </div>
