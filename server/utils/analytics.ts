@@ -41,12 +41,9 @@ export function calculateDashboardMetrics(
   const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
   let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
   
-  // Deduct overhead costs from profit if provided
+  // Deduct full monthly overhead costs from profit if provided
   if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
-    const daysInPeriod = Math.ceil((now.getTime() - thirtyDaysAgo.getTime()) / (1000 * 60 * 60 * 24));
-    const dailyOverheadCost = monthlyOverheadCosts / 30;
-    const periodOverheadCost = dailyOverheadCost * daysInPeriod;
-    totalProfit -= periodOverheadCost;
+    totalProfit -= monthlyOverheadCosts;
   }
 
   // Previous period sales (30-60 days ago)
