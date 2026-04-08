@@ -373,5 +373,15 @@
 - [x] Keep the Top 10 chart and add an 'All Products' chart option
 - [x] Add tabs or sections to switch between Top 10 view and All Products view (Top 10 / All buttons)
 - [x] Implement pagination logic (items per page, previous/next buttons, page counter)
+- [x] Remove .slice(0, 10) limit from getTopProfitableProducts function
 - [x] Test with sample data to verify all products display correctly
+- [x] All 66 tests passing ✅
+
+
+## Phase 37: Fix Total Products Count Display
+
+- [x] Verify product count is being calculated from database (topProducts.length)
+- [x] Ensure Reports & Insights displays actual product count from uploaded data (line 69 shows {topProducts.length})
+- [x] Removed .slice(0, 10) limit from getTopProfitableProducts function
+- [x] Restarted dev server to apply changes
 - [x] All 66 tests passing ✅
