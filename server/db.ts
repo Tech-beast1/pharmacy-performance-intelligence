@@ -130,6 +130,13 @@ export async function insertSalesTransaction(transaction: any) {
   return db.insert(salesTransactions).values(transaction);
 }
 
+// Update inventory lastSaleDate when a sale is recorded
+export async function updateInventoryLastSaleDate(inventoryId: number, saleDate: Date) {
+  const db = await getDb();
+  if (!db) return null;
+  return db.update(inventory).set({ lastSaleDate: saleDate }).where(eq(inventory.id, inventoryId));
+}
+
 // Alerts queries
 export async function getAlertsByUserId(userId: number) {
   const db = await getDb();

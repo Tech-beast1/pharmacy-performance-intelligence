@@ -352,3 +352,15 @@
 - [x] Update menu styling for consistency
 - [x] Test sidebar displays correctly
 - [x] Verify responsive design on mobile
+
+
+## Phase 35: Fix Dead Stock Calculation Logic
+
+- [x] Update inventory lastSaleDate when sales are recorded (added updateInventoryLastSaleDate function)
+- [x] Create function to calculate dead stock based on sales data (products with no sales in N days)
+- [x] Update calculateDashboardMetrics to use corrected dead stock logic (now uses sales data)
+- [x] Update identifyAlerts to use corrected dead stock logic
+- [x] Test dead stock calculation with sample data (updated 2 tests)
+- [x] Verify dead stock only includes products with no sales in the specified duration
+- [x] Ensure revenue is calculated independently from dead stock
+- [x] All 66 tests passing ✅

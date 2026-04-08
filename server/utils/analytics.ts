@@ -80,11 +80,20 @@ export function calculateDashboardMetrics(
     : 0;
 
   // Dead stock: products with 0 sales in last N days (configurable)
+  // Calculate by finding products that have no sales in the duration period
   const durationDaysAgo = new Date(now.getTime() - durationDays * 24 * 60 * 60 * 1000);
-  const deadStockProducts = inventory.filter(item => {
-    const lastSale = new Date(item.lastSaleDate || 0);
-    return lastSale < durationDaysAgo;
-  });
+  
+  // Get all product names that have sales in the duration period
+  const recentSalesProducts = new Set(
+    sales
+      .filter(s => new Date(s.saleDate) >= durationDaysAgo)
+      .map(s => s.productName)
+  );
+  
+  // Dead stock = products in inventory that have NO sales in the duration period
+  const deadStockProducts = inventory.filter(item => 
+    !recentSalesProducts.has(item.productName) && item.quantity > 0
+  );
   const deadStockValue = deadStockProducts.reduce(
     (sum, item) => sum + parseFloat(item.price.toString()) * item.quantity,
     0
@@ -140,12 +149,19 @@ export function identifyAlerts(
     }));
 
   // Dead stock: products with 0 sales in last N days (configurable)
+  // Calculate by finding products that have no sales in the duration period
   const durationDaysAgo = new Date(now.getTime() - durationDays * 24 * 60 * 60 * 1000);
+  
+  // Get all product names that have sales in the duration period
+  const recentSalesProducts = new Set(
+    sales
+      .filter(s => new Date(s.saleDate) >= durationDaysAgo)
+      .map(s => s.productName)
+  );
+  
+  // Dead stock = products in inventory that have NO sales in the duration period
   const deadStockProducts = inventory
-    .filter(item => {
-      const lastSale = new Date(item.lastSaleDate || 0);
-      return lastSale < durationDaysAgo;
-    })
+    .filter(item => !recentSalesProducts.has(item.productName) && item.quantity > 0)
     .map(item => ({
       ...item,
       daysSinceLastSale: Math.ceil(

@@ -238,6 +238,19 @@ describe('Core Performance Metrics - Total Revenue, Gross Profit, Dead Stock Val
         },
       ]);
 
+      // Create a sales transaction for the recent product (within 60 days)
+      await db.insert(salesTransactions).values({
+        userId: testUserId,
+        inventoryId: 1,
+        productName: 'Recent Product',
+        quantitySold: 5,
+        salePrice: '100.00',
+        totalSaleValue: '500.00',
+        costPrice: '60.00',
+        profit: '200.00',
+        saleDate: fifteenDaysAgo,
+      });
+
       const inventoryData = await db.select().from(inventory).where(eq(inventory.userId, testUserId));
       const salesData = await db.select().from(salesTransactions).where(eq(salesTransactions.userId, testUserId));
 
@@ -254,7 +267,8 @@ describe('Core Performance Metrics - Total Revenue, Gross Profit, Dead Stock Val
       const now = new Date();
       const fifteenDaysAgo = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000);
 
-      await db.insert(inventory).values([
+      // Create inventory
+      const invResult = await db.insert(inventory).values([
         {
           userId: testUserId,
           productName: 'Product A',
@@ -270,6 +284,32 @@ describe('Core Performance Metrics - Total Revenue, Gross Profit, Dead Stock Val
           price: '50.00',
           costPrice: '30.00',
           lastSaleDate: fifteenDaysAgo,
+        },
+      ]);
+
+      // Create sales transactions for both products (recent sales)
+      await db.insert(salesTransactions).values([
+        {
+          userId: testUserId,
+          inventoryId: 1,
+          productName: 'Product A',
+          quantitySold: 5,
+          salePrice: '100.00',
+          totalSaleValue: '500.00',
+          costPrice: '60.00',
+          profit: '200.00',
+          saleDate: fifteenDaysAgo,
+        },
+        {
+          userId: testUserId,
+          inventoryId: 2,
+          productName: 'Product B',
+          quantitySold: 10,
+          salePrice: '50.00',
+          totalSaleValue: '500.00',
+          costPrice: '30.00',
+          profit: '200.00',
+          saleDate: fifteenDaysAgo,
         },
       ]);
 
