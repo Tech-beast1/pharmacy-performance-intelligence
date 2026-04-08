@@ -1,10 +1,16 @@
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
-import { AlertCircle, TrendingUp, Target, Zap } from 'lucide-react';
+import { AlertCircle, TrendingUp, Target, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
+import { useState } from 'react';
 
 export default function ReportsInsights() {
+  const [viewMode, setViewMode] = useState<'top10' | 'all'>('top10');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays: 60 });
   const alertsQuery = trpc.analytics.getAlerts.useQuery({ durationDays: 60 });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
@@ -24,9 +30,31 @@ export default function ReportsInsights() {
     { name: 'Low Margin', value: alerts?.lowMarginProducts.length || 0 },
   ];
 
+  // Pagination logic for all products
+  const totalPages = Math.ceil(topProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProducts = topProducts.slice(startIndex, endIndex);
+
+  // Data for charts
+  const top10Products = topProducts.slice(0, 10);
+  const chartData = viewMode === 'top10' ? top10Products : paginatedProducts;
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
     <div className="space-y-6">
-    <PageHeader title="Reports & Insights" description="View detailed reports and insights" />
+      <PageHeader title="Reports & Insights" description="View detailed reports and insights" />
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Reports & Insights</h1>
         <p className="text-gray-600 mt-1">Detailed analytics and business intelligence</p>
@@ -113,12 +141,39 @@ export default function ReportsInsights() {
           </Card>
         )}
 
-        {/* Top Products */}
+        {/* Products Chart with Tabs */}
         {topProducts.length > 0 && (
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Top 10 Products by Margin</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {viewMode === 'top10' ? 'Top 10 Products by Margin' : `All Products by Margin (Page ${currentPage}/${totalPages})`}
+              </h3>
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === 'top10' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => {
+                    setViewMode('top10');
+                    setCurrentPage(1);
+                  }}
+                >
+                  Top 10
+                </Button>
+                <Button
+                  variant={viewMode === 'all' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => {
+                    setViewMode('all');
+                    setCurrentPage(1);
+                  }}
+                >
+                  All ({topProducts.length})
+                </Button>
+              </div>
+            </div>
+
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={topProducts.slice(0, 10)}>
+              <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="productName" angle={-45} textAnchor="end" height={80} />
                 <YAxis />
@@ -126,6 +181,38 @@ export default function ReportsInsights() {
                 <Bar dataKey="margin" fill="#2563eb" name="Margin %" />
               </BarChart>
             </ResponsiveContainer>
+
+            {/* Pagination Controls for All Products View */}
+            {viewMode === 'all' && totalPages > 1 && (
+              <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                <p className="text-sm text-gray-600">
+                  Showing {startIndex + 1} to {Math.min(endIndex, topProducts.length)} of {topProducts.length} products
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </Button>
+                  <span className="px-3 py-2 text-sm font-medium text-gray-700">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </Card>
         )}
 

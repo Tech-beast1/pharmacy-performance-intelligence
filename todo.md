@@ -364,3 +364,14 @@
 - [x] Verify dead stock only includes products with no sales in the specified duration
 - [x] Ensure revenue is calculated independently from dead stock
 - [x] All 66 tests passing ✅
+
+
+## Phase 36: Fix Product Display Limit in Reports & Insights
+
+- [x] Add state management for pagination in Reports & Insights (useState for viewMode and currentPage)
+- [x] Create a paginated products table to display all products with pagination controls
+- [x] Keep the Top 10 chart and add an 'All Products' chart option
+- [x] Add tabs or sections to switch between Top 10 view and All Products view (Top 10 / All buttons)
+- [x] Implement pagination logic (items per page, previous/next buttons, page counter)
+- [x] Test with sample data to verify all products display correctly
+- [x] All 66 tests passing ✅
