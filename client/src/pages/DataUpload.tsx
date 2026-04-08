@@ -1,8 +1,10 @@
 import SmartUpload from '@/components/SmartUpload';
+import PageHeader from '@/components/PageHeader';
 
 export default function DataUpload() {
   return (
     <div className="space-y-6">
+    <PageHeader title="Data Upload" description="Upload your sales and inventory data" />
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Data Upload</h1>
         <p className="text-gray-600 mt-1">Import your pharmacy sales and inventory data</p>

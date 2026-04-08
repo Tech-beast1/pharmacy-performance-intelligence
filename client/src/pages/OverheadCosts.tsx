@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Home, Users, Zap, MoreHorizontal, Save, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/PageHeader';
 import { Input } from '@/components/ui/input';
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
@@ -60,6 +61,7 @@ export default function OverheadCosts() {
 
   return (
     <div className="space-y-6">
+    <PageHeader title="Overhead Costs" description="Manage your pharmacy overhead costs" />
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Overhead Costs Management</h1>

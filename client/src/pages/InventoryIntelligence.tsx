@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { AlertTriangle, Package, TrendingDown, ArrowUpDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/PageHeader';
 import { trpc } from '@/lib/trpc';
 import {
   Table,
@@ -121,6 +122,7 @@ export default function InventoryIntelligence() {
 
   return (
     <div className="space-y-6">
+    <PageHeader title="Inventory Intelligence" description="Analyze your inventory and dead stock" />
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Inventory Intelligence</h1>
         <p className="text-gray-600 mt-1">View and manage your pharmacy inventory</p>

@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DownloadReport from '@/components/DownloadReport';
+import PageHeader from '@/components/PageHeader';
 
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
@@ -119,6 +120,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <PageHeader title="Dashboard" description="Monitor your pharmacy's performance metrics and key insights" />
       {/* Clear All Confirmation Dialog */}
       {showClearConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/PageHeader';
 import { Settings as SettingsIcon, Bell, Lock, HelpCircle } from 'lucide-react';
 import { useAuth } from '@/_core/hooks/useAuth';
 
@@ -12,6 +13,7 @@ export default function Settings() {
 
   return (
     <div className="space-y-6">
+    <PageHeader title="Settings" description="Configure your pharmacy settings" />
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
         <p className="text-gray-600 mt-1">Manage your account and preferences</p>

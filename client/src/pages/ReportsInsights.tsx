@@ -1,5 +1,6 @@
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '@/components/ui/card';
+import PageHeader from '@/components/PageHeader';
 import { AlertCircle, TrendingUp, Target, Zap } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 
@@ -25,6 +26,7 @@ export default function ReportsInsights() {
 
   return (
     <div className="space-y-6">
+    <PageHeader title="Reports & Insights" description="View detailed reports and insights" />
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Reports & Insights</h1>
         <p className="text-gray-600 mt-1">Detailed analytics and business intelligence</p>
