@@ -179,7 +179,7 @@ function DashboardLayoutContent({
                 <Menu className="h-5 md:h-4 w-5 md:w-4 text-white" />
               </button>
               {!isCollapsed ? (
-                <img src={PPILogoUrl} alt="PPI" className="h-20 w-auto flex-shrink-0" />
+                <img src={PPILogoUrl} alt="PPI" className="h-14 w-auto flex-shrink-0" />
               ) : null}
             </div>
           </SidebarHeader>
