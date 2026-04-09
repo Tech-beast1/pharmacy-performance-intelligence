@@ -166,7 +166,7 @@ function DashboardLayoutContent({
       <div className="relative" ref={sidebarRef}>
         <Sidebar
           collapsible="icon"
-          className="border-r-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900"
+          className="border-r-0 bg-gradient-to-b from-blue-900 via-blue-800 to-blue-900"
           disableTransition={isResizing}
         >
           <SidebarHeader className="h-16 justify-center bg-blue-600 md:bg-blue-600">
