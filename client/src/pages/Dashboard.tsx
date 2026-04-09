@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import DownloadReport from '@/components/DownloadReport';
 import PageHeader from '@/components/PageHeader';
+import PharmacySelector from '@/components/PharmacySelector';
 
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
@@ -176,18 +177,11 @@ export default function Dashboard() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Pharmacy</label>
-            <Select value={selectedPharmacy} onValueChange={setSelectedPharmacy}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Pharmacies</SelectItem>
-                <SelectItem value="adom">Adom Pharmacy</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <PharmacySelector
+            pharmacyName={selectedPharmacy}
+            pharmacyLocation="Accra, Ghana"
+            onPharmacyChange={setSelectedPharmacy}
+          />
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
             <div className="flex gap-2">

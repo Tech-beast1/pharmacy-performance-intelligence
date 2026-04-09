@@ -417,3 +417,17 @@
 - [x] Test both filters and verify they display correctly
 - [x] Ensure filters work together with Performance Metrics Duration
 - [x] All 66 tests passing ✅
+
+
+## Phase 41: Replace Pharmacy Dropdown with Text Input and Logo
+
+- [x] Create PharmacySelector component with blue grid icon (logo) and text input field
+- [x] Replace "Pharmacy" dropdown selector with PharmacySelector component
+- [x] Display pharmacy logo (blue grid icon) instead of dropdown arrow
+- [x] Implement text input field for typing pharmacy name
+- [x] Add location display ("Accra, Ghana") below pharmacy name
+- [x] Style component to match dashboard filter layout
+- [x] Integrate PharmacySelector into Dashboard filter card
+- [x] Test component renders correctly with logo and text input
+- [x] Verify all 66 tests still passing ✅
+- [x] Component displays pharmacy name as editable text input
