@@ -4,6 +4,7 @@ import { ENV } from "./env";
 export type NotificationPayload = {
   title: string;
   content: string;
+  userEmail?: string;
 };
 
 const TITLE_MAX_LENGTH = 1200;
@@ -39,6 +40,7 @@ const validatePayload = (input: NotificationPayload): NotificationPayload => {
 
   const title = trimValue(input.title);
   const content = trimValue(input.content);
+  const userEmail = input.userEmail ? trimValue(input.userEmail) : undefined;
 
   if (title.length > TITLE_MAX_LENGTH) {
     throw new TRPCError({
@@ -54,11 +56,13 @@ const validatePayload = (input: NotificationPayload): NotificationPayload => {
     });
   }
 
-  return { title, content };
+  return { title, content, userEmail };
 };
 
 /**
- * Dispatches a project-owner notification through the Manus Notification Service.
+ * Dispatches a notification through the Manus Notification Service.
+ * If userEmail is provided, the notification will be sent to that email address.
+ * Otherwise, it sends to the project owner.
  * Returns `true` if the request was accepted, `false` when the upstream service
  * cannot be reached (callers can fall back to email/slack). Validation errors
  * bubble up as TRPC errors so callers can fix the payload.
@@ -93,7 +97,7 @@ export async function notifyOwner(
         "content-type": "application/json",
         "connect-protocol-version": "1",
       },
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify({ title, content, userEmail: payload.userEmail }),
     });
 
     if (!response.ok) {

@@ -2,6 +2,12 @@ import { z } from "zod";
 import { notifyOwner } from "./notification";
 import { adminProcedure, publicProcedure, router } from "./trpc";
 
+/**
+ * System router handles application-level operations like notifications.
+ * The notifyOwner mutation now automatically includes the logged-in user's email
+ * so notifications are sent to the user's email address.
+ */
+
 export const systemRouter = router({
   health: publicProcedure
     .input(
@@ -20,8 +26,11 @@ export const systemRouter = router({
         content: z.string().min(1, "content is required"),
       })
     )
-    .mutation(async ({ input }) => {
-      const delivered = await notifyOwner(input);
+    .mutation(async ({ input, ctx }) => {
+      const delivered = await notifyOwner({
+        ...input,
+        userEmail: ctx.user?.email || undefined,
+      });
       return {
         success: delivered,
       } as const;
