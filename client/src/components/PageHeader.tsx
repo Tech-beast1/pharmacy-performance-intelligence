@@ -7,7 +7,7 @@ interface PageHeaderProps {
 
 export default function PageHeader({ title, description }: PageHeaderProps) {
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-4 md:px-8 rounded-lg mb-6">
+    <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-2 px-4 md:px-8 rounded-lg mb-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <div className="text-xl md:text-2xl font-bold">Pharmacy Performance Intelligence</div>
