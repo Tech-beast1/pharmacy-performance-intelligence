@@ -183,7 +183,7 @@ export default function Dashboard() {
             onPharmacyChange={setSelectedPharmacy}
           />
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+            <label className="block text-sm font-medium text-blue-600 mb-2">Date Range</label>
             <div className="flex gap-2">
               <input
                 type="date"
