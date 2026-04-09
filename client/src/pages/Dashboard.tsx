@@ -124,7 +124,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Dashboard" description="Monitor your pharmacy's performance metrics and key insights" />
+      <PageHeader description="Monitor your pharmacy's performance metrics and key insights" />
       {/* Clear All Confirmation Dialog */}
       {showClearConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
