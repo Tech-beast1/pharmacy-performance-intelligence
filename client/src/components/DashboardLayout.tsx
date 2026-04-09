@@ -169,7 +169,7 @@ function DashboardLayoutContent({
           className="border-r-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900"
           disableTransition={isResizing}
         >
-          <SidebarHeader className="h-16 justify-center bg-blue-900 md:bg-blue-900">
+          <SidebarHeader className="h-16 justify-center bg-blue-600 md:bg-blue-600">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
