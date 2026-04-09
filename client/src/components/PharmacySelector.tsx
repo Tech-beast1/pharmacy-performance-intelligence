@@ -26,7 +26,7 @@ export default function PharmacySelector({
             value={pharmacyName}
             onChange={(e) => onPharmacyChange(e.target.value)}
             placeholder="Enter pharmacy name"
-            className="w-full text-sm font-medium text-gray-900 bg-transparent border-none outline-none placeholder-gray-400"
+            className="w-full text-sm font-medium text-blue-600 bg-transparent border-none outline-none placeholder-gray-400"
           />
           <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
             <MapPin className="w-3 h-3" />
