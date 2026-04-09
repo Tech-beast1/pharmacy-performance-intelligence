@@ -13,7 +13,6 @@ export default function PharmacySelector({
 }: PharmacySelectorProps) {
   return (
     <div className="flex-1">
-      <label className="block text-sm font-medium text-gray-700 mb-2">Pharmacy</label>
       <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-md bg-white">
         {/* Pharmacy Logo */}
         <div className="flex-shrink-0 bg-blue-100 p-2 rounded">
