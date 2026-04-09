@@ -405,3 +405,15 @@
 - [x] Verify both metrics match (Expiry Risk Loss ₵810 now matches 1 expiring product shown)
 - [x] Test with sample data to confirm calculations are correct
 - [x] All 66 tests passing ✅
+
+
+## Phase 40: Add Pharmacy and Date Range Selectors
+
+- [x] Add Pharmacy Selector dropdown next to Performance Metrics Duration (displays "All Pharmacies" and "Adom Pharmacy")
+- [x] Add Date Range Selector dropdown next to Performance Metrics Duration (date inputs for start and end dates)
+- [x] Create state management for pharmacy and date range selections
+- [x] Wire pharmacy selector state to Dashboard (selectedPharmacy state)
+- [x] Wire date range selector state to Dashboard (startDate and endDate states)
+- [x] Test both filters and verify they display correctly
+- [x] Ensure filters work together with Performance Metrics Duration
+- [x] All 66 tests passing ✅

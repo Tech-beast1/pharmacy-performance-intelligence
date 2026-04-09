@@ -29,6 +29,9 @@ export default function Dashboard() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [durationDays, setDurationDays] = useState<number>(60);
+  const [selectedPharmacy, setSelectedPharmacy] = useState<string>('all');
+  const [startDate, setStartDate] = useState<string>('2025-01-01');
+  const [endDate, setEndDate] = useState<string>('2025-01-31');
 
   const clearAllMutation = trpc.data.clearAll.useMutation();
 
@@ -172,6 +175,36 @@ export default function Dashboard() {
                 <SelectItem value="120">Last 120 Days</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Pharmacy</label>
+            <Select value={selectedPharmacy} onValueChange={setSelectedPharmacy}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Pharmacies</SelectItem>
+                <SelectItem value="adom">Adom Pharmacy</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+            <div className="flex gap-2">
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+              />
+              <span className="flex items-center text-gray-500">to</span>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+              />
+            </div>
           </div>
         </div>
       </Card>
