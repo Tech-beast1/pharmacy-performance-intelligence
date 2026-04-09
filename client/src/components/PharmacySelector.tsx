@@ -1,4 +1,4 @@
-import { Grid3x3, MapPin } from 'lucide-react';
+import { Home, MapPin } from 'lucide-react';
 
 interface PharmacySelectorProps {
   pharmacyName: string;
@@ -17,7 +17,7 @@ export default function PharmacySelector({
       <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-md bg-white">
         {/* Pharmacy Logo */}
         <div className="flex-shrink-0 bg-blue-100 p-2 rounded">
-          <Grid3x3 className="w-5 h-5 text-blue-600" />
+          <Home className="w-5 h-5 text-blue-600" />
         </div>
         
         {/* Pharmacy Info */}

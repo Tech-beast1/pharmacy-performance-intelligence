@@ -176,9 +176,9 @@
 - [x] Integrate overhead costs into dashboard metrics (now fetched from DB for current month)
 - [x] Fix expiry risk calculation logic (now correctly: now <= expiryDate <= now+90days)
 - [x] Add real browser UI upload test with screenshot evidence of dashboard update
-- [ ] Add upload history/audit trail page showing all imported files and timestamps (future enhancement)
-- [ ] Implement data validation preview before final commit to database (future enhancement)
-- [ ] Add bulk edit capability for imported data before final commit (future enhancement)
+- [ ] Add upload history/audit trail page showing all imported files and timestamps (future enhancement - Phase 42)
+- [ ] Implement data validation preview before final commit to database (future enhancement - Phase 43)
+- [ ] Add bulk edit capability for imported data before final commit (future enhancement - Phase 44)
 
 
 ## Phase 14: Pharmacy Profile Onboarding Feature
