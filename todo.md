@@ -395,3 +395,13 @@
 - [x] Debug total products count display - getTopProducts correctly calls getInventoryByUserId and getTopProfitableProducts (no .slice limit)
 - [x] Verify topProducts.length is being calculated correctly from database (Reports & Insights line 69)
 - [x] All 66 tests passing ✅
+
+
+## Phase 39: Fix Expiry Risk Mismatch
+
+- [x] Investigate why Expiry Risk Loss shows ₵810 but Immediate Attention Required shows 0 expiring products (found bug in identifyAlerts)
+- [x] Fix expiry risk alert logic to correctly identify products expiring within 90 days (changed ninetyDaysAgo to ninetyDaysFromNow)
+- [x] Update Immediate Attention Required section to display count of expiring products (now shows 1 expiring product)
+- [x] Verify both metrics match (Expiry Risk Loss ₵810 now matches 1 expiring product shown)
+- [x] Test with sample data to confirm calculations are correct
+- [x] All 66 tests passing ✅

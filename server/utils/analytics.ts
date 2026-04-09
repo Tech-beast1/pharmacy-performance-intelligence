@@ -131,14 +131,14 @@ export function identifyAlerts(
 ): AlertData {
   const now = new Date();
   const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
-  const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+  const ninetyDaysFromNow = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
 
-  // Expiry risk: products expiring within 90 days
+  // Expiry risk: products expiring within 90 days (from now until 90 days in future)
   const expiryRiskProducts = inventory
     .filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
-      return expiryDate >= now && expiryDate <= ninetyDaysAgo;
+      return expiryDate >= now && expiryDate <= ninetyDaysFromNow;
     })
     .map(item => ({
       ...item,
