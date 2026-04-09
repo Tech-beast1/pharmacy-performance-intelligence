@@ -173,10 +173,10 @@ function DashboardLayoutContent({
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
-                className="h-8 w-8 flex items-center justify-center hover:bg-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
+                className="h-10 w-10 md:h-8 md:w-8 flex items-center justify-center hover:bg-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
                 aria-label="Toggle navigation"
               >
-                <Menu className="h-4 w-4 text-white" />
+                <Menu className="h-5 md:h-4 w-5 md:w-4 text-white" />
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
@@ -187,7 +187,7 @@ function DashboardLayoutContent({
           </SidebarHeader>
 
           <SidebarContent className="gap-0">
-            <SidebarMenu className="px-2 py-1">
+            <SidebarMenu className="px-1 md:px-2 py-1 md:py-1 gap-1">
               {menuItems.map(item => {
                 const isActive = location === item.path;
                 return (
@@ -196,12 +196,12 @@ function DashboardLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal`}
+                      className={`h-12 md:h-10 transition-all font-medium md:font-normal px-3 md:px-2 text-sm md:text-base`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-primary" : ""}`}
+                        className={`h-5 md:h-4 w-5 md:w-4 flex-shrink-0 ${isActive ? "text-primary" : ""}`}
                       />
-                      <span>{item.label}</span>
+                      <span className="flex-1 text-left">{item.label}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

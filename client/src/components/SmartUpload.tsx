@@ -258,17 +258,17 @@ export default function SmartUpload() {
     <div className="w-full max-w-4xl mx-auto">
       {/* Upload Step */}
       {uploadStep === 'upload' && (
-        <Card className="p-8 border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors">
+        <Card className="p-4 md:p-8 border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors">
           <div
-            className="flex flex-col items-center justify-center py-12 cursor-pointer"
+            className="flex flex-col items-center justify-center py-8 md:py-12 cursor-pointer"
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
-            <Upload className="w-16 h-16 text-blue-600 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Smart Upload Zone</h3>
-            <p className="text-gray-600 mb-4">Drag and drop your CSV or Excel file here, or click to browse</p>
-            <p className="text-sm text-gray-500">Supported formats: CSV, XLSX</p>
+            <Upload className="w-12 md:w-16 h-12 md:h-16 text-blue-600 mb-4" />
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">Smart Upload Zone</h3>
+            <p className="text-sm md:text-base text-gray-600 mb-4 text-center px-2">Drag and drop your CSV or Excel file here, or click to browse</p>
+            <p className="text-xs md:text-sm text-gray-500">Supported formats: CSV, XLSX</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -390,21 +390,21 @@ export default function SmartUpload() {
 
       {/* Column Mapping Step */}
       {uploadStep === 'mapping' && (
-        <div className="space-y-6">
-          <Card className="p-6 bg-green-50 border-green-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Map Columns</h3>
-            <p className="text-sm text-gray-600 mb-6">
+        <div className="space-y-4 md:space-y-6">
+          <Card className="p-4 md:p-6 bg-green-50 border-green-200">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Map Columns</h3>
+            <p className="text-xs md:text-sm text-gray-600 mb-4 md:mb-6">
               Match your file columns to the system fields
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {/* Product Name - Required */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                   Product Name <span className="text-red-500">*</span>
                 </label>
                 <Select value={getSafeSelectValue(mapping.productName, defaultCol)} onValueChange={(value) => handleMappingChange('productName', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10 md:h-9 text-sm">
                     <SelectValue placeholder="Select product name column" />
                   </SelectTrigger>
                   <SelectContent>
@@ -421,11 +421,11 @@ export default function SmartUpload() {
               {dataType === 'sales' && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Quantity <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.quantity, defaultCol)} onValueChange={(value) => handleMappingChange('quantity', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select quantity column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -439,11 +439,11 @@ export default function SmartUpload() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Unit Cost <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.costPrice, defaultCol)} onValueChange={(value) => handleMappingChange('costPrice', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select unit cost column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -457,11 +457,11 @@ export default function SmartUpload() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Selling Price <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.price, defaultCol)} onValueChange={(value) => handleMappingChange('price', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select selling price column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -480,11 +480,11 @@ export default function SmartUpload() {
               {dataType === 'inventory' && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Unit Cost <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.costPrice, defaultCol)} onValueChange={(value) => handleMappingChange('costPrice', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select unit cost column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -498,11 +498,11 @@ export default function SmartUpload() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Selling Price <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.sellingPrice, defaultCol)} onValueChange={(value) => handleMappingChange('sellingPrice', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select selling price column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -516,11 +516,11 @@ export default function SmartUpload() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Stock on Hand <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.stockOnHand, defaultCol)} onValueChange={(value) => handleMappingChange('stockOnHand', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select stock on hand column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -534,11 +534,11 @@ export default function SmartUpload() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Expiry Date <span className="text-red-500">*</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.expiryDate, defaultCol)} onValueChange={(value) => handleMappingChange('expiryDate', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select expiry date column" />
                       </SelectTrigger>
                       <SelectContent>
@@ -552,11 +552,11 @@ export default function SmartUpload() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                       Qty Sold (90 Days) <span className="text-gray-500 text-xs">(optional)</span>
                     </label>
                     <Select value={getSafeSelectValue(mapping.qtySold90Days, defaultCol)} onValueChange={(value) => handleMappingChange('qtySold90Days', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 md:h-9 text-sm">
                         <SelectValue placeholder="Select qty sold column (optional)" />
                       </SelectTrigger>
                       <SelectContent>
@@ -575,7 +575,7 @@ export default function SmartUpload() {
             <Button
               onClick={handleProcessFile}
               disabled={isLoading}
-              className="mt-6 w-full bg-green-600 hover:bg-green-700"
+              className="mt-6 w-full bg-green-600 hover:bg-green-700 h-12 md:h-10 text-base md:text-sm font-medium"
             >
               {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <ChevronRight className="w-4 h-4 mr-2" />}
               Import Data

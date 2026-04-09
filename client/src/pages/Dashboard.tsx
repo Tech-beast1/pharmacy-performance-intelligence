@@ -210,7 +210,7 @@ export default function Dashboard() {
           variant="outline"
           size="sm"
           onClick={() => setShowClearConfirm(true)}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="text-red-600 hover:text-red-700 hover:bg-red-50 h-10 md:h-9 px-3 md:px-2 text-sm md:text-xs"
         >
           <Trash2 className="w-4 h-4 mr-2" />
           Clear All

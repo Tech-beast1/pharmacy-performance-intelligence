@@ -175,10 +175,10 @@
 
 - [x] Integrate overhead costs into dashboard metrics (now fetched from DB for current month)
 - [x] Fix expiry risk calculation logic (now correctly: now <= expiryDate <= now+90days)
-- [ ] Add real browser UI upload test with screenshot evidence of dashboard update
-- [ ] Add upload history/audit trail page showing all imported files and timestamps
-- [ ] Implement data validation preview before final commit to database
-- [ ] Add bulk edit capability for imported data before final commit
+- [x] Add real browser UI upload test with screenshot evidence of dashboard update
+- [ ] Add upload history/audit trail page showing all imported files and timestamps (future enhancement)
+- [ ] Implement data validation preview before final commit to database (future enhancement)
+- [ ] Add bulk edit capability for imported data before final commit (future enhancement)
 
 
 ## Phase 14: Pharmacy Profile Onboarding Feature
@@ -251,9 +251,9 @@
 
 - [x] Improve PageHeader styling for mobile (reduce padding, optimize font sizes)
 - [x] Optimize dashboard metrics cards for mobile (stack vertically, adjust spacing)
-- [ ] Improve sidebar navigation on mobile (better touch targets, clearer labels)
-- [ ] Optimize data upload form for mobile (larger input fields, better spacing)
-- [ ] Improve button sizes and spacing for mobile touch interaction
+- [x] Improve sidebar navigation on mobile (better touch targets, clearer labels) - Updated SidebarMenuButton with h-12 on mobile, font-medium labels, larger icons
+- [x] Optimize data upload form for mobile (larger input fields, better spacing) - Updated SmartUpload with responsive padding, font sizes, and button heights
+- [x] Improve button sizes and spacing for mobile touch interaction - Updated Dashboard and SmartUpload buttons with h-10/h-12 on mobile
 - [x] Test and verify all pages display nicely on phones (responsive breakpoints)
 - [x] Ensure text is readable on mobile without zooming (text-lg on mobile, text-2xl on desktop)
 - [x] Add mobile-specific styling for better visual hierarchy (md: breakpoints)
