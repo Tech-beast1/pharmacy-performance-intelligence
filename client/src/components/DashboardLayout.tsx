@@ -63,7 +63,7 @@ export default function DashboardLayout({
     return <DashboardLayoutSkeleton />
   }
 
-  const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/Gemini_Generated_Image_exif8uexif8uexif_7a0ae127.png';
+  const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/Gemini_Generated_Image_bujcrwbujcrwbujc_c411346a.png';
 
   if (!user) {
     return (
@@ -123,7 +123,7 @@ function DashboardLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
-  const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/Gemini_Generated_Image_exif8uexif8uexif_7a0ae127.png';
+  const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/Gemini_Generated_Image_bujcrwbujcrwbujc_c411346a.png';
 
   useEffect(() => {
     if (isCollapsed) {
@@ -178,7 +178,9 @@ function DashboardLayoutContent({
               >
                 <Menu className="h-5 md:h-4 w-5 md:w-4 text-white" />
               </button>
-
+              {!isCollapsed ? (
+                <img src={PPILogoUrl} alt="PPI" className="h-12 w-auto flex-shrink-0" />
+              ) : null}
             </div>
           </SidebarHeader>
 
