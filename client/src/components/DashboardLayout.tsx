@@ -179,7 +179,7 @@ function DashboardLayoutContent({
                 <Menu className="h-5 md:h-4 w-5 md:w-4 text-white" />
               </button>
               {!isCollapsed ? (
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-2 min-w-0 rounded-lg px-2 py-1" style={{backgroundColor: '#2160f2'}}>
                   <img src={PPILogoUrl} alt="PPI" className="h-10 w-10 flex-shrink-0" style={{ filter: 'brightness(0) saturate(100%) invert(1)' }} />
                 </div>
               ) : null}
