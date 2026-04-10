@@ -27,6 +27,28 @@ const formatCurrency = (value: any): string => {
   return `₵${num.toFixed(2)}`;
 };
 
+// Determine status based on inventory item
+const getInventoryStatus = (item: any, alerts: any): string => {
+  if (!alerts) return 'Normal';
+  
+  // Check if product is in expiry risk list
+  if (alerts.expiryRiskProducts?.some((p: any) => p.id === item.id)) {
+    return 'Expiry Risk';
+  }
+  
+  // Check if product is in dead stock list
+  if (alerts.deadStockProducts?.some((p: any) => p.id === item.id)) {
+    return 'Dead Stock';
+  }
+  
+  // Check if product is in low margin list
+  if (alerts.lowMarginProducts?.some((p: any) => p.id === item.id)) {
+    return 'Low Margin';
+  }
+  
+  return 'Normal';
+};
+
 export default function DownloadReport({
   metrics,
   alerts,
@@ -272,10 +294,12 @@ export default function DownloadReport({
                 <th>Unit Cost</th>
                 <th>Selling Price</th>
                 <th>Expiry Date</th>
+                <th>Status</th>
               </tr>
         `;
         inventoryData.forEach(item => {
           const expiryDate = item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A';
+          const status = getInventoryStatus(item, alerts);
           htmlContent += `
             <tr>
               <td>${item.productName || ''}</td>
@@ -283,6 +307,7 @@ export default function DownloadReport({
               <td>${formatCurrency(item.costPrice)}</td>
               <td>${formatCurrency(item.price)}</td>
               <td>${expiryDate}</td>
+              <td>${status}</td>
             </tr>
           `;
         });

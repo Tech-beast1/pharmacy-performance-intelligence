@@ -466,3 +466,10 @@
 - [x] Remove profit percentage column from Top 10 Profitable Products table in PDF
 - [x] Keep Product Name, Unit Cost, Selling Price, and Total Profit columns
 - [x] Verify all 66 tests still pass
+
+
+## Phase 47: Add Status Column to Inventory PDF
+- [x] Add Status column to Inventory Data table in PDF
+- [x] Determine status based on product alerts (Expiry Risk, Dead Stock, Low Margin, or Normal)
+- [x] Display status for each inventory item in PDF
+- [x] Verify all 66 tests still pass
