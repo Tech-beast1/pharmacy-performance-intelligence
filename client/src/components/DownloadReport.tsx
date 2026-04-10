@@ -118,11 +118,8 @@ export default function DownloadReport({
                 gap: 20px;
               }
               .header-logo {
-                width: 60px;
-                height: 60px;
-                border-radius: 8px;
-                background: white;
-                padding: 5px;
+                width: 100px;
+                height: 100px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
