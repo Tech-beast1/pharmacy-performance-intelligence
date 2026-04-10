@@ -418,7 +418,7 @@ export default function DownloadReport({
     <Button
       onClick={generateReport}
       disabled={isGenerating}
-      className="gap-2 bg-red-600 hover:bg-red-700 text-white"
+      className="gap-2 bg-green-600 hover:bg-green-700 text-white"
       size="sm"
     >
       {isGenerating ? (
