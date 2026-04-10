@@ -21,6 +21,13 @@ export default function DownloadReport({
   const generateReport = async () => {
     setIsGenerating(true);
     try {
+      // Check if we have any data to export
+      if (!metrics && !alerts && topProducts.length === 0 && inventoryData.length === 0) {
+        toast.error('No data available to export');
+        setIsGenerating(false);
+        return;
+      }
+
       let csvContent = 'Pharmacy Performance Intelligence Report\n';
       csvContent += `Generated: ${new Date().toLocaleString()}\n\n`;
 
@@ -71,18 +78,22 @@ export default function DownloadReport({
       csvContent += 'Email: info@ppi.com\n';
 
       // Create and download CSV file
-      const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
-      element.setAttribute('download', `PPI-Report-${new Date().getTime()}.csv`);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `PPI-Report-${new Date().getTime()}.csv`);
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
       toast.success('Report downloaded successfully');
     } catch (error) {
       console.error('Error generating report:', error);
-      toast.error('Failed to generate report');
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to generate report: ${errorMsg}`);
     } finally {
       setIsGenerating(false);
     }
@@ -91,13 +102,18 @@ export default function DownloadReport({
   return (
     <Button
       onClick={generateReport}
-      disabled={isGenerating}
-      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+      disabled={isGenerating || (!metrics && !alerts && topProducts.length === 0 && inventoryData.length === 0)}
+      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isGenerating ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin" />
           Generating...
+        </>
+      ) : (!metrics && !alerts && topProducts.length === 0 && inventoryData.length === 0) ? (
+        <>
+          <Download className="w-4 h-4" />
+          No Data
         </>
       ) : (
         <>
