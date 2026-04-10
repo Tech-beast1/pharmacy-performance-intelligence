@@ -231,11 +231,11 @@ export default function OverheadCosts() {
         </p>
         <div className="mt-3 p-3 bg-white rounded border border-blue-200">
           <p className="text-sm font-mono text-gray-800">
-            Profit = Selling Price - (Unit Cost Price + Daily Overhead Cost)
+            Profit = Selling Price - (Unit Cost Price + Monthly Overhead Cost)
           </p>
         </div>
         <p className="text-xs text-gray-600 mt-3">
-          Daily overhead cost is calculated by dividing total monthly overhead by 30 days, then applied per unit sold.
+          Monthly overhead cost is the total operational expenses for the month, applied to profit calculations.
         </p>
       </Card>
     </div>
