@@ -473,3 +473,10 @@
 - [x] Determine status based on product alerts (Expiry Risk, Dead Stock, Low Margin, or Normal)
 - [x] Display status for each inventory item in PDF
 - [x] Verify all 66 tests still pass
+
+
+## Phase 48: Fix Total Profit Calculation in PDF
+- [x] Debug why totalProfit is showing ₵0.00 for all products in PDF
+- [x] Calculate totalProfit as (Selling Price - Unit Cost) * Quantity
+- [x] Ensure totalProfit is passed correctly to PDF generation
+- [x] Verify all 66 tests still pass

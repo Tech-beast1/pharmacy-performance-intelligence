@@ -207,11 +207,19 @@ export function calculateMargin(item: Inventory): number {
  */
 export function getTopProfitableProducts(inventory: Inventory[]): any[] {
   return inventory
-    .map(item => ({
-      ...item,
-      margin: calculateMargin(item),
-      totalProfit: parseFloat(item.totalSalesValue.toString()) * (calculateMargin(item) / 100),
-    }))
+    .map(item => {
+      const costPrice = parseFloat(item.costPrice?.toString() || '0');
+      const salePrice = parseFloat(item.price.toString());
+      const quantity = parseFloat(item.quantity?.toString() || '0');
+      const profitPerUnit = salePrice - costPrice;
+      const totalProfit = profitPerUnit * quantity;
+      
+      return {
+        ...item,
+        margin: calculateMargin(item),
+        totalProfit: Math.max(0, totalProfit), // Ensure non-negative
+      };
+    })
     .sort((a, b) => b.totalProfit - a.totalProfit);
 }
 
