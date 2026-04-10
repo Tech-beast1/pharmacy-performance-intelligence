@@ -15,7 +15,7 @@ export default function DataAnalystFooter() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Assistance/Enquiries Info */}
           <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">FOR ASSISTANCE/ENQUIRIES</h3>
+            <h3 className="text-lg font-semibold mb-2">For Assistance/Enquiries</h3>
             
             {/* Contact Buttons */}
             <div className="flex flex-wrap gap-3">
