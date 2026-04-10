@@ -115,10 +115,6 @@ export default function Settings() {
             <p className="text-sm text-gray-600">Learn how to use Pharmacy Performance Intelligence</p>
           </div>
           <div>
-            <p className="font-medium text-gray-900">Contact Support</p>
-            <p className="text-sm text-gray-600">Email: support@ppi.pharmacy</p>
-          </div>
-          <div>
             <p className="font-medium text-gray-900">Version</p>
             <p className="text-sm text-gray-600">Pharmacy Performance Intelligence v1.0.0</p>
           </div>

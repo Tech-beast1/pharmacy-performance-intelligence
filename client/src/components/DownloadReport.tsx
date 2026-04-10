@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import html2pdf from 'html2pdf.js';
 
 interface DownloadReportProps {
   metrics?: any;
@@ -44,75 +45,282 @@ export default function DownloadReport({
         return;
       }
 
-      let csvContent = 'Pharmacy Performance Intelligence Report\n';
-      csvContent += `Generated: ${new Date().toLocaleString()}\n\n`;
+      // PPI Logo URL
+      const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/Gemini_Generated_Image_bujcrwbujcrwbujc(2)_0057bb08.png';
+
+      // Create HTML content for PDF
+      let htmlContent = `
+        <html>
+          <head>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #f5f5f5;
+              }
+              .header {
+                background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+              }
+              .header-content {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+              }
+              .header-logo {
+                width: 60px;
+                height: 60px;
+                border-radius: 8px;
+                background: white;
+                padding: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+              }
+              .header-logo img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+              }
+              .header-text {
+                text-align: center;
+              }
+              .header h1 {
+                margin: 0;
+                font-size: 28px;
+                font-weight: bold;
+              }
+              .header p {
+                margin: 5px 0 0 0;
+                font-size: 14px;
+                opacity: 0.9;
+              }
+              .section {
+                margin-bottom: 30px;
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+              }
+              .section h2 {
+                color: #1e40af;
+                font-size: 18px;
+                margin-top: 0;
+                border-bottom: 2px solid #1e40af;
+                padding-bottom: 10px;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+              }
+              th, td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #e5e7eb;
+              }
+              th {
+                background-color: #f3f4f6;
+                font-weight: bold;
+                color: #1e40af;
+              }
+              tr:hover {
+                background-color: #f9fafb;
+              }
+              .metric-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid #e5e7eb;
+              }
+              .metric-label {
+                font-weight: bold;
+                color: #374151;
+              }
+              .metric-value {
+                color: #1e40af;
+                font-weight: bold;
+              }
+              .footer {
+                background: #f3f4f6;
+                padding: 20px;
+                border-radius: 8px;
+                margin-top: 30px;
+                text-align: center;
+                font-size: 12px;
+                color: #6b7280;
+              }
+              .footer h3 {
+                color: #1e40af;
+                margin-top: 0;
+              }
+              .footer p {
+                margin: 5px 0;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="header-content">
+                <div class="header-logo">
+                  <img src="${PPILogoUrl}" alt="PPI Logo" />
+                </div>
+                <div class="header-text">
+                  <h1>Pharmacy Performance Intelligence</h1>
+                  <p>Performance Report - ${new Date().toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
+      `;
 
       // Add Metrics Section
       if (metrics) {
-        csvContent += 'PERFORMANCE METRICS\n';
-        csvContent += 'Metric,Value\n';
-        csvContent += `Total Revenue,${formatCurrency(metrics.totalRevenue)}\n`;
-        csvContent += `Estimated Profit,${formatCurrency(metrics.estimatedProfit)}\n`;
-        csvContent += `Expiry Risk Loss,${formatCurrency(metrics.expiryRiskLoss)}\n`;
-        csvContent += `Dead Stock Value,${formatCurrency(metrics.deadStockValue)}\n\n`;
+        htmlContent += `
+          <div class="section">
+            <h2>Performance Metrics</h2>
+            <div class="metric-row">
+              <span class="metric-label">Total Revenue</span>
+              <span class="metric-value">${formatCurrency(metrics.totalRevenue)}</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Estimated Profit</span>
+              <span class="metric-value">${formatCurrency(metrics.estimatedProfit)}</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Expiry Risk Loss</span>
+              <span class="metric-value">${formatCurrency(metrics.expiryRiskLoss)}</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Dead Stock Value</span>
+              <span class="metric-value">${formatCurrency(metrics.deadStockValue)}</span>
+            </div>
+          </div>
+        `;
       }
 
       // Add Alerts Section
       if (alerts) {
-        csvContent += 'ALERTS SUMMARY\n';
-        csvContent += 'Alert Type,Count\n';
-        csvContent += `Expiry Risk Products,${alerts.expiryRiskProducts?.length || 0}\n`;
-        csvContent += `Dead Stock Products,${alerts.deadStockProducts?.length || 0}\n`;
-        csvContent += `Low Margin Products,${alerts.lowMarginProducts?.length || 0}\n\n`;
+        htmlContent += `
+          <div class="section">
+            <h2>Alerts Summary</h2>
+            <table>
+              <tr>
+                <th>Alert Type</th>
+                <th>Count</th>
+              </tr>
+              <tr>
+                <td>Expiry Risk Products</td>
+                <td>${alerts.expiryRiskProducts?.length || 0}</td>
+              </tr>
+              <tr>
+                <td>Dead Stock Products</td>
+                <td>${alerts.deadStockProducts?.length || 0}</td>
+              </tr>
+              <tr>
+                <td>Low Margin Products</td>
+                <td>${alerts.lowMarginProducts?.length || 0}</td>
+              </tr>
+            </table>
+          </div>
+        `;
       }
 
       // Add Top Products Section
       if (topProducts.length > 0) {
-        csvContent += 'TOP 10 PROFITABLE PRODUCTS\n';
-        csvContent += 'Product Name,Unit Cost,Selling Price,Margin %,Total Profit\n';
+        htmlContent += `
+          <div class="section">
+            <h2>Top 10 Profitable Products</h2>
+            <table>
+              <tr>
+                <th>Product Name</th>
+                <th>Unit Cost</th>
+                <th>Selling Price</th>
+                <th>Margin %</th>
+                <th>Total Profit</th>
+              </tr>
+        `;
         topProducts.forEach(product => {
-          const productName = product.productName || '';
-          const costPrice = formatCurrency(product.costPrice);
-          const price = formatCurrency(product.price);
-          const margin = toNumber(product.margin);
-          const totalProfit = formatCurrency(product.totalProfit);
-          csvContent += `"${productName}",${costPrice},${price},${margin}%,${totalProfit}\n`;
+          htmlContent += `
+            <tr>
+              <td>${product.productName || ''}</td>
+              <td>${formatCurrency(product.costPrice)}</td>
+              <td>${formatCurrency(product.price)}</td>
+              <td>${toNumber(product.margin)}%</td>
+              <td>${formatCurrency(product.totalProfit)}</td>
+            </tr>
+          `;
         });
-        csvContent += '\n';
+        htmlContent += `
+            </table>
+          </div>
+        `;
       }
 
       // Add Inventory Data Section
       if (inventoryData.length > 0) {
-        csvContent += 'INVENTORY DATA\n';
-        csvContent += 'Product Name,Qty,Unit Cost,Selling Price,Expiry Date\n';
+        htmlContent += `
+          <div class="section">
+            <h2>Inventory Data</h2>
+            <table>
+              <tr>
+                <th>Product Name</th>
+                <th>Qty</th>
+                <th>Unit Cost</th>
+                <th>Selling Price</th>
+                <th>Expiry Date</th>
+              </tr>
+        `;
         inventoryData.forEach(item => {
-          const productName = item.productName || '';
-          const quantity = toNumber(item.quantity);
-          const costPrice = formatCurrency(item.costPrice);
-          const price = formatCurrency(item.price);
           const expiryDate = item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A';
-          csvContent += `"${productName}",${quantity},${costPrice},${price},${expiryDate}\n`;
+          htmlContent += `
+            <tr>
+              <td>${item.productName || ''}</td>
+              <td>${toNumber(item.quantity)}</td>
+              <td>${formatCurrency(item.costPrice)}</td>
+              <td>${formatCurrency(item.price)}</td>
+              <td>${expiryDate}</td>
+            </tr>
+          `;
         });
-        csvContent += '\n';
+        htmlContent += `
+            </table>
+          </div>
+        `;
       }
 
       // Add Footer
-      csvContent += 'FOR ASSISTANCE/ENQUIRIES\n';
-      csvContent += 'Contact: support@ppi.com\n';
-      csvContent += 'Phone: +233 XXX XXX XXXX\n';
-      csvContent += 'Email: info@ppi.com\n';
+      htmlContent += `
+            <div class="footer">
+              <h3>For Assistance/Enquiries</h3>
+              <p>Email: salomeydenkyira@gmail.com</p>
+              <p>Phone: 0240373436</p>
+              <p style="margin-top: 15px; border-top: 1px solid #d1d5db; padding-top: 10px;">
+                Pharmacy Performance Intelligence v1.0.0
+              </p>
+            </div>
+          </body>
+        </html>
+      `;
 
-      // Create and download CSV file
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', `PPI-Report-${new Date().getTime()}.csv`);
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Create PDF from HTML
+      const element = document.createElement('div');
+      element.innerHTML = htmlContent;
+
+      const opt = {
+        margin: 10,
+        filename: `PPI-Report-${new Date().getTime()}.pdf`,
+        image: { type: 'jpeg' as const, quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      };
+
+      (html2pdf() as any).set(opt).from(element).save();
 
       toast.success('Report downloaded successfully');
     } catch (error) {

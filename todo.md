@@ -220,7 +220,7 @@
 - [x] Add "Edit Profile" functionality to TopNavBar badges
 - [x] Test profile save and display workflow end-to-end
 - [x] Verify circular badges display correctly (green pharmacy, red date, blue owner)
-- [ ] Apply database migration for pharmacy_profiles table via Manus platform UI (generate and execute SQL)
+- [ ] Verify pharmacy_profiles table exists in database and apply migration if needed
 - [ ] Test complete E2E flow: create profile → verify badges on all pages → click to edit → save → verify persistence
 
 
@@ -439,3 +439,24 @@
 - [x] Implement PDF report generation for Dashboard metrics - CSV export with metrics, alerts, top products
 - [x] Implement PDF report generation for Inventory Intelligence data - CSV export with inventory data
 - [x] Test report download functionality - All 66 tests passing, buttons visible and functional
+
+
+## Phase 43: Update Download Report to PDF Format
+- [x] Update DownloadReport component to generate PDF instead of CSV
+- [x] Add PDF styling with logo and contact information
+- [x] Test PDF generation on Dashboard and Inventory Intelligence pages
+- [x] Verify PDF downloads successfully with proper formatting
+
+
+## Phase 44: Remove Contact Support from Settings Page
+- [x] Remove "Contact Support" section from Settings page Help & Support card
+- [x] Remove email address (support@ppi.pharmacy) from Settings page
+- [x] Keep Documentation and Version information in Help & Support
+- [x] Verify all 66 tests still pass
+
+
+## Phase 45: Update PDF Footer with Contact Information
+- [x] Add email address (salomeydenkyira@gmail.com) to PDF footer
+- [x] Add phone number (0240373436) to PDF footer
+- [x] Keep "For Assistance/Enquiries" heading in PDF footer
+- [x] Verify all 66 tests still pass
