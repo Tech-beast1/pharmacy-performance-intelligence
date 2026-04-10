@@ -236,9 +236,6 @@ export default function DownloadReport({
           <body>
             <div class="header">
               <div class="header-content">
-                <div class="header-logo">
-                  <img src="${logoDataUrl}" alt="Logo" />
-                </div>
                 <div class="header-text">
                   <h1>Pharmacy Performance Intelligence</h1>
                   <p>Performance Report - ${new Date().toLocaleDateString()}</p>
@@ -421,7 +418,7 @@ export default function DownloadReport({
     <Button
       onClick={generateReport}
       disabled={isGenerating}
-      className="gap-2"
+      className="gap-2 bg-red-600 hover:bg-red-700 text-white"
       size="sm"
     >
       {isGenerating ? (
