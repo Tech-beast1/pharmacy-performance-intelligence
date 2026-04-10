@@ -90,8 +90,9 @@ export default function DownloadReport({
         return;
       }
 
-      // PPI Logo URL
-      const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/ppi-logo_adfa0f9c.png';
+      // Simple SVG Logo for PDF
+      const logoSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="80" height="80"><circle cx="50" cy="50" r="45" fill="%231e40af" opacity="0.1"/><circle cx="50" cy="50" r="40" fill="none" stroke="%231e40af" stroke-width="2"/><path d="M 35 55 L 50 35 L 65 55" fill="none" stroke="%231e40af" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="65" r="4" fill="%231e40af"/></svg>';
+      const logoDataUrl = 'data:image/svg+xml;base64,' + btoa(logoSVG);
 
       // Create HTML content for PDF
       let htmlContent = `
@@ -235,7 +236,7 @@ export default function DownloadReport({
             <div class="header">
               <div class="header-content">
                 <div class="header-logo">
-                  <img src="${PPILogoUrl}" alt="PPI Logo" />
+                  <img src="${logoDataUrl}" alt="Logo" />
                 </div>
                 <div class="header-text">
                   <h1>Pharmacy Performance Intelligence</h1>
