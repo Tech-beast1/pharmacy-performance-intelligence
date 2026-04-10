@@ -502,3 +502,10 @@
 - [x] Style Expiry Risk with red/pink background
 - [x] Style OK status with gray text
 - [x] Verify all 66 tests still pass
+
+
+## Phase 52: Fix Status Matching Logic in PDF
+- [x] Debug why products with Dead Stock and Expiry Risk show OK status
+- [x] Check alert data structure in DownloadReport component
+- [x] Pass alerts data to DownloadReport in InventoryIntelligence page
+- [x] Verify all 66 tests still pass

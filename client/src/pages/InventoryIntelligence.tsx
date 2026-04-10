@@ -164,7 +164,7 @@ export default function InventoryIntelligence() {
             <div className="text-sm text-gray-600">
               Showing {sortedItems.length} of {itemsWithMargin.length} items
             </div>
-            <DownloadReport inventoryData={sortedItems} />
+            <DownloadReport inventoryData={sortedItems} alerts={alerts} />
           </div>
         </div>
       </Card>

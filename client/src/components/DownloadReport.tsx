@@ -33,6 +33,15 @@ const getInventoryStatus = (item: any, alerts: any): string => {
   
   const productName = item.productName?.toLowerCase().trim() || '';
   
+  // Debug: Log alerts structure once
+  if (!(window as any).__alertsLogged) {
+    console.log('[PDF Debug] Full alerts object:', alerts);
+    console.log('[PDF Debug] Expiry Risk count:', alerts.expiryRiskProducts?.length || 0);
+    console.log('[PDF Debug] Dead Stock count:', alerts.deadStockProducts?.length || 0);
+    console.log('[PDF Debug] Low Margin count:', alerts.lowMarginProducts?.length || 0);
+    (window as any).__alertsLogged = true;
+  }
+  
   // Check expiryRiskProducts array
   if (alerts.expiryRiskProducts?.length > 0) {
     const found = alerts.expiryRiskProducts.find((p: any) => {
