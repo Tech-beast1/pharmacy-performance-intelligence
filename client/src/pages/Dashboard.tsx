@@ -240,7 +240,7 @@ export default function Dashboard() {
       {/* Alerts Banner */}
       {alerts && (
         <div className="space-y-3">
-          <h2 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <h2 className="text-base md:text-lg font-semibold text-red-600 flex items-center gap-2">
             <AlertTriangle className="w-4 md:w-5 h-4 md:h-5 text-red-600" />
             Immediate Attention Required
           </h2>
