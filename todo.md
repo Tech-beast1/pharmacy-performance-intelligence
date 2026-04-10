@@ -220,8 +220,8 @@
 - [x] Add "Edit Profile" functionality to TopNavBar badges
 - [x] Test profile save and display workflow end-to-end
 - [x] Verify circular badges display correctly (green pharmacy, red date, blue owner)
-- [ ] Apply database migration for pharmacy_profiles table via Manus platform UI
-- [ ] Test complete flow: setup profile → see badges on all pages → click to edit
+- [ ] Apply database migration for pharmacy_profiles table via Manus platform UI (generate and execute SQL)
+- [ ] Test complete E2E flow: create profile → verify badges on all pages → click to edit → save → verify persistence
 
 
 ## Phase 18: Background Motion Animations - VERIFIED WORKING

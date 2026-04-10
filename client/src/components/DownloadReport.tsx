@@ -10,6 +10,22 @@ interface DownloadReportProps {
   inventoryData?: any[];
 }
 
+// Safe number conversion utility
+const toNumber = (value: any): number => {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    const parsed = parseFloat(value);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return 0;
+};
+
+// Safe string formatting
+const formatCurrency = (value: any): string => {
+  const num = toNumber(value);
+  return `₵${num.toFixed(2)}`;
+};
+
 export default function DownloadReport({
   metrics,
   alerts,
@@ -35,10 +51,10 @@ export default function DownloadReport({
       if (metrics) {
         csvContent += 'PERFORMANCE METRICS\n';
         csvContent += 'Metric,Value\n';
-        csvContent += `Total Revenue,₵${(metrics.totalRevenue || 0).toFixed(2)}\n`;
-        csvContent += `Estimated Profit,₵${(metrics.estimatedProfit || 0).toFixed(2)}\n`;
-        csvContent += `Expiry Risk Loss,₵${(metrics.expiryRiskLoss || 0).toFixed(2)}\n`;
-        csvContent += `Dead Stock Value,₵${(metrics.deadStockValue || 0).toFixed(2)}\n\n`;
+        csvContent += `Total Revenue,${formatCurrency(metrics.totalRevenue)}\n`;
+        csvContent += `Estimated Profit,${formatCurrency(metrics.estimatedProfit)}\n`;
+        csvContent += `Expiry Risk Loss,${formatCurrency(metrics.expiryRiskLoss)}\n`;
+        csvContent += `Dead Stock Value,${formatCurrency(metrics.deadStockValue)}\n\n`;
       }
 
       // Add Alerts Section
@@ -55,7 +71,12 @@ export default function DownloadReport({
         csvContent += 'TOP 10 PROFITABLE PRODUCTS\n';
         csvContent += 'Product Name,Unit Cost,Selling Price,Margin %,Total Profit\n';
         topProducts.forEach(product => {
-          csvContent += `"${product.productName || ''}",₵${(product.costPrice || 0).toFixed(2)},₵${(product.price || 0).toFixed(2)},${product.margin || 0}%,₵${(product.totalProfit || 0).toFixed(2)}\n`;
+          const productName = product.productName || '';
+          const costPrice = formatCurrency(product.costPrice);
+          const price = formatCurrency(product.price);
+          const margin = toNumber(product.margin);
+          const totalProfit = formatCurrency(product.totalProfit);
+          csvContent += `"${productName}",${costPrice},${price},${margin}%,${totalProfit}\n`;
         });
         csvContent += '\n';
       }
@@ -65,8 +86,12 @@ export default function DownloadReport({
         csvContent += 'INVENTORY DATA\n';
         csvContent += 'Product Name,Qty,Unit Cost,Selling Price,Expiry Date\n';
         inventoryData.forEach(item => {
+          const productName = item.productName || '';
+          const quantity = toNumber(item.quantity);
+          const costPrice = formatCurrency(item.costPrice);
+          const price = formatCurrency(item.price);
           const expiryDate = item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A';
-          csvContent += `"${item.productName || ''}",${item.quantity || 0},₵${(item.costPrice || 0).toFixed(2)},₵${(item.price || 0).toFixed(2)},${expiryDate}\n`;
+          csvContent += `"${productName}",${quantity},${costPrice},${price},${expiryDate}\n`;
         });
         csvContent += '\n';
       }
