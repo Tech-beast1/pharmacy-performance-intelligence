@@ -90,8 +90,8 @@ export default function DownloadReport({
         return;
       }
 
-      // Simple SVG Logo for PDF
-      const logoSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="80" height="80"><circle cx="50" cy="50" r="45" fill="%231e40af" opacity="0.1"/><circle cx="50" cy="50" r="40" fill="none" stroke="%231e40af" stroke-width="2"/><path d="M 35 55 L 50 35 L 65 55" fill="none" stroke="%231e40af" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="65" r="4" fill="%231e40af"/></svg>';
+      // Professional SVG Logo for PDF - Pharmacy Performance
+      const logoSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e40af;stop-opacity:1"/><stop offset="100%" style="stop-color:#2563eb;stop-opacity:1"/></linearGradient></defs><circle cx="100" cy="100" r="95" fill="url(#grad)"/><g transform="translate(100,100)"><path d="M -20,-30 L 0,-50 L 20,-30 L 10,-30 L 10,20 L -10,20 L -10,-30 Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/><circle cx="0" cy="40" r="6" fill="white"/><circle cx="-15" cy="40" r="6" fill="white"/><circle cx="15" cy="40" r="6" fill="white"/></g></svg>';
       const logoDataUrl = 'data:image/svg+xml;base64,' + btoa(logoSVG);
 
       // Create HTML content for PDF
@@ -145,36 +145,18 @@ export default function DownloadReport({
                 opacity: 0.9;
               }
               .section {
-                margin-bottom: 30px;
                 background: white;
                 padding: 20px;
+                margin-bottom: 20px;
                 border-radius: 8px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                page-break-inside: avoid;
               }
               .section h2 {
+                margin: 0 0 15px 0;
                 color: #1e40af;
                 font-size: 18px;
-                margin-top: 0;
                 border-bottom: 2px solid #1e40af;
                 padding-bottom: 10px;
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 10px;
-              }
-              th, td {
-                padding: 10px;
-                text-align: left;
-                border-bottom: 1px solid #e5e7eb;
-              }
-              th {
-                background-color: #f3f4f6;
-                font-weight: bold;
-                color: #1e40af;
-              }
-              tr:hover {
-                background-color: #f9fafb;
               }
               .metric-row {
                 display: flex;
@@ -182,50 +164,69 @@ export default function DownloadReport({
                 padding: 10px 0;
                 border-bottom: 1px solid #e5e7eb;
               }
+              .metric-row:last-child {
+                border-bottom: none;
+              }
               .metric-label {
-                font-weight: bold;
+                font-weight: 600;
                 color: #374151;
               }
               .metric-value {
                 color: #1e40af;
                 font-weight: bold;
               }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+              }
+              th {
+                background-color: #f3f4f6;
+                padding: 12px;
+                text-align: left;
+                font-weight: 600;
+                color: #1e40af;
+                border-bottom: 2px solid #1e40af;
+              }
+              td {
+                padding: 10px 12px;
+                border-bottom: 1px solid #e5e7eb;
+              }
+              tr:last-child td {
+                border-bottom: none;
+              }
               .status-badge {
                 display: inline-block;
-                padding: 6px 12px;
-                border-radius: 4px;
+                padding: 4px 12px;
+                border-radius: 12px;
                 font-size: 12px;
                 font-weight: 600;
-                text-align: center;
               }
-              .status-dead-stock {
-                background-color: #fed7aa;
-                color: #92400e;
-              }
-              .status-expiry-risk {
+              .status-expiry {
                 background-color: #fecaca;
-                color: #991b1b;
+                color: #7f1d1d;
               }
-              .status-low-margin {
+              .status-deadstock {
+                background-color: #fed7aa;
+                color: #7c2d12;
+              }
+              .status-lowmargin {
                 background-color: #fef3c7;
-                color: #92400e;
+                color: #78350f;
               }
-              .status-ok {
+              .status-normal {
                 color: #6b7280;
-                font-weight: 500;
               }
               .footer {
-                background: #f3f4f6;
+                background: white;
                 padding: 20px;
                 border-radius: 8px;
-                margin-top: 30px;
                 text-align: center;
-                font-size: 12px;
-                color: #6b7280;
+                border-top: 2px solid #1e40af;
               }
               .footer h3 {
+                margin: 0 0 10px 0;
                 color: #1e40af;
-                margin-top: 0;
               }
               .footer p {
                 margin: 5px 0;
@@ -277,22 +278,26 @@ export default function DownloadReport({
           <div class="section">
             <h2>Alerts Summary</h2>
             <table>
-              <tr>
-                <th>Alert Type</th>
-                <th>Count</th>
-              </tr>
-              <tr>
-                <td>Expiry Risk Products</td>
-                <td>${alerts.expiryRiskProducts?.length || 0}</td>
-              </tr>
-              <tr>
-                <td>Dead Stock Products</td>
-                <td>${alerts.deadStockProducts?.length || 0}</td>
-              </tr>
-              <tr>
-                <td>Low Margin Products</td>
-                <td>${alerts.lowMarginProducts?.length || 0}</td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Alert Type</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Expiry Risk</td>
+                  <td>${alerts.expiryRiskProducts?.length || 0}</td>
+                </tr>
+                <tr>
+                  <td>Dead Stock</td>
+                  <td>${alerts.deadStockProducts?.length || 0}</td>
+                </tr>
+                <tr>
+                  <td>Low Margin</td>
+                  <td>${alerts.lowMarginProducts?.length || 0}</td>
+                </tr>
+              </tbody>
             </table>
           </div>
         `;
@@ -304,69 +309,75 @@ export default function DownloadReport({
           <div class="section">
             <h2>Top 10 Profitable Products</h2>
             <table>
-              <tr>
-                <th>Product Name</th>
-                <th>Unit Cost</th>
-                <th>Selling Price</th>
-                <th>Total Profit</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Unit Cost</th>
+                  <th>Selling Price</th>
+                  <th>Total Profit</th>
+                </tr>
+              </thead>
+              <tbody>
         `;
-        topProducts.forEach(product => {
+        
+        topProducts.forEach((product: any) => {
           htmlContent += `
-            <tr>
-              <td>${product.productName || ''}</td>
-              <td>${formatCurrency(product.costPrice)}</td>
-              <td>${formatCurrency(product.price)}</td>
-              <td>${formatCurrency(product.totalProfit)}</td>
-            </tr>
+                <tr>
+                  <td>${product.productName || 'N/A'}</td>
+                  <td>${formatCurrency(product.costPrice)}</td>
+                  <td>${formatCurrency(product.price)}</td>
+                  <td>${formatCurrency(product.totalProfit)}</td>
+                </tr>
           `;
         });
+
         htmlContent += `
+              </tbody>
             </table>
           </div>
         `;
       }
 
-      // Add Inventory Data Section
+      // Add Inventory Section
       if (inventoryData.length > 0) {
         htmlContent += `
           <div class="section">
             <h2>Inventory Data</h2>
             <table>
-              <tr>
-                <th>Product Name</th>
-                <th>Qty</th>
-                <th>Unit Cost</th>
-                <th>Selling Price</th>
-                <th>Expiry Date</th>
-                <th>Status</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Qty</th>
+                  <th>Unit Cost</th>
+                  <th>Selling Price</th>
+                  <th>Expiry Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
         `;
-        inventoryData.forEach(item => {
-          const expiryDate = item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A';
+
+        inventoryData.forEach((item: any) => {
           const status = getInventoryStatus(item, alerts);
-          let statusHtml = '';
-          if (status === 'Dead Stock') {
-            statusHtml = '<span class="status-badge status-dead-stock">Dead Stock</span>';
-          } else if (status === 'Expiry Risk') {
-            statusHtml = '<span class="status-badge status-expiry-risk">Expiry Risk</span>';
-          } else if (status === 'Low Margin') {
-            statusHtml = '<span class="status-badge status-low-margin">Low Margin</span>';
-          } else {
-            statusHtml = '<span class="status-ok">OK</span>';
-          }
+          let statusClass = 'status-normal';
+          if (status === 'Expiry Risk') statusClass = 'status-expiry';
+          else if (status === 'Dead Stock') statusClass = 'status-deadstock';
+          else if (status === 'Low Margin') statusClass = 'status-lowmargin';
+
           htmlContent += `
-            <tr>
-              <td>${item.productName || ''}</td>
-              <td>${toNumber(item.quantity)}</td>
-              <td>${formatCurrency(item.costPrice)}</td>
-              <td>${formatCurrency(item.price)}</td>
-              <td>${expiryDate}</td>
-              <td>${statusHtml}</td>
-            </tr>
+                <tr>
+                  <td>${item.productName || 'N/A'}</td>
+                  <td>${item.quantity || 0}</td>
+                  <td>${formatCurrency(item.costPrice)}</td>
+                  <td>${formatCurrency(item.price)}</td>
+                  <td>${item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A'}</td>
+                  <td><span class="status-badge ${statusClass}">${status}</span></td>
+                </tr>
           `;
         });
+
         htmlContent += `
+              </tbody>
             </table>
           </div>
         `;
@@ -378,33 +389,29 @@ export default function DownloadReport({
               <h3>For Assistance/Enquiries</h3>
               <p>Email: salomeydenkyira@gmail.com</p>
               <p>Phone: 0240373436</p>
-              <p style="margin-top: 15px; border-top: 1px solid #d1d5db; padding-top: 10px;">
-                Pharmacy Performance Intelligence v1.0.0
-              </p>
+              <p style="margin-top: 15px; font-size: 12px; color: #9ca3af;">Pharmacy Performance Intelligence v1.0.0</p>
             </div>
           </body>
         </html>
       `;
 
-      // Create PDF from HTML
+      // Generate PDF
       const element = document.createElement('div');
       element.innerHTML = htmlContent;
 
       const opt = {
         margin: 10,
-        filename: `PPI-Report-${new Date().getTime()}.pdf`,
-        image: { type: 'jpeg' as const, quality: 0.98 },
+        filename: 'pharmacy-performance-report.pdf',
+        image: { type: 'jpeg' as any, quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+        jsPDF: { orientation: 'portrait' as any, unit: 'mm' as any, format: 'a4' },
       };
 
-      (html2pdf() as any).set(opt).from(element).save();
-
-      toast.success('Report downloaded successfully');
+      html2pdf().set(opt).from(element).save();
+      toast.success('Report downloaded successfully!');
     } catch (error) {
-      console.error('Error generating report:', error);
-      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Failed to generate report: ${errorMsg}`);
+      console.error('Error generating PDF:', error);
+      toast.error('Failed to generate report');
     } finally {
       setIsGenerating(false);
     }
@@ -413,22 +420,18 @@ export default function DownloadReport({
   return (
     <Button
       onClick={generateReport}
-      disabled={isGenerating || (!metrics && !alerts && topProducts.length === 0 && inventoryData.length === 0)}
-      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+      disabled={isGenerating}
+      className="gap-2"
+      size="sm"
     >
       {isGenerating ? (
         <>
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin" />
           Generating...
-        </>
-      ) : (!metrics && !alerts && topProducts.length === 0 && inventoryData.length === 0) ? (
-        <>
-          <Download className="w-4 h-4" />
-          No Data
         </>
       ) : (
         <>
-          <Download className="w-4 h-4" />
+          <Download className="h-4 w-4" />
           Download Report
         </>
       )}
