@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Download, FileText, Loader2 } from 'lucide-react';
+import { Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
 interface DownloadReportProps {
@@ -19,71 +18,183 @@ export default function DownloadReport({
 }: DownloadReportProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateCSVReport = () => {
+  const generatePDFReport = async () => {
     setIsGenerating(true);
     try {
-      const now = new Date().toLocaleDateString();
-      
-      // Create CSV content
-      let csvContent = 'Pharmacy Performance Intelligence - Report\n';
-      csvContent += `Generated: ${now}\n\n`;
-      
-      // Dashboard Metrics
-      csvContent += 'DASHBOARD METRICS\n';
-      csvContent += '================\n';
+      // Dynamically import jsPDF to avoid SSR issues
+      const { jsPDF } = await import('jspdf');
+      const autoTable = (await import('jspdf-autotable')).default;
+
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPosition = 10;
+
+      // Add header with logo and title
+      doc.setFillColor(30, 96, 242); // Blue background
+      doc.rect(0, 0, pageWidth, 40, 'F');
+
+      // Add title
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Pharmacy Performance Intelligence', 15, 20);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Performance Report', 15, 28);
+
+      // Add date
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(10);
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 10, 50);
+
+      yPosition = 60;
+
+      // Dashboard Metrics Section
       if (metrics) {
-        csvContent += `Total Revenue,${metrics.totalRevenue}\n`;
-        csvContent += `Revenue Trend (%),${metrics.revenueTrend}\n`;
-        csvContent += `Estimated Profit,${metrics.estimatedProfit}\n`;
-        csvContent += `Profit Trend (%),${metrics.profitTrend}\n`;
-        csvContent += `Expiry Risk Loss,${metrics.expiryRiskLoss}\n`;
-        csvContent += `Dead Stock Value,${metrics.deadStockValue}\n`;
-      }
-      csvContent += '\n\n';
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Performance Metrics', 10, yPosition);
+        yPosition += 8;
 
-      // Alerts Summary
-      csvContent += 'ALERTS SUMMARY\n';
-      csvContent += '==============\n';
+        const metricsData = [
+          ['Total Revenue', `₵${(metrics.totalRevenue || 0).toFixed(2)}`],
+          ['Estimated Profit', `₵${(metrics.estimatedProfit || 0).toFixed(2)}`],
+          ['Expiry Risk Loss', `₵${(metrics.expiryRiskLoss || 0).toFixed(2)}`],
+          ['Dead Stock Value', `₵${(metrics.deadStockValue || 0).toFixed(2)}`],
+        ];
+
+        (doc as any).autoTable({
+          startY: yPosition,
+          head: [['Metric', 'Value']],
+          body: metricsData,
+          theme: 'grid',
+          headStyles: { fillColor: [30, 96, 242], textColor: 255 },
+          columnStyles: { 0: { cellWidth: 80 }, 1: { cellWidth: 80 } },
+        });
+
+        yPosition = (doc as any).lastAutoTable.finalY + 10;
+      }
+
+      // Alerts Summary Section
       if (alerts) {
-        csvContent += `Expiry Risk Products,${alerts.expiryRiskProducts?.length || 0}\n`;
-        csvContent += `Dead Stock Products,${alerts.deadStockProducts?.length || 0}\n`;
-        csvContent += `Low Margin Products,${alerts.lowMarginProducts?.length || 0}\n`;
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Alerts Summary', 10, yPosition);
+        yPosition += 8;
+
+        const alertsData = [
+          ['Expiry Risk Products', (alerts.expiryRiskProducts?.length || 0).toString()],
+          ['Dead Stock Products', (alerts.deadStockProducts?.length || 0).toString()],
+          ['Low Margin Products', (alerts.lowMarginProducts?.length || 0).toString()],
+        ];
+
+        (doc as any).autoTable({
+          startY: yPosition,
+          head: [['Alert Type', 'Count']],
+          body: alertsData,
+          theme: 'grid',
+          headStyles: { fillColor: [30, 96, 242], textColor: 255 },
+          columnStyles: { 0: { cellWidth: 80 }, 1: { cellWidth: 80 } },
+        });
+
+        yPosition = (doc as any).lastAutoTable.finalY + 10;
       }
-      csvContent += '\n\n';
 
-      // Top Products
-      csvContent += 'TOP 10 PROFITABLE PRODUCTS\n';
-      csvContent += '==========================\n';
-      csvContent += 'Product Name,Unit Cost,Selling Price,Margin %,Total Profit\n';
-      topProducts.forEach(product => {
-        csvContent += `"${product.productName}",${product.costPrice || 0},${product.price},${product.margin || 0},${product.totalProfit || 0}\n`;
-      });
-      csvContent += '\n\n';
+      // Top Products Section
+      if (topProducts.length > 0) {
+        if (yPosition > pageHeight - 50) {
+          doc.addPage();
+          yPosition = 10;
+        }
 
-      // Inventory Data
-      csvContent += 'INVENTORY DATA\n';
-      csvContent += '==============\n';
-      csvContent += 'Product Name,Quantity,Unit Cost,Selling Price,Expiry Date,Total Sales Qty\n';
-      inventoryData.forEach(item => {
-        const expiryDate = item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A';
-        csvContent += `"${item.productName}",${item.quantity},${item.costPrice || 0},${item.price},${expiryDate},${item.totalSalesQuantity || 0}\n`;
-      });
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Top 10 Profitable Products', 10, yPosition);
+        yPosition += 8;
 
-      // Download CSV
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', `PPI-Report-${new Date().getTime()}.csv`);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        const productsData = topProducts.map(product => [
+          product.productName || '',
+          `₵${(product.costPrice || 0).toFixed(2)}`,
+          `₵${(product.price || 0).toFixed(2)}`,
+          `${product.margin || 0}%`,
+          `₵${(product.totalProfit || 0).toFixed(2)}`,
+        ]);
 
-      toast.success('Report downloaded successfully');
+        (doc as any).autoTable({
+          startY: yPosition,
+          head: [['Product Name', 'Unit Cost', 'Selling Price', 'Margin %', 'Total Profit']],
+          body: productsData,
+          theme: 'grid',
+          headStyles: { fillColor: [30, 96, 242], textColor: 255 },
+          columnStyles: {
+            0: { cellWidth: 50 },
+            1: { cellWidth: 30 },
+            2: { cellWidth: 30 },
+            3: { cellWidth: 25 },
+            4: { cellWidth: 30 },
+          },
+        });
+
+        yPosition = (doc as any).lastAutoTable.finalY + 10;
+      }
+
+      // Inventory Data Section
+      if (inventoryData.length > 0) {
+        if (yPosition > pageHeight - 50) {
+          doc.addPage();
+          yPosition = 10;
+        }
+
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Inventory Data', 10, yPosition);
+        yPosition += 8;
+
+        const inventoryTableData = inventoryData.map(item => [
+          item.productName || '',
+          (item.quantity || 0).toString(),
+          `₵${(item.costPrice || 0).toFixed(2)}`,
+          `₵${(item.price || 0).toFixed(2)}`,
+          item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A',
+          (item.totalSalesQuantity || 0).toString(),
+        ]);
+
+        (doc as any).autoTable({
+          startY: yPosition,
+          head: [['Product Name', 'Qty', 'Unit Cost', 'Selling Price', 'Expiry Date', 'Sales Qty']],
+          body: inventoryTableData,
+          theme: 'grid',
+          headStyles: { fillColor: [30, 96, 242], textColor: 255 },
+          columnStyles: {
+            0: { cellWidth: 45 },
+            1: { cellWidth: 20 },
+            2: { cellWidth: 25 },
+            3: { cellWidth: 25 },
+            4: { cellWidth: 30 },
+            5: { cellWidth: 20 },
+          },
+        });
+
+        yPosition = (doc as any).lastAutoTable.finalY + 15;
+      }
+
+      // Add footer with contact information on last page
+      const footerY = pageHeight - 20;
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.setFont('helvetica', 'bold');
+      doc.text('For Assistance/Enquiries', 10, footerY);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Contact: support@ppi.com | Phone: +233 XXX XXX XXXX', 10, footerY + 5);
+      doc.text('Email: info@ppi.com', 10, footerY + 10);
+
+      // Save PDF
+      doc.save(`PPI-Report-${new Date().getTime()}.pdf`);
+      toast.success('PDF report downloaded successfully');
     } catch (error) {
-      console.error('Error generating report:', error);
-      toast.error('Failed to generate report');
+      console.error('Error generating PDF report:', error);
+      toast.error('Failed to generate PDF report');
     } finally {
       setIsGenerating(false);
     }
@@ -91,7 +202,7 @@ export default function DownloadReport({
 
   return (
     <Button
-      onClick={generateCSVReport}
+      onClick={generatePDFReport}
       disabled={isGenerating}
       className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
     >
