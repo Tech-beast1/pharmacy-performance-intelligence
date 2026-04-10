@@ -204,17 +204,24 @@ export default function Dashboard() {
       </Card>
 
       {/* Dashboard Metrics */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-6 md:mt-8">Performance Metrics</h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowClearConfirm(true)}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50 h-10 md:h-9 px-3 md:px-2 text-sm md:text-xs"
-        >
-          <Trash2 className="w-4 h-4 mr-2" />
-          Clear All
-        </Button>
+        <div className="flex gap-2">
+          <DownloadReport
+            metrics={metrics}
+            alerts={alerts}
+            topProducts={topProducts}
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowClearConfirm(true)}
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 h-10 md:h-9 px-3 md:px-2 text-sm md:text-xs"
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            Clear All
+          </Button>
+        </div>
       </div>
 
       {/* Metric Cards Grid */}

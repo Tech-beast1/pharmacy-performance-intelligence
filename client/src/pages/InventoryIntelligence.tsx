@@ -3,6 +3,7 @@ import { AlertTriangle, Package, TrendingDown, ArrowUpDown } from 'lucide-react'
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
+import DownloadReport from '@/components/DownloadReport';
 import { trpc } from '@/lib/trpc';
 import {
   Table,
@@ -159,8 +160,11 @@ export default function InventoryIntelligence() {
               </SelectContent>
             </Select>
           </div>
-          <div className="text-sm text-gray-600">
-            Showing {sortedItems.length} of {itemsWithMargin.length} items
+          <div className="flex items-center gap-2">
+            <div className="text-sm text-gray-600">
+              Showing {sortedItems.length} of {itemsWithMargin.length} items
+            </div>
+            <DownloadReport inventoryData={sortedItems} />
           </div>
         </div>
       </Card>
