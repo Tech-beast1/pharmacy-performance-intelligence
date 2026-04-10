@@ -487,3 +487,10 @@
 - [x] Ensure Dead Stock and Expiry Risk products show correct status in PDF
 - [x] Test that all alert types (Expiry Risk, Dead Stock, Low Margin) display correctly
 - [x] Verify all 66 tests still pass
+
+
+## Phase 50: Display Original Status Data from Inventory
+- [x] Check inventory schema for status field
+- [x] Update PDF to display status directly from inventory item
+- [x] Refine alert-based status matching logic with better debugging
+- [x] Verify all 66 tests still pass

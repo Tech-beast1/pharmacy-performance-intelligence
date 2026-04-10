@@ -33,28 +33,31 @@ const getInventoryStatus = (item: any, alerts: any): string => {
   
   const productName = item.productName?.toLowerCase().trim() || '';
   
-  // Check if product is in expiry risk list (match by name)
-  if (alerts.expiryRiskProducts?.some((p: any) => {
-    const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
-    return pName === productName;
-  })) {
-    return 'Expiry Risk';
+  // Check expiryRiskProducts array
+  if (alerts.expiryRiskProducts?.length > 0) {
+    const found = alerts.expiryRiskProducts.find((p: any) => {
+      const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
+      return pName === productName;
+    });
+    if (found) return 'Expiry Risk';
   }
   
-  // Check if product is in dead stock list (match by name)
-  if (alerts.deadStockProducts?.some((p: any) => {
-    const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
-    return pName === productName;
-  })) {
-    return 'Dead Stock';
+  // Check deadStockProducts array
+  if (alerts.deadStockProducts?.length > 0) {
+    const found = alerts.deadStockProducts.find((p: any) => {
+      const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
+      return pName === productName;
+    });
+    if (found) return 'Dead Stock';
   }
   
-  // Check if product is in low margin list (match by name)
-  if (alerts.lowMarginProducts?.some((p: any) => {
-    const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
-    return pName === productName;
-  })) {
-    return 'Low Margin';
+  // Check lowMarginProducts array
+  if (alerts.lowMarginProducts?.length > 0) {
+    const found = alerts.lowMarginProducts.find((p: any) => {
+      const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
+      return pName === productName;
+    });
+    if (found) return 'Low Margin';
   }
   
   return 'Normal';
