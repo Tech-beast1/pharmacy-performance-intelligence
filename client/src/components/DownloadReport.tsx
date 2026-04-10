@@ -91,7 +91,7 @@ export default function DownloadReport({
       }
 
       // PPI Logo URL
-      const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/Gemini_Generated_Image_bujcrwbujcrwbujc(2)_0057bb08.png';
+      const PPILogoUrl = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz/ppi-logo_adfa0f9c.png';
 
       // Create HTML content for PDF
       let htmlContent = `
