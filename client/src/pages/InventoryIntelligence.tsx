@@ -171,22 +171,22 @@ export default function InventoryIntelligence() {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="p-4 text-left">
+                <TableHead className="p-4 text-center">
                   <SortHeader label="Product Name" sortBy="productName" />
                 </TableHead>
-                <TableHead className="p-4 text-right">
+                <TableHead className="p-4 text-center">
                   <SortHeader label="Price" sortBy="price" />
                 </TableHead>
-                <TableHead className="p-4 text-right">
+                <TableHead className="p-4 text-center">
                   <SortHeader label="Quantity" sortBy="quantity" />
                 </TableHead>
-                <TableHead className="p-4 text-right">
+                <TableHead className="p-4 text-center">
                   <SortHeader label="Margin %" sortBy="margin" />
                 </TableHead>
-                <TableHead className="p-4 text-left">
+                <TableHead className="p-4 text-center">
                   <SortHeader label="Expiry Date" sortBy="expiryDate" />
                 </TableHead>
-                <TableHead className="p-4 text-left">Status</TableHead>
+                <TableHead className="p-4 text-center">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -195,20 +195,20 @@ export default function InventoryIntelligence() {
                   const alertStatus = getAlertStatus(item);
                   return (
                     <TableRow key={item.id} className="hover:bg-gray-50 border-b">
-                      <TableCell className="p-4 font-medium text-gray-900 text-left">{item.productName}</TableCell>
-                      <TableCell className="p-4 text-right text-gray-700">
+                      <TableCell className="p-4 font-medium text-gray-900 text-center">{item.productName}</TableCell>
+                      <TableCell className="p-4 text-center text-gray-700">
                         ₵{parseFloat(item.price.toString()).toLocaleString()}
                       </TableCell>
-                      <TableCell className="p-4 text-right text-gray-700">{item.quantity}</TableCell>
-                      <TableCell className="p-4 text-right">
+                      <TableCell className="p-4 text-center text-gray-700">{item.quantity}</TableCell>
+                      <TableCell className="p-4 text-center">
                         <span className={`font-semibold ${item.margin >= 20 ? 'text-green-600' : 'text-red-600'}`}>
                           {item.margin}%
                         </span>
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-left">
+                      <TableCell className="p-4 text-gray-700 text-center">
                         {item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '-'}
                       </TableCell>
-                      <TableCell className="p-4 text-left">
+                      <TableCell className="p-4 text-center">
                         {alertStatus ? (
                           <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${alertStatus.color}`}>
                             {alertStatus.label}
