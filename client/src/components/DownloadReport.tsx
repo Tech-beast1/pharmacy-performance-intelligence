@@ -31,18 +31,29 @@ const formatCurrency = (value: any): string => {
 const getInventoryStatus = (item: any, alerts: any): string => {
   if (!alerts) return 'Normal';
   
-  // Check if product is in expiry risk list
-  if (alerts.expiryRiskProducts?.some((p: any) => p.id === item.id)) {
+  const productName = item.productName?.toLowerCase().trim() || '';
+  
+  // Check if product is in expiry risk list (match by name)
+  if (alerts.expiryRiskProducts?.some((p: any) => {
+    const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
+    return pName === productName;
+  })) {
     return 'Expiry Risk';
   }
   
-  // Check if product is in dead stock list
-  if (alerts.deadStockProducts?.some((p: any) => p.id === item.id)) {
+  // Check if product is in dead stock list (match by name)
+  if (alerts.deadStockProducts?.some((p: any) => {
+    const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
+    return pName === productName;
+  })) {
     return 'Dead Stock';
   }
   
-  // Check if product is in low margin list
-  if (alerts.lowMarginProducts?.some((p: any) => p.id === item.id)) {
+  // Check if product is in low margin list (match by name)
+  if (alerts.lowMarginProducts?.some((p: any) => {
+    const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
+    return pName === productName;
+  })) {
     return 'Low Margin';
   }
   

@@ -480,3 +480,10 @@
 - [x] Calculate totalProfit as (Selling Price - Unit Cost) * Quantity
 - [x] Ensure totalProfit is passed correctly to PDF generation
 - [x] Verify all 66 tests still pass
+
+
+## Phase 49: Fix Status Matching in PDF Inventory Table
+- [x] Change status matching from product ID to product name
+- [x] Ensure Dead Stock and Expiry Risk products show correct status in PDF
+- [x] Test that all alert types (Expiry Risk, Dead Stock, Low Margin) display correctly
+- [x] Verify all 66 tests still pass
