@@ -460,3 +460,9 @@
 - [x] Add phone number (0240373436) to PDF footer
 - [x] Keep "For Assistance/Enquiries" heading in PDF footer
 - [x] Verify all 66 tests still pass
+
+
+## Phase 46: Remove Profit Percentage from PDF
+- [x] Remove profit percentage column from Top 10 Profitable Products table in PDF
+- [x] Keep Product Name, Unit Cost, Selling Price, and Total Profit columns
+- [x] Verify all 66 tests still pass

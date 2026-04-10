@@ -241,7 +241,6 @@ export default function DownloadReport({
                 <th>Product Name</th>
                 <th>Unit Cost</th>
                 <th>Selling Price</th>
-                <th>Margin %</th>
                 <th>Total Profit</th>
               </tr>
         `;
@@ -251,7 +250,6 @@ export default function DownloadReport({
               <td>${product.productName || ''}</td>
               <td>${formatCurrency(product.costPrice)}</td>
               <td>${formatCurrency(product.price)}</td>
-              <td>${toNumber(product.margin)}%</td>
               <td>${formatCurrency(product.totalProfit)}</td>
             </tr>
           `;
