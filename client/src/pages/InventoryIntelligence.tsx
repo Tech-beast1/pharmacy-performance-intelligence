@@ -171,7 +171,7 @@ export default function InventoryIntelligence() {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="p-4">
+                <TableHead className="p-4 text-left">
                   <SortHeader label="Product Name" sortBy="productName" />
                 </TableHead>
                 <TableHead className="p-4 text-right">
@@ -183,10 +183,10 @@ export default function InventoryIntelligence() {
                 <TableHead className="p-4 text-right">
                   <SortHeader label="Margin %" sortBy="margin" />
                 </TableHead>
-                <TableHead className="p-4">
+                <TableHead className="p-4 text-left">
                   <SortHeader label="Expiry Date" sortBy="expiryDate" />
                 </TableHead>
-                <TableHead className="p-4">Status</TableHead>
+                <TableHead className="p-4 text-left">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -195,7 +195,7 @@ export default function InventoryIntelligence() {
                   const alertStatus = getAlertStatus(item);
                   return (
                     <TableRow key={item.id} className="hover:bg-gray-50 border-b">
-                      <TableCell className="p-4 font-medium text-gray-900">{item.productName}</TableCell>
+                      <TableCell className="p-4 font-medium text-gray-900 text-left">{item.productName}</TableCell>
                       <TableCell className="p-4 text-right text-gray-700">
                         ₵{parseFloat(item.price.toString()).toLocaleString()}
                       </TableCell>
@@ -205,10 +205,10 @@ export default function InventoryIntelligence() {
                           {item.margin}%
                         </span>
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700">
+                      <TableCell className="p-4 text-gray-700 text-left">
                         {item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '-'}
                       </TableCell>
-                      <TableCell className="p-4">
+                      <TableCell className="p-4 text-left">
                         {alertStatus ? (
                           <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${alertStatus.color}`}>
                             {alertStatus.label}
