@@ -183,6 +183,30 @@ export default function DownloadReport({
                 color: #1e40af;
                 font-weight: bold;
               }
+              .status-badge {
+                display: inline-block;
+                padding: 6px 12px;
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 600;
+                text-align: center;
+              }
+              .status-dead-stock {
+                background-color: #fed7aa;
+                color: #92400e;
+              }
+              .status-expiry-risk {
+                background-color: #fecaca;
+                color: #991b1b;
+              }
+              .status-low-margin {
+                background-color: #fef3c7;
+                color: #92400e;
+              }
+              .status-ok {
+                color: #6b7280;
+                font-weight: 500;
+              }
               .footer {
                 background: #f3f4f6;
                 padding: 20px;
@@ -314,6 +338,16 @@ export default function DownloadReport({
         inventoryData.forEach(item => {
           const expiryDate = item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A';
           const status = getInventoryStatus(item, alerts);
+          let statusHtml = '';
+          if (status === 'Dead Stock') {
+            statusHtml = '<span class="status-badge status-dead-stock">Dead Stock</span>';
+          } else if (status === 'Expiry Risk') {
+            statusHtml = '<span class="status-badge status-expiry-risk">Expiry Risk</span>';
+          } else if (status === 'Low Margin') {
+            statusHtml = '<span class="status-badge status-low-margin">Low Margin</span>';
+          } else {
+            statusHtml = '<span class="status-ok">OK</span>';
+          }
           htmlContent += `
             <tr>
               <td>${item.productName || ''}</td>
@@ -321,7 +355,7 @@ export default function DownloadReport({
               <td>${formatCurrency(item.costPrice)}</td>
               <td>${formatCurrency(item.price)}</td>
               <td>${expiryDate}</td>
-              <td>${status}</td>
+              <td>${statusHtml}</td>
             </tr>
           `;
         });

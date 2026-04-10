@@ -494,3 +494,11 @@
 - [x] Update PDF to display status directly from inventory item
 - [x] Refine alert-based status matching logic with better debugging
 - [x] Verify all 66 tests still pass
+
+
+## Phase 51: Add Styled Status Badges to PDF
+- [x] Add CSS styling for status badges in PDF
+- [x] Style Dead Stock with orange/brown background
+- [x] Style Expiry Risk with red/pink background
+- [x] Style OK status with gray text
+- [x] Verify all 66 tests still pass
