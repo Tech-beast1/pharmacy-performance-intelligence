@@ -560,3 +560,9 @@
 - [x] Add key insights section to PDF report
 - [x] Display insights with proper formatting
 - [x] Verify all 66 tests still pass
+
+
+## Phase 60: Display Negative Estimated Profit in Red
+- [x] Add red text styling for negative estimated profit values in PDF
+- [x] Check estimated profit value and apply conditional styling
+- [x] Verify all 66 tests still pass

@@ -257,7 +257,7 @@ export default function DownloadReport({
             </div>
             <div class="metric-row">
               <span class="metric-label">Estimated Profit</span>
-              <span class="metric-value">${formatCurrency(metrics.estimatedProfit)}</span>
+              <span class="metric-value" style="color: ${toNumber(metrics.estimatedProfit) < 0 ? '#dc2626' : 'inherit'}">${formatCurrency(metrics.estimatedProfit)}</span>
             </div>
             <div class="metric-row">
               <span class="metric-label">Expiry Risk Loss</span>
