@@ -232,7 +232,11 @@ export default function Dashboard() {
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
                 <p className="text-xs md:text-sm font-medium text-gray-600 truncate">{card.title}</p>
-                <p className="text-lg md:text-2xl font-bold text-gray-900 mt-1 md:mt-2 truncate">{card.value}</p>
+                <p className={`text-lg md:text-2xl font-bold mt-1 md:mt-2 truncate ${
+                  card.title === 'Estimated Profit' && (metrics?.estimatedProfit ?? 0) < 0
+                    ? 'text-red-600'
+                    : 'text-gray-900'
+                }`}>{card.value}</p>
                 <div className={`mt-1 md:mt-2 text-xs md:text-sm font-medium ${getTrendColor(card.trend)}`}>
                   {getTrendIcon(card.trend)} {Math.abs(card.trend).toFixed(1)}% vs last month
                 </div>
