@@ -214,7 +214,7 @@ export default function InventoryIntelligence() {
                         {item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '-'}
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
-                        {alertStatus?.label === 'Dead Stock' ? `₵${(parseFloat(item.costPrice?.toString() || '0') * item.quantity).toLocaleString()}` : '₵0'}
+                        {alertStatus?.label === 'Dead Stock' ? `₵${(parseFloat(item.price.toString()) * item.quantity).toLocaleString()}` : '₵0'}
                       </TableCell>
                       <TableCell className="p-4 text-center">
                         {alertStatus ? (
@@ -242,7 +242,7 @@ export default function InventoryIntelligence() {
                     ₵{sortedItems.reduce((total, item) => {
                       const alertStatus = getAlertStatus(item);
                       if (alertStatus?.label === 'Dead Stock') {
-                        return total + (parseFloat(item.costPrice?.toString() || '0') * item.quantity);
+                        return total + (parseFloat(item.price.toString()) * item.quantity);
                       }
                       return total;
                     }, 0).toLocaleString()}

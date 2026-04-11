@@ -579,3 +579,10 @@
 - [x] Calculate dead stock value for each product (Unit Cost * Quantity for dead stock items)
 - [x] Display total dead stock value at bottom of table
 - [x] Verify all 66 tests still pass
+
+
+## Phase 63: Fix Dead Stock Value Calculation to Match Dashboard
+- [x] Check how Dashboard calculates Dead Stock Value
+- [x] Update Inventory Intelligence calculation to use selling price instead of cost price
+- [x] Verify total matches Dashboard value
+- [x] Verify all 66 tests still pass
