@@ -211,6 +211,7 @@ export default function Dashboard() {
             metrics={metrics}
             alerts={alerts}
             topProducts={topProducts}
+            insights={insights}
           />
           <Button
             variant="outline"

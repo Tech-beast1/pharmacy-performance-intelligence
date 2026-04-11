@@ -9,6 +9,7 @@ interface DownloadReportProps {
   alerts?: any;
   topProducts?: any[];
   inventoryData?: any[];
+  insights?: any[];
 }
 
 // Safe number conversion utility
@@ -77,6 +78,7 @@ export default function DownloadReport({
   alerts,
   topProducts = [],
   inventoryData = [],
+  insights = [],
 }: DownloadReportProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -265,6 +267,35 @@ export default function DownloadReport({
               <span class="metric-label">Dead Stock Value</span>
               <span class="metric-value">${formatCurrency(metrics.deadStockValue)}</span>
             </div>
+          </div>
+        `;
+      }
+
+      // Add Key Insights Section
+      if (insights && insights.length > 0) {
+        htmlContent += `
+          <div class="section">
+            <h2>Key Insights</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        insights.forEach((insight: any) => {
+          htmlContent += `
+                <tr>
+                  <td>${insight.title || 'N/A'}</td>
+                  <td>${insight.description || 'N/A'}</td>
+                </tr>
+          `;
+        });
+        htmlContent += `
+              </tbody>
+            </table>
           </div>
         `;
       }

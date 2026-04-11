@@ -553,3 +553,10 @@
 - [x] Change download button from red to green
 - [x] Verify button color is green in UI
 - [x] Verify all 66 tests still pass
+
+
+## Phase 59: Add Key Insights to PDF
+- [x] Check what key insights are available in the system
+- [x] Add key insights section to PDF report
+- [x] Display insights with proper formatting
+- [x] Verify all 66 tests still pass
