@@ -190,6 +190,7 @@ export default function InventoryIntelligence() {
                 <TableHead className="p-4 text-center">
                   <SortHeader label="Expiry Date" sortBy="expiryDate" />
                 </TableHead>
+                <TableHead className="p-4 text-center">Dead Stock Value</TableHead>
                 <TableHead className="p-4 text-center">Status</TableHead>
               </TableRow>
             </TableHeader>
@@ -212,6 +213,9 @@ export default function InventoryIntelligence() {
                       <TableCell className="p-4 text-gray-700 text-center">
                         {item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '-'}
                       </TableCell>
+                      <TableCell className="p-4 text-center text-gray-700">
+                        {alertStatus?.label === 'Dead Stock' ? `₵${(parseFloat(item.costPrice?.toString() || '0') * item.quantity).toLocaleString()}` : '₵0'}
+                      </TableCell>
                       <TableCell className="p-4 text-center">
                         {alertStatus ? (
                           <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${alertStatus.color}`}>
@@ -226,9 +230,24 @@ export default function InventoryIntelligence() {
                 })
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="p-8 text-center text-gray-500">
+                  <TableCell colSpan={7} className="p-8 text-center text-gray-500">
                     No inventory items found
                   </TableCell>
+                </TableRow>
+              )}
+              {sortedItems.length > 0 && (
+                <TableRow className="bg-gray-100 font-bold">
+                  <TableCell colSpan={5} className="p-4 text-right">Total Dead Stock Value:</TableCell>
+                  <TableCell className="p-4 text-center text-gray-900">
+                    ₵{sortedItems.reduce((total, item) => {
+                      const alertStatus = getAlertStatus(item);
+                      if (alertStatus?.label === 'Dead Stock') {
+                        return total + (parseFloat(item.costPrice?.toString() || '0') * item.quantity);
+                      }
+                      return total;
+                    }, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               )}
             </TableBody>

@@ -572,3 +572,10 @@
 - [x] Add red text styling for negative estimated profit in Dashboard
 - [x] Apply conditional className based on profit value
 - [x] Verify all 66 tests still pass
+
+
+## Phase 62: Add Dead Stock Value Column to Inventory Intelligence
+- [x] Add Dead Stock Value column to inventory table
+- [x] Calculate dead stock value for each product (Unit Cost * Quantity for dead stock items)
+- [x] Display total dead stock value at bottom of table
+- [x] Verify all 66 tests still pass
