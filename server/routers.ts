@@ -101,12 +101,17 @@ export const appRouter = router({
                 continue;
               }
 
-              // Upsert inventory item
+              // Insert new inventory item (create new record for each upload, don't update existing)
+              // This ensures each month has its own separate inventory records
               const sku = parsed.sku || parsed.productName;
+              // Add month suffix to SKU to make it unique per month
+              const monthSuffix = input.uploadDate ? `-${input.uploadDate.getFullYear()}-${String(input.uploadDate.getMonth() + 1).padStart(2, '0')}` : '';
+              const uniqueSku = sku + monthSuffix;
+              
               await upsertInventoryItem({
                 userId: ctx.user!.id,
                 productName: parsed.productName,
-                sku,
+                sku: uniqueSku,
                 quantity: parsed.quantity || parsed.stockOnHand || 0,
                 price: parsed.price || parsed.sellingPrice || 0,
                 costPrice: parsed.costPrice || 0,
