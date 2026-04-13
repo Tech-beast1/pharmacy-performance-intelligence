@@ -31,8 +31,19 @@ export default function Dashboard() {
   const [isClearing, setIsClearing] = useState(false);
   const [durationDays, setDurationDays] = useState<number>(60);
   const [selectedPharmacy, setSelectedPharmacy] = useState<string>('all');
-  const [startDate, setStartDate] = useState<string>('2025-01-01');
-  const [endDate, setEndDate] = useState<string>('2025-01-31');
+  const [startDate, setStartDate] = useState<string>(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}-01`;
+  });
+  const [endDate, setEndDate] = useState<string>(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const lastDay = new Date(year, month, 0).toISOString().split('T')[0];
+    return lastDay;
+  });
 
   const clearAllMutation = trpc.data.clearAll.useMutation();
   const saveMetricsMutation = trpc.monthlyMetrics.save.useMutation();
@@ -74,8 +85,16 @@ export default function Dashboard() {
 
 
   // Fetch dashboard data
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays });
-  const alertsQuery = trpc.analytics.getAlerts.useQuery({ durationDays });
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ 
+    startDate, 
+    endDate,
+    durationDays 
+  });
+  const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
+    startDate, 
+    endDate,
+    durationDays 
+  });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
   const insightsQuery = trpc.analytics.getKeyInsights.useQuery();
@@ -182,30 +201,16 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Duration Selector */}
+      {/* Month Selector - Primary Filter */}
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4 items-end">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Performance Metrics Duration</label>
-            <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="30">Last 30 Days</SelectItem>
-                <SelectItem value="60">Last 60 Days</SelectItem>
-                <SelectItem value="90">Last 90 Days</SelectItem>
-                <SelectItem value="120">Last 120 Days</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
           <PharmacySelector
             pharmacyName={selectedPharmacy}
             pharmacyLocation="Accra, Ghana"
             onPharmacyChange={setSelectedPharmacy}
           />
           <div className="flex-1">
-            <label className="block text-sm font-medium text-blue-600 mb-2">Month</label>
+            <label className="block text-sm font-medium text-blue-600 mb-2">Select Month</label>
             <input
               type="month"
               value={startDate.substring(0, 7)}

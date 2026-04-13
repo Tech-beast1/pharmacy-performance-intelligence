@@ -26,12 +26,27 @@ type SortOrder = 'asc' | 'desc';
 
 export default function InventoryIntelligence() {
   const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'lowmargin'>('all');
-  const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [startDate, setStartDate] = useState<string>(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}-01`;
+  });
+  const [endDate, setEndDate] = useState<string>(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const lastDay = new Date(year, month, 0).toISOString().split('T')[0];
+    return lastDay;
+  });
 
   const inventoryQuery = trpc.inventory.getAll.useQuery();
-  const alertsQuery = trpc.analytics.getAlerts.useQuery({ durationDays });
+  const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
+    startDate,
+    endDate
+  });
 
   const inventory = inventoryQuery.data?.data || [];
   const alerts = alertsQuery.data?.data;
@@ -146,20 +161,7 @@ export default function InventoryIntelligence() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Dead Stock Duration</label>
-            <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="30">Last 30 Days</SelectItem>
-                <SelectItem value="60">Last 60 Days</SelectItem>
-                <SelectItem value="90">Last 90 Days</SelectItem>
-                <SelectItem value="120">Last 120 Days</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+
           <div className="flex items-center gap-2">
             <div className="text-sm text-gray-600">
               Showing {sortedItems.length} of {itemsWithMargin.length} items

@@ -172,16 +172,29 @@ export const appRouter = router({
   // Dashboard analytics
   analytics: router({
     getDashboardMetrics: protectedProcedure
-      .input(z.object({ durationDays: z.number().optional().default(60) }))
+      .input(z.object({ 
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+        durationDays: z.number().optional().default(60) 
+      }))
       .query(async ({ ctx, input }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
         
-        // Get current month's overhead costs
-        const now = new Date();
-        const month = now.getMonth() + 1;
-        const year = now.getFullYear();
+        // Determine which month to get overhead costs for
+        let month: number;
+        let year: number;
+        
+        if (input.startDate) {
+          const startDateObj = new Date(input.startDate);
+          month = startDateObj.getMonth() + 1;
+          year = startDateObj.getFullYear();
+        } else {
+          const now = new Date();
+          month = now.getMonth() + 1;
+          year = now.getFullYear();
+        }
         const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, month, year);
         
         // Calculate total overhead costs for the month
@@ -194,7 +207,15 @@ export const appRouter = router({
             parseFloat(overheadCosts.others?.toString() || '0');
         }
         
-        const metrics = calculateDashboardMetrics(inventory, sales, undefined, monthlyOverheadCosts, input.durationDays);
+        const metrics = calculateDashboardMetrics(
+          inventory, 
+          sales, 
+          undefined, 
+          monthlyOverheadCosts, 
+          input.durationDays,
+          input.startDate ? new Date(input.startDate) : undefined,
+          input.endDate ? new Date(input.endDate) : undefined
+        );
         return { success: true, data: metrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);
@@ -203,12 +224,22 @@ export const appRouter = router({
     }),
 
     getAlerts: protectedProcedure
-      .input(z.object({ durationDays: z.number().optional().default(60) }))
+      .input(z.object({ 
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+        durationDays: z.number().optional().default(60) 
+      }))
       .query(async ({ ctx, input }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const alerts = identifyAlerts(inventory, sales, input.durationDays);
+        const alerts = identifyAlerts(
+          inventory, 
+          sales, 
+          input.durationDays,
+          input.startDate ? new Date(input.startDate) : undefined,
+          input.endDate ? new Date(input.endDate) : undefined
+        );
         return { success: true, data: alerts };
       } catch (error) {
         console.error('Alerts error:', error);
