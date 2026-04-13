@@ -50,10 +50,11 @@ export default function Dashboard() {
         expiryRiskLoss: metrics.expiryRiskLoss,
         deadStockValue: metrics.deadStockValue,
       });
-      alert('Monthly metrics saved successfully!');
+      const monthName = new Date(parseInt(year), parseInt(month) - 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+      alert(`✓ Metrics for ${monthName} saved successfully!`);
     } catch (error) {
       console.error('Error saving metrics:', error);
-      alert('Failed to save metrics');
+      alert('✗ Failed to save metrics. Please try again.');
     }
   };
 
@@ -221,9 +222,17 @@ export default function Dashboard() {
           <div className="flex items-end">
             <Button
               onClick={() => handleSaveMetrics()}
-              className="bg-green-600 hover:bg-green-700 text-white h-10 px-4"
+              disabled={!metrics || saveMetricsMutation.isPending}
+              className="bg-blue-600 hover:bg-blue-700 text-white h-10 px-4"
             >
-              Save Metrics
+              {saveMetricsMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save Metrics'
+              )}
             </Button>
           </div>
         </div>
