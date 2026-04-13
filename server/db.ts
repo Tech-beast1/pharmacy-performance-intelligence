@@ -298,10 +298,12 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
   
   try {
     if (month !== undefined && year !== undefined) {
-      const monthStart = new Date(year, month - 1, 1);
-      const monthEnd = new Date(year, month, 1);
-      monthEnd.setDate(monthEnd.getDate() - 1);
-      monthEnd.setHours(23, 59, 59, 999);
+      // Use UTC dates to avoid timezone issues
+      const monthStart = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0, 0));
+      const monthEnd = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999));
+      
+      console.log(`[clearAllUserData] Deleting data for month ${month}/${year}`);
+      console.log(`[clearAllUserData] Date range: ${monthStart.toISOString()} to ${monthEnd.toISOString()}`);
       
       await db.delete(salesTransactions)
         .where(
@@ -311,6 +313,7 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
             lte(salesTransactions.createdAt, monthEnd)
           )
         );
+      console.log(`[clearAllUserData] Deleted sales transactions for month ${month}/${year}`);
       
       await db.delete(inventory)
         .where(
@@ -320,6 +323,7 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
             lte(inventory.createdAt, monthEnd)
           )
         );
+      console.log(`[clearAllUserData] Deleted inventory items for month ${month}/${year}`);
       
       await db.delete(alerts)
         .where(
