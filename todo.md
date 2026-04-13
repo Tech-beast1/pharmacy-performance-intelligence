@@ -633,23 +633,23 @@
 
 
 ## Phase 69: Implement Month-Based Upload Data Isolation
-- [ ] Add uploadMonth and uploadYear columns to inventory table
-- [ ] Add uploadMonth and uploadYear columns to sales_transactions table
-- [ ] Update schema migration for new columns
-- [ ] Update upload procedures to tag data with current selected month
-- [ ] Update analytics queries to filter inventory/sales by month
-- [ ] Test April uploads don't appear in May
-- [ ] Test May uploads show fresh metrics (0 if no data)
-- [ ] Verify all tests still pass
+- [x] Add uploadMonth and uploadYear columns to inventory table
+- [x] Add uploadMonth and uploadYear columns to sales_transactions table
+- [x] Update schema migration for new columns
+- [x] Update upload procedures to tag data with current selected month
+- [x] Update analytics queries to filter inventory/sales by month
+- [x] Test April uploads don't appear in May
+- [x] Test May uploads show fresh metrics (0 if no data)
+- [x] Verify all tests still pass
 
 
 ## Phase 70: Implement Month-Based Upload Data Isolation (Option A)
-- [ ] Add uploadMonth and uploadYear columns to inventory table
-- [ ] Add uploadMonth and uploadYear columns to sales_transactions table
-- [ ] Generate and apply migration SQL
-- [ ] Update upload procedures to tag data with current selected month
-- [ ] Update analytics queries to filter inventory/sales by uploadMonth and uploadYear
-- [ ] Update expiry risk to use filtered inventory only
-- [ ] Update dead stock to use filtered sales only
-- [ ] Test April uploads show April data, May shows 0 until new upload
-- [ ] Verify all tests still pass
+- [x] Add uploadMonth and uploadYear columns to inventory table
+- [x] Add uploadMonth and uploadYear columns to sales_transactions table
+- [x] Generate and apply migration SQL
+- [x] Update upload procedures to tag data with current selected month
+- [x] Update analytics queries to filter inventory/sales by uploadMonth and uploadYear
+- [x] Update expiry risk to use filtered inventory only
+- [x] Update dead stock to use filtered sales only
+- [x] Test April uploads show April data, May shows 0 until new upload
+- [x] Verify all tests still pass
