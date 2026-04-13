@@ -5,21 +5,80 @@ import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
 import { Input } from '@/components/ui/input';
 import { trpc } from '@/lib/trpc';
+import { useLocation } from 'wouter';
 import { toast } from 'sonner';
 
 export default function OverheadCosts() {
+  const [location] = useLocation();
   const currentDate = new Date();
-  const [month, setMonth] = useState(currentDate.getMonth() + 1);
-  const [year, setYear] = useState(currentDate.getFullYear());
+  
+  // Parse month/year from URL parameters first
+  const urlParams = new URLSearchParams(location.split('?')[1] || '');
+  const urlMonth = urlParams.get('month');
+  const urlYear = urlParams.get('year');
+  
+  // Try to read from localStorage (Dashboard's selected month) as fallback
+  const getStoredMonth = () => {
+    try {
+      const stored = localStorage.getItem('selectedMonth');
+      return stored ? parseInt(stored) : currentDate.getMonth() + 1;
+    } catch {
+      return currentDate.getMonth() + 1;
+    }
+  };
+  
+  const getStoredYear = () => {
+    try {
+      const stored = localStorage.getItem('selectedYear');
+      return stored ? parseInt(stored) : currentDate.getFullYear();
+    } catch {
+      return currentDate.getFullYear();
+    }
+  };
+  
+  const [month, setMonth] = useState(() => urlMonth ? parseInt(urlMonth) : getStoredMonth());
+  const [year, setYear] = useState(() => urlYear ? parseInt(urlYear) : getStoredYear());
   const [rent, setRent] = useState('0');
   const [salaries, setSalaries] = useState('0');
   const [electricity, setElectricity] = useState('0');
   const [others, setOthers] = useState('0');
   const [isSaving, setIsSaving] = useState(false);
+  
+
 
   // Fetch overhead costs for the selected month/year
   const overheadQuery = trpc.overheadCosts.getByMonth.useQuery({ month, year });
   const saveMutation = trpc.overheadCosts.save.useMutation();
+
+  // Update month/year when URL parameters or localStorage changes
+  useEffect(() => {
+    if (urlMonth) {
+      setMonth(parseInt(urlMonth));
+    } else {
+      // Read from localStorage if no URL params
+      const storedMonth = getStoredMonth();
+      setMonth(storedMonth);
+    }
+    
+    if (urlYear) {
+      setYear(parseInt(urlYear));
+    } else {
+      // Read from localStorage if no URL params
+      const storedYear = getStoredYear();
+      setYear(storedYear);
+    }
+  }, [location]);
+  
+  // Also listen for localStorage changes (when Dashboard updates)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (!urlMonth) setMonth(getStoredMonth());
+      if (!urlYear) setYear(getStoredYear());
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [urlMonth, urlYear]);
 
   // Load existing data when query returns
   useEffect(() => {

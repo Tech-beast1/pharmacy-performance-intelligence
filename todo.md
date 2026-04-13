@@ -681,3 +681,13 @@
 - [x] Verify PDF shows correct profit calculations instead of ₵0.00
 - [x] Test PDF generation with April data
 - [x] Verify all 66 tests still pass
+
+
+## Phase 74: Fix Overhead Costs to Be Month-Specific
+- [x] Check overhead_costs table schema to see if it has month/year fields
+- [x] Confirm overhead_costs table already has uploadMonth and uploadYear columns
+- [x] Update OverheadCosts page to read month from URL parameters
+- [x] Update OverheadCosts page to read month from localStorage (Dashboard's selected month)
+- [x] Add localStorage change listener to sync with Dashboard
+- [x] Test April overhead costs don't affect May
+- [x] Verify all 66 tests pass
