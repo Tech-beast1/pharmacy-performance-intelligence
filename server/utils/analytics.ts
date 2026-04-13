@@ -62,11 +62,14 @@ export function calculateDashboardMetrics(
     const revenueTrend = 0;
     const profitTrend = 0;
     
-    // Expiry risk: products expiring within the selected month
+    // Expiry risk: products expiring within 90 days from today (independent of selected month)
+    // This ensures real-time alerts for products that need attention soon
+    const today = new Date();
+    const ninetyDaysFromNow = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
     const expiryRiskProducts = inventory.filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
-      return expiryDate >= monthStart && expiryDate <= monthEnd;
+      return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
     });
     const expiryRiskLoss = expiryRiskProducts.reduce(
       (sum, item) => sum + parseFloat(item.price.toString()) * item.quantity,
@@ -203,11 +206,14 @@ export function identifyAlerts(
     const monthEnd = new Date(endDate);
     monthEnd.setHours(23, 59, 59, 999);
     
-    // Expiry risk: products expiring within the selected month
+    // Expiry risk: products expiring within 90 days from today (independent of selected month)
+    // This ensures real-time alerts for products that need attention soon
+    const today = new Date();
+    const ninetyDaysFromNow = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
     const expiryRiskProducts = inventory.filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
-      return expiryDate >= monthStart && expiryDate <= monthEnd;
+      return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
     });
     
     // Dead stock: products with 0 sales in the selected month
