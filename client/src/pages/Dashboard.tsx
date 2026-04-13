@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2, Trash2, TrendingDown, BarChart3, CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ export default function Dashboard() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [durationDays, setDurationDays] = useState<number>(60);
-  const [selectedPharmacy, setSelectedPharmacy] = useState<string>('all');
+  const [selectedPharmacy, setSelectedPharmacy] = useState<string>('');
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
     const year = now.getFullYear();
