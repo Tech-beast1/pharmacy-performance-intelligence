@@ -216,16 +216,55 @@ export const appRouter = router({
             parseFloat(overheadCosts.others?.toString() || '0');
         }
         
+        let startDate = input.startDate ? new Date(input.startDate) : undefined;
+        let endDate = input.endDate ? new Date(input.endDate) : undefined;
+        
         const metrics = calculateDashboardMetrics(
           inventory, 
           sales, 
           undefined, 
           monthlyOverheadCosts, 
           input.durationDays,
-          input.startDate ? new Date(input.startDate) : undefined,
-          input.endDate ? new Date(input.endDate) : undefined
+          startDate,
+          endDate
         );
-        return { success: true, data: metrics };
+        
+        // Calculate previous month metrics for comparison
+        let previousMetrics = null;
+        if (startDate) {
+          const prevMonthDate = new Date(startDate);
+          prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
+          const prevMonth = prevMonthDate.getMonth() + 1;
+          const prevYear = prevMonthDate.getFullYear();
+          
+          // Get previous month overhead costs
+          const prevOverheadCosts = await getOverheadCostsByMonth(ctx.user!.id, prevMonth, prevYear);
+          let prevMonthlyOverheadCosts = 0;
+          if (prevOverheadCosts) {
+            prevMonthlyOverheadCosts = 
+              parseFloat(prevOverheadCosts.rent?.toString() || '0') +
+              parseFloat(prevOverheadCosts.salaries?.toString() || '0') +
+              parseFloat(prevOverheadCosts.electricity?.toString() || '0') +
+              parseFloat(prevOverheadCosts.others?.toString() || '0');
+          }
+          
+          // Calculate date range for previous month
+          const prevMonthStart = new Date(prevYear, prevMonth - 1, 1);
+          const prevMonthEnd = new Date(prevYear, prevMonth, 0);
+          prevMonthEnd.setHours(23, 59, 59, 999);
+          
+          previousMetrics = calculateDashboardMetrics(
+            inventory,
+            sales,
+            undefined,
+            prevMonthlyOverheadCosts,
+            input.durationDays,
+            prevMonthStart,
+            prevMonthEnd
+          );
+        }
+        
+        return { success: true, data: metrics, previousMetrics };
       } catch (error) {
         console.error('Dashboard metrics error:', error);
         return { success: false, error: 'Failed to calculate metrics' };

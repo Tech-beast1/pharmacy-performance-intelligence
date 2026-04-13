@@ -653,3 +653,12 @@
 - [x] Update dead stock to use filtered sales only
 - [x] Test April uploads show April data, May shows 0 until new upload
 - [x] Verify all tests still pass
+
+
+## Phase 71: Implement Month-over-Month Comparison
+- [x] Update analytics to calculate previous month metrics
+- [x] Update Dashboard queries to fetch both current and previous month data
+- [x] Calculate percentage changes for all metrics (Revenue, Profit, Expiry Risk, Dead Stock)
+- [x] Update Dashboard UI to display month-over-month comparison percentages
+- [x] Test comparison with April vs May data
+- [x] Verify all 66 tests still pass

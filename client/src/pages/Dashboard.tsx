@@ -100,10 +100,23 @@ export default function Dashboard() {
   const insightsQuery = trpc.analytics.getKeyInsights.useQuery();
 
   const metrics = metricsQuery.data?.data;
+  const previousMetrics = metricsQuery.data?.previousMetrics;
   const alerts = alertsQuery.data?.data;
   const topProducts = topProductsQuery.data?.data || [];
   const revenueTrend = revenueTrendQuery.data?.data || [];
   const insights = insightsQuery.data?.data || [];
+  
+  // Calculate percentage changes for month-over-month comparison
+  const calculatePercentageChange = (current: number, previous: number | null | undefined): number => {
+    if (!previous || previous === 0) return 0;
+    return ((current - previous) / previous) * 100;
+  };
+  
+  // Use previous month metrics if available, otherwise use trend values
+  const revenueTrendPercent = previousMetrics ? calculatePercentageChange(metrics?.totalRevenue || 0, previousMetrics.totalRevenue) : (metrics?.revenueTrend || 0);
+  const profitTrendPercent = previousMetrics ? calculatePercentageChange(metrics?.estimatedProfit || 0, previousMetrics.estimatedProfit) : (metrics?.profitTrend || 0);
+  const expiryTrendPercent = previousMetrics ? calculatePercentageChange(metrics?.expiryRiskLoss || 0, previousMetrics.expiryRiskLoss) : (metrics?.expiryRiskTrend || 0);
+  const deadStockTrendPercent = previousMetrics ? calculatePercentageChange(metrics?.deadStockValue || 0, previousMetrics.deadStockValue) : (metrics?.deadStockTrend || 0);
 
   const isLoading = metricsQuery.isLoading || alertsQuery.isLoading;
 
@@ -112,7 +125,7 @@ export default function Dashboard() {
       title: 'Total Revenue',
       value: `₵${metrics.totalRevenue.toLocaleString()}`,
       // Ghanaian Cedis currency
-      trend: metrics.revenueTrend,
+      trend: revenueTrendPercent,
       icon: <DollarSign className="w-8 h-8" />,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100',
@@ -121,7 +134,7 @@ export default function Dashboard() {
       title: 'Estimated Profit',
       value: `₵${metrics.estimatedProfit.toLocaleString()}`,
       // Ghanaian Cedis currency
-      trend: metrics.profitTrend,
+      trend: profitTrendPercent,
       icon: <TrendingUp className="w-8 h-8" />,
       color: 'text-green-600',
       bgColor: 'bg-green-100',
@@ -130,7 +143,7 @@ export default function Dashboard() {
       title: 'Expiry Risk Loss',
       value: `₵${metrics.expiryRiskLoss.toLocaleString()}`,
       // Ghanaian Cedis currency
-      trend: metrics.expiryRiskTrend,
+      trend: expiryTrendPercent,
       icon: <AlertTriangle className="w-8 h-8" />,
       color: 'text-red-600',
       bgColor: 'bg-red-100',
@@ -139,7 +152,7 @@ export default function Dashboard() {
       title: 'Dead Stock Value',
       value: `₵${metrics.deadStockValue.toLocaleString()}`,
       // Ghanaian Cedis currency
-      trend: metrics.deadStockTrend,
+      trend: deadStockTrendPercent,
       icon: <Package className="w-8 h-8" />,
       color: 'text-orange-600',
       bgColor: 'bg-orange-100',
