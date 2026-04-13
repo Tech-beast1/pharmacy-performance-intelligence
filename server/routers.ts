@@ -116,6 +116,7 @@ export const appRouter = router({
                 price: parsed.price || parsed.sellingPrice || 0,
                 costPrice: parsed.costPrice || 0,
                 expiryDate: parsed.expiryDate,
+                createdAt: input.uploadDate || new Date(),
               });
 
               // For SALES data: create sales transaction from quantity and price
@@ -137,6 +138,7 @@ export const appRouter = router({
                   costPrice,
                   profit,
                   saleDate,
+                  createdAt: input.uploadDate || new Date(),
                 });
               }
               // For INVENTORY data: only create sales transaction if explicitly mapped
@@ -152,6 +154,7 @@ export const appRouter = router({
                   costPrice: parsed.costPrice || 0,
                   profit,
                   saleDate: parsed.saleDate,
+                  createdAt: input.uploadDate || new Date(),
                 });
               }
 
