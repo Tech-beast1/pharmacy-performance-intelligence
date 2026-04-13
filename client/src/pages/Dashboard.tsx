@@ -183,22 +183,19 @@ export default function Dashboard() {
             onPharmacyChange={setSelectedPharmacy}
           />
           <div className="flex-1">
-            <label className="block text-sm font-medium text-blue-600 mb-2">Date Range</label>
-            <div className="flex gap-2">
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
-              />
-              <span className="flex items-center text-gray-500">to</span>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
-              />
-            </div>
+            <label className="block text-sm font-medium text-blue-600 mb-2">Month</label>
+            <input
+              type="month"
+              value={startDate.substring(0, 7)}
+              onChange={(e) => {
+                const [year, month] = e.target.value.split('-');
+                const firstDay = `${year}-${month}-01`;
+                const lastDay = new Date(parseInt(year), parseInt(month), 0).toISOString().split('T')[0];
+                setStartDate(firstDay);
+                setEndDate(lastDay);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+            />
           </div>
         </div>
       </Card>
