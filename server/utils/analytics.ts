@@ -292,10 +292,12 @@ export function getTopProfitableProducts(inventory: Inventory[]): any[] {
   return inventory
     .map(item => ({
       productName: item.productName,
+      costPrice: item.costPrice,
       profit: (parseFloat(item.price.toString()) - parseFloat(item.costPrice?.toString() || '0')) * item.quantity,
       margin: ((parseFloat(item.price.toString()) - parseFloat(item.costPrice?.toString() || '0')) / parseFloat(item.costPrice?.toString() || '1')) * 100,
       quantity: item.quantity,
       price: item.price,
+      totalProfit: (parseFloat(item.price.toString()) - parseFloat(item.costPrice?.toString() || '0')) * item.quantity,
     }))
     .sort((a, b) => b.profit - a.profit)
     .slice(0, 10);

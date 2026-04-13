@@ -670,3 +670,14 @@
 - [x] Update Dashboard Clear All button to pass selected month
 - [x] Test clearing April doesn't affect May data
 - [x] Verify all 66 tests still pass
+
+
+## Phase 73: Fix PDF Report to Include Unit Costs and Profits
+- [x] Update PDF generation to fetch unit costs from inventory table
+- [x] Join inventory and sales data to get unit costs for each product
+- [x] Calculate profit correctly: (Selling Price - Unit Cost) × Quantity Sold
+- [x] Update Top 10 Profitable Products table to display unit costs
+- [x] Verify PDF shows correct unit costs instead of ₵0.00
+- [x] Verify PDF shows correct profit calculations instead of ₵0.00
+- [x] Test PDF generation with April data
+- [x] Verify all 66 tests still pass
