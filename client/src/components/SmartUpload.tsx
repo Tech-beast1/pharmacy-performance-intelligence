@@ -33,7 +33,11 @@ interface UploadStep {
   step: 'upload' | 'sheetSelect' | 'dataType' | 'mapping' | 'preview' | 'processing' | 'complete';
 }
 
-export default function SmartUpload() {
+interface SmartUploadProps {
+  uploadDate?: Date;
+}
+
+export default function SmartUpload({ uploadDate }: SmartUploadProps) {
   const [uploadStep, setUploadStep] = useState<UploadStep['step']>('upload');
   const [csvContent, setCsvContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
@@ -50,8 +54,8 @@ export default function SmartUpload() {
   const [isLoading, setIsLoading] = useState(false);
   const [sheets, setSheets] = useState<SheetInfo[]>([]);
   const [selectedSheet, setSelectedSheet] = useState<string>('');
-  const [selectedMonth, setSelectedMonth] = useState<Date>(() => new Date());
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const effectiveUploadDate = uploadDate || new Date();
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
   const processFileMutation = trpc.upload.processFile.useMutation();
@@ -206,7 +210,7 @@ export default function SmartUpload() {
         csvContent,
         sheetName: selectedSheet || undefined,
         mapping: mapping as any,
-        uploadDate: selectedMonth,
+        uploadDate: effectiveUploadDate,
       });
 
       if (result.success) {

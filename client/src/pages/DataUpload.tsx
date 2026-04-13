@@ -1,16 +1,33 @@
 import SmartUpload from '@/components/SmartUpload';
 import PageHeader from '@/components/PageHeader';
+import { useState } from 'react';
 
 export default function DataUpload() {
+  const [selectedMonth, setSelectedMonth] = useState<Date>(() => new Date());
+
   return (
     <div className="space-y-6">
     <PageHeader title="Data Upload" description="Upload your sales and inventory data" />
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Data Upload</h1>
-        <p className="text-gray-600 mt-1">Import your pharmacy sales and inventory data</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Data Upload</h1>
+          <p className="text-gray-600 mt-1">Import your pharmacy sales and inventory data</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <label className="text-sm font-medium text-gray-700">Upload for Month:</label>
+          <input
+            type="month"
+            value={selectedMonth.toISOString().slice(0, 7)}
+            onChange={(e) => {
+              const [year, month] = e.target.value.split('-');
+              setSelectedMonth(new Date(parseInt(year), parseInt(month) - 1, 1));
+            }}
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
 
-      <SmartUpload />
+      <SmartUpload uploadDate={selectedMonth} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
