@@ -146,3 +146,24 @@ export const pharmacyProfiles = mysqlTable("pharmacy_profiles", {
 
 export type PharmacyProfile = typeof pharmacyProfiles.$inferSelect;
 export type InsertPharmacyProfile = typeof pharmacyProfiles.$inferInsert;
+
+
+/**
+ * MonthlyMetrics table stores saved performance metrics for each month.
+ * Similar to OverheadCosts, allows users to save metrics snapshots.
+ */
+export const monthlyMetrics = mysqlTable("monthly_metrics", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  totalRevenue: decimal("totalRevenue", { precision: 15, scale: 2 }).default("0").notNull(),
+  estimatedProfit: decimal("estimatedProfit", { precision: 15, scale: 2 }).default("0").notNull(),
+  expiryRiskLoss: decimal("expiryRiskLoss", { precision: 15, scale: 2 }).default("0").notNull(),
+  deadStockValue: decimal("deadStockValue", { precision: 15, scale: 2 }).default("0").notNull(),
+  month: int("month").notNull(), // 1-12
+  year: int("year").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MonthlyMetric = typeof monthlyMetrics.$inferSelect;
+export type InsertMonthlyMetric = typeof monthlyMetrics.$inferInsert;

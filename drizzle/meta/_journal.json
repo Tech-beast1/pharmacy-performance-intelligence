@@ -50,6 +50,13 @@
       "when": 1775594330443,
       "tag": "0006_panoramic_skin",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1776077443559,
+      "tag": "0007_panoramic_living_tribunal",
+      "breakpoints": true
     }
   ]
 }

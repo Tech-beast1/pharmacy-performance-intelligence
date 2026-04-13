@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 import { generateKeyInsights } from "./utils/insights";
@@ -301,6 +301,45 @@ export const appRouter = router({
         } catch (error) {
           console.error('Error saving overhead costs:', error);
           return { success: false, error: 'Failed to save overhead costs' };
+        }
+      }),
+  }),
+
+  // Monthly metrics management
+  monthlyMetrics: router({
+    getByMonth: protectedProcedure
+      .input(z.object({ month: z.number().min(1).max(12), year: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const data = await getMonthlyMetricsByMonth(ctx.user!.id, input.month, input.year);
+        return { success: true, data: data || { totalRevenue: 0, estimatedProfit: 0, expiryRiskLoss: 0, deadStockValue: 0 } };
+      }),
+
+    save: protectedProcedure
+      .input(
+        z.object({
+          month: z.number().min(1).max(12),
+          year: z.number(),
+          totalRevenue: z.number().min(0),
+          estimatedProfit: z.number(),
+          expiryRiskLoss: z.number().min(0),
+          deadStockValue: z.number().min(0),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        try {
+          await upsertMonthlyMetrics({
+            userId: ctx.user!.id,
+            month: input.month,
+            year: input.year,
+            totalRevenue: input.totalRevenue.toString(),
+            estimatedProfit: input.estimatedProfit.toString(),
+            expiryRiskLoss: input.expiryRiskLoss.toString(),
+            deadStockValue: input.deadStockValue.toString(),
+          } as any);
+          return { success: true, message: 'Monthly metrics saved successfully' };
+        } catch (error) {
+          console.error('Error saving monthly metrics:', error);
+          return { success: false, error: 'Failed to save monthly metrics' };
         }
       }),
   }),

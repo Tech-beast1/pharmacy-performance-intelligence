@@ -1,9 +1,9 @@
 import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles } from "../drizzle/schema";
+import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile } from "../drizzle/schema";
+import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile, MonthlyMetric, InsertMonthlyMetric } from "../drizzle/schema";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -255,6 +255,41 @@ export async function upsertPharmacyProfile(data: InsertPharmacyProfile) {
   }
 }
 
+
+// Monthly metrics queries
+export async function getMonthlyMetricsByMonth(userId: number, month: number, year: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(monthlyMetrics)
+    .where(
+      and(
+        eq(monthlyMetrics.userId, userId),
+        eq(monthlyMetrics.month, month),
+        eq(monthlyMetrics.year, year)
+      )
+    )
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function upsertMonthlyMetrics(data: InsertMonthlyMetric) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const existing = await getMonthlyMetricsByMonth(data.userId, data.month, data.year);
+  
+  if (existing) {
+    await db.update(monthlyMetrics).set(data).where(eq(monthlyMetrics.id, existing.id));
+    return existing;
+  } else {
+    const result = await db.insert(monthlyMetrics).values(data);
+    return result;
+  }
+}
 
 // Clear all user data
 export async function clearAllUserData(userId: number) {

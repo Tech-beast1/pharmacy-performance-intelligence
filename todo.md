@@ -593,3 +593,12 @@
 - [x] Replace date inputs with month input type
 - [x] Automatically set first and last day of selected month
 - [x] Verify all 66 tests still pass
+
+
+## Phase 65: Add Save Button for Monthly Performance Metrics
+- [x] Create monthly performance metrics table in schema
+- [x] Add backend procedures to save/retrieve monthly metrics
+- [x] Add Save button next to month selector in Dashboard
+- [x] Show confirmation dialog before saving
+- [x] Display success message after saving
+- [x] Verify all 66 tests still pass
