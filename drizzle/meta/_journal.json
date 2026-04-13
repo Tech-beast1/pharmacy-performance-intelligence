@@ -64,6 +64,20 @@
       "when": 1776079776112,
       "tag": "0008_daily_venom",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1776080306633,
+      "tag": "0009_tan_miss_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1776080717967,
+      "tag": "0010_daily_echo",
+      "breakpoints": true
     }
   ]
 }

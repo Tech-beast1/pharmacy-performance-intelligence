@@ -50,6 +50,7 @@ export default function SmartUpload() {
   const [isLoading, setIsLoading] = useState(false);
   const [sheets, setSheets] = useState<SheetInfo[]>([]);
   const [selectedSheet, setSelectedSheet] = useState<string>('');
+  const [selectedMonth, setSelectedMonth] = useState<Date>(() => new Date());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
@@ -205,6 +206,7 @@ export default function SmartUpload() {
         csvContent,
         sheetName: selectedSheet || undefined,
         mapping: mapping as any,
+        uploadDate: selectedMonth,
       });
 
       if (result.success) {

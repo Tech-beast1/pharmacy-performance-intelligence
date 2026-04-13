@@ -44,10 +44,16 @@ export function calculateDashboardMetrics(
     const monthEnd = new Date(endDate);
     monthEnd.setHours(23, 59, 59, 999); // Include entire end day
     
-    // Current period sales (within the selected month)
+    // Filter inventory by createdAt month (only show data uploaded in this month)
+    const monthInventory = inventory.filter(item => {
+      const createdDate = new Date(item.createdAt);
+      return createdDate >= monthStart && createdDate <= monthEnd;
+    });
+    
+    // Current period sales (within the selected month, filtered by createdAt)
     const currentSales = sales.filter(s => {
-      const saleDate = new Date(s.saleDate);
-      return saleDate >= monthStart && saleDate <= monthEnd;
+      const createdDate = new Date(s.createdAt);
+      return createdDate >= monthStart && createdDate <= monthEnd;
     });
     const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
     let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
@@ -62,11 +68,10 @@ export function calculateDashboardMetrics(
     const revenueTrend = 0;
     const profitTrend = 0;
     
-    // Expiry risk: products expiring within 90 days from today (independent of selected month)
-    // This ensures real-time alerts for products that need attention soon
+    // Expiry risk: products from this month that are expiring within 90 days from today
     const today = new Date();
     const ninetyDaysFromNow = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
-    const expiryRiskProducts = inventory.filter(item => {
+    const expiryRiskProducts = monthInventory.filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
       return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
@@ -77,11 +82,11 @@ export function calculateDashboardMetrics(
     );
     const expiryRiskTrend = 0;
     
-    // Dead stock: products with 0 sales in the selected month
+    // Dead stock: products from this month with 0 sales in the selected month
     const recentSalesProducts = new Set(
       currentSales.map(s => s.productName)
     );
-    const deadStockProducts = inventory.filter(item => 
+    const deadStockProducts = monthInventory.filter(item => 
       !recentSalesProducts.has(item.productName) && item.quantity > 0
     );
     const deadStockValue = deadStockProducts.reduce(
@@ -206,11 +211,16 @@ export function identifyAlerts(
     const monthEnd = new Date(endDate);
     monthEnd.setHours(23, 59, 59, 999);
     
-    // Expiry risk: products expiring within 90 days from today (independent of selected month)
-    // This ensures real-time alerts for products that need attention soon
+    // Filter inventory by createdAt month (only show data uploaded in this month)
+    const monthInventory = inventory.filter(item => {
+      const createdDate = new Date(item.createdAt);
+      return createdDate >= monthStart && createdDate <= monthEnd;
+    });
+    
+    // Expiry risk: products from this month that are expiring within 90 days from today
     const today = new Date();
     const ninetyDaysFromNow = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
-    const expiryRiskProducts = inventory.filter(item => {
+    const expiryRiskProducts = monthInventory.filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
       return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
@@ -218,16 +228,16 @@ export function identifyAlerts(
     
     // Dead stock: products with 0 sales in the selected month
     const currentSales = sales.filter(s => {
-      const saleDate = new Date(s.saleDate);
-      return saleDate >= monthStart && saleDate <= monthEnd;
+      const createdDate = new Date(s.createdAt);
+      return createdDate >= monthStart && createdDate <= monthEnd;
     });
     const recentSalesProducts = new Set(currentSales.map(s => s.productName));
-    const deadStockProducts = inventory.filter(item => 
+    const deadStockProducts = monthInventory.filter(item => 
       !recentSalesProducts.has(item.productName) && item.quantity > 0
     );
     
     // Low margin products (margin < 20%)
-    const lowMarginProducts = inventory.filter(item => {
+    const lowMarginProducts = monthInventory.filter(item => {
       const costPrice = parseFloat(item.costPrice?.toString() || '0');
       const sellingPrice = parseFloat(item.price.toString());
       if (costPrice === 0) return false;

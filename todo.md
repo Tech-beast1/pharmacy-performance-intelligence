@@ -641,3 +641,15 @@
 - [ ] Test April uploads don't appear in May
 - [ ] Test May uploads show fresh metrics (0 if no data)
 - [ ] Verify all tests still pass
+
+
+## Phase 70: Implement Month-Based Upload Data Isolation (Option A)
+- [ ] Add uploadMonth and uploadYear columns to inventory table
+- [ ] Add uploadMonth and uploadYear columns to sales_transactions table
+- [ ] Generate and apply migration SQL
+- [ ] Update upload procedures to tag data with current selected month
+- [ ] Update analytics queries to filter inventory/sales by uploadMonth and uploadYear
+- [ ] Update expiry risk to use filtered inventory only
+- [ ] Update dead stock to use filtered sales only
+- [ ] Test April uploads show April data, May shows 0 until new upload
+- [ ] Verify all tests still pass
