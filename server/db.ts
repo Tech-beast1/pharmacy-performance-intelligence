@@ -299,7 +299,8 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
   try {
     if (month !== undefined && year !== undefined) {
       const monthStart = new Date(year, month - 1, 1);
-      const monthEnd = new Date(year, month, 0);
+      const monthEnd = new Date(year, month, 1);
+      monthEnd.setDate(monthEnd.getDate() - 1);
       monthEnd.setHours(23, 59, 59, 999);
       
       await db.delete(salesTransactions)
