@@ -35,6 +35,27 @@ export default function Dashboard() {
   const [endDate, setEndDate] = useState<string>('2025-01-31');
 
   const clearAllMutation = trpc.data.clearAll.useMutation();
+  const saveMetricsMutation = trpc.monthlyMetrics.save.useMutation();
+
+  const handleSaveMetrics = async () => {
+    if (!metrics) return;
+    
+    const [year, month] = startDate.substring(0, 7).split('-');
+    try {
+      await saveMetricsMutation.mutateAsync({
+        month: parseInt(month),
+        year: parseInt(year),
+        totalRevenue: metrics.totalRevenue,
+        estimatedProfit: metrics.estimatedProfit,
+        expiryRiskLoss: metrics.expiryRiskLoss,
+        deadStockValue: metrics.deadStockValue,
+      });
+      alert('Monthly metrics saved successfully!');
+    } catch (error) {
+      console.error('Error saving metrics:', error);
+      alert('Failed to save metrics');
+    }
+  };
 
   const handleClearAll = async () => {
     setIsClearing(true);
@@ -196,6 +217,14 @@ export default function Dashboard() {
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
+          </div>
+          <div className="flex items-end">
+            <Button
+              onClick={() => handleSaveMetrics()}
+              className="bg-green-600 hover:bg-green-700 text-white h-10 px-4"
+            >
+              Save Metrics
+            </Button>
           </div>
         </div>
       </Card>

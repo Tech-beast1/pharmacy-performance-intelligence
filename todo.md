@@ -599,6 +599,6 @@
 - [x] Create monthly performance metrics table in schema
 - [x] Add backend procedures to save/retrieve monthly metrics
 - [x] Add Save button next to month selector in Dashboard
-- [x] Show confirmation dialog before saving
+- [x] Add handleSaveMetrics function to save metrics for selected month
 - [x] Display success message after saving
 - [x] Verify all 66 tests still pass
