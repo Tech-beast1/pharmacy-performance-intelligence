@@ -691,3 +691,14 @@
 - [x] Add localStorage change listener to sync with Dashboard
 - [x] Test April overhead costs don't affect May
 - [x] Verify all 66 tests pass
+
+## Phase 75: CRITICAL BUG FIX - Overhead Costs Month Mismatch (Timezone Issue)
+- [x] Identify root cause: new Date(input.startDate) parsing date in local timezone instead of UTC
+- [x] Fix metrics procedure to parse date string directly without Date constructor
+- [x] Update routers.ts to extract month/year from "YYYY-MM-DD" format using string split
+- [x] Verify April overhead costs don't affect May's Estimated Profit
+- [x] Verify May overhead costs don't affect April's Estimated Profit
+- [x] Write comprehensive timezone isolation tests (6 new tests)
+- [x] Verify all 72 tests pass (66 original + 6 new timezone tests)
+- [x] Test that April costs are stored with month=4, May costs with month=5
+- [x] Confirm overhead costs are completely isolated by month

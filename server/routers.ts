@@ -196,9 +196,11 @@ export const appRouter = router({
         let year: number;
         
         if (input.startDate) {
-          const startDateObj = new Date(input.startDate);
-          month = startDateObj.getMonth() + 1;
-          year = startDateObj.getFullYear();
+          // Parse date string as UTC to avoid timezone issues
+          // Date string format: "2026-05-01"
+          const [yearStr, monthStr] = input.startDate.split('-');
+          month = parseInt(monthStr, 10);
+          year = parseInt(yearStr, 10);
         } else {
           const now = new Date();
           month = now.getMonth() + 1;
