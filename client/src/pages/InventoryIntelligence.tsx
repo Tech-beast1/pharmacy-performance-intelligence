@@ -26,6 +26,7 @@ type SortOrder = 'asc' | 'desc';
 
 export default function InventoryIntelligence() {
   const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'lowmargin'>('all');
+  const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [startDate, setStartDate] = useState<string>(() => {
@@ -147,6 +148,20 @@ export default function InventoryIntelligence() {
       {/* Filter Controls */}
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4 items-end">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Dead Stock Duration</label>
+            <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="30">Last 30 Days</SelectItem>
+                <SelectItem value="60">Last 60 Days</SelectItem>
+                <SelectItem value="90">Last 90 Days</SelectItem>
+                <SelectItem value="120">Last 120 Days</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Alert Status</label>
             <Select value={filterAlert} onValueChange={(value: any) => setFilterAlert(value)}>

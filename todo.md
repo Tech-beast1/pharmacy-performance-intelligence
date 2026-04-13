@@ -630,3 +630,14 @@
 - [x] Update InventoryIntelligence default month to current month
 - [x] Verify all 66 tests still pass
 - [x] Confirm dev server displays current month on load
+
+
+## Phase 69: Implement Month-Based Upload Data Isolation
+- [ ] Add uploadMonth and uploadYear columns to inventory table
+- [ ] Add uploadMonth and uploadYear columns to sales_transactions table
+- [ ] Update schema migration for new columns
+- [ ] Update upload procedures to tag data with current selected month
+- [ ] Update analytics queries to filter inventory/sales by month
+- [ ] Test April uploads don't appear in May
+- [ ] Test May uploads show fresh metrics (0 if no data)
+- [ ] Verify all tests still pass

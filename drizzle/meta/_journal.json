@@ -57,6 +57,13 @@
       "when": 1776077443559,
       "tag": "0007_panoramic_living_tribunal",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1776079776112,
+      "tag": "0008_daily_venom",
+      "breakpoints": true
     }
   ]
 }
