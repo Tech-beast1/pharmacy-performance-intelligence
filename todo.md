@@ -220,8 +220,8 @@
 - [x] Add "Edit Profile" functionality to TopNavBar badges
 - [x] Test profile save and display workflow end-to-end
 - [x] Verify circular badges display correctly (green pharmacy, red date, blue owner)
-- [ ] Verify pharmacy_profiles table exists in database and apply migration if needed
-- [ ] Test complete E2E flow: create profile → verify badges on all pages → click to edit → save → verify persistence
+- [x] Verify pharmacy_profiles table exists in database and apply migration if needed
+- [x] Test complete E2E flow: create profile → verify badges on all pages → click to edit → save → verify persistence
 
 
 ## Phase 18: Background Motion Animations - VERIFIED WORKING
