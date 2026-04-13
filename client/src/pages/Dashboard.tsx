@@ -72,7 +72,8 @@ export default function Dashboard() {
   const handleClearAll = async () => {
     setIsClearing(true);
     try {
-      await clearAllMutation.mutateAsync();
+      const [year, month] = startDate.substring(0, 7).split('-');
+      await clearAllMutation.mutateAsync({ month: parseInt(month), year: parseInt(year) });
       setShowClearConfirm(false);
       // Invalidate all queries to refresh the dashboard
       await trpc.useUtils().analytics.invalidate();

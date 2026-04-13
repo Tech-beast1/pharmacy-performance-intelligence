@@ -662,3 +662,11 @@
 - [x] Update Dashboard UI to display month-over-month comparison percentages
 - [x] Test comparison with April vs May data
 - [x] Verify all 66 tests still pass
+
+
+## Phase 72: Fix Clear All to Only Delete Selected Month Data
+- [x] Update backend clearAll procedure to accept month/year parameters
+- [x] Update clearAllUserData function to filter by createdAt month
+- [x] Update Dashboard Clear All button to pass selected month
+- [x] Test clearing April doesn't affect May data
+- [x] Verify all 66 tests still pass

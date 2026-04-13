@@ -484,9 +484,10 @@ export const appRouter = router({
   // Data management
   data: router({
     clearAll: protectedProcedure
-      .mutation(async ({ ctx }) => {
+      .input(z.object({ month: z.number().optional(), year: z.number().optional() }))
+      .mutation(async ({ ctx, input }) => {
         try {
-          await clearAllUserData(ctx.user!.id);
+          await clearAllUserData(ctx.user!.id, input.month, input.year);
           return { success: true, message: 'All data cleared successfully' };
         } catch (error) {
           console.error('Error clearing user data:', error);

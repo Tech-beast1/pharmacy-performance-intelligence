@@ -1,5 +1,5 @@
-import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
+import { eq, and, gte, lte } from "drizzle-orm";
 import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -292,25 +292,58 @@ export async function upsertMonthlyMetrics(data: InsertMonthlyMetric) {
 }
 
 // Clear all user data
-export async function clearAllUserData(userId: number) {
+export async function clearAllUserData(userId: number, month?: number, year?: number) {
   const db = await getDb();
   if (!db) return null;
   
   try {
-    // Delete all sales transactions
-    await db.delete(salesTransactions).where(eq(salesTransactions.userId, userId));
-    
-    // Delete all inventory items
-    await db.delete(inventory).where(eq(inventory.userId, userId));
-    
-    // Delete all alerts
-    await db.delete(alerts).where(eq(alerts.userId, userId));
-    
-    // Delete all file uploads
-    await db.delete(fileUploads).where(eq(fileUploads.userId, userId));
-    
-    // Delete all overhead costs
-    await db.delete(overheadCosts).where(eq(overheadCosts.userId, userId));
+    if (month !== undefined && year !== undefined) {
+      const monthStart = new Date(year, month - 1, 1);
+      const monthEnd = new Date(year, month, 0);
+      monthEnd.setHours(23, 59, 59, 999);
+      
+      await db.delete(salesTransactions)
+        .where(
+          and(
+            eq(salesTransactions.userId, userId),
+            gte(salesTransactions.createdAt, monthStart),
+            lte(salesTransactions.createdAt, monthEnd)
+          )
+        );
+      
+      await db.delete(inventory)
+        .where(
+          and(
+            eq(inventory.userId, userId),
+            gte(inventory.createdAt, monthStart),
+            lte(inventory.createdAt, monthEnd)
+          )
+        );
+      
+      await db.delete(alerts)
+        .where(
+          and(
+            eq(alerts.userId, userId),
+            gte(alerts.createdAt, monthStart),
+            lte(alerts.createdAt, monthEnd)
+          )
+        );
+      
+      await db.delete(fileUploads)
+        .where(
+          and(
+            eq(fileUploads.userId, userId),
+            gte(fileUploads.createdAt, monthStart),
+            lte(fileUploads.createdAt, monthEnd)
+          )
+        );
+    } else {
+      await db.delete(salesTransactions).where(eq(salesTransactions.userId, userId));
+      await db.delete(inventory).where(eq(inventory.userId, userId));
+      await db.delete(alerts).where(eq(alerts.userId, userId));
+      await db.delete(fileUploads).where(eq(fileUploads.userId, userId));
+      await db.delete(overheadCosts).where(eq(overheadCosts.userId, userId));
+    }
     
     return { success: true };
   } catch (error) {
