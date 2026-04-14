@@ -313,41 +313,88 @@ export function transformRow(row: any, mapping: ColumnMapping): ParsedRow | null
   }
 
   if (mapping.expiryDate) {
-    const dateStr = row[mapping.expiryDate];
-    if (dateStr) {
-      // Parse date as UTC to avoid timezone issues
-      // Handle formats: YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY
+    const dateValue = row[mapping.expiryDate];
+    if (dateValue) {
       let date: Date | null = null;
       
-      if (typeof dateStr === 'string') {
+      // Handle Excel datetime objects (from openpyxl or similar)
+      if (dateValue instanceof Date) {
+        // If it's already a Date object from Excel, use it directly
+        date = dateValue;
+      }
+      // Handle string dates
+      else if (typeof dateValue === 'string') {
         // Try ISO format first (YYYY-MM-DD)
-        if (dateStr.includes('-')) {
-          const [year, month, day] = dateStr.split('-');
+        if (dateValue.includes('-')) {
+          const [year, month, day] = dateValue.split('-');
           if (year && month && day) {
-            date = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+            const y = parseInt(year);
+            const m = parseInt(month);
+            const d = parseInt(day);
+            // Validate date
+            if (isValidDate(y, m, d)) {
+              date = new Date(Date.UTC(y, m - 1, d));
+            }
           }
         }
         // Try slash format (MM/DD/YYYY or DD/MM/YYYY)
-        else if (dateStr.includes('/')) {
-          const parts = dateStr.split('/');
+        else if (dateValue.includes('/')) {
+          const parts = dateValue.split('/');
           if (parts.length === 3) {
             // Assume MM/DD/YYYY format
             const month = parseInt(parts[0]);
             const day = parseInt(parts[1]);
             const year = parseInt(parts[2]);
             if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
-              date = new Date(Date.UTC(year, month - 1, day));
+              // Validate date
+              if (isValidDate(year, month, day)) {
+                date = new Date(Date.UTC(year, month - 1, day));
+              }
             }
           }
         }
         // Fallback to Date constructor
         if (!date) {
-          date = new Date(dateStr);
+          const parsedDate = new Date(dateValue);
+          if (!isNaN(parsedDate.getTime())) {
+            date = parsedDate;
+          }
+        }
+      }
+      // Handle numeric dates (Excel serial dates)
+      else if (typeof dateValue === 'number') {
+        // Excel stores dates as days since 1900-01-01
+        // Convert Excel serial date to JavaScript Date
+        const excelEpoch = new Date(1900, 0, 1).getTime();
+        const jsDate = new Date(excelEpoch + (dateValue - 1) * 24 * 60 * 60 * 1000);
+        if (!isNaN(jsDate.getTime())) {
+          date = jsDate;
         }
       }
       
       if (date && !isNaN(date.getTime())) result.expiryDate = date;
     }
+  }
+  
+  // Helper function to validate date
+  function isValidDate(year: number, month: number, day: number): boolean {
+    // Check month range
+    if (month < 1 || month > 12) return false;
+    
+    // Days in each month
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    
+    // Check for leap year
+    if (month === 2 && isLeapYear(year)) {
+      return day >= 1 && day <= 29;
+    }
+    
+    // Check day range
+    return day >= 1 && day <= daysInMonth[month - 1];
+  }
+  
+  function isLeapYear(year: number): boolean {
+    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
   }
 
   if (mapping.sku) {
