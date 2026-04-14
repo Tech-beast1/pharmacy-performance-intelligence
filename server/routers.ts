@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 import { generateKeyInsights } from "./utils/insights";
@@ -568,6 +568,17 @@ export const appRouter = router({
 
   // Data management
   data: router({
+
+    removeDuplicates: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        try {
+          const result = await removeDuplicateInventory(ctx.user!.id);
+          return { success: true, message: `Removed ${result.removed} duplicate entries`, removed: result.removed };
+        } catch (error) {
+          console.error('Error removing duplicates:', error);
+          return { success: false, error: 'Failed to remove duplicates' };
+        }
+      }),
     clearAll: protectedProcedure
       .input(z.object({ month: z.number().optional(), year: z.number().optional() }))
       .mutation(async ({ ctx, input }) => {

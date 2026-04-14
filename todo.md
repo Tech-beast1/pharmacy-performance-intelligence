@@ -781,3 +781,14 @@
 - [x] Converts Excel datetime to UTC to avoid timezone issues
 - [x] Handles both datetime objects and string dates from Excel
 - [x] All 72 tests passing
+
+## Phase 85: Remove Duplicate Product Entries
+- [x] Created removeDuplicateInventory function in server/db.ts
+- [x] Groups inventory by productName and SKU
+- [x] Keeps entry with newest expiryDate for each product
+- [x] Deletes old duplicate entries from database
+- [x] Added data.removeDuplicates tRPC procedure
+- [x] Added "Remove Duplicates" button to Dashboard UI
+- [x] Button shows confirmation dialog before removing duplicates
+- [x] Page refreshes after successful removal
+- [x] All 72 tests passing

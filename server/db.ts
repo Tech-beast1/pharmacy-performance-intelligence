@@ -416,3 +416,63 @@ export async function loadUserPreferences(userId: number): Promise<UserPreferenc
     return null;
   }
 }
+
+
+/**
+ * Remove duplicate inventory entries for the same product, keeping only the newest expiry date
+ * For each product (by name and SKU), keeps the entry with the latest expiryDate
+ */
+export async function removeDuplicateInventory(userId: number): Promise<{ removed: number }> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  try {
+    // Get all inventory items for the user
+    const allItems = await db
+      .select()
+      .from(inventory)
+      .where(eq(inventory.userId, userId));
+
+    // Group by productName and SKU to find duplicates
+    const grouped: Record<string, Inventory[]> = {};
+    for (const item of allItems) {
+      const key = `${item.productName}|${item.sku || ""}`;
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(item);
+    }
+
+    // Find items to delete (keep the one with the latest expiryDate)
+    const toDelete: number[] = [];
+    for (const items of Object.values(grouped)) {
+      if (items.length > 1) {
+        // Sort by expiryDate descending (newest first)
+        const sorted = items.sort((a, b) => {
+          const dateA = a.expiryDate ? new Date(a.expiryDate).getTime() : 0;
+          const dateB = b.expiryDate ? new Date(b.expiryDate).getTime() : 0;
+          return dateB - dateA;
+        });
+
+        // Mark all but the first (newest) for deletion
+        for (let i = 1; i < sorted.length; i++) {
+          toDelete.push(sorted[i].id);
+        }
+      }
+    }
+
+    // Delete the old duplicates
+    if (toDelete.length > 0) {
+      for (const id of toDelete) {
+        await db.delete(inventory).where(eq(inventory.id, id));
+      }
+    }
+
+    return { removed: toDelete.length };
+  } catch (error) {
+    console.error("[Database] Error removing duplicates:", error);
+    throw error;
+  }
+}
