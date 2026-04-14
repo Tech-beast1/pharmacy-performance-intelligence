@@ -319,8 +319,12 @@ export function transformRow(row: any, mapping: ColumnMapping): ParsedRow | null
       
       // Handle Excel datetime objects (from openpyxl or similar)
       if (dateValue instanceof Date) {
-        // If it's already a Date object from Excel, use it directly
-        date = dateValue;
+        // If it's already a Date object from Excel, extract just the date part
+        // and convert to UTC to avoid timezone issues
+        const utcDate = new Date(Date.UTC(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate()));
+        if (!isNaN(utcDate.getTime())) {
+          date = utcDate;
+        }
       }
       // Handle string dates
       else if (typeof dateValue === 'string') {

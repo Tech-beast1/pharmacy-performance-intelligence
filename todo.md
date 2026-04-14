@@ -775,11 +775,9 @@
 
 ## Phase 84: Fix 1970-01-01 Unix Epoch Date Bug - DD/MM/YYYY Format
 - [x] Identified root cause: parser was treating DD/MM/YYYY as MM/DD/YYYY
-- [x] Example: 30/06/2027 was parsed as month 30 (invalid) → fallback to 1970-01-01
-- [x] Implemented smart format detection:
-  - If first > 12: must be DD/MM/YYYY
-  - If second > 12: must be MM/DD/YYYY
-  - If both <= 12: assume DD/MM/YYYY (international standard)
-- [x] Dates now parse correctly from Excel
-- [x] 30/06/2027 now correctly shows as June 30, 2027
+- [x] Implemented smart format detection for slash-separated dates
+- [x] Fixed Excel datetime object handling to extract date part only
+- [x] Excel datetime objects like '2027-06-30 00:00:00' now parse correctly
+- [x] Converts Excel datetime to UTC to avoid timezone issues
+- [x] Handles both datetime objects and string dates from Excel
 - [x] All 72 tests passing
