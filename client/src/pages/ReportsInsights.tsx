@@ -11,15 +11,41 @@ export default function ReportsInsights() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays: 60 });
+  // Get selected month from localStorage (synced with Dashboard)
+  const getStoredMonth = () => {
+    try {
+      const stored = localStorage.getItem('selectedMonth');
+      return stored ? parseInt(stored) : new Date().getMonth() + 1;
+    } catch {
+      return new Date().getMonth() + 1;
+    }
+  };
+
+  const getStoredYear = () => {
+    try {
+      const stored = localStorage.getItem('selectedYear');
+      return stored ? parseInt(stored) : new Date().getFullYear();
+    } catch {
+      return new Date().getFullYear();
+    }
+  };
+
+  const month = getStoredMonth();
+  const year = getStoredYear();
+  const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  const endDate = new Date(year, month, 0).toISOString().split('T')[0];
+
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ startDate, endDate, durationDays: 60 });
   const alertsQuery = trpc.analytics.getAlerts.useQuery({ durationDays: 60 });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
+  const totalProductsQuery = trpc.analytics.getTotalProductsCount.useQuery({ startDate, endDate });
 
   const metrics = metricsQuery.data?.data;
   const alerts = alertsQuery.data?.data;
   const topProducts = topProductsQuery.data?.data || [];
   const revenueTrend = revenueTrendQuery.data?.data || [];
+  const totalProductsCount = totalProductsQuery.data?.data || 0;
 
   const COLORS = ['#2563eb', '#16a34a', '#dc2626', '#ea580c', '#eab308'];
 
@@ -66,7 +92,7 @@ export default function ReportsInsights() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Total Products</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{topProducts.length}</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">{totalProductsCount}</p>
             </div>
             <div className="p-3 bg-blue-100 rounded-lg">
               <Zap className="w-6 h-6 text-blue-600" />

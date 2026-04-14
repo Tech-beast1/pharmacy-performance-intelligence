@@ -702,3 +702,11 @@
 - [x] Verify all 72 tests pass (66 original + 6 new timezone tests)
 - [x] Test that April costs are stored with month=4, May costs with month=5
 - [x] Confirm overhead costs are completely isolated by month
+
+## Phase 76: Fix Total Products Card on Reports & Insights
+- [ ] Add totalProducts calculation to calculateDashboardMetrics function in analytics.ts
+- [ ] Update getDashboardMetrics tRPC procedure to return totalProducts
+- [ ] Update Reports & Insights page to use totalProducts instead of topProducts.length
+- [ ] Verify Total Products shows all unique products from selected month (not just top products)
+- [ ] Write tests for total products calculation
+- [ ] Verify all tests pass

@@ -308,6 +308,35 @@ export const appRouter = router({
       }
     }),
 
+    getTotalProductsCount: protectedProcedure
+      .input(z.object({ 
+        startDate: z.string().optional(),
+        endDate: z.string().optional()
+      }))
+      .query(async ({ ctx, input }) => {
+        try {
+          const inventory = await getInventoryByUserId(ctx.user!.id);
+          
+          let filteredInventory = inventory;
+          if (input.startDate && input.endDate) {
+            const monthStart = new Date(input.startDate);
+            const monthEnd = new Date(input.endDate);
+            monthEnd.setHours(23, 59, 59, 999);
+            
+            filteredInventory = inventory.filter(item => {
+              const createdDate = new Date(item.createdAt);
+              return createdDate >= monthStart && createdDate <= monthEnd;
+            });
+          }
+          
+          const uniqueSkus = new Set(filteredInventory.map(item => item.sku));
+          return { success: true, data: uniqueSkus.size };
+        } catch (error) {
+          console.error('Total products count error:', error);
+          return { success: false, error: 'Failed to fetch total products count' };
+        }
+      }),
+
     getRevenueTrend: protectedProcedure.query(async ({ ctx }) => {
       try {
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
