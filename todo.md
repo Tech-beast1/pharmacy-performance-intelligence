@@ -826,3 +826,12 @@
 - [x] Now total dead stock value includes ALL dead stock products, independent of table filters
 - [x] Verify all 74 tests still passing
 - [x] Total dead stock value now matches Dashboard calculation
+
+## Phase 49: Fix Overhead Cost Saving Failure
+
+- [x] Investigate overhead cost save failure on Overhead Costs page
+- [x] Identify root cause: Save mutation was catching errors and returning error response instead of throwing
+- [x] Fix: Updated server/routers.ts to throw TRPCError on failure instead of returning error response
+- [x] Fix: Improved client error handling in OverheadCosts.tsx to display actual error messages
+- [x] Verify all 74 tests still passing
+- [x] Frontend now properly catches and displays error messages from backend

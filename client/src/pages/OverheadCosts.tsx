@@ -104,8 +104,9 @@ export default function OverheadCosts() {
       });
       toast.success('Overhead costs saved successfully');
     } catch (error) {
-      toast.error('Failed to save overhead costs');
-      console.error(error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save overhead costs';
+      toast.error(errorMessage);
+      console.error('Overhead costs save error:', error);
     } finally {
       setIsSaving(false);
     }

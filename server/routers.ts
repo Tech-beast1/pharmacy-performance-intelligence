@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
@@ -452,7 +453,7 @@ export const appRouter = router({
       )
       .mutation(async ({ ctx, input }) => {
         try {
-          await upsertOverheadCosts({
+          const result = await upsertOverheadCosts({
             userId: ctx.user!.id,
             month: input.month,
             year: input.year,
@@ -461,10 +462,16 @@ export const appRouter = router({
             electricity: input.electricity.toString(),
             others: input.others.toString(),
           } as any);
+          if (!result) {
+            throw new Error('Failed to save overhead costs');
+          }
           return { success: true, message: 'Overhead costs saved successfully' };
         } catch (error) {
           console.error('Error saving overhead costs:', error);
-          return { success: false, error: 'Failed to save overhead costs' };
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: error instanceof Error ? error.message : 'Failed to save overhead costs',
+          });
         }
       }),
   }),
