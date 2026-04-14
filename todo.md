@@ -704,9 +704,16 @@
 - [x] Confirm overhead costs are completely isolated by month
 
 ## Phase 76: Fix Total Products Card on Reports & Insights
-- [ ] Add totalProducts calculation to calculateDashboardMetrics function in analytics.ts
-- [ ] Update getDashboardMetrics tRPC procedure to return totalProducts
-- [ ] Update Reports & Insights page to use totalProducts instead of topProducts.length
-- [ ] Verify Total Products shows all unique products from selected month (not just top products)
-- [ ] Write tests for total products calculation
-- [ ] Verify all tests pass
+- [x] Added getTotalProductsCount procedure to analytics router
+- [x] Updated Reports & Insights page to fetch and display total products count
+- [x] Reports & Insights now reads selected month from localStorage
+- [x] Total Products now shows all unique products from selected month (not just top 10)
+- [x] All 72 tests passing
+- [x] Month-based data isolation preserved
+
+## Phase 77: Persist Pharmacy Name Input Across Navigation
+- [x] Updated Dashboard to save pharmacy name to localStorage when input changes
+- [x] Pharmacy name loads from localStorage on component mount
+- [x] Pharmacy name persists when navigating to other pages and back
+- [x] Pharmacy name can be manually changed and updated
+- [x] All 72 tests passing

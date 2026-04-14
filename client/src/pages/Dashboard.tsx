@@ -30,7 +30,24 @@ export default function Dashboard() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [durationDays, setDurationDays] = useState<number>(60);
-  const [selectedPharmacy, setSelectedPharmacy] = useState<string>('');
+  const [selectedPharmacy, setSelectedPharmacy] = useState<string>(() => {
+    try {
+      return localStorage.getItem('pharmacyName') || '';
+    } catch {
+      return '';
+    }
+  });
+
+  // Save pharmacy name to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (selectedPharmacy) {
+        localStorage.setItem('pharmacyName', selectedPharmacy);
+      }
+    } catch (error) {
+      console.error('Failed to save pharmacy name to localStorage:', error);
+    }
+  }, [selectedPharmacy]);
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
     const year = now.getFullYear();
