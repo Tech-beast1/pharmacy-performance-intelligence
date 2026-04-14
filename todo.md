@@ -755,3 +755,11 @@
 - [x] Handles multiple date formats: YYYY-MM-DD, MM/DD/YYYY
 - [x] Expiry dates now match between upload and PDF report
 - [x] All 72 tests passing
+
+## Phase 82: Fix Expiry Date Display in Inventory Intelligence Page
+- [x] Identified date display issue in InventoryIntelligence.tsx line 231
+- [x] Added formatDate function for consistent UTC date formatting
+- [x] Updated expiry date display to use formatDate function
+- [x] Expiry dates now match uploaded data in Inventory Intelligence page
+- [x] Handles multiple date formats consistently
+- [x] All 72 tests passing

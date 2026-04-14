@@ -24,6 +24,41 @@ import {
 type SortKey = 'productName' | 'price' | 'quantity' | 'margin' | 'expiryDate';
 type SortOrder = 'asc' | 'desc';
 
+// Format date consistently without timezone conversion
+const formatDate = (dateValue: any): string => {
+  if (!dateValue) return '-';
+  
+  try {
+    // If it's a string date (YYYY-MM-DD), return as-is
+    if (typeof dateValue === 'string') {
+      if (dateValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        return dateValue;
+      }
+      // Try to parse and format
+      const date = new Date(dateValue);
+      if (!isNaN(date.getTime())) {
+        // Format as YYYY-MM-DD using UTC to avoid timezone issues
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+    }
+    
+    // If it's a Date object
+    if (dateValue instanceof Date) {
+      const year = dateValue.getUTCFullYear();
+      const month = String(dateValue.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(dateValue.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    return '-';
+  } catch (error) {
+    return '-';
+  }
+};
+
 export default function InventoryIntelligence() {
   const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'lowmargin'>('all');
   const [durationDays, setDurationDays] = useState<number>(60);
@@ -228,7 +263,7 @@ export default function InventoryIntelligence() {
                         </span>
                       </TableCell>
                       <TableCell className="p-4 text-gray-700 text-center">
-                        {item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '-'}
+                        {formatDate(item.expiryDate)}
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
                         {alertStatus?.label === 'Dead Stock' ? `₵${(parseFloat(item.price.toString()) * item.quantity).toLocaleString()}` : '₵0'}
