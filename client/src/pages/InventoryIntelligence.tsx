@@ -239,9 +239,6 @@ export default function InventoryIntelligence() {
                 <TableHead className="p-4 text-center">
                   <SortHeader label="Margin %" sortBy="margin" />
                 </TableHead>
-                <TableHead className="p-4 text-center">
-                  <SortHeader label="Expiry Date" sortBy="expiryDate" />
-                </TableHead>
                 <TableHead className="p-4 text-center">Dead Stock Value</TableHead>
                 <TableHead className="p-4 text-center">Status</TableHead>
               </TableRow>
@@ -262,9 +259,6 @@ export default function InventoryIntelligence() {
                           {item.margin}%
                         </span>
                       </TableCell>
-                      <TableCell className="p-4 text-gray-700 text-center">
-                        {formatDate(item.expiryDate)}
-                      </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
                         {alertStatus?.label === 'Dead Stock' ? `₵${(parseFloat(item.price.toString()) * item.quantity).toLocaleString()}` : '₵0'}
                       </TableCell>
@@ -282,7 +276,7 @@ export default function InventoryIntelligence() {
                 })
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="p-8 text-center text-gray-500">
+                  <TableCell colSpan={6} className="p-8 text-center text-gray-500">
                     No inventory items found
                   </TableCell>
                 </TableRow>

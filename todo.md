@@ -801,3 +801,12 @@
 - [x] Verify all 74 tests passing after fix
 - [x] Test that uploading same file twice results in 20 items (not 40)
 - [x] Verify different users can have same SKU without conflicts
+
+## Phase 46: UI Cleanup - Remove Expiry Date Column and Remove Duplicates Button
+
+- [x] Remove Expiry Date column from Inventory Intelligence table
+- [x] Remove "Remove Duplicates" button from Dashboard
+- [x] Update table colspan to reflect removed column (from 7 to 6)
+- [x] Clean up unused imports (Package, Loader2 from Remove Duplicates button)
+- [x] Verify all 74 tests still passing
+- [x] Verify Dashboard displays correctly without Remove Duplicates button

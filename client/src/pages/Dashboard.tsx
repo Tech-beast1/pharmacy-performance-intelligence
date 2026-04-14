@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, AlertTriangle, Package, Loader2, Trash2, TrendingDown, BarChart3, CheckCircle } from 'lucide-react';
+import { DollarSign, TrendingUp, AlertTriangle, Loader2, Trash2, TrendingDown, BarChart3, CheckCircle, Package } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
@@ -37,16 +37,6 @@ export default function Dashboard() {
   // Load preferences from database on mount
   const loadPreferencesQuery = trpc.preferences.load.useQuery();
   const savePreferencesMutation = trpc.preferences.save.useMutation();
-    const removeDuplicatesMutation = trpc.data.removeDuplicates.useMutation({
-    onSuccess: () => {
-      alert('Duplicate entries removed successfully!');
-      // Refresh the inventory data
-      window.location.reload();
-    },
-    onError: (error) => {
-      alert('Failed to remove duplicates: ' + (error.message || 'Unknown error'));
-    },
-  });
 
   useEffect(() => {
     if (!hasLoadedPreferences && !loadPreferencesQuery.isLoading) {
@@ -338,24 +328,6 @@ export default function Dashboard() {
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Clear All
-          </Button>
-                    <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              if (confirm('Remove duplicate product entries? This will keep only the newest expiry dates.')) {
-                removeDuplicatesMutation.mutate();
-              }
-            }}
-            disabled={removeDuplicatesMutation.isPending}
-            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 h-10 md:h-9 px-3 md:px-2 text-sm md:text-xs"
-          >
-            {removeDuplicatesMutation.isPending ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Package className="w-4 h-4 mr-2" />
-            )}
-            Remove Duplicates
           </Button>
         </div>
       </div>
