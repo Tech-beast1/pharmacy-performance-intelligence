@@ -214,8 +214,8 @@ export default function Dashboard() {
   ] : [];
 
   const getTrendColor = (trend: number) => {
-    if (trend > 0) return 'text-red-600'; // Increase in risk is bad
-    return 'text-green-600'; // Decrease is good
+    if (trend > 0) return 'text-green-600'; // Increase is good
+    return 'text-red-600'; // Decrease is bad
   };
 
   const getTrendIcon = (trend: number) => {

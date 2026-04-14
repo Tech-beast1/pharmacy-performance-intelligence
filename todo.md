@@ -835,3 +835,10 @@
 - [x] Fix: Improved client error handling in OverheadCosts.tsx to display actual error messages
 - [x] Verify all 74 tests still passing
 - [x] Frontend now properly catches and displays error messages from backend
+
+## Phase 50: Fix Comparison Metric Colors
+
+- [x] Swap green and red colors in comparison metrics
+- [x] Green should show for increases (positive change)
+- [x] Red should show for decreases (negative change)
+- [x] Test all metrics display correct colors
