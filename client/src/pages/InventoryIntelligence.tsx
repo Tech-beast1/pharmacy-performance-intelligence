@@ -286,13 +286,9 @@ export default function InventoryIntelligence() {
                 <TableRow className="bg-gray-100 font-bold">
                   <TableCell colSpan={5} className="p-4 text-right">Total Dead Stock Value:</TableCell>
                   <TableCell className="p-4 text-center text-gray-900">
-                    ₵{sortedItems.reduce((total, item) => {
-                      const alertStatus = getAlertStatus(item);
-                      if (alertStatus?.label === 'Dead Stock') {
-                        return total + (parseFloat(item.price.toString()) * item.quantity);
-                      }
-                      return total;
-                    }, 0).toLocaleString()}
+                    ₵{alerts?.deadStockProducts.reduce((total: number, item: any) => {
+                      return total + (parseFloat(item.price.toString()) * item.quantity);
+                    }, 0).toLocaleString() || '0'}
                   </TableCell>
                   <TableCell></TableCell>
                 </TableRow>

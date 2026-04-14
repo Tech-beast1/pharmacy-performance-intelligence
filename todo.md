@@ -818,3 +818,11 @@
 - [x] Fix: Updated InventoryIntelligence.tsx to pass durationDays to getAlerts query
 - [x] Verify all 74 tests still passing
 - [x] Ensure Dashboard and Inventory Intelligence now use same dead stock calculation
+
+## Phase 48: Final Dead Stock Value Calculation Fix
+
+- [x] Identify root cause: Total dead stock was calculated from filtered items only, not all dead stock products
+- [x] Fix: Changed total calculation to use alerts.deadStockProducts directly instead of sortedItems
+- [x] Now total dead stock value includes ALL dead stock products, independent of table filters
+- [x] Verify all 74 tests still passing
+- [x] Total dead stock value now matches Dashboard calculation
