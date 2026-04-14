@@ -746,3 +746,12 @@
 - [x] Only save preferences after initial load completes
 - [x] Pharmacy name now persists correctly without being erased
 - [x] All 72 tests passing
+
+## Phase 81: Fix Expiry Date Mismatch in PDF Report
+- [x] Identified root cause: timezone conversion in date parsing and display
+- [x] Updated file parser to use UTC date parsing (Date.UTC)
+- [x] Added formatDate function to display dates consistently without timezone conversion
+- [x] Updated PDF report to use formatDate for expiry dates
+- [x] Handles multiple date formats: YYYY-MM-DD, MM/DD/YYYY
+- [x] Expiry dates now match between upload and PDF report
+- [x] All 72 tests passing

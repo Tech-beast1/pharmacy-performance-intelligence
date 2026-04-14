@@ -315,8 +315,38 @@ export function transformRow(row: any, mapping: ColumnMapping): ParsedRow | null
   if (mapping.expiryDate) {
     const dateStr = row[mapping.expiryDate];
     if (dateStr) {
-      const date = new Date(dateStr);
-      if (!isNaN(date.getTime())) result.expiryDate = date;
+      // Parse date as UTC to avoid timezone issues
+      // Handle formats: YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY
+      let date: Date | null = null;
+      
+      if (typeof dateStr === 'string') {
+        // Try ISO format first (YYYY-MM-DD)
+        if (dateStr.includes('-')) {
+          const [year, month, day] = dateStr.split('-');
+          if (year && month && day) {
+            date = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+          }
+        }
+        // Try slash format (MM/DD/YYYY or DD/MM/YYYY)
+        else if (dateStr.includes('/')) {
+          const parts = dateStr.split('/');
+          if (parts.length === 3) {
+            // Assume MM/DD/YYYY format
+            const month = parseInt(parts[0]);
+            const day = parseInt(parts[1]);
+            const year = parseInt(parts[2]);
+            if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+              date = new Date(Date.UTC(year, month - 1, day));
+            }
+          }
+        }
+        // Fallback to Date constructor
+        if (!date) {
+          date = new Date(dateStr);
+        }
+      }
+      
+      if (date && !isNaN(date.getTime())) result.expiryDate = date;
     }
   }
 

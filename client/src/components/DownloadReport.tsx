@@ -28,6 +28,41 @@ const formatCurrency = (value: any): string => {
   return `₵${num.toFixed(2)}`;
 };
 
+// Format date consistently without timezone conversion
+const formatDate = (dateValue: any): string => {
+  if (!dateValue) return 'N/A';
+  
+  try {
+    // If it's a string date (YYYY-MM-DD), return as-is
+    if (typeof dateValue === 'string') {
+      if (dateValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        return dateValue;
+      }
+      // Try to parse and format
+      const date = new Date(dateValue);
+      if (!isNaN(date.getTime())) {
+        // Format as YYYY-MM-DD using UTC to avoid timezone issues
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+    }
+    
+    // If it's a Date object
+    if (dateValue instanceof Date) {
+      const year = dateValue.getUTCFullYear();
+      const month = String(dateValue.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(dateValue.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    return 'N/A';
+  } catch (error) {
+    return 'N/A';
+  }
+};
+
 // Determine status based on inventory item
 const getInventoryStatus = (item: any, alerts: any): string => {
   if (!alerts) return 'Normal';
@@ -398,7 +433,7 @@ export default function DownloadReport({
                   <td>${item.quantity || 0}</td>
                   <td>${formatCurrency(item.costPrice)}</td>
                   <td>${formatCurrency(item.price)}</td>
-                  <td>${item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : 'N/A'}</td>
+                  <td>${formatDate(item.expiryDate)}</td>
                   <td><span class="status-badge ${statusClass}">${status}</span></td>
                 </tr>
           `;
