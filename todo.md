@@ -792,3 +792,12 @@
 - [x] Button shows confirmation dialog before removing duplicates
 - [x] Page refreshes after successful removal
 - [x] All 72 tests passing
+
+## Phase 45: Fix Duplicate Inventory Issue - Prevent Re-uploads from Creating Duplicates
+
+- [x] Fix upsertInventoryItem function to filter by both userId AND sku (not just sku)
+- [x] Ensure re-uploading the same file updates existing records instead of creating duplicates
+- [x] Add comprehensive tests for duplicate prevention (2 new tests added)
+- [x] Verify all 74 tests passing after fix
+- [x] Test that uploading same file twice results in 20 items (not 40)
+- [x] Verify different users can have same SKU without conflicts

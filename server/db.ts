@@ -105,11 +105,11 @@ export async function upsertInventoryItem(item: any) {
   const existing = await db
     .select()
     .from(inventory)
-    .where(eq(inventory.sku, item.sku))
+    .where(and(eq(inventory.userId, item.userId), eq(inventory.sku, item.sku)))
     .limit(1);
   
   if (existing.length > 0) {
-    await db.update(inventory).set(item).where(eq(inventory.sku, item.sku));
+    await db.update(inventory).set(item).where(and(eq(inventory.userId, item.userId), eq(inventory.sku, item.sku)));
     return existing[0];
   } else {
     const result = await db.insert(inventory).values(item);
