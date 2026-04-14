@@ -32,22 +32,21 @@ export default function Dashboard() {
   const [durationDays, setDurationDays] = useState<number>(60);
   const [selectedPharmacy, setSelectedPharmacy] = useState<string>('');
   const [isLoadingPreferences, setIsLoadingPreferences] = useState(true);
+  const [hasLoadedPreferences, setHasLoadedPreferences] = useState(false);
 
   // Load preferences from database on mount
   const loadPreferencesQuery = trpc.preferences.load.useQuery();
   const savePreferencesMutation = trpc.preferences.save.useMutation();
 
   useEffect(() => {
-    if (loadPreferencesQuery.data?.data) {
-      const prefs = loadPreferencesQuery.data.data;
-      if (prefs.pharmacyName) {
-        setSelectedPharmacy(prefs.pharmacyName);
+    if (!hasLoadedPreferences && !loadPreferencesQuery.isLoading) {
+      if (loadPreferencesQuery.data?.success && loadPreferencesQuery.data?.data?.pharmacyName) {
+        setSelectedPharmacy(loadPreferencesQuery.data.data.pharmacyName);
       }
       setIsLoadingPreferences(false);
-    } else if (loadPreferencesQuery.isError || (loadPreferencesQuery.data && !loadPreferencesQuery.data.success)) {
-      setIsLoadingPreferences(false);
+      setHasLoadedPreferences(true);
     }
-  }, [loadPreferencesQuery.data]);
+  }, [loadPreferencesQuery.isLoading, hasLoadedPreferences]);
 
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
@@ -63,18 +62,23 @@ export default function Dashboard() {
     return lastDay;
   });
 
-  // Save pharmacy name to database whenever it changes
+  // Save pharmacy name to database whenever it changes (debounced)
   useEffect(() => {
-    if (selectedPharmacy && !isLoadingPreferences) {
+    if (selectedPharmacy && hasLoadedPreferences) {
       const monthStr = startDate.substring(0, 7);
       const [year, month] = monthStr.split('-');
-      savePreferencesMutation.mutate({
-        pharmacyName: selectedPharmacy,
-        selectedMonth: monthStr,
-        selectedYear: parseInt(year),
-      });
+      
+      const timer = setTimeout(() => {
+        savePreferencesMutation.mutate({
+          pharmacyName: selectedPharmacy,
+          selectedMonth: monthStr,
+          selectedYear: parseInt(year),
+        });
+      }, 500);
+      
+      return () => clearTimeout(timer);
     }
-  }, [selectedPharmacy, startDate]);
+  }, [selectedPharmacy]);
 
 
   const clearAllMutation = trpc.data.clearAll.useMutation();
@@ -82,7 +86,7 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     // Save preferences before logout
-    if (selectedPharmacy) {
+    if (selectedPharmacy && hasLoadedPreferences) {
       const monthStr = startDate.substring(0, 7);
       const [year, month] = monthStr.split('-');
       await savePreferencesMutation.mutateAsync({

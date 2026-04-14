@@ -737,3 +737,12 @@
 - [x] Updated Dashboard to save preferences whenever pharmacy name or month changes
 - [x] Added handleLogout function to save preferences before logout
 - [x] All 72 tests passing
+
+## Phase 80: Fix Pharmacy Name Being Erased
+- [x] Identified root cause: preference query was re-running and overwriting pharmacy name
+- [x] Added hasLoadedPreferences state to prevent re-loading after initial load
+- [x] Fixed preference loading logic to only load once
+- [x] Added debouncing to save mutations to prevent excessive requests
+- [x] Only save preferences after initial load completes
+- [x] Pharmacy name now persists correctly without being erased
+- [x] All 72 tests passing
