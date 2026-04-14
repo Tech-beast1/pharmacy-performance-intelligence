@@ -1,9 +1,9 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, and, gte, lte } from "drizzle-orm";
-import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics } from "../drizzle/schema";
+import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics, userPreferences } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile, MonthlyMetric, InsertMonthlyMetric } from "../drizzle/schema";
+import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile, MonthlyMetric, InsertMonthlyMetric, UserPreference, InsertUserPreference } from "../drizzle/schema";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -354,5 +354,65 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
   } catch (error) {
     console.error("Error clearing user data:", error);
     throw error;
+  }
+}
+
+
+/**
+ * Save user preferences (pharmacy name, selected month, etc.)
+ */
+export async function saveUserPreferences(userId: number, preferences: Partial<InsertUserPreference>): Promise<UserPreference | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save preferences: database not available");
+    return null;
+  }
+
+  try {
+    const existing = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1);
+
+    if (existing.length > 0) {
+      // Update existing preferences
+      await db.update(userPreferences)
+        .set({
+          ...preferences,
+          updatedAt: new Date(),
+        })
+        .where(eq(userPreferences.userId, userId));
+      
+      const updated = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1);
+      return updated[0] || null;
+    } else {
+      // Create new preferences
+      await db.insert(userPreferences).values({
+        userId,
+        ...preferences,
+      } as InsertUserPreference);
+      
+      const created = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1);
+      return created[0] || null;
+    }
+  } catch (error) {
+    console.error("Error saving user preferences:", error);
+    throw error;
+  }
+}
+
+/**
+ * Load user preferences
+ */
+export async function loadUserPreferences(userId: number): Promise<UserPreference | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot load preferences: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1);
+    return result[0] || null;
+  } catch (error) {
+    console.error("Error loading user preferences:", error);
+    return null;
   }
 }

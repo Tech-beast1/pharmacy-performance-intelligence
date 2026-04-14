@@ -78,6 +78,13 @@
       "when": 1776080717967,
       "tag": "0010_daily_echo",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1776149543818,
+      "tag": "0011_wandering_quicksilver",
+      "breakpoints": true
     }
   ]
 }

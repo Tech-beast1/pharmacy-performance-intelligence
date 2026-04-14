@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences } from "./db";
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 import { generateKeyInsights } from "./utils/insights";
@@ -19,6 +19,35 @@ export const appRouter = router({
       return {
         success: true,
       } as const;
+    }),
+  }),
+
+  // User preferences (persisted across sessions)
+  preferences: router({
+    save: protectedProcedure
+      .input(z.object({
+        pharmacyName: z.string().optional(),
+        selectedMonth: z.string().optional(),
+        selectedYear: z.number().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        try {
+          const result = await saveUserPreferences(ctx.user!.id, input);
+          return { success: true, data: result };
+        } catch (error) {
+          console.error('Error saving preferences:', error);
+          return { success: false, error: 'Failed to save preferences' };
+        }
+      }),
+    
+    load: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const result = await loadUserPreferences(ctx.user!.id);
+        return { success: true, data: result };
+      } catch (error) {
+        console.error('Error loading preferences:', error);
+        return { success: false, error: 'Failed to load preferences' };
+      }
     }),
   }),
 

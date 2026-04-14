@@ -726,3 +726,14 @@
 - [x] April insights show only April data, May insights show only May data
 - [x] All 72 tests passing
 - [x] Month isolation verified
+
+## Phase 79: Persist User Preferences Across Logout/Login
+- [x] Created userPreferences table in database schema
+- [x] Added saveUserPreferences database helper function
+- [x] Added loadUserPreferences database helper function
+- [x] Added preferences.save tRPC procedure to store preferences
+- [x] Added preferences.load tRPC procedure to retrieve preferences
+- [x] Updated Dashboard to load preferences on mount
+- [x] Updated Dashboard to save preferences whenever pharmacy name or month changes
+- [x] Added handleLogout function to save preferences before logout
+- [x] All 72 tests passing

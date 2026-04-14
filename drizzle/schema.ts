@@ -167,3 +167,21 @@ export const monthlyMetrics = mysqlTable("monthly_metrics", {
 
 export type MonthlyMetric = typeof monthlyMetrics.$inferSelect;
 export type InsertMonthlyMetric = typeof monthlyMetrics.$inferInsert;
+
+
+/**
+ * UserPreferences table stores user dashboard preferences.
+ * Persists pharmacy name, selected month, and other UI state across sessions.
+ */
+export const userPreferences = mysqlTable("user_preferences", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  pharmacyName: varchar("pharmacyName", { length: 255 }),
+  selectedMonth: varchar("selectedMonth", { length: 7 }), // Format: YYYY-MM
+  selectedYear: int("selectedYear"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserPreference = typeof userPreferences.$inferSelect;
+export type InsertUserPreference = typeof userPreferences.$inferInsert;

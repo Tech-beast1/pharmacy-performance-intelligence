@@ -30,24 +30,25 @@ export default function Dashboard() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [durationDays, setDurationDays] = useState<number>(60);
-  const [selectedPharmacy, setSelectedPharmacy] = useState<string>(() => {
-    try {
-      return localStorage.getItem('pharmacyName') || '';
-    } catch {
-      return '';
-    }
-  });
+  const [selectedPharmacy, setSelectedPharmacy] = useState<string>('');
+  const [isLoadingPreferences, setIsLoadingPreferences] = useState(true);
 
-  // Save pharmacy name to localStorage whenever it changes
+  // Load preferences from database on mount
+  const loadPreferencesQuery = trpc.preferences.load.useQuery();
+  const savePreferencesMutation = trpc.preferences.save.useMutation();
+
   useEffect(() => {
-    try {
-      if (selectedPharmacy) {
-        localStorage.setItem('pharmacyName', selectedPharmacy);
+    if (loadPreferencesQuery.data?.data) {
+      const prefs = loadPreferencesQuery.data.data;
+      if (prefs.pharmacyName) {
+        setSelectedPharmacy(prefs.pharmacyName);
       }
-    } catch (error) {
-      console.error('Failed to save pharmacy name to localStorage:', error);
+      setIsLoadingPreferences(false);
+    } else if (loadPreferencesQuery.isError || (loadPreferencesQuery.data && !loadPreferencesQuery.data.success)) {
+      setIsLoadingPreferences(false);
     }
-  }, [selectedPharmacy]);
+  }, [loadPreferencesQuery.data]);
+
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -62,7 +63,38 @@ export default function Dashboard() {
     return lastDay;
   });
 
+  // Save pharmacy name to database whenever it changes
+  useEffect(() => {
+    if (selectedPharmacy && !isLoadingPreferences) {
+      const monthStr = startDate.substring(0, 7);
+      const [year, month] = monthStr.split('-');
+      savePreferencesMutation.mutate({
+        pharmacyName: selectedPharmacy,
+        selectedMonth: monthStr,
+        selectedYear: parseInt(year),
+      });
+    }
+  }, [selectedPharmacy, startDate]);
+
+
   const clearAllMutation = trpc.data.clearAll.useMutation();
+  const logoutMutation = trpc.auth.logout.useMutation();
+
+  const handleLogout = async () => {
+    // Save preferences before logout
+    if (selectedPharmacy) {
+      const monthStr = startDate.substring(0, 7);
+      const [year, month] = monthStr.split('-');
+      await savePreferencesMutation.mutateAsync({
+        pharmacyName: selectedPharmacy,
+        selectedMonth: monthStr,
+        selectedYear: parseInt(year),
+      });
+    }
+    // Then logout
+    await logoutMutation.mutateAsync();
+    window.location.href = '/';
+  };
   const saveMetricsMutation = trpc.monthlyMetrics.save.useMutation();
 
   const handleSaveMetrics = async () => {
