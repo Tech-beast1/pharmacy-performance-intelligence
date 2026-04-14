@@ -717,3 +717,12 @@
 - [x] Pharmacy name persists when navigating to other pages and back
 - [x] Pharmacy name can be manually changed and updated
 - [x] All 72 tests passing
+
+## Phase 78: Fix Key Insights Data Isolation Issue
+- [x] Identified issue: getKeyInsights was not filtering by month, showing all data
+- [x] Updated getKeyInsights procedure to accept startDate/endDate parameters
+- [x] Updated Dashboard to pass month parameters to getKeyInsights query
+- [x] Key Insights now only show data from selected month
+- [x] April insights show only April data, May insights show only May data
+- [x] All 72 tests passing
+- [x] Month isolation verified

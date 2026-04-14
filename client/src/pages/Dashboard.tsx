@@ -115,7 +115,7 @@ export default function Dashboard() {
   });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
-  const insightsQuery = trpc.analytics.getKeyInsights.useQuery();
+  const insightsQuery = trpc.analytics.getKeyInsights.useQuery({ startDate, endDate });
 
   const metrics = metricsQuery.data?.data;
   const previousMetrics = metricsQuery.data?.previousMetrics;

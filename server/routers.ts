@@ -348,13 +348,38 @@ export const appRouter = router({
       }
     }),
 
-    getKeyInsights: protectedProcedure.query(async ({ ctx }) => {
+    getKeyInsights: protectedProcedure
+      .input(z.object({ 
+        startDate: z.string().optional(),
+        endDate: z.string().optional()
+      }))
+      .query(async ({ ctx, input }) => {
       try {
         const inventory = await getInventoryByUserId(ctx.user!.id);
         const sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        const metrics = calculateDashboardMetrics(inventory, sales);
-        const alerts = identifyAlerts(inventory, sales);
-        const insights = generateKeyInsights(metrics, alerts, inventory, sales);
+        
+        let filteredInventory = inventory;
+        let filteredSales = sales;
+        
+        if (input.startDate && input.endDate) {
+          const monthStart = new Date(input.startDate);
+          const monthEnd = new Date(input.endDate);
+          monthEnd.setHours(23, 59, 59, 999);
+          
+          filteredInventory = inventory.filter(item => {
+            const createdDate = new Date(item.createdAt);
+            return createdDate >= monthStart && createdDate <= monthEnd;
+          });
+          
+          filteredSales = sales.filter(s => {
+            const createdDate = new Date(s.createdAt);
+            return createdDate >= monthStart && createdDate <= monthEnd;
+          });
+        }
+        
+        const metrics = calculateDashboardMetrics(filteredInventory, filteredSales);
+        const alerts = identifyAlerts(filteredInventory, filteredSales);
+        const insights = generateKeyInsights(metrics, alerts, filteredInventory, filteredSales);
         return { success: true, data: insights };
       } catch (error) {
         console.error('Key insights error:', error);
