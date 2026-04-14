@@ -81,7 +81,8 @@ export default function InventoryIntelligence() {
   const inventoryQuery = trpc.inventory.getAll.useQuery();
   const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
     startDate,
-    endDate
+    endDate,
+    durationDays
   });
 
   const inventory = inventoryQuery.data?.data || [];

@@ -810,3 +810,11 @@
 - [x] Clean up unused imports (Package, Loader2 from Remove Duplicates button)
 - [x] Verify all 74 tests still passing
 - [x] Verify Dashboard displays correctly without Remove Duplicates button
+
+## Phase 47: Fix Dead Stock Value Mismatch Between Dashboard and Inventory Intelligence
+
+- [x] Investigate dead stock calculation logic in analytics.ts
+- [x] Identify root cause: Inventory Intelligence was NOT passing durationDays parameter to getAlerts query
+- [x] Fix: Updated InventoryIntelligence.tsx to pass durationDays to getAlerts query
+- [x] Verify all 74 tests still passing
+- [x] Ensure Dashboard and Inventory Intelligence now use same dead stock calculation
