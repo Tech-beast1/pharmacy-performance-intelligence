@@ -341,11 +341,32 @@ export function transformRow(row: any, mapping: ColumnMapping): ParsedRow | null
         else if (dateValue.includes('/')) {
           const parts = dateValue.split('/');
           if (parts.length === 3) {
-            // Assume MM/DD/YYYY format
-            const month = parseInt(parts[0]);
-            const day = parseInt(parts[1]);
+            const first = parseInt(parts[0]);
+            const second = parseInt(parts[1]);
             const year = parseInt(parts[2]);
-            if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+            
+            if (!isNaN(first) && !isNaN(second) && !isNaN(year)) {
+              // Detect format: DD/MM/YYYY or MM/DD/YYYY
+              // If first > 12, must be DD/MM/YYYY
+              // If second > 12, must be MM/DD/YYYY
+              // If both <= 12, prefer DD/MM/YYYY (international standard)
+              
+              let month: number, day: number;
+              
+              if (first > 12) {
+                // Must be DD/MM/YYYY
+                day = first;
+                month = second;
+              } else if (second > 12) {
+                // Must be MM/DD/YYYY
+                month = first;
+                day = second;
+              } else {
+                // Both could be valid - assume DD/MM/YYYY
+                day = first;
+                month = second;
+              }
+              
               // Validate date
               if (isValidDate(year, month, day)) {
                 date = new Date(Date.UTC(year, month - 1, day));
