@@ -53,7 +53,8 @@ export default function DataAnalystFooter() {
         {/* Divider */}
         <div className="border-t border-slate-700 mt-6 pt-6">
           <p className="text-center text-slate-400 text-xs">
-            Empowering pharmacy businesses with data-driven insights
+            Developed by Tech Beast Agency<br />
+            Email - techbeastagency@gmail.com
           </p>
         </div>
       </div>
