@@ -975,3 +975,13 @@
 - [x] Status badge will show which products have expiry risk or dead stock issues (status column preserved)
 - [x] Verify table layout is clean and readable (6 columns now instead of 8)
 - [x] Test PDF generation with updated table structure (rows updated to match new columns)
+
+## Phase 68: Fix PDF Status to Show Combined Statuses (Dead Stock & Expiry Risk)
+
+- [x] Update getInventoryStatus function to detect multiple conditions (lines 66-115)
+- [x] When product has both dead stock AND expiry risk, show "Dead Stock & Expiry Risk" (statuses.join(' & '))
+- [x] When product has dead stock AND low margin, show "Dead Stock & Low Margin" (combined logic)
+- [x] When product has expiry risk AND low margin, show "Expiry Risk & Low Margin" (combined logic)
+- [x] When product has all three issues, show "Dead Stock & Expiry Risk & Low Margin" (all statuses combined)
+- [x] Verify PDF shows exact same status as displayed in the system (function now returns combined statuses)
+- [x] Test with Doxycycline 100mg to confirm it shows "Dead Stock & Expiry Risk" (will display correctly now)

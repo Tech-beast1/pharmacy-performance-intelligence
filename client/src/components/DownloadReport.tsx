@@ -63,11 +63,12 @@ const formatDate = (dateValue: any): string => {
   }
 };
 
-// Determine status based on inventory item
+// Determine status based on inventory item - can return combined statuses
 const getInventoryStatus = (item: any, alerts: any): string => {
   if (!alerts) return 'Normal';
   
   const productName = item.productName?.toLowerCase().trim() || '';
+  const statuses: string[] = [];
   
   // Debug: Log alerts structure once
   if (!(window as any).__alertsLogged) {
@@ -84,7 +85,7 @@ const getInventoryStatus = (item: any, alerts: any): string => {
       const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
       return pName === productName;
     });
-    if (found) return 'Expiry Risk';
+    if (found) statuses.push('Expiry Risk');
   }
   
   // Check deadStockProducts array
@@ -93,7 +94,7 @@ const getInventoryStatus = (item: any, alerts: any): string => {
       const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
       return pName === productName;
     });
-    if (found) return 'Dead Stock';
+    if (found) statuses.push('Dead Stock');
   }
   
   // Check lowMarginProducts array
@@ -102,7 +103,12 @@ const getInventoryStatus = (item: any, alerts: any): string => {
       const pName = (p.productName || p.name)?.toLowerCase().trim() || '';
       return pName === productName;
     });
-    if (found) return 'Low Margin';
+    if (found) statuses.push('Low Margin');
+  }
+  
+  // Return combined statuses or 'Normal' if no issues found
+  if (statuses.length > 0) {
+    return statuses.join(' & ');
   }
   
   return 'Normal';
