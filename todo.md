@@ -842,3 +842,10 @@
 - [x] Green should show for increases (positive change)
 - [x] Red should show for decreases (negative change)
 - [x] Test all metrics display correct colors
+
+## Phase 51: Change Skeleton Loading Color
+
+- [x] Find skeleton loading component
+- [x] Change color from blue to light gray (bg-accent → bg-gray-200)
+- [x] Test on all pages with loading states
+- [x] Verify consistency across the app
