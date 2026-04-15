@@ -501,6 +501,48 @@ export default function Dashboard() {
           })}
         </div>
       </Card>
+
+      {/* Recommendations */}
+      <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recommendations</h3>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <div className="flex-shrink-0 mt-1">
+              <div className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-sm font-bold">1</div>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">Focus on Expiry Management</p>
+              <p className="text-sm text-gray-600 mt-1">
+                You have ₵{metrics?.expiryRiskLoss.toLocaleString()} worth of products expiring soon. Implement promotional strategies to clear these items.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <div className="flex-shrink-0 mt-1">
+              <div className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-sm font-bold">2</div>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">Optimize Slow-Moving Stock</p>
+              <p className="text-sm text-gray-600 mt-1">
+                ₵{metrics?.deadStockValue.toLocaleString()} is tied up in products with no recent sales. Consider bundling or discounting these items.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <div className="flex-shrink-0 mt-1">
+              <div className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-sm font-bold">3</div>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">Review Low-Margin Products</p>
+              <p className="text-sm text-gray-600 mt-1">
+                {alerts?.lowMarginProducts.length || 0} products have margins below 20%. Review pricing or reduce costs to improve profitability.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

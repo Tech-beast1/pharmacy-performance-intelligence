@@ -876,3 +876,11 @@
 - [x] Show only relevant status when filtering by specific type (Dead Stock, Expiry Risk, Low Margin)
 - [x] Show all applicable statuses when filtering by "All Items"
 - [x] Test with all filter combinations (all 74 tests passing)
+
+## Phase 56: Display Recommendations on Dashboard
+
+- [x] Review Reports & Insights page to identify recommendations logic
+- [x] Extract recommendation generation logic
+- [x] Add recommendations section to Dashboard below Key Insights
+- [x] Position recommendations at the bottom of Dashboard
+- [x] Test recommendations display with various data scenarios (all 74 tests passing)
