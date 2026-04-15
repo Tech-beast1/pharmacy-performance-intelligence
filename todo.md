@@ -884,3 +884,11 @@
 - [x] Add recommendations section to Dashboard below Key Insights
 - [x] Position recommendations at the bottom of Dashboard
 - [x] Test recommendations display with various data scenarios (all 74 tests passing)
+
+## Phase 57: Remove Reports & Insights Page
+
+- [x] Delete ReportsInsights.tsx file
+- [x] Remove navigation link from DashboardLayout
+- [x] Remove route from App.tsx
+- [x] Test that navigation works without Reports & Insights (all 74 tests passing)
+- [x] Verify no broken links remain
