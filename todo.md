@@ -940,3 +940,12 @@
 - [x] Style boxes consistently with existing design (gradient backgrounds, icons, responsive)
 - [x] Ensure responsive layout on mobile devices (grid-cols-1 on mobile, md:grid-cols-2 on desktop)
 - [x] Test calculations with sample data (Net Profit card changes color based on value - blue if positive, red if negative)
+
+## Phase 64: Reduce Size of Profit Comparison Boxes
+
+- [x] Reduce padding of profit boxes from p-6 to p-4 (OverheadCosts.tsx lines 294, 310)
+- [x] Reduce font size of profit values from text-3xl to text-2xl (lines 301, 325)
+- [x] Reduce icon size from w-5 h-5 to w-4 h-4 (lines 298, 319, 321)
+- [x] Reduce text sizes for labels and descriptions (text-xs for labels and descriptions)
+- [x] Verify responsive layout still works on mobile (grid-cols-1 md:grid-cols-2 gap-4 maintained)
+- [x] Ensure boxes maintain visual hierarchy (compact but clear visual distinction)
