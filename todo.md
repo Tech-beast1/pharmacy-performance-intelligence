@@ -966,3 +966,12 @@
 - [x] Format values consistently with other metrics (using formatCurrency helper)
 - [x] Calculate Dead Stock Value and Expiry Risk Loss for each inventory item (lines 444-450)
 - [x] Verify all status metrics display correctly in PDF (columns added to table header and rows)
+
+## Phase 67: Remove Expiry Date and Expiry Risk Loss from PDF Table
+
+- [x] Remove "Expiry Date" column from PDF inventory table (line 419 removed)
+- [x] Remove "Expiry Risk Loss" column from PDF inventory table (line 420 removed)
+- [x] Keep only: Product Name, Qty, Unit Cost, Selling Price, Dead Stock Value, Status (table headers updated)
+- [x] Status badge will show which products have expiry risk or dead stock issues (status column preserved)
+- [x] Verify table layout is clean and readable (6 columns now instead of 8)
+- [x] Test PDF generation with updated table structure (rows updated to match new columns)

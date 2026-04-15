@@ -416,9 +416,7 @@ export default function DownloadReport({
                   <th>Qty</th>
                   <th>Unit Cost</th>
                   <th>Selling Price</th>
-                  <th>Expiry Date</th>
                   <th>Dead Stock Value</th>
-                  <th>Expiry Risk Loss</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -454,9 +452,7 @@ export default function DownloadReport({
                   <td>${item.quantity || 0}</td>
                   <td>${formatCurrency(item.costPrice)}</td>
                   <td>${formatCurrency(item.price)}</td>
-                  <td>${formatDate(item.expiryDate)}</td>
                   <td>${formatCurrency(deadStockValue)}</td>
-                  <td>${formatCurrency(expiryRiskLoss)}</td>
                   <td><span class="status-badge ${statusClass}">${status}</span></td>
                 </tr>
           `;
