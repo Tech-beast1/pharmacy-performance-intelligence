@@ -377,6 +377,7 @@ export default function DownloadReport({
                   <th>Product Name</th>
                   <th>Unit Cost</th>
                   <th>Selling Price</th>
+                  <th>Quantity</th>
                   <th>Total Profit</th>
                 </tr>
               </thead>
@@ -389,6 +390,7 @@ export default function DownloadReport({
                   <td>${product.productName || 'N/A'}</td>
                   <td>${formatCurrency(product.costPrice)}</td>
                   <td>${formatCurrency(product.price)}</td>
+                  <td>${product.quantity || 0}</td>
                   <td>${formatCurrency(product.totalProfit)}</td>
                 </tr>
           `;

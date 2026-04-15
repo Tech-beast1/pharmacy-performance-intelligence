@@ -892,3 +892,11 @@
 - [x] Remove route from App.tsx
 - [x] Test that navigation works without Reports & Insights (all 74 tests passing)
 - [x] Verify no broken links remain
+
+## Phase 58: Add Quantity Column to PDF Report
+
+- [x] Find PDF report generation code in DownloadReport.tsx
+- [x] Locate Top 10 Profitable Products table (lines 370-402)
+- [x] Add Quantity column between Selling Price and Total Profit
+- [x] Test PDF export with new column (all 74 tests passing)
+- [x] Verify column alignment and formatting
