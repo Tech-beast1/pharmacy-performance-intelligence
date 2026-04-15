@@ -915,3 +915,11 @@
 - [x] Change formula from "Profit = Selling Price - (Unit Cost Price + Monthly Overhead Cost)" to "Net Profit = Estimated Profit - Overhead Cost"
 - [x] Verify changes display correctly on Overhead Costs page (updated in OverheadCosts.tsx lines 290 and 294)
 - [x] Test responsive layout with new text (no layout changes, only text updates)
+
+## Phase 61: Reposition Tips for Best Results Section
+
+- [x] Move "Tips for Best Results" section to be beside "Inventory Data Columns" (side-by-side layout)
+- [x] Use grid layout to display both sections horizontally (grid-cols-1 md:grid-cols-2 gap-6)
+- [x] Ensure responsive layout on mobile (stack vertically on small screens with md: breakpoint)
+- [x] Verify all content is visible and properly formatted (both sections in DataUpload.tsx lines 53-77)
+- [x] Test on desktop and mobile viewports (responsive classes applied)
