@@ -908,3 +908,10 @@
 - [x] Verify navigation order in sidebar (Data Upload now appears first in menuItems array)
 - [x] Test that all navigation links still work (no routing changes, only menu order)
 - [x] Verify responsive sidebar on mobile (responsive classes unchanged)
+
+## Phase 60: Update Overhead Costs Page Text and Formula
+
+- [x] Change text from "The profit calculation for each product is updated to include overhead costs:" to "The estimated profit calculation for entire sales data is updated to include overhead costs:"
+- [x] Change formula from "Profit = Selling Price - (Unit Cost Price + Monthly Overhead Cost)" to "Net Profit = Estimated Profit - Overhead Cost"
+- [x] Verify changes display correctly on Overhead Costs page (updated in OverheadCosts.tsx lines 290 and 294)
+- [x] Test responsive layout with new text (no layout changes, only text updates)

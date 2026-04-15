@@ -287,11 +287,11 @@ export default function OverheadCosts() {
       <Card className="p-6 bg-blue-50 border-blue-200">
         <h3 className="font-semibold text-gray-900 mb-2">How Overhead Costs Affect Profit Calculation</h3>
         <p className="text-sm text-gray-700">
-          The profit calculation for each product is updated to include overhead costs:
+          The estimated profit calculation for entire sales data is updated to include overhead costs:
         </p>
         <div className="mt-3 p-3 bg-white rounded border border-blue-200">
           <p className="text-sm font-mono text-gray-800">
-            Profit = Selling Price - (Unit Cost Price + Monthly Overhead Cost)
+            Net Profit = Estimated Profit - Overhead Cost
           </p>
         </div>
         <p className="text-xs text-gray-600 mt-3">
