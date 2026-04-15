@@ -161,16 +161,29 @@ export default function InventoryIntelligence() {
   const getAlertStatus = (item: any) => {
     if (!alerts) return null;
 
-    if (alerts.expiryRiskProducts.some((p: any) => p.id === item.id)) {
-      return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
-    }
+    const statuses = [];
+    const colors = [];
+
     if (alerts.deadStockProducts.some((p: any) => p.id === item.id)) {
-      return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
+      statuses.push('Dead Stock');
+      colors.push('bg-orange-100 text-orange-800');
+    }
+    if (alerts.expiryRiskProducts.some((p: any) => p.id === item.id)) {
+      statuses.push('Expiry Risk');
+      colors.push('bg-red-100 text-red-800');
     }
     if (alerts.lowMarginProducts.some((p: any) => p.id === item.id)) {
-      return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
+      statuses.push('Low Margin');
+      colors.push('bg-yellow-100 text-yellow-800');
     }
-    return null;
+
+    if (statuses.length === 0) return null;
+
+    return {
+      type: statuses.map(s => s.toLowerCase().replace(' ', '')).join('_'),
+      label: statuses.join(' & '),
+      color: colors[0]
+    };
   };
 
   return (
