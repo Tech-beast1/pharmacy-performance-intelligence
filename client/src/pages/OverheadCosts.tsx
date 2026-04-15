@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, Users, Zap, MoreHorizontal, Save, Loader2 } from 'lucide-react';
+import { Home, Users, Zap, MoreHorizontal, Save, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
@@ -113,6 +113,11 @@ export default function OverheadCosts() {
   };
 
   const totalOverhead = (parseFloat(rent) || 0) + (parseFloat(salaries) || 0) + (parseFloat(electricity) || 0) + (parseFloat(others) || 0);
+
+  // Fetch dashboard metrics to get gross profit
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays: 30 });
+  const grossProfit = metricsQuery.data?.data?.estimatedProfit || 0;
+  const netProfit = grossProfit - totalOverhead;
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -282,6 +287,51 @@ export default function OverheadCosts() {
           </Button>
         </div>
       </Card>
+
+      {/* Profit Comparison Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Gross Profit Card */}
+        <Card className="p-6 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className="w-5 h-5 text-green-600" />
+                <p className="text-sm font-medium text-gray-700">Gross Profit</p>
+              </div>
+              <p className="text-3xl font-bold text-green-700 mt-2">
+                ₵{grossProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </p>
+              <p className="text-xs text-gray-600 mt-2">Original estimated profit before overhead deduction</p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Net Profit Card */}
+        <Card className={`p-6 border-2 ${
+          netProfit >= 0
+            ? 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200'
+            : 'bg-gradient-to-br from-red-50 to-red-100 border-red-200'
+        }`}>
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                {netProfit >= 0 ? (
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                ) : (
+                  <TrendingDown className="w-5 h-5 text-red-600" />
+                )}
+                <p className="text-sm font-medium text-gray-700">Net Profit</p>
+              </div>
+              <p className={`text-3xl font-bold mt-2 ${
+                netProfit >= 0 ? 'text-blue-700' : 'text-red-700'
+              }`}>
+                ₵{netProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </p>
+              <p className="text-xs text-gray-600 mt-2">Profit after deducting overhead costs (Gross Profit - Overhead Costs)</p>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       {/* Information Card */}
       <Card className="p-6 bg-blue-50 border-blue-200">

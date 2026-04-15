@@ -930,3 +930,13 @@
 - [x] Verify text displays correctly in footer/header area (updated in DataAnalystFooter.tsx lines 56-57)
 - [x] Ensure formatting and line breaks are preserved (using <br /> for line break)
 - [x] Test on desktop and mobile viewports (responsive footer styling maintained)
+
+## Phase 63: Add Gross Profit and Net Profit Display Boxes
+
+- [x] Add two side-by-side boxes at the bottom of Overhead Costs section (grid layout with md:grid-cols-2)
+- [x] First box displays Gross Profit (original estimated profit from dashboard metrics)
+- [x] Second box displays Net Profit (Gross Profit - Overhead Costs)
+- [x] Calculate Net Profit by subtracting overhead costs from gross profit (line 120)
+- [x] Style boxes consistently with existing design (gradient backgrounds, icons, responsive)
+- [x] Ensure responsive layout on mobile devices (grid-cols-1 on mobile, md:grid-cols-2 on desktop)
+- [x] Test calculations with sample data (Net Profit card changes color based on value - blue if positive, red if negative)
