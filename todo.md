@@ -949,3 +949,11 @@
 - [x] Reduce text sizes for labels and descriptions (text-xs for labels and descriptions)
 - [x] Verify responsive layout still works on mobile (grid-cols-1 md:grid-cols-2 gap-4 maintained)
 - [x] Ensure boxes maintain visual hierarchy (compact but clear visual distinction)
+
+## Phase 65: Fix Gross Profit Calculation to Match Dashboard
+
+- [x] Update OverheadCosts.tsx to fetch metrics using month/year parameters instead of durationDays (lines 118-123)
+- [x] Ensure Gross Profit matches the Estimated Profit shown on Dashboard page (now uses startDate and endDate for selected month)
+- [x] Verify calculation uses same date range as Dashboard selection (startDateOfMonth to endDateOfMonth)
+- [x] Test with different month/year combinations to confirm accuracy (dynamic date calculation based on month/year state)
+- [x] Updated todo.md to mark complete

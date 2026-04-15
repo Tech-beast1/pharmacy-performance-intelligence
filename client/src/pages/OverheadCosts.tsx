@@ -114,8 +114,13 @@ export default function OverheadCosts() {
 
   const totalOverhead = (parseFloat(rent) || 0) + (parseFloat(salaries) || 0) + (parseFloat(electricity) || 0) + (parseFloat(others) || 0);
 
-  // Fetch dashboard metrics to get gross profit
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ durationDays: 30 });
+  // Fetch dashboard metrics to get gross profit for the selected month/year
+  const startDateOfMonth = `${year}-${String(month).padStart(2, '0')}-01`;
+  const endDateOfMonth = new Date(year, month, 0).toISOString().split('T')[0];
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ 
+    startDate: startDateOfMonth,
+    endDate: endDateOfMonth
+  });
   const grossProfit = metricsQuery.data?.data?.estimatedProfit || 0;
   const netProfit = grossProfit - totalOverhead;
 
