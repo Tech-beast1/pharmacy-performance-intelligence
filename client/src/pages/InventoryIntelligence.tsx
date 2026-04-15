@@ -161,29 +161,49 @@ export default function InventoryIntelligence() {
   const getAlertStatus = (item: any) => {
     if (!alerts) return null;
 
-    const statuses = [];
-    const colors = [];
+    const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
+    const isExpiryRisk = alerts.expiryRiskProducts.some((p: any) => p.id === item.id);
+    const isLowMargin = alerts.lowMarginProducts.some((p: any) => p.id === item.id);
 
-    if (alerts.deadStockProducts.some((p: any) => p.id === item.id)) {
-      statuses.push('Dead Stock');
-      colors.push('bg-orange-100 text-orange-800');
+    // If filtering by a specific alert type, show only that status
+    if (filterAlert === 'deadstock' && isDeadStock) {
+      return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
     }
-    if (alerts.expiryRiskProducts.some((p: any) => p.id === item.id)) {
-      statuses.push('Expiry Risk');
-      colors.push('bg-red-100 text-red-800');
+    if (filterAlert === 'expiry' && isExpiryRisk) {
+      return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
     }
-    if (alerts.lowMarginProducts.some((p: any) => p.id === item.id)) {
-      statuses.push('Low Margin');
-      colors.push('bg-yellow-100 text-yellow-800');
+    if (filterAlert === 'lowmargin' && isLowMargin) {
+      return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
     }
 
-    if (statuses.length === 0) return null;
+    // If showing all items, display all applicable statuses
+    if (filterAlert === 'all') {
+      const statuses = [];
+      const colors = [];
 
-    return {
-      type: statuses.map(s => s.toLowerCase().replace(' ', '')).join('_'),
-      label: statuses.join(' & '),
-      color: colors[0]
-    };
+      if (isDeadStock) {
+        statuses.push('Dead Stock');
+        colors.push('bg-orange-100 text-orange-800');
+      }
+      if (isExpiryRisk) {
+        statuses.push('Expiry Risk');
+        colors.push('bg-red-100 text-red-800');
+      }
+      if (isLowMargin) {
+        statuses.push('Low Margin');
+        colors.push('bg-yellow-100 text-yellow-800');
+      }
+
+      if (statuses.length === 0) return null;
+
+      return {
+        type: statuses.map(s => s.toLowerCase().replace(' ', '')).join('_'),
+        label: statuses.join(' & '),
+        color: colors[0]
+      };
+    }
+
+    return null;
   };
 
   return (

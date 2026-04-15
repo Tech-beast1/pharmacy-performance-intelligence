@@ -869,3 +869,10 @@
 - [x] Display combined statuses like "Dead Stock & Expiry Risk"
 - [x] Test with products having multiple alert types (all 74 tests passing)
 - [x] Verify status colors and styling for combined statuses
+
+## Phase 55: Filter-Aware Status Display
+
+- [x] Update getAlertStatus to check filterAlert context
+- [x] Show only relevant status when filtering by specific type (Dead Stock, Expiry Risk, Low Margin)
+- [x] Show all applicable statuses when filtering by "All Items"
+- [x] Test with all filter combinations (all 74 tests passing)
