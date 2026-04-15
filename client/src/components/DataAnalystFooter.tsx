@@ -40,7 +40,7 @@ export default function DataAnalystFooter() {
           </div>
 
           {/* Branding */}
-          <div className="text-right">
+          <div className="text-center">
             <p className="text-slate-400 text-sm">
               Pharmacy Performance Intelligence
             </p>
