@@ -31,8 +31,8 @@ import { TopNavBar } from './TopNavBar';
 
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Upload, label: "Data Upload", path: "/upload" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Calculator, label: "Overhead Costs", path: "/overhead" },
   { icon: BarChart3, label: "Inventory Intelligence", path: "/inventory" },
   { icon: SettingsIcon, label: "Settings", path: "/settings" },

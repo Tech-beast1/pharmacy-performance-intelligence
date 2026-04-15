@@ -900,3 +900,11 @@
 - [x] Add Quantity column between Selling Price and Total Profit
 - [x] Test PDF export with new column (all 74 tests passing)
 - [x] Verify column alignment and formatting
+
+## Phase 59: Reorder Navigation - Data Upload First
+
+- [x] Modify DashboardLayout.tsx sidebar navigation order
+- [x] Move "Data Upload" to first position (before Dashboard)
+- [x] Verify navigation order in sidebar (Data Upload now appears first in menuItems array)
+- [x] Test that all navigation links still work (no routing changes, only menu order)
+- [x] Verify responsive sidebar on mobile (responsive classes unchanged)
