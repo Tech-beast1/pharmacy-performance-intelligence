@@ -957,3 +957,12 @@
 - [x] Verify calculation uses same date range as Dashboard selection (startDateOfMonth to endDateOfMonth)
 - [x] Test with different month/year combinations to confirm accuracy (dynamic date calculation based on month/year state)
 - [x] Updated todo.md to mark complete
+
+## Phase 66: Add Dead Stock & Expiry Risk to PDF Status Section
+
+- [x] Find PDF generation code that creates the Status section (DownloadReport.tsx)
+- [x] Add Dead Stock Value column to inventory table in PDF (line 418)
+- [x] Add Expiry Risk Loss column to inventory table in PDF (line 420)
+- [x] Format values consistently with other metrics (using formatCurrency helper)
+- [x] Calculate Dead Stock Value and Expiry Risk Loss for each inventory item (lines 444-450)
+- [x] Verify all status metrics display correctly in PDF (columns added to table header and rows)

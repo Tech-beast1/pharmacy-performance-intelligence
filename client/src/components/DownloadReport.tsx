@@ -216,6 +216,7 @@ export default function DownloadReport({
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 10px;
+                font-size: 11px;
               }
               th {
                 background-color: #f3f4f6;
@@ -416,6 +417,8 @@ export default function DownloadReport({
                   <th>Unit Cost</th>
                   <th>Selling Price</th>
                   <th>Expiry Date</th>
+                  <th>Dead Stock Value</th>
+                  <th>Expiry Risk Loss</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -429,6 +432,22 @@ export default function DownloadReport({
           else if (status === 'Dead Stock') statusClass = 'status-deadstock';
           else if (status === 'Low Margin') statusClass = 'status-lowmargin';
 
+          // Check if item is dead stock
+          const isDeadStock = alerts?.deadStockProducts?.some((p: any) => 
+            (p.productName || p.name)?.toLowerCase().trim() === (item.productName || '')?.toLowerCase().trim()
+          ) || false;
+
+          // Check if item has expiry risk
+          const hasExpiryRisk = alerts?.expiryRiskProducts?.some((p: any) => 
+            (p.productName || p.name)?.toLowerCase().trim() === (item.productName || '')?.toLowerCase().trim()
+          ) || false;
+
+          // Calculate dead stock value
+          const deadStockValue = isDeadStock ? toNumber(item.quantity) * toNumber(item.costPrice) : 0;
+          
+          // Calculate expiry risk loss
+          const expiryRiskLoss = hasExpiryRisk ? toNumber(item.quantity) * toNumber(item.costPrice) : 0;
+
           htmlContent += `
                 <tr>
                   <td>${item.productName || 'N/A'}</td>
@@ -436,6 +455,8 @@ export default function DownloadReport({
                   <td>${formatCurrency(item.costPrice)}</td>
                   <td>${formatCurrency(item.price)}</td>
                   <td>${formatDate(item.expiryDate)}</td>
+                  <td>${formatCurrency(deadStockValue)}</td>
+                  <td>${formatCurrency(expiryRiskLoss)}</td>
                   <td><span class="status-badge ${statusClass}">${status}</span></td>
                 </tr>
           `;
