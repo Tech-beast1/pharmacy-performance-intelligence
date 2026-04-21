@@ -19,7 +19,8 @@ function Router() {
       <Route path="/" nest>
         <DashboardLayout>
           <Switch>
-            <Route path="/" component={Dashboard} />
+            <Route path="/" component={DataUpload} />
+            <Route path="/dashboard" component={Dashboard} />
             <Route path="/upload" component={DataUpload} />
             <Route path="/inventory" component={InventoryIntelligence} />
 
