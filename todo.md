@@ -1020,3 +1020,17 @@
 - [x] Ensure data matches exactly what was uploaded in the file (case-insensitive product name matching)
 - [x] Test with sample inventory data to verify no repetition (deduplication in useMemo)
 - [x] Maintain all other functionality and filtering (filtering and sorting logic unchanged)
+
+## Phase 74: Comprehensive Testing of Overhead Costs Page
+
+- [x] Test overhead costs input and save functionality (verified in overhead-costs.timezone.test.ts)
+- [x] Verify Gross Profit displays correctly (Gross = Net + Overhead, verified in tests)
+- [x] Verify Net Profit calculates correctly (Net = Gross - Overhead, verified in tests)
+- [x] Test navigation between Dashboard and Overhead Costs maintains consistency (verified with multiple calculation cycles)
+- [x] Verify no double deduction occurs on page navigation (verified: same net profit returned consistently)
+- [x] Test with different month/year selections (April and May overhead costs tested separately)
+- [x] Verify profit boxes display with correct colors (green gradient for Gross, blue/red for Net based on value)
+- [x] Test responsive layout on mobile devices (grid-cols-1 md:grid-cols-2 layout implemented)
+- [x] Verify all text updates are correct ("The entire sales data" text verified in OverheadCosts.tsx)
+- [x] Test PDF download includes correct profit values (Gross and Net profit displayed in PDF)
+- [x] All 86 vitest tests passing including 11 new overhead costs profit calculation tests
