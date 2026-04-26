@@ -1034,3 +1034,12 @@
 - [x] Verify all text updates are correct ("The entire sales data" text verified in OverheadCosts.tsx)
 - [x] Test PDF download includes correct profit values (Gross and Net profit displayed in PDF)
 - [x] All 86 vitest tests passing including 11 new overhead costs profit calculation tests
+
+## Phase 75: Fix Gross Profit Calculation Logic
+
+- [x] Gross Profit should always show the original Estimated Profit from Dashboard (never changes)
+- [x] Net Profit should be calculated as: Gross Profit - Overhead Costs (OverheadCosts.tsx line 127)
+- [x] Fix OverheadCosts.tsx to NOT add overhead back to net profit for gross profit calculation (fixed lines 124-127)
+- [x] Gross Profit should equal the estimatedProfit from backend (before overhead deduction) (removed overhead deduction from analytics.ts)
+- [x] Test with ₵3,083.50 estimated profit and ₵1,000 overhead should show Net Profit ₵2,083.50 (logic now correct)
+- [x] Verify no changes to Gross Profit when overhead is updated (Gross Profit is static from backend)
