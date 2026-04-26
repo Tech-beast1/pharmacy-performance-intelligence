@@ -88,9 +88,14 @@ export default function InventoryIntelligence() {
   const inventory = inventoryQuery.data?.data || [];
   const alerts = alertsQuery.data?.data;
 
-  // Calculate margin for each item
+  // Calculate margin for each item and deduplicate by product name
   const itemsWithMargin = useMemo(() => {
-    return inventory.map(item => {
+    const productMap = new Map();
+    inventory.forEach(item => {
+      const productName = item.productName?.toLowerCase().trim() || '';
+      productMap.set(productName, item);
+    });
+    return Array.from(productMap.values()).map(item => {
       const costPrice = parseFloat(item.costPrice?.toString() || '0');
       const salePrice = parseFloat(item.price.toString());
       const margin = costPrice > 0 ? ((salePrice - costPrice) / costPrice) * 100 : 0;

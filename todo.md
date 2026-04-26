@@ -1012,3 +1012,11 @@
 - [x] Generate inventory management recommendations for expiry items (lines 495-499)
 - [x] Format recommendations clearly in PDF (bullet list with icons and descriptions)
 - [x] Test PDF generation with sample data (recommendations display before footer)
+
+## Phase 73: Remove Duplicate Drugs from Inventory Intelligence
+
+- [x] Fix Inventory Intelligence page to show each drug only once (added deduplication logic)
+- [x] Remove duplicate entries from inventory display (using Map to keep latest entry per product)
+- [x] Ensure data matches exactly what was uploaded in the file (case-insensitive product name matching)
+- [x] Test with sample inventory data to verify no repetition (deduplication in useMemo)
+- [x] Maintain all other functionality and filtering (filtering and sorting logic unchanged)
