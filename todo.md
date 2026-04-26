@@ -1061,3 +1061,13 @@
 - [x] Net Profit = Gross Profit - Overhead Costs (OverheadCosts.tsx line 129)
 - [x] Test: Gross Profit ₵3,083.50 (Dashboard's Net), Net Profit ₵2,083.50 with ₵1,000 overhead
 - [x] Dashboard shows ₵6,167 (Gross Profit before overhead deduction)
+
+## Phase 78: Fix Expiry Risk Items Hidden in Inventory Intelligence Table
+
+- [x] Identified root cause: Deduplication logic was keeping only the latest entry per product name
+- [x] If latest entry had no alert, the expiry risk product was hidden from table
+- [x] Updated deduplication logic to prioritize items with alert status (InventoryIntelligence.tsx lines 91-124)
+- [x] New logic: Keep item with alert status, or latest if neither/both have alerts
+- [x] Added 4 comprehensive tests for deduplication scenarios (inventory-dedup.test.ts)
+- [x] All 90 tests passing (86 existing + 4 new deduplication tests)
+- [x] Expiry risk items now visible in table when they have alert status

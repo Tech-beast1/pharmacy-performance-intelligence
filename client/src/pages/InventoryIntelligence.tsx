@@ -89,11 +89,31 @@ export default function InventoryIntelligence() {
   const alerts = alertsQuery.data?.data;
 
   // Calculate margin for each item and deduplicate by product name
+  // Prioritize items with alert status (expiry risk, dead stock, low margin)
   const itemsWithMargin = useMemo(() => {
     const productMap = new Map();
     inventory.forEach(item => {
       const productName = item.productName?.toLowerCase().trim() || '';
-      productMap.set(productName, item);
+      const existing = productMap.get(productName);
+      
+      // Check if current item has an alert status
+      const currentHasAlert = alerts && (
+        alerts.expiryRiskProducts.some((p: any) => p.id === item.id) ||
+        alerts.deadStockProducts.some((p: any) => p.id === item.id) ||
+        alerts.lowMarginProducts.some((p: any) => p.id === item.id)
+      );
+      
+      // Check if existing item has an alert status
+      const existingHasAlert = existing && alerts && (
+        alerts.expiryRiskProducts.some((p: any) => p.id === existing.id) ||
+        alerts.deadStockProducts.some((p: any) => p.id === existing.id) ||
+        alerts.lowMarginProducts.some((p: any) => p.id === existing.id)
+      );
+      
+      // Keep the item with alert status, or the latest if neither/both have alerts
+      if (!existing || currentHasAlert || !existingHasAlert) {
+        productMap.set(productName, item);
+      }
     });
     return Array.from(productMap.values()).map(item => {
       const costPrice = parseFloat(item.costPrice?.toString() || '0');
@@ -101,7 +121,7 @@ export default function InventoryIntelligence() {
       const margin = costPrice > 0 ? ((salePrice - costPrice) / costPrice) * 100 : 0;
       return { ...item, margin: Math.round(margin) };
     });
-  }, [inventory]);
+  }, [inventory, alerts]);
 
   // Filter items based on selected alert type
   const filteredItems = useMemo(() => {
