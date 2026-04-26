@@ -994,3 +994,12 @@
 - [x] Verify Net Profit calculation is correct after fix (Gross - Overhead done only on OverheadCosts page)
 - [x] Test navigation between Dashboard and Overhead Costs multiple times (should now be consistent)
 - [x] Confirm values remain consistent across page navigation (no more double deduction)
+
+## Phase 71: Make Dashboard Show Net Profit (After Overhead Deduction)
+
+- [x] Restore overhead cost deduction in calculateDashboardMetrics backend function (analytics.ts lines 61-65, 122-126)
+- [x] Dashboard's Estimated Profit should show Net Profit (Gross - Overhead) (backend now deducts overhead)
+- [x] Overhead Costs page should show Gross Profit and Net Profit separately (OverheadCosts.tsx lines 124-127)
+- [x] Ensure Gross Profit on Overhead Costs page matches Dashboard's raw sales profit (calculated as netProfit + totalOverhead)
+- [x] Test navigation between Dashboard and Overhead Costs (no double deduction - backend handles it)
+- [x] Verify no double deduction occurs (Overhead Costs page adds overhead back to get Gross Profit)
