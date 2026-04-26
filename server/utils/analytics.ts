@@ -58,9 +58,11 @@ export function calculateDashboardMetrics(
     const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
     let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
     
-    // NOTE: Do NOT deduct overhead costs here
-    // Backend should return Gross Profit (raw profit from sales)
-    // Overhead deduction is handled on the Overhead Costs page only
+    // Deduct full monthly overhead costs from profit if provided
+    // This ensures Dashboard shows Net Profit (after overhead deduction)
+    if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
+      totalProfit -= monthlyOverheadCosts;
+    }
     
     // For month-based view, trends are calculated differently (no previous period)
     // We'll show 0 trend for month view since we're looking at isolated months
@@ -117,9 +119,11 @@ export function calculateDashboardMetrics(
   const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
   let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
   
-  // NOTE: Do NOT deduct overhead costs here
-  // Backend should return Gross Profit (raw profit from sales)
-  // Overhead deduction is handled on the Overhead Costs page only
+  // Deduct full monthly overhead costs from profit if provided
+  // This ensures Dashboard shows Net Profit (after overhead deduction)
+  if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
+    totalProfit -= monthlyOverheadCosts;
+  }
 
   // Previous period sales (30-60 days ago)
   const previousSales = (previousPeriodSales || sales).filter(

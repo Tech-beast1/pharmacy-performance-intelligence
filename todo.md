@@ -1043,3 +1043,12 @@
 - [x] Gross Profit should equal the estimatedProfit from backend (before overhead deduction) (removed overhead deduction from analytics.ts)
 - [x] Test with ₵3,083.50 estimated profit and ₵1,000 overhead should show Net Profit ₵2,083.50 (logic now correct)
 - [x] Verify no changes to Gross Profit when overhead is updated (Gross Profit is static from backend)
+
+## Phase 76: Make Dashboard Estimated Profit Reflect Net Profit After Overhead
+
+- [x] Restore overhead cost deduction in backend calculateDashboardMetrics function (analytics.ts lines 61-65, 122-126)
+- [x] Dashboard's Estimated Profit should show Net Profit (after overhead deduction) once overhead is saved (backend now deducts)
+- [x] Gross Profit on Overhead Costs page = Net Profit + Overhead (OverheadCosts.tsx line 127)
+- [x] Net Profit on Overhead Costs page = estimatedProfit from backend (OverheadCosts.tsx line 126)
+- [x] Test: Save ₵1,000 overhead, Dashboard shows Estimated Profit ₵5,167 (Net Profit after overhead)
+- [x] Verify Overhead Costs page shows Gross ₵6,167 and Net ₵5,167 (calculated correctly)
