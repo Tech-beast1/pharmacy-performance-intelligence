@@ -1003,3 +1003,12 @@
 - [x] Ensure Gross Profit on Overhead Costs page matches Dashboard's raw sales profit (calculated as netProfit + totalOverhead)
 - [x] Test navigation between Dashboard and Overhead Costs (no double deduction - backend handles it)
 - [x] Verify no double deduction occurs (Overhead Costs page adds overhead back to get Gross Profit)
+
+## Phase 72: Add Recommendations Section to PDF Report
+
+- [x] Add recommendations section to DownloadReport.tsx (lines 474-519)
+- [x] Generate profit margin recommendations based on data (lines 478-485)
+- [x] Generate overhead cost optimization recommendations for dead stock (lines 488-492)
+- [x] Generate inventory management recommendations for expiry items (lines 495-499)
+- [x] Format recommendations clearly in PDF (bullet list with icons and descriptions)
+- [x] Test PDF generation with sample data (recommendations display before footer)

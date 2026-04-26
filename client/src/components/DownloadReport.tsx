@@ -471,6 +471,53 @@ export default function DownloadReport({
         `;
       }
 
+      // Add Recommendations Section
+      const recommendations: string[] = [];
+      
+      // Profit margin recommendations
+      if (metrics) {
+        const profitMargin = metrics.totalRevenue > 0 ? (metrics.estimatedProfit / metrics.totalRevenue) * 100 : 0;
+        if (profitMargin < 15) {
+          recommendations.push('⚠️ Profit margin is below 15%. Consider reviewing pricing strategy or reducing operational costs.');
+        } else if (profitMargin > 30) {
+          recommendations.push('✓ Strong profit margin detected. Continue current pricing and cost management strategies.');
+        }
+      }
+      
+      // Overhead cost recommendations
+      if (alerts?.deadStockProducts?.length > 0) {
+        const totalDeadStockValue = alerts.deadStockProducts.reduce((sum: number, p: any) => 
+          sum + (toNumber(p.quantity) * toNumber(p.costPrice)), 0);
+        recommendations.push(`📦 Dead Stock Alert: ${alerts.deadStockProducts.length} products with total value ${formatCurrency(totalDeadStockValue)}. Consider discounting or clearance sales.`);
+      }
+      
+      // Expiry risk recommendations
+      if (alerts?.expiryRiskProducts?.length > 0) {
+        const totalExpiryRiskValue = alerts.expiryRiskProducts.reduce((sum: number, p: any) => 
+          sum + (toNumber(p.quantity) * toNumber(p.costPrice)), 0);
+        recommendations.push(`⏰ Expiry Risk Alert: ${alerts.expiryRiskProducts.length} products expiring soon with total value ${formatCurrency(totalExpiryRiskValue)}. Prioritize sales for these items.`);
+      }
+      
+      // Low margin recommendations
+      if (alerts?.lowMarginProducts?.length > 0) {
+        recommendations.push(`💰 Low Margin Products: ${alerts.lowMarginProducts.length} products have margins below 20%. Review pricing or sourcing costs.`);
+      }
+      
+      if (recommendations.length > 0) {
+        htmlContent += `
+          <div class="section">
+            <h2>Recommendations</h2>
+            <ul style="line-height: 1.8; font-size: 13px;">
+        `;
+        recommendations.forEach((rec: string) => {
+          htmlContent += `<li style="margin-bottom: 10px;">${rec}</li>`;
+        });
+        htmlContent += `
+            </ul>
+          </div>
+        `;
+      }
+
       // Add Footer
       htmlContent += `
             <div class="footer">
