@@ -9,6 +9,7 @@ export interface DashboardMetrics {
   expiryRiskTrend: number;
   deadStockValue: number;
   deadStockTrend: number;
+  grossProfit?: number; // Raw profit before overhead deduction
 }
 
 export interface AlertData {
@@ -57,6 +58,7 @@ export function calculateDashboardMetrics(
     });
     const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
     let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
+    const grossProfit = totalProfit; // Store raw profit before overhead deduction
     
     // Deduct full monthly overhead costs from profit if provided
     // This ensures Dashboard shows Net Profit (after overhead deduction)
@@ -105,6 +107,7 @@ export function calculateDashboardMetrics(
       expiryRiskTrend: Math.round(expiryRiskTrend * 100) / 100,
       deadStockValue: Math.round(deadStockValue * 100) / 100,
       deadStockTrend: Math.round(deadStockTrend * 100) / 100,
+      grossProfit: Math.round(grossProfit * 100) / 100,
     };
   }
   

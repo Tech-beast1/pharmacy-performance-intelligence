@@ -1052,3 +1052,12 @@
 - [x] Net Profit on Overhead Costs page = estimatedProfit from backend (OverheadCosts.tsx line 126)
 - [x] Test: Save ₵1,000 overhead, Dashboard shows Estimated Profit ₵5,167 (Net Profit after overhead)
 - [x] Verify Overhead Costs page shows Gross ₵6,167 and Net ₵5,167 (calculated correctly)
+
+## Phase 77: Fix Gross Profit to Show Original Profit Without Overhead Addition
+
+- [x] Gross Profit should show the estimated profit from Dashboard (already Net Profit after overhead)
+- [x] Added grossProfit field to DashboardMetrics interface (analytics.ts line 12)
+- [x] Use estimatedProfit as Gross Profit on Overhead Costs page (OverheadCosts.tsx line 128)
+- [x] Net Profit = Gross Profit - Overhead Costs (OverheadCosts.tsx line 129)
+- [x] Test: Gross Profit ₵3,083.50 (Dashboard's Net), Net Profit ₵2,083.50 with ₵1,000 overhead
+- [x] Dashboard shows ₵6,167 (Gross Profit before overhead deduction)

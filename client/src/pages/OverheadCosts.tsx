@@ -122,9 +122,11 @@ export default function OverheadCosts() {
     endDate: endDateOfMonth
   });
   // Backend's estimatedProfit is the Net Profit (after overhead deduction)
-  // Gross Profit = Net Profit + Overhead Costs
-  const netProfit = metricsQuery.data?.data?.estimatedProfit || 0;
-  const grossProfit = netProfit + totalOverhead;
+  // For Overhead Costs page:
+  // - Gross Profit = estimatedProfit (the net profit from dashboard)
+  // - Net Profit = Gross Profit - Overhead Costs (deduct overhead again)
+  const grossProfit = metricsQuery.data?.data?.estimatedProfit || 0;
+  const netProfit = grossProfit - totalOverhead;
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
