@@ -985,3 +985,12 @@
 - [x] When product has all three issues, show "Dead Stock & Expiry Risk & Low Margin" (all statuses combined)
 - [x] Verify PDF shows exact same status as displayed in the system (function now returns combined statuses)
 - [x] Test with Doxycycline 100mg to confirm it shows "Dead Stock & Expiry Risk" (will display correctly now)
+
+## Phase 70: Fix Overhead Costs Double Deduction Bug
+
+- [x] Identify why Gross Profit is showing Net Profit value after page navigation (found in calculateDashboardMetrics)
+- [x] Fix metrics query by removing overhead deduction from backend (analytics.ts lines 61-63, 120-122)
+- [x] Ensure Gross Profit always shows pre-overhead value regardless of navigation (estimatedProfit now returns raw profit)
+- [x] Verify Net Profit calculation is correct after fix (Gross - Overhead done only on OverheadCosts page)
+- [x] Test navigation between Dashboard and Overhead Costs multiple times (should now be consistent)
+- [x] Confirm values remain consistent across page navigation (no more double deduction)
