@@ -12,8 +12,8 @@ export default function DataUpload() {
   const userType = userTypeQuery.data?.data?.type;
   
   // Get organization if user is organization owner
-  const organizationQuery = trpc.branches.organization.get.useQuery({ organizationId: 0 });
-  const organization = organizationQuery.data?.data;
+  const organizationListQuery = trpc.branches.organization.list.useQuery();
+  const organization = organizationListQuery.data?.data?.[0];
   
   // Get branches for organization owner
   const branchesQuery = trpc.branches.branch.list.useQuery(
