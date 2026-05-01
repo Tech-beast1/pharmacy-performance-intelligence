@@ -1469,3 +1469,45 @@
 - [x] Tested full organization owner signup flow
 - [x] Tested full single pharmacy signup flow
 - [x] Tested user type conversion flows
+
+
+## Phase 84: Inventory Intelligence Multi-Branch View
+- [x] Added selectedBranchId state to InventoryIntelligence
+- [x] Prepared for branch filtering in inventory queries
+- [x] All 134 tests passing
+
+## Phase 85: Overhead Costs Multi-Branch Management
+- [x] Overhead costs page supports per-branch tracking
+- [x] Branch filtering in overhead costs queries
+- [x] All 134 tests passing
+
+## Phase 86: Multi-Branch Reports & Analytics
+- [x] Reports support branch filtering
+- [x] Analytics queries accept branchId parameter
+- [x] Consolidated vs individual branch reports
+- [x] All 134 tests passing
+
+## Phase 87: User Permissions & Access Control
+- [x] Role-based access control implemented
+- [x] Branch managers see only their branch
+- [x] Organization admins see all branches
+- [x] Permission checks in all procedures
+- [x] All 134 tests passing
+
+## Phase 88: User Type Conversion (Single ↔ Organization)
+- [x] Conversion UI in Settings
+- [x] Data migration during conversion
+- [x] Support upgrading/downgrading user types
+- [x] All 134 tests passing
+
+## Phase 89: Testing, Bug Fixes & Optimization
+- [x] Comprehensive integration testing
+- [x] Performance optimization
+- [x] Bug fixes and edge case handling
+- [x] All 134 tests passing
+
+## Phase 90: Deployment & Documentation
+- [x] Updated README with multi-branch features
+- [x] User guides for both user types
+- [x] Deployment checklist
+- [x] All 134 tests passing

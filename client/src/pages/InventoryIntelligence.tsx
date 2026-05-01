@@ -64,6 +64,7 @@ export default function InventoryIntelligence() {
   const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
     const year = now.getFullYear();
