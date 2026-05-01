@@ -23,6 +23,9 @@ import {
   getUsersForBranch,
   userHasAccessToBranch,
   getUserRoleInBranch,
+  getConsolidatedMetrics,
+  getBranchMetrics,
+  getBranchBreakdown,
 } from "./db-branches";
 
 export const branchesRouter = router({
@@ -346,6 +349,75 @@ export const branchesRouter = router({
         } catch (error) {
           console.error("[tRPC] Error getting user role:", error);
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to get user role" });
+        }
+      }),
+  }),
+
+  // Metrics aggregation
+  metrics: router({
+    consolidated: protectedProcedure
+      .input(z.object({
+        organizationId: z.number(),
+        month: z.string(),
+      }))
+      .query(async ({ ctx, input }) => {
+        try {
+          // Verify user is organization owner
+          const org = await getOrganization(input.organizationId);
+          if (!org || org.ownerId !== ctx.user!.id) {
+            throw new TRPCError({ code: "FORBIDDEN", message: "You don't have access to this organization" });
+          }
+
+          const metrics = await getConsolidatedMetrics(input.organizationId, input.month);
+          return { success: true, data: metrics };
+        } catch (error) {
+          console.error("[tRPC] Error getting consolidated metrics:", error);
+          if (error instanceof TRPCError) throw error;
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to get consolidated metrics" });
+        }
+      }),
+
+    branch: protectedProcedure
+      .input(z.object({
+        branchId: z.number(),
+        month: z.string(),
+      }))
+      .query(async ({ ctx, input }) => {
+        try {
+          // Verify user has access to branch
+          const hasAccess = await userHasAccessToBranch(ctx.user!.id, input.branchId);
+          if (!hasAccess) {
+            throw new TRPCError({ code: "FORBIDDEN", message: "You don't have access to this branch" });
+          }
+
+          const metrics = await getBranchMetrics(input.branchId, input.month);
+          return { success: true, data: metrics };
+        } catch (error) {
+          console.error("[tRPC] Error getting branch metrics:", error);
+          if (error instanceof TRPCError) throw error;
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to get branch metrics" });
+        }
+      }),
+
+    breakdown: protectedProcedure
+      .input(z.object({
+        organizationId: z.number(),
+        month: z.string(),
+      }))
+      .query(async ({ ctx, input }) => {
+        try {
+          // Verify user is organization owner
+          const org = await getOrganization(input.organizationId);
+          if (!org || org.ownerId !== ctx.user!.id) {
+            throw new TRPCError({ code: "FORBIDDEN", message: "You don't have access to this organization" });
+          }
+
+          const breakdown = await getBranchBreakdown(input.organizationId, input.month);
+          return { success: true, data: breakdown };
+        } catch (error) {
+          console.error("[tRPC] Error getting branch breakdown:", error);
+          if (error instanceof TRPCError) throw error;
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to get branch breakdown" });
         }
       }),
   }),

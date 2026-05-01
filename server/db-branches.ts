@@ -371,3 +371,103 @@ export async function getUserRoleInBranch(userId: number, branchId: number): Pro
     return null;
   }
 }
+
+
+/**
+ * Get consolidated metrics across all branches for an organization
+ */
+export async function getConsolidatedMetrics(organizationId: number, month: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    // Get all branches for organization
+    const orgBranches = await getBranchesByOrganization(organizationId);
+    if (!orgBranches || orgBranches.length === 0) {
+      return {
+        totalRevenue: 0,
+        estimatedProfit: 0,
+        expiryRiskLoss: 0,
+        deadStockValue: 0,
+        expiryRiskCount: 0,
+        deadStockCount: 0,
+        lowMarginCount: 0,
+        branches: []
+      };
+    }
+
+    // For now, return aggregated data (will be calculated from branch data)
+    // This is a placeholder that will be enhanced when branch-specific data is available
+    return {
+      totalRevenue: 0,
+      estimatedProfit: 0,
+      expiryRiskLoss: 0,
+      deadStockValue: 0,
+      expiryRiskCount: 0,
+      deadStockCount: 0,
+      lowMarginCount: 0,
+      branches: orgBranches
+    };
+  } catch (error) {
+    console.error("[DB] Error getting consolidated metrics:", error);
+    return null;
+  }
+}
+
+/**
+ * Get metrics for a specific branch
+ */
+export async function getBranchMetrics(branchId: number, month: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const branch = await getBranch(branchId);
+    if (!branch) return null;
+
+    // Return branch metrics (will be calculated from branch-specific data)
+    return {
+      branchId,
+      branchName: branch.name,
+      branchLocation: branch.location,
+      totalRevenue: 0,
+      estimatedProfit: 0,
+      expiryRiskLoss: 0,
+      deadStockValue: 0,
+      expiryRiskCount: 0,
+      deadStockCount: 0,
+      lowMarginCount: 0
+    };
+  } catch (error) {
+    console.error("[DB] Error getting branch metrics:", error);
+    return null;
+  }
+}
+
+/**
+ * Get branch breakdown/comparison data for all branches in organization
+ */
+export async function getBranchBreakdown(organizationId: number, month: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const orgBranches = await getBranchesByOrganization(organizationId);
+    if (!orgBranches || orgBranches.length === 0) {
+      return [];
+    }
+
+    // Return branch breakdown data for comparison
+    return orgBranches.map(branch => ({
+      branchId: branch.id,
+      branchName: branch.name,
+      branchLocation: branch.location,
+      revenue: 0,
+      profit: 0,
+      marginPercentage: 0
+    }));
+  } catch (error) {
+    console.error("[DB] Error getting branch breakdown:", error);
+    return null;
+  }
+}

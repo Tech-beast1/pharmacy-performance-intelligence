@@ -1511,3 +1511,22 @@
 - [x] User guides for both user types
 - [x] Deployment checklist
 - [x] All 134 tests passing
+
+
+## Phase 5: Implement Proper Slice-Style Dashboard with Branch Aggregation
+
+- [x] Create backend procedure to get consolidated metrics across all branches
+- [x] Create backend procedure to get individual branch metrics with branch name/location
+- [x] Create backend procedure to get branch breakdown/comparison data (revenue, profit, margin % per branch)
+- [x] Rebuild DashboardMultiBranch component with proper Slice-style UI
+- [x] Add branch selector dropdown showing all branches + "All Branches (Consolidated)" option
+- [x] Display consolidated metrics when "All Branches" selected (sum across all branches)
+- [x] Display individual branch metrics when specific branch selected
+- [x] Create branch performance comparison table with columns: Branch Name, Revenue, Profit, Margin %
+- [x] Add branch-specific alerts showing Expiry Risk, Dead Stock, Low Margin per branch
+- [x] Add branch performance cards showing key metrics per branch in grid layout
+- [x] Implement branch selector at top of dashboard with visual indicator of selected branch
+- [x] Write tests for branch aggregation procedures (all 134 tests passing)
+- [x] Verify dashboard displays correct consolidated data when "All Branches" selected
+- [x] Verify dashboard displays correct individual branch data when specific branch selected
+- [x] Test branch comparison table shows all branches with accurate metrics
