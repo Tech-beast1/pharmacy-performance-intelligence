@@ -1592,3 +1592,13 @@
 - [ ] Update overhead costs to filter by selected branch
 - [ ] Ensure all metrics (revenue, profit, expiry risk, dead stock) are calculated per-branch
 - [ ] Test branch filtering works correctly across all pages
+
+
+## Phase 26: Restore Clear All and Download Report Buttons
+
+- [x] Add Clear All button to dashboard (Settings page)
+- [x] Add Download Report button to dashboard
+- [x] Implement Clear All functionality to delete all user data
+- [x] Implement Download Report to generate PDF with all metrics
+- [x] Add confirmation dialog for Clear All
+- [x] Test both buttons work correctly (all 134 tests passing)

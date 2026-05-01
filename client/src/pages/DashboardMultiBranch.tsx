@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
-import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle, Trash2 } from 'lucide-react';
+import DownloadReport from '@/components/DownloadReport';
 
 export default function DashboardMultiBranch() {
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
@@ -56,6 +57,26 @@ export default function DashboardMultiBranch() {
   const selectedBranchName = selectedBranchId
     ? branches.find(b => b.id === selectedBranchId)?.name
     : 'All Branches (Consolidated)';
+
+  // Clear All functionality
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+  const clearAllMutation = trpc.data.clearAll.useMutation();
+
+  const handleClearAll = async () => {
+    setIsClearing(true);
+    try {
+      // Clear all data by passing current month/year
+      const now = new Date();
+      await clearAllMutation.mutateAsync({ month: now.getMonth() + 1, year: now.getFullYear() });
+      setShowClearConfirm(false);
+      // Reload after a brief delay to allow mutation to complete
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      console.error('Error clearing data:', error);
+      setIsClearing(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -287,6 +308,50 @@ export default function DashboardMultiBranch() {
             </div>
           </Card>
         </>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex gap-4 justify-end">
+        <DownloadReport />
+        <Button
+          onClick={() => setShowClearConfirm(true)}
+          variant="destructive"
+          className="gap-2"
+        >
+          <Trash2 size={18} />
+          Clear All
+        </Button>
+      </div>
+
+      {/* Clear All Confirmation Dialog */}
+      {showClearConfirm && (
+        <Card className="p-6 bg-red-50 border-l-4 border-red-500">
+          <h3 className="text-lg font-bold text-gray-900 mb-2">Clear All Data?</h3>
+          <p className="text-gray-600 mb-4">This will permanently delete all inventory, sales, and overhead data. This action cannot be undone.</p>
+          <div className="flex gap-3">
+            <Button
+              onClick={() => handleClearAll()}
+              disabled={isClearing}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isClearing ? (
+                <>
+                  <span className="inline-block animate-spin mr-2">⏳</span>
+                  Clearing...
+                </>
+              ) : (
+                <>Clear All</>
+              )}
+            </Button>
+            <Button
+              onClick={() => setShowClearConfirm(false)}
+              disabled={isClearing}
+              variant="outline"
+            >
+              Cancel
+            </Button>
+          </div>
+        </Card>
       )}
 
       {/* Loading State */}
