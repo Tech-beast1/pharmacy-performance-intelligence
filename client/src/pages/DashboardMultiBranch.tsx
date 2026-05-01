@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+
 import { Card } from '@/components/ui/card';
 import { trpc } from '@/lib/trpc';
-import { AlertTriangle, Package, TrendingDown } from 'lucide-react';
+import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle } from 'lucide-react';
 
 export default function DashboardMultiBranch() {
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
@@ -191,6 +192,110 @@ export default function DashboardMultiBranch() {
               </div>
             </Card>
           )}
+
+          {/* Key Insights */}
+          <Card className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Insights</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-blue-600 text-white">
+                    <TrendingUp className="w-5 h-5" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Revenue Trend</p>
+                  <p className="text-xs text-gray-600 mt-1">₵{metrics?.totalRevenue?.toLocaleString() || '0'} total</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-green-600 text-white">
+                    <DollarSign className="w-5 h-5" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Profit Margin</p>
+                  <p className="text-xs text-gray-600 mt-1">{metrics?.totalRevenue ? ((metrics?.estimatedProfit / metrics?.totalRevenue) * 100).toFixed(1) : '0'}%</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-red-600 text-white">
+                    <AlertTriangle className="w-5 h-5" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Expiry Risk</p>
+                  <p className="text-xs text-gray-600 mt-1">₵{metrics?.expiryRiskLoss?.toLocaleString() || '0'} at risk</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-orange-600 text-white">
+                    <Package className="w-5 h-5" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Dead Stock</p>
+                  <p className="text-xs text-gray-600 mt-1">₵{metrics?.deadStockValue?.toLocaleString() || '0'} value</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-blue-600 text-white">
+                    <BarChart3 className="w-5 h-5" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Branches</p>
+                  <p className="text-xs text-gray-600 mt-1">{branches.length} active branch{branches.length !== 1 ? 'es' : ''}</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Recommendations */}
+          <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recommendations</h3>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-sm font-bold">1</div>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Focus on Expiry Management</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    You have ₵{metrics?.expiryRiskLoss?.toLocaleString() || '0'} worth of products expiring soon. Implement promotional strategies to clear these items.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-sm font-bold">2</div>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Optimize Slow-Moving Stock</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    ₵{metrics?.deadStockValue?.toLocaleString() || '0'} is tied up in products with no recent sales. Consider bundling or discounting these items.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-sm font-bold">3</div>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Optimize Branch Performance</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Compare branch metrics in the table above to identify top performers and areas for improvement across your network.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
         </>
       )}
 
