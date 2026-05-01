@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 export default function DataUpload() {
   const [selectedMonth, setSelectedMonth] = useState<Date>(() => new Date());
+  const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
 
   return (
     <div className="space-y-6">
