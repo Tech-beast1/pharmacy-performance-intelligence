@@ -81,22 +81,22 @@ export default function DashboardMultiBranch() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-6 text-white flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Multi-Branch Dashboard</h1>
-          <p className="text-blue-100">{organization?.name} • {branches.length} branch{branches.length !== 1 ? 'es' : ''}</p>
-        </div>
-        <div className="flex gap-3">
-          <DownloadReport />
-          <Button
-            onClick={() => setShowClearConfirm(true)}
-            variant="destructive"
-            className="gap-2"
-          >
-            <Trash2 size={18} />
-            Clear All
-          </Button>
-        </div>
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-6 text-white">
+        <h1 className="text-3xl font-bold mb-2">Multi-Branch Dashboard</h1>
+        <p className="text-blue-100">{organization?.name} • {branches.length} branch{branches.length !== 1 ? 'es' : ''}</p>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-3 justify-end">
+        <DownloadReport />
+        <Button
+          onClick={() => setShowClearConfirm(true)}
+          variant="destructive"
+          className="gap-2"
+        >
+          <Trash2 size={18} />
+          Clear All
+        </Button>
       </div>
 
       {/* Branch Selector and Month Filter */}
