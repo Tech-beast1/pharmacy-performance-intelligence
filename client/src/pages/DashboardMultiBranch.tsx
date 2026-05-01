@@ -42,6 +42,17 @@ export default function DashboardMultiBranch() {
   );
   const breakdown = breakdownQuery.data?.data || [];
 
+  // Get AI-powered insights
+  const startDate = `${selectedMonth}-01`;
+  const endDate = new Date(selectedMonth + '-01');
+  endDate.setMonth(endDate.getMonth() + 1);
+  endDate.setDate(0);
+  const insightsQuery = trpc.analytics.getKeyInsights.useQuery({
+    startDate,
+    endDate: endDate.toISOString().split('T')[0],
+  });
+  const insights = insightsQuery.data?.data || [];
+
   const selectedBranchName = selectedBranchId
     ? branches.find(b => b.id === selectedBranchId)?.name
     : 'All Branches (Consolidated)';
@@ -197,61 +208,40 @@ export default function DashboardMultiBranch() {
           <Card className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Insights</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              <div className="flex gap-3">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-blue-600 text-white">
-                    <TrendingUp className="w-5 h-5" />
+              {insights.map((insight: any, index: number) => {
+                const iconMap: Record<string, React.ReactNode> = {
+                  'TrendingUp': <TrendingUp className="w-5 h-5" />,
+                  'TrendingDown': <TrendingDown className="w-5 h-5" />,
+                  'Package': <Package className="w-5 h-5" />,
+                  'AlertTriangle': <AlertTriangle className="w-5 h-5" />,
+                  'DollarSign': <DollarSign className="w-5 h-5" />,
+                  'BarChart3': <BarChart3 className="w-5 h-5" />,
+                  'CheckCircle': <CheckCircle className="w-5 h-5" />,
+                };
+
+                const colorMap: Record<string, string> = {
+                  'red': 'bg-red-600',
+                  'green': 'bg-green-600',
+                  'orange': 'bg-orange-600',
+                  'blue': 'bg-blue-600',
+                };
+
+                return (
+                  <div key={index} className="flex gap-3">
+                    <div className="flex-shrink-0">
+                      <div className={`flex items-center justify-center h-10 w-10 rounded-md ${colorMap[insight.color]} text-white`}>
+                        {iconMap[insight.icon]}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{insight.title}</p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        {insight.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Revenue Trend</p>
-                  <p className="text-xs text-gray-600 mt-1">₵{metrics?.totalRevenue?.toLocaleString() || '0'} total</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-green-600 text-white">
-                    <DollarSign className="w-5 h-5" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Profit Margin</p>
-                  <p className="text-xs text-gray-600 mt-1">{metrics?.totalRevenue ? ((metrics?.estimatedProfit / metrics?.totalRevenue) * 100).toFixed(1) : '0'}%</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-red-600 text-white">
-                    <AlertTriangle className="w-5 h-5" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Expiry Risk</p>
-                  <p className="text-xs text-gray-600 mt-1">₵{metrics?.expiryRiskLoss?.toLocaleString() || '0'} at risk</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-orange-600 text-white">
-                    <Package className="w-5 h-5" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Dead Stock</p>
-                  <p className="text-xs text-gray-600 mt-1">₵{metrics?.deadStockValue?.toLocaleString() || '0'} value</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-blue-600 text-white">
-                    <BarChart3 className="w-5 h-5" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Branches</p>
-                  <p className="text-xs text-gray-600 mt-1">{branches.length} active branch{branches.length !== 1 ? 'es' : ''}</p>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </Card>
 
