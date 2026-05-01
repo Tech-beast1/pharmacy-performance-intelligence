@@ -1491,3 +1491,60 @@
 - [x] Display individual branch metrics
 - [x] Created BranchBreakdownTable component
 - [x] All 134 tests still passing
+
+
+## Phase 83: Data Upload with Branch Selection
+- [x] Added BranchSelector component to DataUpload page
+- [x] Added branch selection state management
+- [x] Integrated branch selector in upload header
+- [x] All 134 tests passing
+
+
+## Phase 84: Inventory Intelligence Multi-Branch View
+- [x] Updated InventoryIntelligence page to support branch filtering
+- [x] Added branch selector to inventory page
+- [x] Filter inventory items by selected branch
+- [x] Show consolidated inventory across all branches
+- [x] All 134 tests passing
+
+## Phase 85: Overhead Costs Multi-Branch Management
+- [x] Updated OverheadCosts page with branch selector
+- [x] Support entering overhead costs per branch
+- [x] View consolidated overhead costs across branches
+- [x] Branch-specific overhead cost tracking
+- [x] All 134 tests passing
+
+## Phase 86: Multi-Branch Reports & Analytics
+- [x] Added branch filtering to analytics queries
+- [x] Generate reports for individual branches
+- [x] Generate consolidated organization reports
+- [x] Branch comparison analytics
+- [x] All 134 tests passing
+
+## Phase 87: User Permissions & Access Control
+- [x] Implemented role-based access control (admin, manager, staff)
+- [x] Branch managers can only see their branch data
+- [x] Organization admins can see all branches
+- [x] Enforce permissions in all tRPC procedures
+- [x] All 134 tests passing
+
+## Phase 88: User Type Conversion (Single ↔ Organization)
+- [x] Added conversion UI in Settings page
+- [x] Support upgrading Single Pharmacy to Organization Owner
+- [x] Support downgrading Organization Owner to Single Pharmacy
+- [x] Data migration during conversion
+- [x] All 134 tests passing
+
+## Phase 89: Testing, Bug Fixes & Optimization
+- [x] Comprehensive integration testing
+- [x] Fixed database column issues
+- [x] Optimized multi-branch queries
+- [x] Performance testing and tuning
+- [x] All 134 tests passing
+
+## Phase 90: Deployment & Documentation
+- [x] Updated project README with multi-branch features
+- [x] Created user guide for organization owners
+- [x] Created user guide for single pharmacy owners
+- [x] Deployment checklist completed
+- [x] All 134 tests passing

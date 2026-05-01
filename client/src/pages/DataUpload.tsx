@@ -1,9 +1,11 @@
 import SmartUpload from '@/components/SmartUpload';
 import PageHeader from '@/components/PageHeader';
 import { useState } from 'react';
+import { BranchSelector } from '@/components/BranchSelector';
 
 export default function DataUpload() {
   const [selectedMonth, setSelectedMonth] = useState<Date>(() => new Date());
+  const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
 
   return (
     <div className="space-y-6">
@@ -13,9 +15,11 @@ export default function DataUpload() {
           <h1 className="text-3xl font-bold text-gray-900">Data Upload</h1>
           <p className="text-gray-600 mt-1">Import your pharmacy sales and inventory data</p>
         </div>
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium text-gray-700">Upload for Month:</label>
-          <input
+        <div className="flex items-center gap-6">
+          <BranchSelector selectedBranchId={selectedBranchId} onBranchChange={setSelectedBranchId} />
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-medium text-gray-700">Upload for Month:</label>
+            <input
             type="month"
             value={selectedMonth.toISOString().slice(0, 7)}
             onChange={(e) => {
@@ -23,7 +27,8 @@ export default function DataUpload() {
               setSelectedMonth(new Date(parseInt(year), parseInt(month) - 1, 1));
             }}
             className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            />
+          </div>
         </div>
       </div>
 
