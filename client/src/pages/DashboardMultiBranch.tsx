@@ -10,9 +10,9 @@ export default function DashboardMultiBranch() {
     return date.toISOString().slice(0, 7);
   });
 
-  // Get organization
-  const organizationQuery = trpc.branches.organization.get.useQuery({ organizationId: 0 });
-  const organization = organizationQuery.data?.data;
+  // Get user's organization
+  const organizationsQuery = trpc.branches.organization.list.useQuery();
+  const organization = organizationsQuery.data?.data?.[0]; // Get first organization
 
   // Get branches for the organization
   const branchesQuery = trpc.branches.branch.list.useQuery(
