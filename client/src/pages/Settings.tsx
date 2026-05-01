@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
 import { Settings as SettingsIcon, Bell, Lock, HelpCircle } from 'lucide-react';
 import { useAuth } from '@/_core/hooks/useAuth';
+import { BranchManagementSettings } from '@/components/BranchManagementSettings';
 
 export default function Settings() {
   const { user, logout } = useAuth();
@@ -102,6 +103,9 @@ export default function Settings() {
           </Button>
         </div>
       </Card>
+
+      {/* Branch Management */}
+      <BranchManagementSettings />
 
       {/* Help & Support */}
       <Card className="p-6">
