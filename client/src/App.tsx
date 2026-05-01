@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import DashboardLayout from "./components/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
+import DashboardMultiBranch from "./pages/DashboardMultiBranch";
 import DataUpload from "./pages/DataUpload";
 import InventoryIntelligence from "./pages/InventoryIntelligence";
 
@@ -36,12 +37,15 @@ function Router() {
     return <SignupFlow />;
   }
 
+  const userType = userTypeQuery.data.data.type;
+  const DashboardComponent = userType === 'organization_owner' ? DashboardMultiBranch : Dashboard;
+
   return (
     <Switch>
       <Route path="/" nest>
         <DashboardLayout>
           <Switch>
-            <Route path="/" component={Dashboard} />
+            <Route path="/" component={DashboardComponent} />
             <Route path="/upload" component={DataUpload} />
             <Route path="/inventory" component={InventoryIntelligence} />
 
