@@ -11,7 +11,17 @@ import { toast } from 'sonner';
 export default function OverheadCosts() {
   const [location] = useLocation();
   const currentDate = new Date();
-  
+  const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
+
+  // Get user's organization and branches
+  const organizationQuery = trpc.branches.organization.list.useQuery();
+  const organization = organizationQuery.data?.data?.[0];
+  const branchesQuery = trpc.branches.branch.list.useQuery(
+    { organizationId: organization?.id || 0 },
+    { enabled: !!organization?.id }
+  );
+  const branches = branchesQuery.data?.data || [];
+
   // Parse month/year from URL parameters first
   const urlParams = new URLSearchParams(location.split('?')[1] || '');
   const urlMonth = urlParams.get('month');
@@ -136,6 +146,26 @@ export default function OverheadCosts() {
   return (
     <div className="space-y-6">
     <PageHeader title="Overhead Costs" description="Manage your pharmacy overhead costs" />
+
+      {/* Branch Selector for Organization Owners */}
+      {organization && branches.length > 0 && (
+        <div className="flex gap-4 items-center px-4">
+          <label className="text-sm font-medium text-gray-700">Select Branch:</label>
+          <select
+            value={selectedBranchId || ''}
+            onChange={(e) => setSelectedBranchId(e.target.value ? parseInt(e.target.value) : null)}
+            className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Branches (Consolidated)</option>
+            {branches.map((branch: any) => (
+              <option key={branch.id} value={branch.id}>
+                {branch.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Overhead Costs Management</h1>
