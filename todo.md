@@ -1071,3 +1071,386 @@
 - [x] Added 4 comprehensive tests for deduplication scenarios (inventory-dedup.test.ts)
 - [x] All 90 tests passing (86 existing + 4 new deduplication tests)
 - [x] Expiry risk items now visible in table when they have alert status
+
+
+## MAJOR FEATURE: Multi-Branch Pharmacy Analytics System (Slice-Like)
+
+### Overview
+- Organization owners can manage multiple pharmacy branches
+- Single pharmacy owners see current metrics dashboard
+- Users choose their type at signup
+- Support conversion between user types
+- Consolidated metrics + individual branch metrics
+- 2-3 week implementation timeline
+
+---
+
+## Phase 79: Database Schema & Backend Setup for Multi-Branch System
+
+### Database Changes
+- [ ] Create organizations table (id, name, owner_id, created_at)
+- [ ] Create branches table (id, organization_id, name, location, manager_name, manager_phone, created_at, is_active)
+- [ ] Create branch_users table (id, user_id, branch_id, role, created_at)
+- [ ] Create user_types table (id, user_id, type: "organization_owner" or "single_pharmacy", created_at)
+- [ ] Add branch_id column to inventory table
+- [ ] Add branch_id column to sales_transactions table
+- [ ] Add branch_id column to overhead_costs table
+- [ ] Create database migration files
+- [ ] Update Drizzle schema (drizzle/schema.ts)
+- [ ] Test all database queries with branch_id filtering
+
+### Backend Procedures
+- [ ] Create analytics.getBranchMetrics(branchId, month, year) procedure
+- [ ] Create analytics.getOrganizationMetrics(organizationId, month, year) procedure
+- [ ] Create analytics.getBranchBreakdown(organizationId, month, year) procedure
+- [ ] Create branch.createBranch(organizationId, name, location) procedure
+- [ ] Create branch.getBranches(organizationId) procedure
+- [ ] Create branch.updateBranch(branchId, updates) procedure
+- [ ] Create branch.deleteBranch(branchId) procedure
+- [ ] Create branch.addUserToBranch(userId, branchId, role) procedure
+- [ ] Create branch.removeUserFromBranch(userId, branchId) procedure
+- [ ] Update inventory.getAll to filter by branch_id
+- [ ] Update sales.getAll to filter by branch_id
+- [ ] Update analytics.getAlerts to accept branch_id parameter
+- [ ] Write 30+ unit tests for new backend logic
+- [ ] Verify all tests passing
+
+---
+
+## Phase 80: User Type Selection & Signup Flow
+
+### Signup UI Changes
+- [ ] Create UserTypeSelector component (Organization Owner vs Single Pharmacy)
+- [ ] Create OrganizationSetup form (org name, first branch name, location)
+- [ ] Create SinglePharmacySetup form (pharmacy name, location)
+- [ ] Update signup flow to show user type selector
+- [ ] Add form validation for both flows
+- [ ] Add success confirmation after setup
+
+### Backend Signup Logic
+- [ ] Create user.selectUserType(userId, type) procedure
+- [ ] Create organization.createOrganization(userId, name, firstBranchName, location) procedure
+- [ ] Create user.createSinglePharmacy(userId, pharmacyName, location) procedure
+- [ ] Store user_type in database
+- [ ] Create initial organization/branch records
+- [ ] Test signup flow for both user types
+- [ ] Test data integrity after signup
+
+### Frontend Navigation
+- [ ] Update App.tsx to check user_type
+- [ ] Route Organization Owners to multi-branch dashboard
+- [ ] Route Single Pharmacy Owners to current dashboard
+- [ ] Add user_type indicator in user profile dropdown
+- [ ] Test routing for both user types
+
+---
+
+## Phase 81: Branch Management UI & Settings
+
+### Branch Management Page
+- [ ] Create BranchManagement component in Settings
+- [ ] Display list of all branches (for organization owners)
+- [ ] Show branch details (name, location, manager, users, status)
+- [ ] Add "Create New Branch" button
+- [ ] Add "Edit Branch" functionality
+- [ ] Add "Delete Branch" functionality
+- [ ] Add "Activate/Deactivate Branch" toggle
+- [ ] Add branch user management (invite, remove, change role)
+
+### Branch Details Modal
+- [ ] Create modal for branch details
+- [ ] Show branch name, location, manager info
+- [ ] Show list of users with access
+- [ ] Allow adding/removing users
+- [ ] Allow changing user roles
+
+### User Invitation System
+- [ ] Create invitation form (email, role selection)
+- [ ] Send invitation email to new users
+- [ ] Create invitation link with token
+- [ ] Accept invitation flow (user joins branch)
+- [ ] Test invitation system end-to-end
+
+### Settings Page Updates
+- [ ] Add "Branch Management" section to Settings
+- [ ] Show organization info (for org owners)
+- [ ] Show pharmacy info (for single pharmacy owners)
+- [ ] Add "Convert to Organization Owner" button (for single pharmacy)
+- [ ] Add "Manage Branches" link (for org owners)
+- [ ] Test settings page for both user types
+
+---
+
+## Phase 82: Multi-Branch Dashboard with Slice View
+
+### Dashboard Redesign - Organization Owner View
+- [ ] Create BranchSelector component (dropdown: All Branches or individual branch)
+- [ ] Create DashboardMetricsAggregator component
+- [ ] Update Dashboard to show branch selector
+- [ ] Implement "All Branches" view with consolidated metrics
+- [ ] Implement single branch view
+- [ ] Create BranchBreakdownTable component
+- [ ] Display branch breakdown table (Branch Name, Revenue, Profit, Overhead, % of Total)
+- [ ] Add drill-down functionality (click branch → view single branch)
+- [ ] Update metric cards to show aggregated data
+- [ ] Update charts to show branch comparisons
+
+### Dashboard - Single Pharmacy Owner View
+- [ ] Keep current dashboard design (no changes)
+- [ ] No branch selector
+- [ ] Display metrics as before
+- [ ] Test that single pharmacy owners see familiar interface
+
+### Branch Selector Logic
+- [ ] Create useSelectedBranch hook
+- [ ] Store selected branch in local state
+- [ ] Persist selection in localStorage
+- [ ] Update all queries to use selected branch
+- [ ] Test branch switching functionality
+
+### Charts & Visualizations
+- [ ] Update Revenue vs Profit chart to show branch comparison
+- [ ] Update Top Profitable Products chart (show per branch)
+- [ ] Add branch filter to all charts
+- [ ] Test charts with multi-branch data
+
+---
+
+## Phase 83: Data Upload with Branch Selection
+
+### Upload Flow Changes
+- [ ] Update DataUpload component to show branch selector
+- [ ] Add "Which branch is this data for?" dropdown
+- [ ] Only show branches user has access to
+- [ ] Maintain existing column mapping UI
+- [ ] Add branch_id to upload payload
+
+### Backend Upload Logic
+- [ ] Update uploadFile procedure to accept branch_id
+- [ ] Attach branch_id to all inventory/sales records
+- [ ] Verify branch_id is stored correctly
+- [ ] Test upload for different branches
+- [ ] Test data isolation (branch A can't see branch B's data)
+
+### Upload UI/UX
+- [ ] Show current branch name in upload form
+- [ ] Add "Change Branch" button
+- [ ] Show success message with branch name
+- [ ] Test upload flow for both user types
+
+---
+
+## Phase 84: Inventory Intelligence Multi-Branch View
+
+### Inventory Page Changes
+- [ ] Add branch selector to Inventory Intelligence page
+- [ ] Update table to show "Branch" column
+- [ ] Implement branch filtering
+- [ ] Implement branch grouping (show subtotals per branch)
+- [ ] Update dead stock value calculation (per branch)
+- [ ] Update expiry risk calculation (per branch)
+- [ ] Add "Total Dead Stock Value" across all branches
+- [ ] Test inventory view for both user types
+
+### Inventory Queries
+- [ ] Update inventory.getAll to accept branch_id
+- [ ] Create inventory.getByBranch(branchId) procedure
+- [ ] Create inventory.getAllBranches(organizationId) procedure
+- [ ] Test queries return correct data per branch
+
+---
+
+## Phase 85: Overhead Costs Multi-Branch Management
+
+### Overhead Costs Page Changes
+- [ ] Add branch selector to Overhead Costs page
+- [ ] Update form to show "Enter overhead for: [Branch Name]"
+- [ ] Allow entering overhead per branch
+- [ ] Store overhead with branch_id
+- [ ] Update profit calculations to use branch overhead
+- [ ] Show organization total overhead (sum of all branches)
+
+### Overhead Queries
+- [ ] Update overhead.getByMonth to accept branch_id
+- [ ] Create overhead.getByBranch(branchId, month, year) procedure
+- [ ] Create overhead.getOrganizationTotal(organizationId, month, year) procedure
+- [ ] Test overhead calculations per branch
+
+### Profit Calculations
+- [ ] Update profit calculation: Profit = Revenue - Cost - Branch Overhead
+- [ ] Ensure branch overhead is deducted from branch profit
+- [ ] Test profit calculations for multi-branch scenarios
+
+---
+
+## Phase 86: Multi-Branch Reports & Analytics
+
+### Report Types
+- [ ] Create SingleBranchReport (PDF for one branch)
+- [ ] Create OrganizationReport (PDF for all branches consolidated)
+- [ ] Create BranchComparisonReport (side-by-side branch comparison)
+- [ ] Update DownloadReport component to accept branch_id
+
+### Single Branch Report
+- [ ] Show branch name, location, manager in header
+- [ ] Display branch-specific metrics
+- [ ] Show branch inventory status
+- [ ] Include branch-specific recommendations
+- [ ] Test report generation for single branch
+
+### Organization Report
+- [ ] Show organization name in header
+- [ ] Display consolidated metrics
+- [ ] Include branch breakdown table
+- [ ] Show each branch's contribution (% of total)
+- [ ] Include organization-level recommendations
+- [ ] Test report generation for all branches
+
+### Branch Comparison Report
+- [ ] Show all branches side-by-side
+- [ ] Compare revenue, profit, overhead, margins
+- [ ] Highlight top performing branch
+- [ ] Show branch rankings
+- [ ] Test comparison report generation
+
+---
+
+## Phase 87: User Permissions & Access Control
+
+### Role-Based Access Control
+- [ ] Define roles: Owner, Manager, Staff, Viewer
+- [ ] Create permission matrix (who can do what)
+- [ ] Implement permission checks in all tRPC procedures
+- [ ] Add role-based UI visibility (show/hide features)
+
+### Permission Checks
+- [ ] Owner: Can see all branches, manage users, manage branches
+- [ ] Manager: Can see own branch only, upload data, manage overhead
+- [ ] Staff: Can upload data for own branch (read-only view)
+- [ ] Viewer: Can view reports only (no data entry)
+
+### Frontend Permission Enforcement
+- [ ] Hide branch management UI from non-owners
+- [ ] Hide branch selector from single pharmacy owners
+- [ ] Hide features user doesn't have permission for
+- [ ] Show "Upgrade" or "Contact Admin" messages
+
+### Backend Permission Enforcement
+- [ ] Check user role before executing procedures
+- [ ] Verify user has access to requested branch
+- [ ] Prevent data leakage between branches
+- [ ] Log permission violations
+- [ ] Test permission system thoroughly
+
+---
+
+## Phase 88: User Type Conversion (Single ↔ Organization)
+
+### Single Pharmacy → Organization Owner Conversion
+- [ ] Create conversion UI (Settings page button)
+- [ ] Show confirmation dialog
+- [ ] Migrate data: current pharmacy becomes "Branch 1"
+- [ ] Create organization record
+- [ ] Update user_type in database
+- [ ] Redirect to multi-branch dashboard
+- [ ] Test conversion preserves all data
+
+### Organization Owner → Single Pharmacy Conversion
+- [ ] Create conversion UI (Settings page button)
+- [ ] Show warning: "This will delete other branches"
+- [ ] Allow selecting which branch to keep
+- [ ] Delete other branches and their data
+- [ ] Update user_type in database
+- [ ] Redirect to single pharmacy dashboard
+- [ ] Test conversion deletes correct data
+
+### Data Migration Logic
+- [ ] Create migration procedures
+- [ ] Handle data integrity during conversion
+- [ ] Test with various data scenarios
+- [ ] Create rollback procedures (in case of errors)
+
+---
+
+## Phase 89: Testing, Bug Fixes & Optimization
+
+### Unit Tests
+- [ ] Write tests for all new backend procedures (50+ tests)
+- [ ] Write tests for permission system (20+ tests)
+- [ ] Write tests for data aggregation logic (15+ tests)
+- [ ] Write tests for user type conversion (10+ tests)
+- [ ] Ensure all tests passing
+
+### Integration Tests
+- [ ] Test multi-branch data flow end-to-end
+- [ ] Test data isolation between branches
+- [ ] Test permission system with different roles
+- [ ] Test user type conversion with real data
+- [ ] Test upload flow for different branches
+
+### UI/UX Testing
+- [ ] Test dashboard for organization owners
+- [ ] Test dashboard for single pharmacy owners
+- [ ] Test branch selector functionality
+- [ ] Test drill-down from all branches to single branch
+- [ ] Test responsive design (mobile, tablet, desktop)
+
+### Performance Testing
+- [ ] Test dashboard with 10+ branches
+- [ ] Test dashboard with 1000+ products per branch
+- [ ] Test report generation with large datasets
+- [ ] Optimize slow queries
+- [ ] Add database indexes if needed
+
+### Bug Fixes
+- [ ] Fix any bugs found during testing
+- [ ] Fix permission issues
+- [ ] Fix data aggregation issues
+- [ ] Fix UI/UX issues
+- [ ] Test fixes thoroughly
+
+---
+
+## Phase 90: Deployment & Documentation
+
+### Deployment
+- [ ] Create database migration scripts
+- [ ] Deploy database changes to production
+- [ ] Deploy backend code to production
+- [ ] Deploy frontend code to production
+- [ ] Verify all features working in production
+- [ ] Monitor for errors/issues
+
+### Documentation
+- [ ] Create user guide for organization owners
+- [ ] Create user guide for single pharmacy owners
+- [ ] Create admin guide for managing branches
+- [ ] Create API documentation for new procedures
+- [ ] Create troubleshooting guide
+
+### User Communication
+- [ ] Send email to existing users explaining new features
+- [ ] Create in-app tutorial for new users
+- [ ] Create FAQ section
+- [ ] Set up support email for questions
+
+### Post-Launch
+- [ ] Monitor system performance
+- [ ] Collect user feedback
+- [ ] Fix any issues reported by users
+- [ ] Plan Phase 2 (Subscription system)
+
+
+## Phase 79: Multi-Branch System - Database & Backend Setup
+- [x] Created 4 new database tables (user_types, organizations, branches, branch_users)
+- [x] Added branchId columns to inventory, sales_transactions, overhead_costs tables
+- [x] Created 15+ database helper functions for branch management
+- [x] Implemented user type management (organization_owner vs single_pharmacy)
+- [x] Implemented organization CRUD operations
+- [x] Implemented branch CRUD operations with full lifecycle management
+- [x] Implemented branch-user relationship management with role-based access
+- [x] Created comprehensive unit tests (30+ tests, all passing)
+- [x] Created tRPC procedures for all branch operations
+- [x] Integrated branches router into main app router
+- [x] All migrations applied successfully to database
+- [x] Dev server running without errors

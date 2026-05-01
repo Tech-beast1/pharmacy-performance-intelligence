@@ -32,6 +32,7 @@ export type InsertUser = typeof users.$inferInsert;
 export const inventory = mysqlTable("inventory", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
+  branchId: int("branchId"),
   productName: varchar("productName", { length: 255 }).notNull(),
   sku: varchar("sku", { length: 100 }),
   quantity: int("quantity").default(0).notNull(),
@@ -55,6 +56,7 @@ export type InsertInventory = typeof inventory.$inferInsert;
 export const salesTransactions = mysqlTable("sales_transactions", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
+  branchId: int("branchId"),
   inventoryId: int("inventoryId").notNull(),
   productName: varchar("productName", { length: 255 }).notNull(),
   quantitySold: int("quantitySold").notNull(),
@@ -114,6 +116,7 @@ export type InsertFileUpload = typeof fileUploads.$inferInsert;
 export const overheadCosts = mysqlTable("overhead_costs", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
+  branchId: int("branchId"),
   rent: decimal("rent", { precision: 12, scale: 2 }).default("0").notNull(),
   salaries: decimal("salaries", { precision: 12, scale: 2 }).default("0").notNull(),
   electricity: decimal("electricity", { precision: 12, scale: 2 }).default("0").notNull(),
@@ -185,3 +188,69 @@ export const userPreferences = mysqlTable("user_preferences", {
 
 export type UserPreference = typeof userPreferences.$inferSelect;
 export type InsertUserPreference = typeof userPreferences.$inferInsert;
+
+
+/**
+ * UserTypes table stores whether a user is an organization owner or single pharmacy owner.
+ * Allows conversion between types.
+ */
+export const userTypes = mysqlTable("user_types", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  type: mysqlEnum("type", ["organization_owner", "single_pharmacy"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserType = typeof userTypes.$inferSelect;
+export type InsertUserType = typeof userTypes.$inferInsert;
+
+/**
+ * Organizations table stores parent company information.
+ * One organization can have multiple branches.
+ */
+export const organizations = mysqlTable("organizations", {
+  id: int("id").autoincrement().primaryKey(),
+  ownerId: int("ownerId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Organization = typeof organizations.$inferSelect;
+export type InsertOrganization = typeof organizations.$inferInsert;
+
+/**
+ * Branches table stores individual pharmacy locations.
+ * Each branch belongs to one organization.
+ */
+export const branches = mysqlTable("branches", {
+  id: int("id").autoincrement().primaryKey(),
+  organizationId: int("organizationId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  location: varchar("location", { length: 255 }),
+  managerName: varchar("managerName", { length: 255 }),
+  managerPhone: varchar("managerPhone", { length: 20 }),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Branch = typeof branches.$inferSelect;
+export type InsertBranch = typeof branches.$inferInsert;
+
+/**
+ * BranchUsers table stores user-branch relationships and roles.
+ * Determines which users have access to which branches.
+ */
+export const branchUsers = mysqlTable("branch_users", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  branchId: int("branchId").notNull(),
+  role: mysqlEnum("role", ["owner", "manager", "staff", "viewer"]).default("staff").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BranchUser = typeof branchUsers.$inferSelect;
+export type InsertBranchUser = typeof branchUsers.$inferInsert;
