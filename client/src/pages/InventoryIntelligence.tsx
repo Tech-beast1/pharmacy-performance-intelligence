@@ -60,6 +60,16 @@ const formatDate = (dateValue: any): string => {
 };
 
 export default function InventoryIntelligence() {
+  // Get user type and organization for branch filtering
+  const userTypeQuery = trpc.branches.userType.get.useQuery();
+  const userType = userTypeQuery.data?.data?.type;
+  const organizationQuery = trpc.branches.organization.get.useQuery({ organizationId: 0 });
+  const organization = organizationQuery.data?.data;
+  const branchesQuery = trpc.branches.branch.list.useQuery(
+    { organizationId: organization?.id || 0 },
+    { enabled: !!organization?.id && userType === 'organization_owner' }
+  );
+  const branches = branchesQuery.data?.data || [];
   const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'lowmargin'>('all');
   const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
