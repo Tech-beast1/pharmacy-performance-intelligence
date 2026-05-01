@@ -1581,3 +1581,14 @@
 - [x] Verify dashboard displays correct consolidated data when "All Branches" selected
 - [x] Verify dashboard displays correct individual branch data when specific branch selected
 - [x] Test branch comparison table shows all branches with accurate metrics
+
+
+## Phase 25: Branch-Specific Data Filtering
+
+- [ ] Update dashboard metrics queries to filter by selected branch
+- [ ] When branch is selected: show only that branch's data
+- [ ] When "All Branches" is selected: show consolidated totals across all branches
+- [ ] Update inventory intelligence to filter by selected branch
+- [ ] Update overhead costs to filter by selected branch
+- [ ] Ensure all metrics (revenue, profit, expiry risk, dead stock) are calculated per-branch
+- [ ] Test branch filtering works correctly across all pages

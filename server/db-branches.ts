@@ -374,7 +374,7 @@ export async function getUserRoleInBranch(userId: number, branchId: number): Pro
 
 
 /**
- * Get consolidated metrics across all branches for an organization
+ * Get consolidated metrics across all branches in an organization
  */
 export async function getConsolidatedMetrics(organizationId: number, month: string) {
   const db = await getDb();
@@ -396,16 +396,36 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
       };
     }
 
-    // For now, return aggregated data (will be calculated from branch data)
-    // This is a placeholder that will be enhanced when branch-specific data is available
+    // Calculate metrics for each branch
+    let totalRevenue = 0;
+    let totalProfit = 0;
+    let totalExpiryRiskLoss = 0;
+    let totalDeadStockValue = 0;
+    let totalExpiryRiskCount = 0;
+    let totalDeadStockCount = 0;
+    let totalLowMarginCount = 0;
+
+    for (const branch of orgBranches) {
+      const branchMetrics = await getBranchMetrics(branch.id, month);
+      if (branchMetrics) {
+        totalRevenue += branchMetrics.totalRevenue || 0;
+        totalProfit += branchMetrics.estimatedProfit || 0;
+        totalExpiryRiskLoss += branchMetrics.expiryRiskLoss || 0;
+        totalDeadStockValue += branchMetrics.deadStockValue || 0;
+        totalExpiryRiskCount += branchMetrics.expiryRiskCount || 0;
+        totalDeadStockCount += branchMetrics.deadStockCount || 0;
+        totalLowMarginCount += branchMetrics.lowMarginCount || 0;
+      }
+    }
+
     return {
-      totalRevenue: 0,
-      estimatedProfit: 0,
-      expiryRiskLoss: 0,
-      deadStockValue: 0,
-      expiryRiskCount: 0,
-      deadStockCount: 0,
-      lowMarginCount: 0,
+      totalRevenue,
+      estimatedProfit: totalProfit,
+      expiryRiskLoss: totalExpiryRiskLoss,
+      deadStockValue: totalDeadStockValue,
+      expiryRiskCount: totalExpiryRiskCount,
+      deadStockCount: totalDeadStockCount,
+      lowMarginCount: totalLowMarginCount,
       branches: orgBranches
     };
   } catch (error) {
