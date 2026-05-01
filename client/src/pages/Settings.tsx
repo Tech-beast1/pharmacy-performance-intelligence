@@ -1,10 +1,8 @@
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
-import { Settings as SettingsIcon, Bell, Lock, HelpCircle, Building2 } from 'lucide-react';
+import { Settings as SettingsIcon, Bell, Lock, HelpCircle } from 'lucide-react';
 import { useAuth } from '@/_core/hooks/useAuth';
-import { BranchManagementSettings } from '@/components/BranchManagementSettings';
-import { trpc } from '@/lib/trpc';
 
 export default function Settings() {
   const { user, logout } = useAuth();
@@ -20,9 +18,6 @@ export default function Settings() {
         <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
         <p className="text-gray-600 mt-1">Manage your account and preferences</p>
       </div>
-
-      {/* User Type & Organization Settings */}
-      <UserTypeSettings />
 
       {/* Account Settings */}
       <Card className="p-6">
@@ -134,55 +129,5 @@ export default function Settings() {
         </p>
       </Card>
     </div>
-  );
-}
-
-function UserTypeSettings() {
-  const userTypeQuery = trpc.branches.userType.get.useQuery();
-  const orgsQuery = trpc.branches.organization.list.useQuery();
-
-  const userType = userTypeQuery.data?.data?.type;
-  const orgs = orgsQuery.data?.data || [];
-  const selectedOrg = orgs.length > 0 ? orgs[0] : null;
-
-  if (userTypeQuery.isLoading) {
-    return (
-      <Card className="p-6">
-        <div className="animate-pulse">Loading...</div>
-      </Card>
-    );
-  }
-
-  if (!userType) {
-    return null;
-  }
-
-  return (
-    <Card className="p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-        <Building2 className="w-5 h-5" />
-        Organization & Branches
-      </h3>
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
-          <div className="px-4 py-2 bg-gray-50 rounded-lg text-gray-900">
-            {userType === 'organization_owner' ? 'Organization Owner' : 'Single Pharmacy Owner'}
-          </div>
-        </div>
-
-        {userType === 'organization_owner' && selectedOrg && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Organization</label>
-              <div className="px-4 py-2 bg-gray-50 rounded-lg text-gray-900">
-                {selectedOrg.name}
-              </div>
-            </div>
-            <BranchManagementSettings organizationId={selectedOrg.id} />
-          </>
-        )}
-      </div>
-    </Card>
   );
 }
