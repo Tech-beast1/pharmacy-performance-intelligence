@@ -1516,6 +1516,14 @@
 ## Phase 5: Implement Proper Slice-Style Dashboard with Branch Aggregation
 
 - [x] Create backend procedure to get consolidated metrics across all branches
+
+## Phase 6: Data Upload with Branch Selection
+
+- [x] Add branch selector to Data Upload page
+- [x] Show branch dropdown for organization owners only
+- [x] Allow selecting branch before uploading data
+- [x] Pass selected branch ID to upload component
+- [x] All 134 tests passing
 - [x] Create backend procedure to get individual branch metrics with branch name/location
 - [x] Create backend procedure to get branch breakdown/comparison data (revenue, profit, margin % per branch)
 - [x] Rebuild DashboardMultiBranch component with proper Slice-style UI
