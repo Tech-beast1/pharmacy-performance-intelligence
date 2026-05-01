@@ -12,8 +12,30 @@ import InventoryIntelligence from "./pages/InventoryIntelligence";
 import OverheadCosts from "./pages/OverheadCosts";
 import Settings from "./pages/Settings";
 import { AnimatedBackground } from "./components/AnimatedBackground";
+import { SignupFlow } from "./components/SignupFlow";
+import { trpc } from "./lib/trpc";
 
 function Router() {
+  const userTypeQuery = trpc.branches.userType.get.useQuery(undefined, {
+    retry: false,
+  });
+
+  // Show signup flow if user hasn't selected a type yet
+  if (userTypeQuery.isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!userTypeQuery.data?.data) {
+    return <SignupFlow />;
+  }
+
   return (
     <Switch>
       <Route path="/" nest>
