@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle, Trash2 } from 'lucide-react';
-import DownloadReportSimple from '@/components/DownloadReportSimple';
+import DownloadReportBeautiful from '@/components/DownloadReportBeautiful';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function DashboardMultiBranch() {
@@ -127,7 +127,7 @@ export default function DashboardMultiBranch() {
 
       {/* Action Buttons */}
       <div className="flex gap-3 justify-end">
-        <DownloadReportSimple
+        <DownloadReportBeautiful
           metrics={metrics}
           organization={organization}
           selectedBranchName={selectedBranchName}
@@ -136,6 +136,11 @@ export default function DashboardMultiBranch() {
           insights={insights}
           totalOverhead={totalOverhead}
           overheadData={overheadData}
+          alertCounts={{
+            expiryRisk: metrics?.expiryRiskCount || 0,
+            deadStock: metrics?.deadStockCount || 0,
+            lowMargin: metrics?.lowMarginCount || 0
+          }}
         />
         <Button
           onClick={() => setShowClearConfirm(true)}
