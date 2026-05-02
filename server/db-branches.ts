@@ -487,14 +487,13 @@ export async function getBranchMetrics(branchId: number, month: string) {
 
     // Inventory analysis
     const now = new Date();
-    const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-    const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+    const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     for (const item of inv) {
-      // Expiry risk (products expiring soon - within 90 days from now)
+      // Expiry risk (products expiring within 30 days from now)
       if (item.expiryDate) {
         const expiryDate = new Date(item.expiryDate);
-        if (expiryDate > now && expiryDate <= new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000)) {
+        if (expiryDate > now && expiryDate <= thirtyDaysFromNow) {
           const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
           const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
           expiryRiskLoss += price * quantity;
