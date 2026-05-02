@@ -39,10 +39,18 @@ export default function DashboardMultiBranch() {
 
   // Get overhead costs for the selected branch and month
   const [year, month] = selectedMonth.split('-').map(Number);
-  const overheadQuery = trpc.overheadCosts.getByMonth.useQuery(
-    { month, year, branchId: selectedBranchId || undefined },
-    { enabled: !!month && !!year }
-  );
+  
+  // Use different endpoints for branch-specific vs consolidated overhead
+  const overheadQuery = selectedBranchId
+    ? trpc.overheadCosts.getByMonth.useQuery(
+        { month, year, branchId: selectedBranchId },
+        { enabled: !!month && !!year && !!selectedBranchId }
+      )
+    : trpc.overheadCosts.getConsolidated.useQuery(
+        { month, year, organizationId: organization?.id || 0 },
+        { enabled: !!month && !!year && !!organization?.id }
+      );
+  
   const overheadData = overheadQuery.data?.data;
   const totalOverhead = overheadData
     ? (parseFloat(overheadData.rent?.toString() || '0') +

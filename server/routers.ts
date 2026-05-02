@@ -6,6 +6,8 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
+import { getBranchesByOrganization } from "./db-branches";
+
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 import { generateKeyInsights } from "./utils/insights";
@@ -451,6 +453,31 @@ export const appRouter = router({
       .query(async ({ ctx, input }) => {
         const data = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year, input.branchId);
         return { success: true, data: data || { rent: 0, salaries: 0, electricity: 0, others: 0 } };
+      }),
+
+    getConsolidated: protectedProcedure
+      .input(z.object({ month: z.number().min(1).max(12), year: z.number(), organizationId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        try {
+          const branches = await getBranchesByOrganization(input.organizationId);
+          
+          let totalRent = 0, totalSalaries = 0, totalElectricity = 0, totalOthers = 0;
+          
+          for (const branch of branches || []) {
+            const overhead = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year, branch.id);
+            if (overhead) {
+              totalRent += parseFloat(overhead.rent?.toString() || '0');
+              totalSalaries += parseFloat(overhead.salaries?.toString() || '0');
+              totalElectricity += parseFloat(overhead.electricity?.toString() || '0');
+              totalOthers += parseFloat(overhead.others?.toString() || '0');
+            }
+          }
+          
+          return { success: true, data: { rent: totalRent, salaries: totalSalaries, electricity: totalElectricity, others: totalOthers } };
+        } catch (error) {
+          console.error('[tRPC] Error getting consolidated overhead costs:', error);
+          return { success: true, data: { rent: 0, salaries: 0, electricity: 0, others: 0 } };
+        }
       }),
 
     save: protectedProcedure
