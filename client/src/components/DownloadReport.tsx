@@ -114,7 +114,7 @@ const getInventoryStatus = (item: any, alerts: any): string => {
   return 'Normal';
 };
 
-export default function DownloadReport({
+export function DownloadReport({
   metrics,
   alerts,
   topProducts = [],
@@ -573,3 +573,5 @@ export default function DownloadReport({
     </Button>
   );
 }
+
+export default DownloadReport;
