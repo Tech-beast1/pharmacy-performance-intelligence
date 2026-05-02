@@ -21,7 +21,13 @@ const monthNames = [
 ];
 
 const formatCurrency = (value: number): string => {
-  return `₵${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Convert to number if it's a string
+  const numValue = typeof value === 'string' ? parseFloat(value) : value;
+  if (isNaN(numValue)) return 'GHS 0.00';
+  
+  // Format without special characters - use GHS instead of ₵ for PDF compatibility
+  const formatted = numValue.toFixed(2);
+  return `GHS ${formatted}`;
 };
 
 export const generatePDF = (data: ReportData): void => {
