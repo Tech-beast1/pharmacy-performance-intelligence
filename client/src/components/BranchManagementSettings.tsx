@@ -21,6 +21,11 @@ export function BranchManagementSettings() {
   const [newBranchManagerPhone, setNewBranchManagerPhone] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [editingBranchId, setEditingBranchId] = useState<number | null>(null);
+  const [editBranchName, setEditBranchName] = useState('');
+  const [editBranchLocation, setEditBranchLocation] = useState('');
+  const [editBranchManagerName, setEditBranchManagerName] = useState('');
+  const [editBranchManagerPhone, setEditBranchManagerPhone] = useState('');
 
   // Get user's organization
   const organizationsQuery = trpc.branches.organization.list.useQuery();
@@ -36,6 +41,43 @@ export function BranchManagementSettings() {
   // Mutations
   const createBranchMutation = trpc.branches.branch.create.useMutation();
   const deleteBranchMutation = trpc.branches.branch.delete.useMutation();
+  const updateBranchMutation = trpc.branches.branch.update.useMutation();
+
+  const handleEditBranch = (branch: Branch) => {
+    setEditingBranchId(branch.id);
+    setEditBranchName(branch.name);
+    setEditBranchLocation(branch.location || '');
+    setEditBranchManagerName(branch.managerName || '');
+    setEditBranchManagerPhone(branch.managerPhone || '');
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!editBranchName.trim()) {
+      setError('Branch name is required');
+      return;
+    }
+
+    try {
+      await updateBranchMutation.mutateAsync({
+        branchId: editingBranchId!,
+        name: editBranchName.trim(),
+        location: editBranchLocation.trim() || undefined,
+        managerName: editBranchManagerName.trim() || undefined,
+        managerPhone: editBranchManagerPhone.trim() || undefined,
+      });
+
+      setSuccess('Branch updated successfully!');
+      setEditingBranchId(null);
+      branchesQuery.refetch();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to update branch';
+      setError(message);
+    }
+  };
 
   const handleAddBranch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -203,6 +245,79 @@ export function BranchManagementSettings() {
         </form>
       )}
 
+      {/* Edit Branch Form */}
+      {editingBranchId !== null && (
+        <form onSubmit={handleSaveEdit} className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <h4 className="font-medium text-gray-900 mb-4">Edit Branch</h4>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Branch Name *
+              </label>
+              <Input
+                type="text"
+                value={editBranchName}
+                onChange={(e) => setEditBranchName(e.target.value)}
+                placeholder="e.g., Downtown Branch"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Location
+              </label>
+              <Input
+                type="text"
+                value={editBranchLocation}
+                onChange={(e) => setEditBranchLocation(e.target.value)}
+                placeholder="e.g., 123 Main St, Accra"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Manager Name
+              </label>
+              <Input
+                type="text"
+                value={editBranchManagerName}
+                onChange={(e) => setEditBranchManagerName(e.target.value)}
+                placeholder="e.g., John Doe"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Manager Phone
+              </label>
+              <Input
+                type="tel"
+                value={editBranchManagerPhone}
+                onChange={(e) => setEditBranchManagerPhone(e.target.value)}
+                placeholder="e.g., +233 24 123 4567"
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                type="submit"
+                disabled={updateBranchMutation.isPending}
+              >
+                {updateBranchMutation.isPending ? 'Saving...' : 'Save Changes'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setEditingBranchId(null)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </form>
+      )}
+
       {/* Branches List */}
       <div className="space-y-3">
         {branches.length === 0 ? (
@@ -226,6 +341,7 @@ export function BranchManagementSettings() {
                 <Button
                   variant="outline"
                   size="sm"
+                  onClick={() => handleEditBranch(branch)}
                   className="flex items-center gap-1"
                 >
                   <Edit2 className="w-4 h-4" />
