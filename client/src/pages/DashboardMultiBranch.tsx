@@ -86,6 +86,10 @@ export default function DashboardMultiBranch() {
     '#FF8C94', '#A8E6CF', '#FFD3B6', '#FFAAA5', '#FF8B94'
   ];
 
+  // Check if there's any revenue or profit data
+  const hasRevenueData = breakdown.some((b: any) => parseFloat(b.revenue) > 0);
+  const hasProfitData = breakdown.some((b: any) => parseFloat(b.profit) > 0);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -223,77 +227,101 @@ export default function DashboardMultiBranch() {
               {/* Revenue Pie Chart */}
               <Card className="p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Distribution by Branch</h3>
-                <div className="w-full h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={breakdown.map((branch: any) => ({
-                          name: branch.branchName,
-                          value: parseFloat(branch.revenue) || 0,
-                        }))}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={true}
-                        label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
-                        outerRadius={120}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {breakdown.map((branch: any, index: number) => (
-                          <Cell key={`cell-${index}`} fill={vibrantColors[index % vibrantColors.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value: any) => `₵${value.toFixed(2)}`}
-                        contentStyle={{
-                          backgroundColor: '#fff',
-                          border: '2px solid #333',
-                          borderRadius: '8px',
-                          padding: '8px',
-                        }}
-                      />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
+                {hasRevenueData ? (
+                  <div className="w-full h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={breakdown.map((branch: any) => ({
+                            name: branch.branchName,
+                            value: parseFloat(branch.revenue) || 0,
+                          }))}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
+                          outerRadius={120}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {breakdown.map((branch: any, index: number) => (
+                            <Cell key={`cell-${index}`} fill={vibrantColors[index % vibrantColors.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          formatter={(value: any) => `₵${value.toFixed(2)}`}
+                          contentStyle={{
+                            backgroundColor: '#fff',
+                            border: '2px solid #333',
+                            borderRadius: '8px',
+                            padding: '8px',
+                          }}
+                        />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <div className="w-full h-80 flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 rounded-lg border-2 border-dashed border-purple-300">
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 mb-4 shadow-lg">
+                        <BarChart3 className="text-white" size={32} />
+                      </div>
+                      <p className="text-purple-900 font-bold text-lg">No revenue data available</p>
+                      <p className="text-sm text-purple-700 mt-2">Upload sales data to see the colorful distribution chart</p>
+                    </div>
+                  </div>
+                )}
               </Card>
 
               {/* Profit Pie Chart */}
               <Card className="p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Profit Distribution by Branch</h3>
-                <div className="w-full h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={breakdown.map((branch: any) => ({
-                          name: branch.branchName,
-                          value: parseFloat(branch.profit) || 0,
-                        }))}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={true}
-                        label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
-                        outerRadius={120}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {breakdown.map((branch: any, index: number) => (
-                          <Cell key={`cell-${index}`} fill={vibrantColors[index % vibrantColors.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value: any) => `₵${value.toFixed(2)}`}
-                        contentStyle={{
-                          backgroundColor: '#fff',
-                          border: '2px solid #333',
-                          borderRadius: '8px',
-                          padding: '8px',
-                        }}
-                      />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
+                {hasProfitData ? (
+                  <div className="w-full h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={breakdown.map((branch: any) => ({
+                            name: branch.branchName,
+                            value: parseFloat(branch.profit) || 0,
+                          }))}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
+                          outerRadius={120}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {breakdown.map((branch: any, index: number) => (
+                            <Cell key={`cell-${index}`} fill={vibrantColors[index % vibrantColors.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          formatter={(value: any) => `₵${value.toFixed(2)}`}
+                          contentStyle={{
+                            backgroundColor: '#fff',
+                            border: '2px solid #333',
+                            borderRadius: '8px',
+                            padding: '8px',
+                          }}
+                        />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <div className="w-full h-80 flex items-center justify-center bg-gradient-to-br from-orange-100 via-red-100 to-yellow-100 rounded-lg border-2 border-dashed border-orange-300">
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-red-400 mb-4 shadow-lg">
+                        <BarChart3 className="text-white" size={32} />
+                      </div>
+                      <p className="text-orange-900 font-bold text-lg">No profit data available</p>
+                      <p className="text-sm text-orange-700 mt-2">Upload sales data to see the colorful distribution chart</p>
+                    </div>
+                  </div>
+                )}
               </Card>
             </div>
           )}
