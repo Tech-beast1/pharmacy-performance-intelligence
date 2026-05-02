@@ -132,13 +132,19 @@ export default function InventoryIntelligence() {
       const margin = costPrice > 0 ? ((salePrice - costPrice) / costPrice) * 100 : 0;
       return { ...item, margin: Math.round(margin) };
     });
-  }, [inventory, alerts]);
+  }, [inventory, alerts, selectedBranchId]);
+
+  // Filter inventory by selected branch
+  const branchFilteredItems = useMemo(() => {
+    if (selectedBranchId === null) return itemsWithMargin;
+    return itemsWithMargin.filter(item => item.branchId === selectedBranchId);
+  }, [itemsWithMargin, selectedBranchId]);
 
   // Filter items based on selected alert type
   const filteredItems = useMemo(() => {
-    if (!alerts) return itemsWithMargin;
+    if (!alerts) return branchFilteredItems;
 
-    let result = itemsWithMargin;
+    let result = branchFilteredItems;
 
     if (filterAlert === 'expiry') {
       const expiryIds = new Set(alerts.expiryRiskProducts.map((p: any) => p.id));
@@ -152,7 +158,7 @@ export default function InventoryIntelligence() {
     }
 
     return result;
-  }, [itemsWithMargin, alerts, filterAlert]);
+  }, [branchFilteredItems, alerts, filterAlert]);
 
   // Sort items
   const sortedItems = useMemo(() => {
@@ -253,6 +259,22 @@ export default function InventoryIntelligence() {
       {/* Filter Controls */}
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4 items-end">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">View Branch</label>
+            <Select value={selectedBranchId?.toString() || 'all'} onValueChange={(value) => setSelectedBranchId(value === 'all' ? null : parseInt(value))}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Branches (Consolidated)</SelectItem>
+                {branches.map((branch: any) => (
+                  <SelectItem key={branch.id} value={branch.id.toString()}>
+                    {branch.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Dead Stock Duration</label>
             <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>

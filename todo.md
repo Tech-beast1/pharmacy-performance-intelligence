@@ -1623,3 +1623,15 @@
 - [x] Include branch performance comparison table
 - [x] Add professional header with gradient background
 - [x] Test PDF generation with real dashboard data
+
+
+## Phase 32: Branch Dropdown for Inventory Intelligence
+
+- [x] Add branch dropdown filter to Inventory Intelligence page header
+- [x] Update backend query to filter inventory items by selected branch
+- [x] Display branch-specific inventory metrics (total items, dead stock, expiry risk)
+- [x] Filter inventory data table by selected branch
+- [x] Update alert counts to show branch-specific alerts
+- [x] Test branch filtering with multiple branches
+- [x] Verify data accuracy for each branch
+- [x] Ensure "All Branches" option shows consolidated inventory data
