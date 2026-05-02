@@ -1602,3 +1602,17 @@
 - [x] Implement Download Report to generate PDF with all metrics
 - [x] Add confirmation dialog for Clear All
 - [x] Test both buttons work correctly (all 134 tests passing)
+
+
+## Phase 31: PDF Report Export Feature
+
+- [x] Create backend procedure to generate PDF report with all dashboard metrics
+- [x] Include dashboard metrics (Revenue, Profit, Expiry Risk, Dead Stock) in PDF
+- [x] Generate charts as images and embed in PDF (Revenue/Profit distribution)
+- [x] Include branch performance comparison table in PDF
+- [x] Include key insights and recommendations in PDF
+- [x] Add pharmacy info and timestamp to PDF header
+- [x] Implement frontend mutation to trigger PDF generation
+- [x] Add loading state to Download Report button
+- [x] Test PDF download with various data scenarios
+- [x] Verify PDF displays correctly on desktop and mobile

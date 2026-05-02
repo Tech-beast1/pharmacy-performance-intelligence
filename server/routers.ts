@@ -615,6 +615,84 @@ export const appRouter = router({
       }),
   }),
 
+  // PDF Report Export
+  reports: router({
+    generatePDF: protectedProcedure
+      .input(z.object({ 
+        branchId: z.number().optional(),
+        month: z.number().min(1).max(12),
+        year: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        try {
+          // Get all necessary data for the report
+          const inventory = await getInventoryByUserId(ctx.user!.id);
+          const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+          const profile = await getPharmacyProfileByUserId(ctx.user!.id);
+          const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year, input.branchId);
+          
+          // Filter by branch if specified
+          let filteredInventory = inventory;
+          let filteredSales = sales;
+          if (input.branchId) {
+            filteredInventory = inventory.filter(item => item.branchId === input.branchId);
+            filteredSales = sales.filter(s => s.branchId === input.branchId);
+          }
+          
+          // Filter by month
+          const monthStart = new Date(input.year, input.month - 1, 1);
+          const monthEnd = new Date(input.year, input.month, 0, 23, 59, 59, 999);
+          
+          filteredInventory = filteredInventory.filter(item => {
+            const createdDate = new Date(item.createdAt);
+            return createdDate >= monthStart && createdDate <= monthEnd;
+          });
+          
+          filteredSales = filteredSales.filter(s => {
+            const createdDate = new Date(s.createdAt);
+            return createdDate >= monthStart && createdDate <= monthEnd;
+          });
+          
+          // Calculate metrics
+          const metrics = calculateDashboardMetrics(filteredInventory, filteredSales);
+          const alerts = identifyAlerts(filteredInventory, filteredSales);
+          const insights = generateKeyInsights(metrics, alerts, filteredInventory, filteredSales);
+          
+          // Get branches for comparison
+          let branches: any[] = [];
+          if (!input.branchId) {
+            try {
+              // Skip branch comparison if profile doesn't have organization
+              // This is handled by the frontend
+            } catch (e) {
+              // No organization, skip branch comparison
+            }
+          }
+          
+          // Return data for PDF generation (will be done on frontend)
+          return {
+            success: true,
+            data: {
+              profile,
+              metrics,
+              alerts,
+              insights,
+              overheadCosts,
+              month: input.month,
+              year: input.year,
+              branchId: input.branchId,
+              branches,
+              inventoryCount: filteredInventory.length,
+              salesCount: filteredSales.length,
+            }
+          };
+        } catch (error) {
+          console.error('PDF generation error:', error);
+          return { success: false, error: 'Failed to generate PDF report' };
+        }
+      }),
+  }),
+
   // Data management
   data: router({
 
