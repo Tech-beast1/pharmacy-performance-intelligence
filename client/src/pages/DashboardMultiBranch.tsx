@@ -70,6 +70,7 @@ export default function DashboardMultiBranch() {
   const insightsQuery = trpc.analytics.getKeyInsights.useQuery({
     startDate,
     endDate: endDate.toISOString().split('T')[0],
+    branchId: selectedBranchId || undefined,
   });
   const insights = insightsQuery.data?.data || [];
 

@@ -387,12 +387,19 @@ export const appRouter = router({
     getKeyInsights: protectedProcedure
       .input(z.object({ 
         startDate: z.string().optional(),
-        endDate: z.string().optional()
+        endDate: z.string().optional(),
+        branchId: z.number().optional()
       }))
       .query(async ({ ctx, input }) => {
       try {
-        const inventory = await getInventoryByUserId(ctx.user!.id);
-        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        let inventory = await getInventoryByUserId(ctx.user!.id);
+        let sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        
+        // Filter by branch if branchId is provided
+        if (input.branchId) {
+          inventory = inventory.filter(item => item.branchId === input.branchId);
+          sales = sales.filter(s => s.branchId === input.branchId);
+        }
         
         let filteredInventory = inventory;
         let filteredSales = sales;
