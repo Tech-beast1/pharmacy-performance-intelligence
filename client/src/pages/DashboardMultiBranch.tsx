@@ -178,7 +178,8 @@ export default function DashboardMultiBranch() {
                 <TrendingUp className="text-green-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Estimated Profit</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{grossProfit.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{netProfit.toFixed(2)}</p>
+                  <p className="text-xs text-gray-500 mt-1">Gross: ₵{grossProfit.toFixed(2)}</p>
                 </div>
               </div>
             </Card>
