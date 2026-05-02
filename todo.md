@@ -1635,3 +1635,17 @@
 - [x] Test branch filtering with multiple branches
 - [x] Verify data accuracy for each branch
 - [x] Ensure "All Branches" option shows consolidated inventory data
+
+
+## Phase 33: Branch-Specific Inventory Intelligence
+
+- [x] Update backend inventory query to accept branchId parameter
+- [x] Update backend alerts query to calculate branch-specific alerts
+- [x] Modify frontend to pass selected branch to backend queries
+- [x] Display branch-specific dead stock value and count
+- [x] Display branch-specific expiry risk count and value
+- [x] Display branch-specific low margin count
+- [x] Filter inventory table to show only selected branch items
+- [x] Update inventory metrics based on selected branch
+- [x] Test branch filtering shows different data for each branch
+- [x] Verify consolidated "All Branches" view shows correct totals

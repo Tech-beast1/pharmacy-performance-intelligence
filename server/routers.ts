@@ -315,12 +315,20 @@ export const appRouter = router({
       .input(z.object({ 
         startDate: z.string().optional(),
         endDate: z.string().optional(),
-        durationDays: z.number().optional().default(60) 
+        durationDays: z.number().optional().default(60),
+        branchId: z.number().optional()
       }))
       .query(async ({ ctx, input }) => {
       try {
-        const inventory = await getInventoryByUserId(ctx.user!.id);
-        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        let inventory = await getInventoryByUserId(ctx.user!.id);
+        let sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        
+        // Filter by branch if specified
+        if (input.branchId) {
+          inventory = inventory.filter(item => item.branchId === input.branchId);
+          sales = sales.filter((sale: any) => sale.branchId === input.branchId);
+        }
+        
         const alerts = identifyAlerts(
           inventory, 
           sales, 

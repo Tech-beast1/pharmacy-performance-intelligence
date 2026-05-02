@@ -93,7 +93,8 @@ export default function InventoryIntelligence() {
   const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
     startDate,
     endDate,
-    durationDays
+    durationDays,
+    branchId: selectedBranchId || undefined
   });
 
   const inventory = inventoryQuery.data?.data || [];
@@ -140,6 +141,37 @@ export default function InventoryIntelligence() {
     return itemsWithMargin.filter(item => item.branchId === selectedBranchId);
   }, [itemsWithMargin, selectedBranchId]);
 
+  // Get branch name for display
+  const selectedBranchName = selectedBranchId 
+    ? branches.find(b => b.id === selectedBranchId)?.name 
+    : 'All Branches';
+
+  // Define getAlertStatus function
+  const getAlertStatus = (item: any) => {
+    if (!alerts) return null;
+
+    const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
+    const isExpiryRisk = alerts.expiryRiskProducts.some((p: any) => p.id === item.id);
+    const isLowMargin = alerts.lowMarginProducts.some((p: any) => p.id === item.id);
+
+    if (filterAlert === 'deadstock' && isDeadStock) {
+      return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
+    }
+    if (filterAlert === 'expiry' && isExpiryRisk) {
+      return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
+    }
+    if (filterAlert === 'lowmargin' && isLowMargin) {
+      return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
+    }
+
+    if (filterAlert === 'all') {
+      if (isDeadStock) return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
+      if (isExpiryRisk) return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
+      if (isLowMargin) return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
+    }
+    return null;
+  };
+
   // Filter items based on selected alert type
   const filteredItems = useMemo(() => {
     if (!alerts) return branchFilteredItems;
@@ -159,6 +191,26 @@ export default function InventoryIntelligence() {
 
     return result;
   }, [branchFilteredItems, alerts, filterAlert]);
+
+  // Calculate branch-specific metrics
+  const branchMetrics = useMemo(() => {
+    const items = selectedBranchId ? inventory.filter(item => item.branchId === selectedBranchId) : inventory;
+    
+    const deadStockItems = items.filter(item => {
+      const alertStatus = getAlertStatus(item);
+      return alertStatus?.label === 'Dead Stock';
+    });
+    
+    const deadStockValue = deadStockItems.reduce((sum, item) => {
+      return sum + (parseFloat(item.price.toString()) * item.quantity);
+    }, 0);
+    
+    return {
+      totalItems: items.length,
+      deadStockCount: deadStockItems.length,
+      deadStockValue: deadStockValue
+    };
+  }, [inventory, selectedBranchId, alerts]);
 
   // Sort items
   const sortedItems = useMemo(() => {
@@ -200,53 +252,7 @@ export default function InventoryIntelligence() {
     </button>
   );
 
-  const getAlertStatus = (item: any) => {
-    if (!alerts) return null;
 
-    const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
-    const isExpiryRisk = alerts.expiryRiskProducts.some((p: any) => p.id === item.id);
-    const isLowMargin = alerts.lowMarginProducts.some((p: any) => p.id === item.id);
-
-    // If filtering by a specific alert type, show only that status
-    if (filterAlert === 'deadstock' && isDeadStock) {
-      return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
-    }
-    if (filterAlert === 'expiry' && isExpiryRisk) {
-      return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
-    }
-    if (filterAlert === 'lowmargin' && isLowMargin) {
-      return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
-    }
-
-    // If showing all items, display all applicable statuses
-    if (filterAlert === 'all') {
-      const statuses = [];
-      const colors = [];
-
-      if (isDeadStock) {
-        statuses.push('Dead Stock');
-        colors.push('bg-orange-100 text-orange-800');
-      }
-      if (isExpiryRisk) {
-        statuses.push('Expiry Risk');
-        colors.push('bg-red-100 text-red-800');
-      }
-      if (isLowMargin) {
-        statuses.push('Low Margin');
-        colors.push('bg-yellow-100 text-yellow-800');
-      }
-
-      if (statuses.length === 0) return null;
-
-      return {
-        type: statuses.map(s => s.toLowerCase().replace(' ', '')).join('_'),
-        label: statuses.join(' & '),
-        color: colors[0]
-      };
-    }
-
-    return null;
-  };
 
   return (
     <div className="space-y-6">
@@ -306,7 +312,7 @@ export default function InventoryIntelligence() {
 
           <div className="flex items-center gap-2">
             <div className="text-sm text-gray-600">
-              Showing {sortedItems.length} of {itemsWithMargin.length} items
+              {selectedBranchName}: Showing {sortedItems.length} of {branchFilteredItems.length} items
             </div>
             <DownloadReport inventoryData={sortedItems} alerts={alerts} />
           </div>
