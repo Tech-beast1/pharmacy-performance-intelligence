@@ -491,16 +491,21 @@ export async function getBranchMetrics(branchId: number, month: string) {
     const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
     for (const item of inv) {
-      // Expiry risk (expiring within 90 days)
-      if (item.expiryDate && new Date(item.expiryDate) <= now && new Date(item.expiryDate) > ninetyDaysAgo) {
-        const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
-        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
-        expiryRiskLoss += price * quantity;
-        expiryRiskCount++;
+      // Expiry risk (products expiring soon - within 90 days from now)
+      if (item.expiryDate) {
+        const expiryDate = new Date(item.expiryDate);
+        if (expiryDate > now && expiryDate <= new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000)) {
+          const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
+          const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+          expiryRiskLoss += price * quantity;
+          expiryRiskCount++;
+        }
       }
 
-      // Dead stock (no sales in 60 days)
-      if (item.createdAt && new Date(item.createdAt) < sixtyDaysAgo) {
+      // Dead stock (products that have NOT been purchased - no sales activity)
+      // Check if this product has any sales transactions
+      const hasSales = sales.some(s => s.productName === item.productName);
+      if (!hasSales) {
         const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
         deadStockValue += price * quantity;
