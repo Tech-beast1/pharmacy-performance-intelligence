@@ -3,13 +3,15 @@
  * Handles organizations, branches, and branch-user relationships
  */
 
-import { eq, and } from "drizzle-orm";
+import { eq, and, gte, lt, inArray } from "drizzle-orm";
 import { getDb } from "./db";
 import {
   organizations,
   branches,
   branchUsers,
   userTypes,
+  inventory,
+  salesTransactions,
   InsertOrganization,
   InsertBranch,
   InsertBranchUser,
@@ -445,18 +447,92 @@ export async function getBranchMetrics(branchId: number, month: string) {
     const branch = await getBranch(branchId);
     if (!branch) return null;
 
-    // Return branch metrics (will be calculated from branch-specific data)
+    // Parse month (format: YYYY-MM)
+    const [year, monthNum] = month.split('-').map(Number);
+    const startDate = new Date(year, monthNum - 1, 1);
+    const endDate = new Date(year, monthNum, 1);
+
+    // Get sales transactions for this branch in the month
+    const sales = await db
+      .select()
+      .from(salesTransactions)
+      .where(
+        and(
+          eq(salesTransactions.branchId, branchId),
+          gte(salesTransactions.createdAt, startDate),
+          lt(salesTransactions.createdAt, endDate)
+        )
+      );
+
+    // Get inventory for this branch
+    const inv = await db
+      .select()
+      .from(inventory)
+      .where(eq(inventory.branchId, branchId));
+
+    // Calculate metrics
+    let totalRevenue = 0;
+    let totalProfit = 0;
+    let expiryRiskLoss = 0;
+    let deadStockValue = 0;
+    let expiryRiskCount = 0;
+    let deadStockCount = 0;
+    let lowMarginCount = 0;
+
+    // Revenue and profit from sales
+    for (const sale of sales) {
+      totalRevenue += typeof sale.totalSaleValue === 'number' ? sale.totalSaleValue : parseFloat(sale.totalSaleValue as any) || 0;
+      totalProfit += typeof sale.profit === 'number' ? sale.profit : parseFloat(sale.profit as any) || 0;
+    }
+
+    // Inventory analysis
+    const now = new Date();
+    const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+
+    for (const item of inv) {
+      // Expiry risk (expiring within 90 days)
+      if (item.expiryDate && new Date(item.expiryDate) <= now && new Date(item.expiryDate) > ninetyDaysAgo) {
+        const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+        expiryRiskLoss += price * quantity;
+        expiryRiskCount++;
+      }
+
+      // Dead stock (no sales in 60 days)
+      if (item.createdAt && new Date(item.createdAt) < sixtyDaysAgo) {
+        const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+        deadStockValue += price * quantity;
+        deadStockCount++;
+      }
+
+      // Low margin (less than 20%)
+      if (item.price && item.costPrice) {
+        const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any);
+        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any);
+        const margin = ((price - costPrice) / price) * 100;
+        if (margin < 20) {
+          lowMarginCount++;
+        }
+      }
+    }
+
+    // Deduct overhead costs (assume 10% of revenue)
+    const overheadCost = totalRevenue * 0.1;
+    const estimatedProfit = totalProfit - overheadCost;
+
     return {
       branchId,
       branchName: branch.name,
       branchLocation: branch.location,
-      totalRevenue: 0,
-      estimatedProfit: 0,
-      expiryRiskLoss: 0,
-      deadStockValue: 0,
-      expiryRiskCount: 0,
-      deadStockCount: 0,
-      lowMarginCount: 0
+      totalRevenue,
+      estimatedProfit: Math.max(0, estimatedProfit),
+      expiryRiskLoss,
+      deadStockValue,
+      expiryRiskCount,
+      deadStockCount,
+      lowMarginCount
     };
   } catch (error) {
     console.error("[DB] Error getting branch metrics:", error);
@@ -477,15 +553,42 @@ export async function getBranchBreakdown(organizationId: number, month: string) 
       return [];
     }
 
-    // Return branch breakdown data for comparison
-    return orgBranches.map(branch => ({
-      branchId: branch.id,
-      branchName: branch.name,
-      branchLocation: branch.location,
-      revenue: 0,
-      profit: 0,
-      marginPercentage: 0
-    }));
+    // Parse month (format: YYYY-MM)
+    const [year, monthNum] = month.split('-').map(Number);
+    const startDate = new Date(year, monthNum - 1, 1);
+    const endDate = new Date(year, monthNum, 1);
+
+    // Get all branch IDs
+    const branchIds = orgBranches.map(b => b.id);
+
+    // Get sales for all branches in the month
+    const allSales = await db
+      .select()
+      .from(salesTransactions)
+      .where(
+        and(
+          inArray(salesTransactions.branchId, branchIds),
+          gte(salesTransactions.createdAt, startDate),
+          lt(salesTransactions.createdAt, endDate)
+        )
+      );
+
+    // Calculate breakdown for each branch
+    return orgBranches.map(branch => {
+      const branchSales = allSales.filter(s => s.branchId === branch.id);
+      const revenue = branchSales.reduce((sum, s) => sum + (typeof s.totalSaleValue === 'number' ? s.totalSaleValue : parseFloat(s.totalSaleValue as any) || 0), 0);
+      const profit = branchSales.reduce((sum, s) => sum + (typeof s.profit === 'number' ? s.profit : parseFloat(s.profit as any) || 0), 0);
+      const marginPercentage = revenue > 0 ? (profit / revenue) * 100 : 0;
+
+      return {
+        branchId: branch.id,
+        branchName: branch.name,
+        branchLocation: branch.location,
+        revenue,
+        profit,
+        marginPercentage
+      };
+    });
   } catch (error) {
     console.error("[DB] Error getting branch breakdown:", error);
     return null;
