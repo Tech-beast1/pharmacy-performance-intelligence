@@ -163,42 +163,42 @@ export default function DashboardMultiBranch() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="p-6">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <DollarSign className="text-blue-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Total Revenue</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.totalRevenue?.toFixed(2) || '0.00'}</p>
                 </div>
-                <DollarSign className="text-blue-500 flex-shrink-0 mt-1" size={32} />
               </div>
             </Card>
 
             <Card className="p-6">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <TrendingUp className="text-green-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Estimated Profit</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">₵{grossProfit.toFixed(2)}</p>
                 </div>
-                <TrendingUp className="text-green-500 flex-shrink-0 mt-1" size={32} />
               </div>
             </Card>
 
             <Card className="p-6">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <AlertTriangle className="text-red-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Expiry Risk Loss</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.expiryRiskLoss?.toFixed(2) || '0.00'}</p>
                 </div>
-                <AlertTriangle className="text-red-500 flex-shrink-0 mt-1" size={32} />
               </div>
             </Card>
 
             <Card className="p-6">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <Package className="text-orange-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Dead Stock Value</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.deadStockValue?.toFixed(2) || '0.00'}</p>
                 </div>
-                <Package className="text-orange-500 flex-shrink-0 mt-1" size={32} />
               </div>
             </Card>
           </div>
