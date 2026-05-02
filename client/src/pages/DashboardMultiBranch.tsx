@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle, Trash2 } from 'lucide-react';
 import DownloadReport from '@/components/DownloadReport';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function DashboardMultiBranch() {
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
@@ -77,6 +78,13 @@ export default function DashboardMultiBranch() {
       setIsClearing(false);
     }
   };
+
+  // Vibrant color palette for pie charts
+  const vibrantColors = [
+    '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8',
+    '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B88B', '#A8D5BA',
+    '#FF8C94', '#A8E6CF', '#FFD3B6', '#FFAAA5', '#FF8B94'
+  ];
 
   return (
     <div className="space-y-6">
@@ -208,6 +216,87 @@ export default function DashboardMultiBranch() {
               </div>
             </Card>
           </div>
+
+          {/* Vibrant Pie Charts for Revenue and Profit Comparison */}
+          {!selectedBranchId && breakdown && breakdown.length > 1 && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Revenue Pie Chart */}
+              <Card className="p-6 shadow-lg">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Distribution by Branch</h3>
+                <div className="w-full h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={breakdown.map((branch: any) => ({
+                          name: branch.branchName,
+                          value: parseFloat(branch.revenue) || 0,
+                        }))}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={true}
+                        label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
+                        outerRadius={120}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {breakdown.map((branch: any, index: number) => (
+                          <Cell key={`cell-${index}`} fill={vibrantColors[index % vibrantColors.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value: any) => `₵${value.toFixed(2)}`}
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '2px solid #333',
+                          borderRadius: '8px',
+                          padding: '8px',
+                        }}
+                      />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+
+              {/* Profit Pie Chart */}
+              <Card className="p-6 shadow-lg">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Profit Distribution by Branch</h3>
+                <div className="w-full h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={breakdown.map((branch: any) => ({
+                          name: branch.branchName,
+                          value: parseFloat(branch.profit) || 0,
+                        }))}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={true}
+                        label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
+                        outerRadius={120}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {breakdown.map((branch: any, index: number) => (
+                          <Cell key={`cell-${index}`} fill={vibrantColors[index % vibrantColors.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value: any) => `₵${value.toFixed(2)}`}
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '2px solid #333',
+                          borderRadius: '8px',
+                          padding: '8px',
+                        }}
+                      />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </div>
+          )}
 
           {/* Branch Breakdown Table - Only show when viewing all branches */}
           {!selectedBranchId && breakdown && breakdown.length > 1 && (
