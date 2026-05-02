@@ -479,27 +479,11 @@ export async function getBranchMetrics(branchId: number, month: string) {
     let deadStockCount = 0;
     let lowMarginCount = 0;
 
-    // Revenue from sales
+    // Revenue and profit from sales
     for (const sale of sales) {
       totalRevenue += typeof sale.totalSaleValue === 'number' ? sale.totalSaleValue : parseFloat(sale.totalSaleValue as any) || 0;
+      totalProfit += typeof sale.profit === 'number' ? sale.profit : parseFloat(sale.profit as any) || 0;
     }
-
-    // Calculate total cost price of sold items
-    let totalCostPrice = 0;
-    for (const sale of sales) {
-      if (sale.productName) {
-        // Find the product in inventory to get its cost price
-        const product = inv.find(item => item.productName === sale.productName);
-        if (product && product.costPrice) {
-          const costPrice = typeof product.costPrice === 'number' ? product.costPrice : parseFloat(product.costPrice as any) || 0;
-          const quantitySold = typeof sale.quantitySold === 'number' ? sale.quantitySold : parseFloat(sale.quantitySold as any) || 0;
-          totalCostPrice += costPrice * quantitySold;
-        }
-      }
-    }
-
-    // Estimated profit = Total Revenue - Total Cost Price
-    totalProfit = totalRevenue - totalCostPrice;
 
     // Inventory analysis
     const now = new Date();
@@ -538,8 +522,9 @@ export async function getBranchMetrics(branchId: number, month: string) {
       }
     }
 
-    // Estimated profit is already calculated as Revenue - Cost Price
-    const estimatedProfit = totalProfit;
+    // Deduct overhead costs (assume 10% of revenue)
+    const overheadCost = totalRevenue * 0.1;
+    const estimatedProfit = totalProfit - overheadCost;
 
     return {
       branchId,
