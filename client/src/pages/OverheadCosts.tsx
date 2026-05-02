@@ -130,9 +130,10 @@ export default function OverheadCosts() {
 
   // Fetch branch-specific metrics for the selected month
   // If no branch is selected, fetch consolidated metrics
+  const monthString = `${year}-${String(month).padStart(2, '0')}`;
   const metricsQuery = selectedBranchId
-    ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: month.toString() }, { enabled: !!selectedBranchId })
-    : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: month.toString() }, { enabled: !!organization?.id });
+    ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: monthString }, { enabled: !!selectedBranchId })
+    : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: monthString }, { enabled: !!organization?.id });
   
   // Gross Profit = Revenue - Cost Price (from backend, unchanged)
   const grossProfit = metricsQuery.data?.data?.estimatedProfit || 0;
