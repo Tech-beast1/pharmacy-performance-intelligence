@@ -35,9 +35,10 @@ interface UploadStep {
 
 interface SmartUploadProps {
   uploadDate?: Date;
+  branchId?: number | null;
 }
 
-export default function SmartUpload({ uploadDate }: SmartUploadProps) {
+export default function SmartUpload({ uploadDate, branchId }: SmartUploadProps) {
   const [uploadStep, setUploadStep] = useState<UploadStep['step']>('upload');
   const [csvContent, setCsvContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
@@ -211,6 +212,7 @@ export default function SmartUpload({ uploadDate }: SmartUploadProps) {
         sheetName: selectedSheet || undefined,
         mapping: mapping as any,
         uploadDate: effectiveUploadDate,
+        branchId: branchId || undefined,
       });
 
       if (result.success) {

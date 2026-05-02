@@ -65,7 +65,7 @@ export default function DataUpload() {
         </div>
       </div>
 
-      <SmartUpload uploadDate={selectedMonth} />
+      <SmartUpload uploadDate={selectedMonth} branchId={selectedBranchId} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">

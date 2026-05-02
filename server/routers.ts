@@ -97,6 +97,7 @@ export const appRouter = router({
           csvContent: z.string(),
           sheetName: z.string().optional(),
           uploadDate: z.date().optional(),
+          branchId: z.number().optional(),
           mapping: z.object({
             productName: z.string(),
             price: z.string().optional(),
@@ -142,6 +143,7 @@ export const appRouter = router({
               
               await upsertInventoryItem({
                 userId: ctx.user!.id,
+                branchId: input.branchId,
                 productName: parsed.productName,
                 sku: uniqueSku,
                 quantity: parsed.quantity || parsed.stockOnHand || 0,
@@ -162,6 +164,7 @@ export const appRouter = router({
                 
                 await insertSalesTransaction({
                   userId: ctx.user!.id,
+                  branchId: input.branchId,
                   inventoryId: 0, // Will be linked after inventory insert
                   productName: parsed.productName,
                   quantitySold: saleQuantity,
@@ -178,6 +181,7 @@ export const appRouter = router({
                 const profit = (parsed.sellingPrice - (parsed.costPrice || 0)) * parsed.saleQuantity;
                 await insertSalesTransaction({
                   userId: ctx.user!.id,
+                  branchId: input.branchId,
                   inventoryId: 0,
                   productName: parsed.productName,
                   quantitySold: parsed.saleQuantity,
