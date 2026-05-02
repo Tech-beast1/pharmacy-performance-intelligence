@@ -37,6 +37,24 @@ export default function DashboardMultiBranch() {
 
   const metrics = metricsQuery.data?.data;
 
+  // Get overhead costs for the selected branch and month
+  const [year, month] = selectedMonth.split('-').map(Number);
+  const overheadQuery = trpc.overheadCosts.getByMonth.useQuery(
+    { month, year, branchId: selectedBranchId || undefined },
+    { enabled: !!month && !!year }
+  );
+  const overheadData = overheadQuery.data?.data;
+  const totalOverhead = overheadData
+    ? (parseFloat(overheadData.rent?.toString() || '0') +
+       parseFloat(overheadData.salaries?.toString() || '0') +
+       parseFloat(overheadData.electricity?.toString() || '0') +
+       parseFloat(overheadData.others?.toString() || '0'))
+    : 0;
+
+  // Calculate net profit after overhead deduction
+  const grossProfit = metrics?.estimatedProfit || 0;
+  const netProfit = grossProfit - totalOverhead;
+
   // Get branch breakdown for comparison table
   const breakdownQuery = trpc.branches.metrics.breakdown.useQuery(
     { organizationId: organization?.id || 0, month: selectedMonth },
@@ -158,7 +176,8 @@ export default function DashboardMultiBranch() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 font-medium">Estimated Profit</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.estimatedProfit?.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{netProfit.toFixed(2)}</p>
+                  <p className="text-xs text-gray-500 mt-1">Gross: ₵{grossProfit.toFixed(2)}</p>
                 </div>
                 <div className="text-4xl text-green-500">📈</div>
               </div>

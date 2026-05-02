@@ -56,8 +56,8 @@ export default function OverheadCosts() {
   
 
 
-  // Fetch overhead costs for the selected month/year
-  const overheadQuery = trpc.overheadCosts.getByMonth.useQuery({ month, year });
+  // Fetch overhead costs for the selected month/year and branch
+  const overheadQuery = trpc.overheadCosts.getByMonth.useQuery({ month, year, branchId: selectedBranchId || undefined });
   const saveMutation = trpc.overheadCosts.save.useMutation();
 
   // Update month/year when URL parameters or localStorage changes
@@ -107,12 +107,16 @@ export default function OverheadCosts() {
       await saveMutation.mutateAsync({
         month,
         year,
+        branchId: selectedBranchId !== null ? selectedBranchId : undefined,
         rent: parseFloat(rent) || 0,
         salaries: parseFloat(salaries) || 0,
         electricity: parseFloat(electricity) || 0,
         others: parseFloat(others) || 0,
       });
       toast.success('Overhead costs saved successfully');
+      // Invalidate metrics to refresh gross/net profit display
+      metricsQuery.refetch();
+      overheadQuery.refetch();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save overhead costs';
       toast.error(errorMessage);
@@ -124,18 +128,15 @@ export default function OverheadCosts() {
 
   const totalOverhead = (parseFloat(rent) || 0) + (parseFloat(salaries) || 0) + (parseFloat(electricity) || 0) + (parseFloat(others) || 0);
 
-  // Fetch dashboard metrics to get gross profit for the selected month/year
-  const startDateOfMonth = `${year}-${String(month).padStart(2, '0')}-01`;
-  const endDateOfMonth = new Date(year, month, 0).toISOString().split('T')[0];
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ 
-    startDate: startDateOfMonth,
-    endDate: endDateOfMonth
-  });
-  // Backend's estimatedProfit is the Net Profit (after overhead deduction)
-  // For Overhead Costs page:
-  // - Gross Profit = estimatedProfit (the net profit from dashboard)
-  // - Net Profit = Gross Profit - Overhead Costs (deduct overhead again)
+  // Fetch branch-specific metrics for the selected month
+  // If no branch is selected, fetch consolidated metrics
+  const metricsQuery = selectedBranchId
+    ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: month.toString() }, { enabled: !!selectedBranchId })
+    : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: month.toString() }, { enabled: !!organization?.id });
+  
+  // Gross Profit = Revenue - Cost Price (from backend, unchanged)
   const grossProfit = metricsQuery.data?.data?.estimatedProfit || 0;
+  // Net Profit = Gross Profit - Overhead Costs
   const netProfit = grossProfit - totalOverhead;
 
   const monthNames = [

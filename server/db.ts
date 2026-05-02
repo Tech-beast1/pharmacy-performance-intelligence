@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/mysql2";
-import { eq, and, gte, lte } from "drizzle-orm";
+import { eq, and, gte, lte, isNull } from "drizzle-orm";
 import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics, userPreferences } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -187,20 +187,26 @@ export async function updateFileUploadStatus(uploadId: number, status: string, r
 
 
 // Overhead costs queries
-export async function getOverheadCostsByMonth(userId: number, month: number, year: number) {
+export async function getOverheadCostsByMonth(userId: number, month: number, year: number, branchId?: number) {
   const db = await getDb();
   if (!db) return null;
+  
+  const conditions = [
+    eq(overheadCosts.userId, userId),
+    eq(overheadCosts.month, month),
+    eq(overheadCosts.year, year)
+  ];
+  
+  if (branchId) {
+    conditions.push(eq(overheadCosts.branchId, branchId));
+  } else {
+    conditions.push(isNull(overheadCosts.branchId));
+  }
   
   const result = await db
     .select()
     .from(overheadCosts)
-    .where(
-      and(
-        eq(overheadCosts.userId, userId),
-        eq(overheadCosts.month, month),
-        eq(overheadCosts.year, year)
-      )
-    )
+    .where(and(...conditions))
     .limit(1);
   
   return result.length > 0 ? result[0] : null;

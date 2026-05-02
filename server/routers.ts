@@ -440,9 +440,9 @@ export const appRouter = router({
   // Overhead Costs Management
   overheadCosts: router({
     getByMonth: protectedProcedure
-      .input(z.object({ month: z.number().min(1).max(12), year: z.number() }))
+      .input(z.object({ month: z.number().min(1).max(12), year: z.number(), branchId: z.number().optional() }))
       .query(async ({ ctx, input }) => {
-        const data = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year);
+        const data = await getOverheadCostsByMonth(ctx.user!.id, input.month, input.year, input.branchId);
         return { success: true, data: data || { rent: 0, salaries: 0, electricity: 0, others: 0 } };
       }),
 
@@ -451,6 +451,7 @@ export const appRouter = router({
         z.object({
           month: z.number().min(1).max(12),
           year: z.number(),
+          branchId: z.number().optional(),
           rent: z.number().min(0),
           salaries: z.number().min(0),
           electricity: z.number().min(0),
@@ -461,6 +462,7 @@ export const appRouter = router({
         try {
           const result = await upsertOverheadCosts({
             userId: ctx.user!.id,
+            branchId: input.branchId,
             month: input.month,
             year: input.year,
             rent: input.rent.toString(),
@@ -485,7 +487,7 @@ export const appRouter = router({
   // Monthly metrics management
   monthlyMetrics: router({
     getByMonth: protectedProcedure
-      .input(z.object({ month: z.number().min(1).max(12), year: z.number() }))
+      .input(z.object({ month: z.number().min(1).max(12), year: z.number(), branchId: z.number().optional() }))
       .query(async ({ ctx, input }) => {
         const data = await getMonthlyMetricsByMonth(ctx.user!.id, input.month, input.year);
         return { success: true, data: data || { totalRevenue: 0, estimatedProfit: 0, expiryRiskLoss: 0, deadStockValue: 0 } };
