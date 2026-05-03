@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import html2pdf from 'html2pdf.js';
+import jsPDF from 'jspdf';
 
 interface DownloadReportCleanProps {
   metrics?: any;
@@ -14,6 +14,8 @@ interface DownloadReportCleanProps {
   totalOverhead?: number;
   overheadData?: any;
   alertCounts?: any;
+  revenueChartRef?: React.RefObject<HTMLDivElement>;
+  profitChartRef?: React.RefObject<HTMLDivElement>;
 }
 
 export default function DownloadReportClean({
@@ -26,13 +28,15 @@ export default function DownloadReportClean({
   totalOverhead = 0,
   overheadData,
   alertCounts,
+  revenueChartRef,
+  profitChartRef,
 }: DownloadReportCleanProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const formatCurrency = (value: any): string => {
     const num = typeof value === 'string' ? parseFloat(value) : value;
-    if (isNaN(num)) return '₵0.00';
-    return `₵${num.toFixed(2)}`;
+    if (isNaN(num)) return 'GHS 0.00';
+    return `GHS ${num.toFixed(2)}`;
   };
 
   const generateReport = async () => {
@@ -48,223 +52,212 @@ export default function DownloadReportClean({
       const netProfit = grossProfit - totalOverhead;
       const reportDate = new Date().toLocaleDateString();
 
-      // Create HTML content in clean format
-      let htmlContent = `
-        <html>
-          <head>
-            <meta charset="UTF-8">
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              
-              body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-                background-color: #f5f5f5;
-                padding: 40px;
-                line-height: 1.6;
-              }
+      // Create PDF
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
 
-              .container {
-                max-width: 900px;
-                margin: 0 auto;
-                background: white;
-                padding: 40px;
-              }
+      let yPosition = 20;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 15;
+      const contentWidth = pageWidth - (2 * margin);
 
-              /* Header */
-              .header {
-                background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-                color: white;
-                padding: 30px;
-                border-radius: 8px;
-                margin-bottom: 40px;
-                text-align: center;
-              }
-
-              .header h1 {
-                font-size: 28px;
-                font-weight: 700;
-                margin-bottom: 8px;
-              }
-
-              .header p {
-                font-size: 14px;
-                opacity: 0.95;
-              }
-
-              /* Section */
-              .section {
-                margin-bottom: 40px;
-              }
-
-              .section h2 {
-                font-size: 16px;
-                font-weight: 700;
-                color: #1e3a8a;
-                margin-bottom: 20px;
-                padding-bottom: 10px;
-                border-bottom: 2px solid #1e3a8a;
-              }
-
-              /* Metrics */
-              .metrics-list {
-                list-style: none;
-              }
-
-              .metric-item {
-                display: flex;
-                justify-content: space-between;
-                padding: 12px 0;
-                border-bottom: 1px solid #e5e7eb;
-                font-size: 14px;
-              }
-
-              .metric-item:last-child {
-                border-bottom: none;
-              }
-
-              .metric-label {
-                font-weight: 600;
-                color: #1f2937;
-              }
-
-              .metric-value {
-                color: #1e3a8a;
-                font-weight: 700;
-              }
-
-              /* Table */
-              table {
-                width: 100%;
-                border-collapse: collapse;
-              }
-
-              thead {
-                background-color: #f9fafb;
-              }
-
-              th {
-                padding: 12px;
-                text-align: left;
-                font-weight: 700;
-                color: #1e3a8a;
-                font-size: 13px;
-                border-bottom: 2px solid #1e3a8a;
-              }
-
-              td {
-                padding: 12px;
-                border-bottom: 1px solid #e5e7eb;
-                font-size: 13px;
-              }
-
-              tr:last-child td {
-                border-bottom: none;
-              }
-
-              tbody tr:hover {
-                background-color: #f9fafb;
-              }
-
-              /* Footer */
-              .footer {
-                margin-top: 40px;
-                padding-top: 20px;
-                border-top: 1px solid #e5e7eb;
-                text-align: center;
-                font-size: 12px;
-                color: #6b7280;
-              }
-
-              @media print {
-                body {
-                  background-color: white;
-                  padding: 0;
-                }
-                .container {
-                  padding: 0;
-                }
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <!-- Header -->
-              <div class="header">
-                <h1>Pharmacy Performance Intelligence</h1>
-                <p>Performance Report - ${selectedMonth || reportDate}</p>
-              </div>
-
-              <!-- Performance Metrics -->
-              <div class="section">
-                <h2>Performance Metrics</h2>
-                <ul class="metrics-list">
-                  <li class="metric-item">
-                    <span class="metric-label">Total Revenue</span>
-                    <span class="metric-value">${formatCurrency(metrics?.totalRevenue || 0)}</span>
-                  </li>
-                  <li class="metric-item">
-                    <span class="metric-label">Estimated Profit</span>
-                    <span class="metric-value">${formatCurrency(netProfit)}</span>
-                  </li>
-                  <li class="metric-item">
-                    <span class="metric-label">Expiry Risk Loss</span>
-                    <span class="metric-value">${formatCurrency(metrics?.expiryRiskLoss || 0)}</span>
-                  </li>
-                  <li class="metric-item">
-                    <span class="metric-label">Dead Stock Value</span>
-                    <span class="metric-value">${formatCurrency(metrics?.deadStockValue || 0)}</span>
-                  </li>
-                </ul>
-              </div>
-
-              <!-- Key Insights -->
-              ${insights.length > 0 ? `
-              <div class="section">
-                <h2>Key Insights</h2>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${insights.map((insight: any) => `
-                    <tr>
-                      <td><strong>${insight.title || 'Insight'}</strong></td>
-                      <td>${insight.description || ''}</td>
-                    </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-              ` : ''}
-
-              <!-- Footer -->
-              <div class="footer">
-                <p>Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-                <p>Pharmacy Performance Intelligence System</p>
-              </div>
-            </div>
-          </body>
-        </html>
-      `;
-
-      // Generate PDF
-      const options: any = {
-        margin: 10,
-        filename: `pharmacy-report-${selectedMonth || 'report'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      // Helper function to add a new page if needed
+      const checkPageBreak = (spaceNeeded: number) => {
+        if (yPosition + spaceNeeded > pageHeight - 10) {
+          pdf.addPage();
+          yPosition = 20;
+        }
       };
 
-      html2pdf().set(options).from(htmlContent).save();
+      // Header
+      pdf.setFillColor(30, 58, 138); // Blue color
+      pdf.rect(margin, yPosition - 10, contentWidth, 25, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(20);
+      pdf.text('Pharmacy Performance Intelligence', pageWidth / 2, yPosition + 5, { align: 'center' });
+      pdf.setFontSize(12);
+      pdf.text(`Performance Report - ${selectedMonth || reportDate}`, pageWidth / 2, yPosition + 15, { align: 'center' });
+      pdf.setTextColor(0, 0, 0);
+      yPosition += 35;
+
+      // Performance Metrics Section
+      pdf.setFontSize(14);
+      pdf.setFont(undefined as any, 'bold');
+      pdf.text('Performance Metrics', margin, yPosition);
+      pdf.setDrawColor(30, 58, 138);
+      pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+      yPosition += 12;
+
+      pdf.setFont(undefined as any, 'normal');
+      pdf.setFontSize(11);
+      const metrics_data = [
+        ['Total Revenue', formatCurrency(metrics?.totalRevenue || 0)],
+        ['Estimated Profit', formatCurrency(netProfit)],
+        ['Expiry Risk Loss', formatCurrency(metrics?.expiryRiskLoss || 0)],
+        ['Dead Stock Value', formatCurrency(metrics?.deadStockValue || 0)],
+      ];
+
+      metrics_data.forEach((row, index) => {
+        checkPageBreak(8);
+        pdf.text(row[0], margin, yPosition);
+        pdf.setTextColor(30, 58, 138);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.text(row[1], margin + contentWidth - 40, yPosition, { align: 'right' });
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont(undefined as any, 'normal');
+        yPosition += 8;
+      });
+
+      yPosition += 8;
+
+      // Branch Performance Comparison Table
+      if (breakdown && breakdown.length > 0) {
+        checkPageBreak(40);
+        pdf.setFontSize(14);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.text('Branch Performance Comparison', margin, yPosition);
+        pdf.setDrawColor(30, 58, 138);
+        pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+        yPosition += 12;
+
+        // Table headers
+        pdf.setFillColor(30, 58, 138);
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.setFontSize(10);
+        
+        const colWidths = [40, 35, 35, 35];
+        const headers = ['Branch Name', 'Revenue', 'Profit', 'Margin %'];
+        let xPos = margin;
+        
+        headers.forEach((header, i) => {
+          pdf.text(header, xPos + 2, yPosition + 5, { align: 'left' });
+          xPos += colWidths[i];
+        });
+
+        yPosition += 8;
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont(undefined as any, 'normal');
+        pdf.setFontSize(10);
+
+        // Table rows
+        breakdown.forEach((branch: any, index: number) => {
+          checkPageBreak(8);
+          if (index % 2 === 0) {
+            pdf.setFillColor(245, 245, 245);
+            pdf.rect(margin, yPosition - 5, contentWidth, 7, 'F');
+          }
+
+          xPos = margin;
+          const rowData = [
+            (branch.branchName || '') as string,
+            formatCurrency(branch.revenue || 0) as string,
+            formatCurrency(branch.profit || 0) as string,
+            `${branch.marginPercentage?.toFixed(1) || '0.0'}%` as string
+          ];
+
+          rowData.forEach((cell, i) => {
+            const align = i === 0 ? 'left' : 'right';
+            pdf.text(cell, xPos + (align === 'right' ? colWidths[i] - 2 : 2), yPosition, { align });
+            xPos += colWidths[i];
+          });
+
+          yPosition += 8;
+        });
+
+        yPosition += 8;
+      }
+
+      // Key Insights Section
+      if (insights && insights.length > 0) {
+        checkPageBreak(30);
+        pdf.setFontSize(14);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.text('Key Insights', margin, yPosition);
+        pdf.setDrawColor(30, 58, 138);
+        pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+        yPosition += 12;
+
+        pdf.setFont(undefined as any, 'normal');
+        pdf.setFontSize(10);
+
+        insights.slice(0, 5).forEach((insight: any) => {
+          checkPageBreak(12);
+          pdf.setFont(undefined as any, 'bold');
+          pdf.text(`• ${insight.title}`, margin + 2, yPosition);
+          yPosition += 5;
+          
+          pdf.setFont(undefined as any, 'normal');
+          const descriptionLines = pdf.splitTextToSize(insight.description || '', contentWidth - 4) as string[];
+          descriptionLines.forEach((line: string) => {
+            checkPageBreak(5);
+            pdf.text(line, margin + 4, yPosition);
+            yPosition += 4;
+          });
+          yPosition += 3;
+        });
+
+        yPosition += 5;
+      }
+
+      // Recommendations Section
+      checkPageBreak(40);
+      pdf.setFontSize(14);
+      pdf.setFont(undefined as any, 'bold');
+      pdf.text('Recommendations', margin, yPosition);
+      pdf.setDrawColor(30, 58, 138);
+      pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+      yPosition += 12;
+
+      pdf.setFont(undefined as any, 'normal');
+      pdf.setFontSize(10);
+
+      const recommendations = [
+        {
+          title: 'Focus on Expiry Management',
+          description: `You have ${formatCurrency(metrics?.expiryRiskLoss || 0)} worth of products expiring soon. Implement promotional strategies to clear these items.`
+        },
+        {
+          title: 'Optimize Slow-Moving Stock',
+          description: `${formatCurrency(metrics?.deadStockValue || 0)} is tied up in products with no recent sales. Consider bundling or discounting these items.`
+        },
+        {
+          title: 'Optimize Branch Performance',
+          description: 'Compare branch metrics in the table above to identify top performers and areas for improvement across your network.'
+        }
+      ];
+
+      recommendations.forEach((rec, index) => {
+        checkPageBreak(15);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.text(`${index + 1}. ${rec.title}`, margin + 2, yPosition);
+        yPosition += 5;
+
+        pdf.setFont(undefined as any, 'normal');
+        const recLines = pdf.splitTextToSize(rec.description, contentWidth - 4) as string[];
+        recLines.forEach((line: string) => {
+          checkPageBreak(4);
+          pdf.text(line, margin + 4, yPosition);
+          yPosition += 4;
+        });
+        yPosition += 4;
+      });
+
+      // Footer
+      yPosition = pageHeight - 15;
+      pdf.setFontSize(9);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(`Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, pageWidth / 2, yPosition, { align: 'center' });
+      pdf.text('Pharmacy Performance Intelligence System', pageWidth / 2, yPosition + 5, { align: 'center' });
+
+      // Save PDF
+      pdf.save(`pharmacy-report-${selectedMonth || 'report'}.pdf`);
       toast.success('PDF report downloaded successfully!');
+
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.error('Failed to generate PDF report');

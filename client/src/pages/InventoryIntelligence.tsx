@@ -67,9 +67,31 @@ export default function InventoryIntelligence() {
   const organization = organizationQuery.data?.data;
   const branchesQuery = trpc.branches.branch.list.useQuery(
     { organizationId: organization?.id || 0 },
-    { enabled: !!organization?.id && userType === 'organization_owner' }
+    { enabled: !!organization?.id }
   );
-  const branches = branchesQuery.data?.data || [];
+  
+  // Get inventory to extract branches as fallback
+  const inventoryQuery = trpc.inventory.getAll.useQuery();
+  const inventory = inventoryQuery.data?.data || [];
+  
+  // Extract unique branches from inventory if branches query doesn't return data
+  const branchesFromInventory = useMemo(() => {
+    const uniqueBranches = new Map();
+    inventory.forEach((item: any) => {
+      if (item.branchId && item.branchName && !uniqueBranches.has(item.branchId)) {
+        uniqueBranches.set(item.branchId, {
+          id: item.branchId,
+          name: item.branchName
+        });
+      }
+    });
+    return Array.from(uniqueBranches.values());
+  }, [inventory]);
+  
+  // Use branches from query if available, otherwise use extracted branches
+  const branches = (branchesQuery.data?.data && branchesQuery.data.data.length > 0) 
+    ? branchesQuery.data.data 
+    : branchesFromInventory;
   const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'lowmargin'>('all');
   const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
@@ -89,15 +111,12 @@ export default function InventoryIntelligence() {
     return lastDay;
   });
 
-  const inventoryQuery = trpc.inventory.getAll.useQuery();
   const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
     startDate,
     endDate,
     durationDays,
     branchId: selectedBranchId || undefined
   });
-
-  const inventory = inventoryQuery.data?.data || [];
   const alerts = alertsQuery.data?.data;
 
   // Calculate margin for each item and deduplicate by product name
