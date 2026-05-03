@@ -61,7 +61,7 @@ export function generateKeyInsights(
     insights.push({
       category: 'Inventory',
       title: 'High Dead Stock Warning',
-      description: `${deadStockPercentage.toFixed(1)}% of inventory (₵${metrics.deadStockValue.toLocaleString()}) is not moving. Consider clearance sales or donations.`,
+      description: `${deadStockPercentage.toFixed(1)}% of inventory (GHS ${metrics.deadStockValue.toFixed(2)}) is not moving. Consider clearance sales or donations.`,
       icon: 'Package',
       color: 'red',
       priority: 'high'
@@ -70,7 +70,7 @@ export function generateKeyInsights(
     insights.push({
       category: 'Inventory',
       title: 'Moderate Dead Stock',
-      description: `${deadStockPercentage.toFixed(1)}% of inventory (₵${metrics.deadStockValue.toLocaleString()}) hasn't sold recently. Monitor closely.`,
+      description: `${deadStockPercentage.toFixed(1)}% of inventory (GHS ${metrics.deadStockValue.toFixed(2)}) hasn't sold recently. Monitor closely.`,
       icon: 'Package',
       color: 'orange',
       priority: 'medium'
@@ -94,7 +94,7 @@ export function generateKeyInsights(
       insights.push({
         category: 'Expiry Risk',
         title: 'Critical Expiry Risk',
-        description: `₵${metrics.expiryRiskLoss.toLocaleString()} worth of products expiring within 90 days (${expiryRiskPercentage.toFixed(1)}% of revenue). Urgent action needed.`,
+        description: `GHS ${metrics.expiryRiskLoss.toFixed(2)} worth of products expiring within 90 days (${expiryRiskPercentage.toFixed(1)}% of revenue). Urgent action needed.`,
         icon: 'AlertTriangle',
         color: 'red',
         priority: 'high'
@@ -103,7 +103,7 @@ export function generateKeyInsights(
       insights.push({
         category: 'Expiry Risk',
         title: 'Monitor Expiry Dates',
-        description: `₵${metrics.expiryRiskLoss.toLocaleString()} worth of products expiring within 90 days. Plan promotions to move stock.`,
+        description: `GHS ${metrics.expiryRiskLoss.toFixed(2)} worth of products expiring within 90 days. Plan promotions to move stock.`,
         icon: 'AlertTriangle',
         color: 'orange',
         priority: 'medium'

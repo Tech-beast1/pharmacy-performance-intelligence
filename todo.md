@@ -1649,3 +1649,11 @@
 - [x] Update inventory metrics based on selected branch
 - [x] Test branch filtering shows different data for each branch
 - [x] Verify consolidated "All Branches" view shows correct totals
+
+
+## Phase 34: Fix Corrupted Dead Stock Value in PDF Insights
+
+- [x] Fix "High Dead Stock Warning" insight showing corrupted currency characters
+- [x] Update backend insights generation to use "GHS" format instead of Cedis symbol
+- [x] Test PDF generation with fixed insights formatting
+- [x] Verify all currency values display correctly in PDF
