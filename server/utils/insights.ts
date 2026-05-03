@@ -54,23 +54,28 @@ export function generateKeyInsights(
   }
 
   // 2. INVENTORY INSIGHTS
-  const totalInventoryValue = inventory.reduce((sum, item) => sum + (parseFloat(item.price.toString()) * item.quantity), 0);
-  const deadStockPercentage = totalInventoryValue > 0 ? (metrics.deadStockValue / totalInventoryValue) * 100 : 0;
+  // Calculate dead stock percentage based on total revenue
+  // This shows what % of revenue is tied up in dead stock
+  // Use a minimum of 1 to avoid division by zero, but prefer actual revenue
+  const totalRevenue = (metrics.totalRevenue && metrics.totalRevenue > 0) ? metrics.totalRevenue : 1;
+  const deadStockPercentage = (metrics.totalRevenue && metrics.totalRevenue > 0) ? (metrics.deadStockValue / metrics.totalRevenue) * 100 : 0;
+  // Cap the percentage at 100% to avoid display issues
+  const displayDeadStockPercentage = Math.min(deadStockPercentage, 100);
 
-  if (deadStockPercentage > 20) {
+  if (displayDeadStockPercentage > 20) {
     insights.push({
       category: 'Inventory',
       title: 'High Dead Stock Warning',
-      description: `${deadStockPercentage.toFixed(1)}% of inventory (GHS ${metrics.deadStockValue.toFixed(2)}) is not moving. Consider clearance sales or donations.`,
+      description: `${displayDeadStockPercentage.toFixed(1)}% of revenue (GHS ${metrics.deadStockValue.toFixed(2)}) is tied up in dead stock. Consider clearance sales or donations.`,
       icon: 'Package',
       color: 'red',
       priority: 'high'
     });
-  } else if (deadStockPercentage > 10) {
+  } else if (displayDeadStockPercentage > 10) {
     insights.push({
       category: 'Inventory',
       title: 'Moderate Dead Stock',
-      description: `${deadStockPercentage.toFixed(1)}% of inventory (GHS ${metrics.deadStockValue.toFixed(2)}) hasn't sold recently. Monitor closely.`,
+      description: `${displayDeadStockPercentage.toFixed(1)}% of revenue (GHS ${metrics.deadStockValue.toFixed(2)}) hasn't sold recently. Monitor closely.`,
       icon: 'Package',
       color: 'orange',
       priority: 'medium'
@@ -79,7 +84,7 @@ export function generateKeyInsights(
     insights.push({
       category: 'Inventory',
       title: 'Healthy Inventory Turnover',
-      description: `Only ${deadStockPercentage.toFixed(1)}% dead stock. Your inventory is moving well.`,
+      description: `Only ${displayDeadStockPercentage.toFixed(1)}% of revenue tied up in dead stock. Your inventory is moving well.`,
       icon: 'Package',
       color: 'green',
       priority: 'low'

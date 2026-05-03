@@ -411,28 +411,22 @@ export const appRouter = router({
           sales = sales.filter(s => s.branchId === input.branchId);
         }
         
-        let filteredInventory = inventory;
-        let filteredSales = sales;
+        // Pass raw data to calculateDashboardMetrics with date range
+        // Let calculateDashboardMetrics handle all the filtering
+        let startDate = input.startDate ? new Date(input.startDate) : undefined;
+        let endDate = input.endDate ? new Date(input.endDate) : undefined;
         
-        if (input.startDate && input.endDate) {
-          const monthStart = new Date(input.startDate);
-          const monthEnd = new Date(input.endDate);
-          monthEnd.setHours(23, 59, 59, 999);
-          
-          filteredInventory = inventory.filter(item => {
-            const createdDate = new Date(item.createdAt);
-            return createdDate >= monthStart && createdDate <= monthEnd;
-          });
-          
-          filteredSales = sales.filter(s => {
-            const createdDate = new Date(s.createdAt);
-            return createdDate >= monthStart && createdDate <= monthEnd;
-          });
-        }
-        
-        const metrics = calculateDashboardMetrics(filteredInventory, filteredSales);
-        const alerts = identifyAlerts(filteredInventory, filteredSales);
-        const insights = generateKeyInsights(metrics, alerts, filteredInventory, filteredSales);
+        const metrics = calculateDashboardMetrics(
+          inventory,
+          sales,
+          undefined,
+          undefined,
+          60,
+          startDate,
+          endDate
+        );
+        const alerts = identifyAlerts(inventory, sales);
+        const insights = generateKeyInsights(metrics, alerts, inventory, sales);
         return { success: true, data: insights };
       } catch (error) {
         console.error('Key insights error:', error);

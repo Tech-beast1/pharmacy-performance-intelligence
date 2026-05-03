@@ -1657,3 +1657,13 @@
 - [x] Update backend insights generation to use "GHS" format instead of Cedis symbol
 - [x] Test PDF generation with fixed insights formatting
 - [x] Verify all currency values display correctly in PDF
+
+
+## Phase 35: Verify Dead Stock Calculation Accuracy
+
+- [ ] Check if 72.4% dead stock percentage is correct
+- [ ] Verify total inventory value calculation
+- [ ] Verify dead stock value (GHS 3597.50) is accurate
+- [ ] Fix dead stock percentage calculation if needed
+- [ ] Test insights with corrected values
+- [ ] Verify PDF displays accurate dead stock metrics
