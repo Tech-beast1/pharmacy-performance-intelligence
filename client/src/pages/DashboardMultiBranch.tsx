@@ -298,7 +298,13 @@ export default function DashboardMultiBranch() {
                           cx="50%"
                           cy="50%"
                           labelLine={true}
-                          label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
+                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+                            const RADIAN = Math.PI / 180;
+                            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                            return `${(percent * 100).toFixed(0)}%`;
+                          }}
                           outerRadius={120}
                           fill="#8884d8"
                           dataKey="value"
@@ -348,7 +354,13 @@ export default function DashboardMultiBranch() {
                           cx="50%"
                           cy="50%"
                           labelLine={true}
-                          label={({ name, value }) => `${name}: ₵${value.toFixed(2)}`}
+                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+                            const RADIAN = Math.PI / 180;
+                            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                            return `${(percent * 100).toFixed(0)}%`;
+                          }}
                           outerRadius={120}
                           fill="#8884d8"
                           dataKey="value"

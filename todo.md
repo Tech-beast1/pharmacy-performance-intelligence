@@ -1734,3 +1734,11 @@
 - [x] Add Profit Distribution pie chart to PDF
 - [x] Include chart legends with branch names and values
 - [x] Test PDF download with pie charts
+
+
+## Phase 42: Improve Pie Chart Label Readability
+
+- [x] Change pie chart labels from branch names to percentages
+- [x] Move branch information to legend with exact values
+- [x] Fix overlapping label issue
+- [x] Verify improved readability on Dashboard
