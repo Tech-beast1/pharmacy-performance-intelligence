@@ -1795,3 +1795,19 @@
 - [x] Invalidate branches.metrics.consolidated query
 - [x] Test overhead cost save with invalidation
 - [ ] Verify profit calculations update when overhead costs change
+
+
+## Phase 49: Fix Overhead Cost Zero Value Bug
+
+- [ ] When overhead cost is set to 0 and saved, dashboard should show 0 output not previous value
+- [ ] Verify overhead cost value is properly saved to database as 0
+- [ ] Verify profit calculation uses the new overhead cost value (0) not cached value
+- [ ] Test that changing overhead from ₵1000 to ₵0 updates profit correctly
+
+
+## Investigation Notes
+
+- Fixed analytics.ts to deduct overhead costs even when they are 0
+- Overhead costs are being retrieved from database and passed to calculateDashboardMetrics
+- Need to verify that when overhead cost is saved as 0, it's actually stored in database as 0 (not NULL or skipped)
+- Dashboard still showing -₵2000 instead of ₵0 - may be cached value or database not storing 0 properly

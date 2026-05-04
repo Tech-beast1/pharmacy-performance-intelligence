@@ -115,13 +115,18 @@ export default function OverheadCosts() {
       });
       toast.success('Overhead costs saved successfully');
       // Invalidate all related queries to refresh displays
-      metricsQuery.refetch();
-      overheadQuery.refetch();
+      await metricsQuery.refetch();
+      await overheadQuery.refetch();
       // Invalidate dashboard metrics to update profit calculations
       const utils = trpc.useUtils();
       await utils.analytics.getDashboardMetrics.invalidate();
       await utils.branches.metrics.branch.invalidate();
       await utils.branches.metrics.consolidated.invalidate();
+      // Reset the input fields to show the saved values
+      setRent('0');
+      setSalaries('0');
+      setElectricity('0');
+      setOthers('0');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save overhead costs';
       toast.error(errorMessage);

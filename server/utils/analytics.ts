@@ -60,9 +60,10 @@ export function calculateDashboardMetrics(
     let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
     const grossProfit = totalProfit; // Store raw profit before overhead deduction
     
-    // Deduct full monthly overhead costs from profit if provided
+    // Deduct monthly overhead costs from profit if provided
     // This ensures Dashboard shows Net Profit (after overhead deduction)
-    if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
+    // Always deduct if monthlyOverheadCosts is defined (including 0)
+    if (monthlyOverheadCosts !== undefined && monthlyOverheadCosts !== null) {
       totalProfit -= monthlyOverheadCosts;
     }
     
@@ -122,9 +123,10 @@ export function calculateDashboardMetrics(
   const totalRevenue = currentSales.reduce((sum, s) => sum + parseFloat(s.totalSaleValue.toString()), 0);
   let totalProfit = currentSales.reduce((sum, s) => sum + (parseFloat(s.profit?.toString() || '0')), 0);
   
-  // Deduct full monthly overhead costs from profit if provided
+  // Deduct monthly overhead costs from profit if provided
   // This ensures Dashboard shows Net Profit (after overhead deduction)
-  if (monthlyOverheadCosts && monthlyOverheadCosts > 0) {
+  // Always deduct if monthlyOverheadCosts is defined (including 0)
+  if (monthlyOverheadCosts !== undefined && monthlyOverheadCosts !== null) {
     totalProfit -= monthlyOverheadCosts;
   }
 
