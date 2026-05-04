@@ -1718,3 +1718,10 @@
 - [x] Replace "Generated on..." timestamp with contact information in PDF footer
 - [x] Update footer to show "For Assistance or Enquiries: salomeydenkyira@gmail.com | 0240373436"
 - [x] Test PDF download to verify footer displays correctly
+
+
+## Phase 40: Remove View Mode Toggle
+
+- [x] Remove ViewModeToggle component import from Settings.tsx
+- [x] Remove View Mode section from Settings page
+- [x] Verify Settings page displays without View Mode toggle

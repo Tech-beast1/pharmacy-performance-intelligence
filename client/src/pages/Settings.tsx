@@ -4,7 +4,7 @@ import PageHeader from '@/components/PageHeader';
 import { Settings as SettingsIcon, Bell, Lock, HelpCircle, Eye } from 'lucide-react';
 import { useAuth } from '@/_core/hooks/useAuth';
 import { BranchManagementSettings } from '@/components/BranchManagementSettings';
-import { ViewModeToggle } from '@/components/ViewModeToggle';
+
 import { Card } from '@/components/ui/card';
 
 export default function Settings() {
@@ -106,17 +106,7 @@ export default function Settings() {
         </div>
       </Card>
 
-      {/* View Mode Settings */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <Eye className="w-5 h-5" />
-          View Mode
-        </h3>
-        <div className="space-y-4">
-          <p className="text-sm text-gray-600 mb-4">Choose how you want to view your pharmacy data</p>
-          <ViewModeToggle />
-        </div>
-      </Card>
+
 
       {/* Branch Management */}
       <BranchManagementSettings />
