@@ -1725,3 +1725,12 @@
 - [x] Remove ViewModeToggle component import from Settings.tsx
 - [x] Remove View Mode section from Settings page
 - [x] Verify Settings page displays without View Mode toggle
+
+
+## Phase 41: Add Pie Charts to PDF Export
+
+- [x] Create drawSimplePieChart helper function for canvas rendering
+- [x] Add Revenue Distribution pie chart to PDF
+- [x] Add Profit Distribution pie chart to PDF
+- [x] Include chart legends with branch names and values
+- [x] Test PDF download with pie charts

@@ -4,6 +4,66 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 
+// Helper function to draw simple pie charts
+const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: string) => {
+  const centerX = ctx.canvas.width / 2;
+  const centerY = ctx.canvas.height / 2;
+  const radius = 80;
+  const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
+
+  // Draw title
+  ctx.font = 'bold 16px Arial';
+  ctx.fillStyle = '#333';
+  ctx.textAlign = 'center';
+  ctx.fillText(title, centerX, 20);
+
+  // Calculate total
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  if (total === 0) return;
+
+  // Draw pie slices
+  let currentAngle = -Math.PI / 2;
+  data.forEach((item, index) => {
+    const sliceAngle = (item.value / total) * 2 * Math.PI;
+    
+    // Draw slice
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw label
+    const labelAngle = currentAngle + sliceAngle / 2;
+    const labelX = centerX + Math.cos(labelAngle) * (radius * 0.65);
+    const labelY = centerY + Math.sin(labelAngle) * (radius * 0.65);
+    ctx.font = 'bold 12px Arial';
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    const percentage = ((item.value / total) * 100).toFixed(1);
+    ctx.fillText(`${percentage}%`, labelX, labelY);
+
+    currentAngle += sliceAngle;
+  });
+
+  // Draw legend
+  ctx.font = '11px Arial';
+  ctx.fillStyle = '#333';
+  ctx.textAlign = 'left';
+  let legendY = 180;
+  data.forEach((item, index) => {
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.fillRect(10, legendY - 8, 12, 12);
+    ctx.fillStyle = '#333';
+    ctx.fillText(`${item.name}: ₵${item.value.toFixed(2)}`, 25, legendY);
+    legendY += 15;
+  });
+};
+
 interface DownloadReportCleanProps {
   metrics?: any;
   organization?: any;
@@ -204,6 +264,50 @@ export default function DownloadReportClean({
         });
 
         yPosition += 5;
+      }
+
+      // Pie Charts Section (only in multi mode with breakdown data)
+      if (viewMode === 'multi' && breakdown && breakdown.length > 1) {
+        checkPageBreak(100);
+        pdf.setFontSize(14);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.text('Branch Distribution Charts', margin, yPosition);
+        pdf.setDrawColor(30, 58, 138);
+        pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+        yPosition += 12;
+
+        // Create pie chart data
+        const revenueData = breakdown.map((branch: any) => ({
+          name: branch.branchName,
+          value: parseFloat(branch.revenue) || 0,
+        }));
+        const profitData = breakdown.map((branch: any) => ({
+          name: branch.branchName,
+          value: parseFloat(branch.profit) || 0,
+        }));
+
+        // Add pie chart images using canvas
+        const canvas1 = document.createElement('canvas');
+        const ctx1 = canvas1.getContext('2d');
+        if (ctx1) {
+          canvas1.width = 300;
+          canvas1.height = 250;
+          drawSimplePieChart(ctx1, revenueData, 'Revenue Distribution');
+          const imgData1 = canvas1.toDataURL('image/png');
+          pdf.addImage(imgData1, 'PNG', margin, yPosition, 80, 65);
+        }
+
+        const canvas2 = document.createElement('canvas');
+        const ctx2 = canvas2.getContext('2d');
+        if (ctx2) {
+          canvas2.width = 300;
+          canvas2.height = 250;
+          drawSimplePieChart(ctx2, profitData, 'Profit Distribution');
+          const imgData2 = canvas2.toDataURL('image/png');
+          pdf.addImage(imgData2, 'PNG', margin + 95, yPosition, 80, 65);
+        }
+
+        yPosition += 75;
       }
 
       // Recommendations Section
