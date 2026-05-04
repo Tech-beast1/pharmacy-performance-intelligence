@@ -303,58 +303,26 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
   if (!db) return null;
   
   try {
-    if (month !== undefined && year !== undefined) {
-      // Use UTC dates to avoid timezone issues
-      const monthStart = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0, 0));
-      const monthEnd = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999));
-      
-      console.log(`[clearAllUserData] Deleting data for month ${month}/${year}`);
-      console.log(`[clearAllUserData] Date range: ${monthStart.toISOString()} to ${monthEnd.toISOString()}`);
-      
-      await db.delete(salesTransactions)
-        .where(
-          and(
-            eq(salesTransactions.userId, userId),
-            gte(salesTransactions.createdAt, monthStart),
-            lte(salesTransactions.createdAt, monthEnd)
-          )
-        );
-      console.log(`[clearAllUserData] Deleted sales transactions for month ${month}/${year}`);
-      
-      await db.delete(inventory)
-        .where(
-          and(
-            eq(inventory.userId, userId),
-            gte(inventory.createdAt, monthStart),
-            lte(inventory.createdAt, monthEnd)
-          )
-        );
-      console.log(`[clearAllUserData] Deleted inventory items for month ${month}/${year}`);
-      
-      await db.delete(alerts)
-        .where(
-          and(
-            eq(alerts.userId, userId),
-            gte(alerts.createdAt, monthStart),
-            lte(alerts.createdAt, monthEnd)
-          )
-        );
-      
-      await db.delete(fileUploads)
-        .where(
-          and(
-            eq(fileUploads.userId, userId),
-            gte(fileUploads.createdAt, monthStart),
-            lte(fileUploads.createdAt, monthEnd)
-          )
-        );
-    } else {
-      await db.delete(salesTransactions).where(eq(salesTransactions.userId, userId));
-      await db.delete(inventory).where(eq(inventory.userId, userId));
-      await db.delete(alerts).where(eq(alerts.userId, userId));
-      await db.delete(fileUploads).where(eq(fileUploads.userId, userId));
-      await db.delete(overheadCosts).where(eq(overheadCosts.userId, userId));
-    }
+    console.log(`[clearAllUserData] Clearing ALL data for user ${userId}`);
+    
+    // Always delete all data for the user, ignoring month/year parameters
+    await db.delete(salesTransactions).where(eq(salesTransactions.userId, userId));
+    console.log(`[clearAllUserData] Deleted all sales transactions`);
+    
+    await db.delete(inventory).where(eq(inventory.userId, userId));
+    console.log(`[clearAllUserData] Deleted all inventory items`);
+    
+    await db.delete(alerts).where(eq(alerts.userId, userId));
+    console.log(`[clearAllUserData] Deleted all alerts`);
+    
+    await db.delete(fileUploads).where(eq(fileUploads.userId, userId));
+    console.log(`[clearAllUserData] Deleted all file uploads`);
+    
+    await db.delete(overheadCosts).where(eq(overheadCosts.userId, userId));
+    console.log(`[clearAllUserData] Deleted all overhead costs`);
+    
+    await db.delete(monthlyMetrics).where(eq(monthlyMetrics.userId, userId));
+    console.log(`[clearAllUserData] Deleted all monthly metrics`)
     
     return { success: true };
   } catch (error) {
