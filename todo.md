@@ -1749,3 +1749,12 @@
 - [x] Move Branch Distribution Charts before Key Insights
 - [x] Keep Key Insights after pie charts
 - [x] Test PDF download with new section order
+
+
+## Phase 44: Improve Pie Chart Percentage Label Visibility
+
+- [x] Create CustomLabel component with white background
+- [x] Add dark border to label boxes
+- [x] Use bold black text for percentages
+- [x] Apply CustomLabel to both revenue and profit pie charts
+- [x] Test label visibility on Dashboard

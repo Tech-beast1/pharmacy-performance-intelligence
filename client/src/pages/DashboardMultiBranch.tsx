@@ -4,7 +4,33 @@ import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle, Trash2 } from 'lucide-react';
 import DownloadReportClean from '@/components/DownloadReportClean';
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, Label } from 'recharts';
+
+const CustomLabel = (props: any) => {
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const percentText = `${(percent * 100).toFixed(0)}%`;
+
+  return (
+    <g>
+      <rect x={x - 18} y={y - 10} width={36} height={20} fill="white" stroke="#333" strokeWidth={1} rx={3} />
+      <text 
+        x={x} 
+        y={y} 
+        fill="#000" 
+        textAnchor="middle" 
+        dominantBaseline="middle" 
+        fontSize={12} 
+        fontWeight="bold"
+      >
+        {percentText}
+      </text>
+    </g>
+  );
+};
 
 export default function DashboardMultiBranch() {
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
@@ -298,13 +324,7 @@ export default function DashboardMultiBranch() {
                           cx="50%"
                           cy="50%"
                           labelLine={true}
-                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-                            const RADIAN = Math.PI / 180;
-                            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                            return `${(percent * 100).toFixed(0)}%`;
-                          }}
+                          label={CustomLabel}
                           outerRadius={120}
                           fill="#8884d8"
                           dataKey="value"
@@ -354,13 +374,7 @@ export default function DashboardMultiBranch() {
                           cx="50%"
                           cy="50%"
                           labelLine={true}
-                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-                            const RADIAN = Math.PI / 180;
-                            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                            return `${(percent * 100).toFixed(0)}%`;
-                          }}
+                          label={CustomLabel}
                           outerRadius={120}
                           fill="#8884d8"
                           dataKey="value"
