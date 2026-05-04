@@ -57,6 +57,7 @@ export default function OverheadCosts() {
 
 
   // Fetch overhead costs for the selected month/year and branch
+  const utils = trpc.useUtils();
   const overheadQuery = trpc.overheadCosts.getByMonth.useQuery({ month, year, branchId: selectedBranchId || undefined });
   const saveMutation = trpc.overheadCosts.save.useMutation();
 
@@ -115,10 +116,8 @@ export default function OverheadCosts() {
       });
       toast.success('Overhead costs saved successfully');
       // Invalidate all related queries to refresh displays
-      await metricsQuery.refetch();
       await overheadQuery.refetch();
       // Invalidate dashboard metrics to update profit calculations
-      const utils = trpc.useUtils();
       await utils.analytics.getDashboardMetrics.invalidate();
       await utils.branches.metrics.branch.invalidate();
       await utils.branches.metrics.consolidated.invalidate();

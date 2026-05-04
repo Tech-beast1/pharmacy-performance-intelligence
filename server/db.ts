@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/mysql2";
-import { eq, and, gte, lte, isNull } from "drizzle-orm";
+import { eq, and, gte, lte, isNull, desc } from "drizzle-orm";
 import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics, userPreferences } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -207,6 +207,7 @@ export async function getOverheadCostsByMonth(userId: number, month: number, yea
     .select()
     .from(overheadCosts)
     .where(and(...conditions))
+    .orderBy(desc(overheadCosts.id))
     .limit(1);
   
   return result.length > 0 ? result[0] : null;
@@ -216,7 +217,7 @@ export async function upsertOverheadCosts(data: InsertOverheadCost) {
   const db = await getDb();
   if (!db) return null;
   
-  const existing = await getOverheadCostsByMonth(data.userId, data.month, data.year);
+  const existing = await getOverheadCostsByMonth(data.userId, data.month, data.year, data.branchId || undefined);
   
   if (existing) {
     await db.update(overheadCosts).set(data).where(eq(overheadCosts.id, existing.id));
