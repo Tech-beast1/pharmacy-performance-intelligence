@@ -37,15 +37,24 @@ const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: s
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Draw label
+    // Draw label outside the circle
     const labelAngle = currentAngle + sliceAngle / 2;
-    const labelX = centerX + Math.cos(labelAngle) * (radius * 0.65);
-    const labelY = centerY + Math.sin(labelAngle) * (radius * 0.65);
+    const labelDistance = radius + 30;
+    const labelX = centerX + Math.cos(labelAngle) * labelDistance;
+    const labelY = centerY + Math.sin(labelAngle) * labelDistance;
     ctx.font = 'bold 12px Arial';
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#333';
     ctx.textAlign = 'center';
     const percentage = ((item.value / total) * 100).toFixed(1);
     ctx.fillText(`${percentage}%`, labelX, labelY);
+    
+    // Draw line from circle to label
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(centerX + Math.cos(labelAngle) * radius, centerY + Math.sin(labelAngle) * radius);
+    ctx.lineTo(labelX, labelY);
+    ctx.stroke();
 
     currentAngle += sliceAngle;
   });

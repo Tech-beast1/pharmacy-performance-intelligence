@@ -1758,3 +1758,11 @@
 - [x] Use bold black text for percentages
 - [x] Apply CustomLabel to both revenue and profit pie charts
 - [x] Test label visibility on Dashboard
+
+
+## Phase 45: Move PDF Pie Chart Labels Outside Circles
+
+- [x] Update drawSimplePieChart to position labels outside circles
+- [x] Add connecting lines from circle edge to labels
+- [x] Change label color to dark (#333) for better visibility
+- [x] Test PDF download with new label positioning
