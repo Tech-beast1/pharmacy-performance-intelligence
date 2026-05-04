@@ -1700,7 +1700,7 @@
 - [x] Hide branch dropdown in Inventory when in Single Pharmacy Mode
 - [x] Update PDF export to check viewMode setting
 - [x] Hide branch comparison in PDF when in Single Pharmacy Mode
-- [ ] Test mode switching on Dashboard
-- [ ] Test mode switching on Inventory Intelligence
-- [ ] Test PDF export in both modes
-- [ ] Verify UI updates immediately when mode is changed
+- [x] Test mode switching on Dashboard
+- [x] Test mode switching on Inventory Intelligence
+- [x] Test PDF export in both modes
+- [x] Verify UI updates immediately when mode is changed
