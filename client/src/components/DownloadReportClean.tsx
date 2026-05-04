@@ -16,6 +16,7 @@ interface DownloadReportCleanProps {
   alertCounts?: any;
   revenueChartRef?: React.RefObject<HTMLDivElement>;
   profitChartRef?: React.RefObject<HTMLDivElement>;
+  viewMode?: 'single' | 'multi';
 }
 
 export default function DownloadReportClean({
@@ -30,6 +31,7 @@ export default function DownloadReportClean({
   alertCounts,
   revenueChartRef,
   profitChartRef,
+  viewMode = 'multi',
 }: DownloadReportCleanProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -114,8 +116,8 @@ export default function DownloadReportClean({
 
       yPosition += 8;
 
-      // Branch Performance Comparison Table
-      if (breakdown && breakdown.length > 0) {
+      // Branch Performance Comparison Table - Only show in multi mode
+      if (viewMode === 'multi' && breakdown && breakdown.length > 0) {
         checkPageBreak(40);
         pdf.setFontSize(14);
         pdf.setFont(undefined as any, 'bold');

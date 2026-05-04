@@ -143,6 +143,7 @@ export const pharmacyProfiles = mysqlTable("pharmacy_profiles", {
   setupDate: date("setupDate").notNull(),
   reportStartDate: date("reportStartDate"),
   reportEndDate: date("reportEndDate"),
+  viewMode: mysqlEnum("viewMode", ["single", "multi"]).default("multi").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

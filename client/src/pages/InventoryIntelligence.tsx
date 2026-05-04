@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AlertTriangle, Package, TrendingDown, ArrowUpDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,6 +60,16 @@ const formatDate = (dateValue: any): string => {
 };
 
 export default function InventoryIntelligence() {
+  // Get user's profile to check viewMode setting
+  const profileQuery = trpc.pharmacy.getProfile.useQuery();
+  const [viewMode, setViewMode] = useState<'single' | 'multi'>('multi');
+  
+  useEffect(() => {
+    if (profileQuery.data?.profile?.viewMode) {
+      setViewMode(profileQuery.data.profile.viewMode as 'single' | 'multi');
+    }
+  }, [profileQuery.data?.profile?.viewMode]);
+
   // Get user type and organization for branch filtering
   const userTypeQuery = trpc.branches.userType.get.useQuery();
   const userType = userTypeQuery.data?.data?.type;
@@ -67,7 +77,7 @@ export default function InventoryIntelligence() {
   const organization = organizationQuery.data?.data;
   const branchesQuery = trpc.branches.branch.list.useQuery(
     { organizationId: organization?.id || 0 },
-    { enabled: !!organization?.id }
+    { enabled: !!organization?.id && viewMode === 'multi' }
   );
   
   // Get inventory to extract branches as fallback
@@ -96,6 +106,7 @@ export default function InventoryIntelligence() {
   const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  // In single pharmacy mode, always show all inventory (no branch filtering)
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
@@ -163,7 +174,7 @@ export default function InventoryIntelligence() {
   // Get branch name for display
   const selectedBranchName = selectedBranchId 
     ? branches.find(b => b.id === selectedBranchId)?.name 
-    : 'All Branches';
+    : (viewMode === 'single' ? 'Your Pharmacy' : 'All Branches');
 
   // Define getAlertStatus function
   const getAlertStatus = (item: any) => {
@@ -284,22 +295,24 @@ export default function InventoryIntelligence() {
       {/* Filter Controls */}
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4 items-end">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">View Branch</label>
-            <Select value={selectedBranchId?.toString() || 'all'} onValueChange={(value) => setSelectedBranchId(value === 'all' ? null : parseInt(value))}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Branches (Consolidated)</SelectItem>
-                {branches.map((branch: any) => (
-                  <SelectItem key={branch.id} value={branch.id.toString()}>
-                    {branch.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {viewMode === 'multi' && (
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">View Branch</label>
+              <Select value={selectedBranchId?.toString() || 'all'} onValueChange={(value) => setSelectedBranchId(value === 'all' ? null : parseInt(value))}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Branches (Consolidated)</SelectItem>
+                  {branches.map((branch: any) => (
+                    <SelectItem key={branch.id} value={branch.id.toString()}>
+                      {branch.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Dead Stock Duration</label>
             <Select value={durationDays.toString()} onValueChange={(value) => setDurationDays(parseInt(value))}>

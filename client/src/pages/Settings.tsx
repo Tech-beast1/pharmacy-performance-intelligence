@@ -1,9 +1,78 @@
-import { Card } from '@/components/ui/card';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
-import { Settings as SettingsIcon, Bell, Lock, HelpCircle } from 'lucide-react';
+import { Settings as SettingsIcon, Bell, Lock, HelpCircle, Eye } from 'lucide-react';
 import { useAuth } from '@/_core/hooks/useAuth';
 import { BranchManagementSettings } from '@/components/BranchManagementSettings';
+import { trpc } from '@/lib/trpc';
+import { Card } from '@/components/ui/card';
+
+function ViewModeToggle() {
+  const [viewMode, setViewMode] = useState<'single' | 'multi'>('multi');
+  const [isLoading, setIsLoading] = useState(false);
+  const updateProfileMutation = trpc.pharmacy.saveProfile.useMutation();
+  const profileQuery = trpc.pharmacy.getProfile.useQuery();
+
+  useEffect(() => {
+    if (profileQuery.data?.profile?.viewMode) {
+      setViewMode(profileQuery.data.profile.viewMode as 'single' | 'multi');
+    }
+  }, [profileQuery.data?.profile?.viewMode]);
+
+  const handleModeChange = async (mode: 'single' | 'multi') => {
+    setIsLoading(true);
+    try {
+      const profile = profileQuery.data?.profile;
+      if (profile) {
+        await updateProfileMutation.mutateAsync({
+          pharmacyName: profile.pharmacyName,
+          ownerName: profile.ownerName,
+          setupDate: profile.setupDate,
+          location: profile.location || '',
+          reportStartDate: profile.reportStartDate || undefined,
+          reportEndDate: profile.reportEndDate || undefined,
+          viewMode: mode,
+        });
+        setViewMode(mode);
+      }
+    } catch (error) {
+      console.error('Failed to update view mode:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => handleModeChange('single')}
+          disabled={isLoading}
+          className={`flex-1 p-4 rounded-lg border-2 transition-all ${
+            viewMode === 'single'
+              ? 'border-blue-500 bg-blue-50'
+              : 'border-gray-200 bg-white hover:border-gray-300'
+          }`}
+        >
+          <div className="font-semibold text-gray-900">Single Pharmacy</div>
+          <div className="text-sm text-gray-600">View only your main pharmacy</div>
+        </button>
+        <button
+          onClick={() => handleModeChange('multi')}
+          disabled={isLoading}
+          className={`flex-1 p-4 rounded-lg border-2 transition-all ${
+            viewMode === 'multi'
+              ? 'border-blue-500 bg-blue-50'
+              : 'border-gray-200 bg-white hover:border-gray-300'
+          }`}
+        >
+          <div className="font-semibold text-gray-900">Multi-Branch</div>
+          <div className="text-sm text-gray-600">View all branches and compare</div>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function Settings() {
   const { user, logout } = useAuth();
@@ -101,6 +170,18 @@ export default function Settings() {
           <Button variant="outline" onClick={handleLogout} className="w-full">
             Logout
           </Button>
+        </div>
+      </Card>
+
+      {/* View Mode Settings */}
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Eye className="w-5 h-5" />
+          View Mode
+        </h3>
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600 mb-4">Choose how you want to view your pharmacy data</p>
+          <ViewModeToggle />
         </div>
       </Card>
 

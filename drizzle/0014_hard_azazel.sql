@@ -1,0 +1,1 @@
+ALTER TABLE `pharmacy_profiles` ADD `viewMode` enum('single','multi') DEFAULT 'multi' NOT NULL;

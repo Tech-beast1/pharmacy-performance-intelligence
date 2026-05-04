@@ -1668,3 +1668,39 @@
 - [x] Test insights with corrected values
 - [x] Verify PDF displays accurate dead stock metrics
 - [ ] PENDING: Investigate why showing 8.7% instead of expected 22.4%
+
+
+## Phase 36: Single Pharmacy Mode Redesign
+
+- [ ] Remove "View Branch" dropdown from Dashboard
+- [ ] Remove branch performance comparison table from Dashboard
+- [ ] Remove branch performance charts from Dashboard
+- [ ] Remove "View Branch" dropdown from Inventory Intelligence
+- [ ] Simplify dashboard to show single pharmacy metrics only
+- [ ] Update PDF export to remove branch comparison
+- [ ] Remove branch-related backend queries or make them optional
+- [ ] Update navigation to reflect single pharmacy focus
+- [ ] Test dashboard displays correctly without branch filters
+- [ ] Test Inventory Intelligence displays without branch dropdown
+- [ ] Verify PDF export works without branch comparison
+- [ ] Test all features work in single pharmacy mode
+
+
+## Phase 37: Settings Mode Toggle (Multi-Branch vs Single Pharmacy)
+
+- [x] Add viewMode field to pharmacy_profiles table schema
+- [x] Create migration to add viewMode column
+- [x] Update Settings page to include Mode toggle switch
+- [x] Add toggle between "Multi-Branch Mode" and "Single Pharmacy Mode"
+- [x] Store user's mode preference in database
+- [x] Update Dashboard to check viewMode setting
+- [x] Hide branch dropdown when in Single Pharmacy Mode
+- [x] Hide branch comparison table when in Single Pharmacy Mode
+- [x] Update Inventory Intelligence to check viewMode setting
+- [x] Hide branch dropdown in Inventory when in Single Pharmacy Mode
+- [x] Update PDF export to check viewMode setting
+- [x] Hide branch comparison in PDF when in Single Pharmacy Mode
+- [ ] Test mode switching on Dashboard
+- [ ] Test mode switching on Inventory Intelligence
+- [ ] Test PDF export in both modes
+- [ ] Verify UI updates immediately when mode is changed

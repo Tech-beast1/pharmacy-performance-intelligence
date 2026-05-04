@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
@@ -12,15 +12,29 @@ export default function DashboardMultiBranch() {
     const date = new Date();
     return date.toISOString().slice(0, 7);
   });
+  const [viewMode, setViewMode] = useState<'single' | 'multi'>('multi');
 
+  // Get user's profile to check viewMode setting
+  const profileQuery = trpc.pharmacy.getProfile.useQuery();
+  
+  useEffect(() => {
+    if (profileQuery.data?.profile?.viewMode) {
+      setViewMode(profileQuery.data.profile.viewMode as 'single' | 'multi');
+    }
+  }, [profileQuery.data?.profile?.viewMode]);
+
+  // In single pharmacy mode, don't fetch branches
   // Get user's organization
-  const organizationsQuery = trpc.branches.organization.list.useQuery();
+  const organizationsQuery = trpc.branches.organization.list.useQuery(
+    undefined,
+    { enabled: viewMode === 'multi' }
+  );
   const organization = organizationsQuery.data?.data?.[0]; // Get first organization
 
-  // Get branches for the organization
+  // Get branches for the organization (only in multi mode)
   const branchesQuery = trpc.branches.branch.list.useQuery(
     { organizationId: organization?.id || 0 },
-    { enabled: !!organization?.id }
+    { enabled: !!organization?.id && viewMode === 'multi' }
   );
   const branches = branchesQuery.data?.data || [];
 
@@ -63,10 +77,10 @@ export default function DashboardMultiBranch() {
   const grossProfit = metrics?.estimatedProfit || 0;
   const netProfit = grossProfit - totalOverhead;
 
-  // Get branch breakdown for comparison table
+  // Get branch breakdown for comparison table (only in multi mode and when viewing all branches)
   const breakdownQuery = trpc.branches.metrics.breakdown.useQuery(
     { organizationId: organization?.id || 0, month: selectedMonth },
-    { enabled: !!organization?.id && !selectedBranchId }
+    { enabled: !!organization?.id && !selectedBranchId && viewMode === 'multi' }
   );
   const breakdown = breakdownQuery.data?.data || [];
 
@@ -78,7 +92,7 @@ export default function DashboardMultiBranch() {
   const insightsQuery = trpc.analytics.getKeyInsights.useQuery({
     startDate,
     endDate: endDate.toISOString().split('T')[0],
-    branchId: selectedBranchId || undefined,
+    branchId: (viewMode === 'multi' ? selectedBranchId : null) || undefined,
   });
   const insights = insightsQuery.data?.data || [];
 
@@ -136,6 +150,7 @@ export default function DashboardMultiBranch() {
           insights={insights}
           totalOverhead={totalOverhead}
           overheadData={overheadData}
+          viewMode={viewMode}
           alertCounts={{
             expiryRisk: metrics?.expiryRiskCount || 0,
             deadStock: metrics?.deadStockCount || 0,
@@ -152,23 +167,25 @@ export default function DashboardMultiBranch() {
         </Button>
       </div>
 
-      {/* Branch Selector and Month Filter */}
+      {/* Branch Selector and Month Filter - Only show in multi mode */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-2">View Branch:</label>
-          <select
-            value={selectedBranchId || 'all'}
-            onChange={(e) => setSelectedBranchId(e.target.value === 'all' ? null : parseInt(e.target.value))}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+        {viewMode === 'multi' && (
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">View Branch:</label>
+            <select
+              value={selectedBranchId || 'all'}
+              onChange={(e) => setSelectedBranchId(e.target.value === 'all' ? null : parseInt(e.target.value))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
             <option value="all">All Branches (Consolidated)</option>
             {branches.map((b: any) => (
               <option key={b.id} value={b.id}>
                 {b.name}
               </option>
             ))}
-          </select>
-        </div>
+            </select>
+          </div>
+        )}
 
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700 mb-2">Month:</label>
@@ -263,8 +280,8 @@ export default function DashboardMultiBranch() {
             </Card>
           </div>
 
-          {/* Vibrant Pie Charts for Revenue and Profit Comparison */}
-          {!selectedBranchId && breakdown && breakdown.length > 1 && (
+          {/* Vibrant Pie Charts for Revenue and Profit Comparison - Only in multi mode */}
+          {viewMode === 'multi' && !selectedBranchId && breakdown && breakdown.length > 1 && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Revenue Pie Chart */}
               <Card className="p-6 shadow-lg">
@@ -368,8 +385,8 @@ export default function DashboardMultiBranch() {
             </div>
           )}
 
-          {/* Branch Breakdown Table - Only show when viewing all branches */}
-          {!selectedBranchId && breakdown && breakdown.length > 1 && (
+          {/* Branch Breakdown Table - Only show in multi mode when viewing all branches */}
+          {viewMode === 'multi' && !selectedBranchId && breakdown && breakdown.length > 1 && (
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Branch Performance Comparison</h3>
               <div className="overflow-x-auto">

@@ -580,6 +580,7 @@ export const appRouter = router({
         setupDate: z.string().or(z.date()),
         reportStartDate: z.string().or(z.date()).optional(),
         reportEndDate: z.string().or(z.date()).optional(),
+        viewMode: z.enum(['single', 'multi']).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         try {
@@ -607,6 +608,7 @@ export const appRouter = router({
             setupDate: setupDate as any,
             reportStartDate: reportStartDate as any,
             reportEndDate: reportEndDate as any,
+            viewMode: input.viewMode || 'multi',
           });
           
           return { success: true, message: 'Pharmacy profile saved successfully' };
