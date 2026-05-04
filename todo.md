@@ -1774,3 +1774,24 @@
 - [x] Delete all sales transactions, inventory, alerts, file uploads, overhead costs, and monthly metrics
 - [x] Test Clear All button functionality
 - [x] Verify all dashboard data is cleared
+
+
+## Phase 47: Fix Overhead Cost Calculations
+
+- [ ] Verify overhead costs are being saved correctly in database
+- [ ] Update profit calculations to include overhead costs
+- [ ] Update Estimated Profit to subtract overhead costs
+- [ ] Update Gross Profit to include overhead costs in calculation
+- [ ] Ensure branch-level profit calculations include overhead costs
+- [ ] Test overhead cost input and verify all outputs update
+- [ ] Verify PDF export includes updated overhead costs in calculations
+
+
+## Phase 48: Verify Overhead Cost Updates
+
+- [x] Add dashboard metrics invalidation after saving overhead costs
+- [x] Invalidate analytics.getDashboardMetrics query
+- [x] Invalidate branches.metrics.branch query
+- [x] Invalidate branches.metrics.consolidated query
+- [x] Test overhead cost save with invalidation
+- [ ] Verify profit calculations update when overhead costs change

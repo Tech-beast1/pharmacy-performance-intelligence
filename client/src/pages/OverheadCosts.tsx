@@ -114,9 +114,14 @@ export default function OverheadCosts() {
         others: parseFloat(others) || 0,
       });
       toast.success('Overhead costs saved successfully');
-      // Invalidate metrics to refresh gross/net profit display
+      // Invalidate all related queries to refresh displays
       metricsQuery.refetch();
       overheadQuery.refetch();
+      // Invalidate dashboard metrics to update profit calculations
+      const utils = trpc.useUtils();
+      await utils.analytics.getDashboardMetrics.invalidate();
+      await utils.branches.metrics.branch.invalidate();
+      await utils.branches.metrics.consolidated.invalidate();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save overhead costs';
       toast.error(errorMessage);
