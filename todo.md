@@ -1742,3 +1742,10 @@
 - [x] Move branch information to legend with exact values
 - [x] Fix overlapping label issue
 - [x] Verify improved readability on Dashboard
+
+
+## Phase 43: Reorder PDF Sections
+
+- [x] Move Branch Distribution Charts before Key Insights
+- [x] Keep Key Insights after pie charts
+- [x] Test PDF download with new section order

@@ -234,38 +234,6 @@ export default function DownloadReportClean({
         yPosition += 8;
       }
 
-      // Key Insights Section
-      if (insights && insights.length > 0) {
-        checkPageBreak(30);
-        pdf.setFontSize(14);
-        pdf.setFont(undefined as any, 'bold');
-        pdf.text('Key Insights', margin, yPosition);
-        pdf.setDrawColor(30, 58, 138);
-        pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
-        yPosition += 12;
-
-        pdf.setFont(undefined as any, 'normal');
-        pdf.setFontSize(10);
-
-        insights.slice(0, 5).forEach((insight: any) => {
-          checkPageBreak(12);
-          pdf.setFont(undefined as any, 'bold');
-          pdf.text(`• ${insight.title}`, margin + 2, yPosition);
-          yPosition += 5;
-          
-          pdf.setFont(undefined as any, 'normal');
-          const descriptionLines = pdf.splitTextToSize(insight.description || '', contentWidth - 4) as string[];
-          descriptionLines.forEach((line: string) => {
-            checkPageBreak(5);
-            pdf.text(line, margin + 4, yPosition);
-            yPosition += 4;
-          });
-          yPosition += 3;
-        });
-
-        yPosition += 5;
-      }
-
       // Pie Charts Section (only in multi mode with breakdown data)
       if (viewMode === 'multi' && breakdown && breakdown.length > 1) {
         checkPageBreak(100);
@@ -308,6 +276,38 @@ export default function DownloadReportClean({
         }
 
         yPosition += 75;
+      }
+
+      // Key Insights Section
+      if (insights && insights.length > 0) {
+        checkPageBreak(30);
+        pdf.setFontSize(14);
+        pdf.setFont(undefined as any, 'bold');
+        pdf.text('Key Insights', margin, yPosition);
+        pdf.setDrawColor(30, 58, 138);
+        pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+        yPosition += 12;
+
+        pdf.setFont(undefined as any, 'normal');
+        pdf.setFontSize(10);
+
+        insights.slice(0, 5).forEach((insight: any) => {
+          checkPageBreak(12);
+          pdf.setFont(undefined as any, 'bold');
+          pdf.text(`• ${insight.title}`, margin + 2, yPosition);
+          yPosition += 5;
+          
+          pdf.setFont(undefined as any, 'normal');
+          const descriptionLines = pdf.splitTextToSize(insight.description || '', contentWidth - 4) as string[];
+          descriptionLines.forEach((line: string) => {
+            checkPageBreak(5);
+            pdf.text(line, margin + 4, yPosition);
+            yPosition += 4;
+          });
+          yPosition += 3;
+        });
+
+        yPosition += 5;
       }
 
       // Recommendations Section
