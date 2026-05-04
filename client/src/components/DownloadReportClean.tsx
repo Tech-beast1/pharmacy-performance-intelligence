@@ -253,7 +253,7 @@ export default function DownloadReportClean({
       yPosition = pageHeight - 15;
       pdf.setFontSize(9);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(`Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, pageWidth / 2, yPosition, { align: 'center' });
+      pdf.text('For Assistance or Enquiries: salomeydenkyira@gmail.com | 0240373436', pageWidth / 2, yPosition, { align: 'center' });
       pdf.text('Pharmacy Performance Intelligence System', pageWidth / 2, yPosition + 5, { align: 'center' });
 
       // Save PDF

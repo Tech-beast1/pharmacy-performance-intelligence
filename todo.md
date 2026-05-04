@@ -1711,3 +1711,10 @@
 - [x] Remove TopNavBar component from DashboardLayout
 - [x] Remove import of TopNavBar component
 - [x] Verify Dashboard displays without circular badges at top
+
+
+## Phase 39: Update PDF Footer
+
+- [x] Replace "Generated on..." timestamp with contact information in PDF footer
+- [x] Update footer to show "For Assistance or Enquiries: salomeydenkyira@gmail.com | 0240373436"
+- [x] Test PDF download to verify footer displays correctly
