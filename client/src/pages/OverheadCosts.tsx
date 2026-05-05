@@ -24,8 +24,24 @@ export default function OverheadCosts() {
 
   // Parse month/year from URL parameters first
   const urlParams = new URLSearchParams(location.split('?')[1] || '');
-  const urlMonth = urlParams.get('month');
-  const urlYear = urlParams.get('year');
+  let urlMonth = urlParams.get('month');
+  let urlYear = urlParams.get('year');
+  
+  // If not in URL, try to get from Dashboard via window location
+  // This is a workaround for localStorage issues
+  if (!urlMonth || !urlYear) {
+    try {
+      // Check if we can read from parent window or session storage
+      const sessionMonth = sessionStorage.getItem('selectedMonth');
+      const sessionYear = sessionStorage.getItem('selectedYear');
+      if (sessionMonth && sessionYear) {
+        urlMonth = sessionMonth;
+        urlYear = sessionYear;
+      }
+    } catch (e) {
+      // Session storage might not be available
+    }
+  }
   
   // Try to read from localStorage (Dashboard's selected month) as fallback
   const getStoredMonth = () => {
@@ -80,7 +96,36 @@ export default function OverheadCosts() {
     }
   }, [location]);
   
-  // Also listen for localStorage changes (when Dashboard updates)
+  // Sync with localStorage changes from Dashboard (poll every 500ms)
+  // Note: storage event only fires in different tabs, so we need to poll
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!urlMonth) {
+        const storedMonth = getStoredMonth();
+        setMonth(prev => {
+          const newMonth = storedMonth;
+          if (prev !== newMonth) {
+            return newMonth;
+          }
+          return prev;
+        });
+      }
+      if (!urlYear) {
+        const storedYear = getStoredYear();
+        setYear(prev => {
+          const newYear = storedYear;
+          if (prev !== newYear) {
+            return newYear;
+          }
+          return prev;
+        });
+      }
+    }, 500);
+    
+    return () => clearInterval(interval);
+  }, [urlMonth, urlYear]);
+  
+  // Also listen for storage event (for cross-tab communication)
   useEffect(() => {
     const handleStorageChange = () => {
       if (!urlMonth) setMonth(getStoredMonth());
@@ -90,6 +135,7 @@ export default function OverheadCosts() {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [urlMonth, urlYear]);
+
 
   // Load existing data when query returns
   useEffect(() => {

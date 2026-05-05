@@ -1811,3 +1811,20 @@
 - Overhead costs are being retrieved from database and passed to calculateDashboardMetrics
 - Need to verify that when overhead cost is saved as 0, it's actually stored in database as 0 (not NULL or skipped)
 - Dashboard still showing -₵2000 instead of ₵0 - may be cached value or database not storing 0 properly
+
+
+## Phase 50: Investigate Dashboard Overhead Cost Display Issue
+
+- [ ] Debug why Dashboard shows ₵-2000 instead of ₵0 when overhead costs are ₵0
+- [ ] Check if multiple overhead cost records exist in database for May 2026
+- [ ] Verify profit calculation is using the correct overhead cost value
+- [ ] Test with non-zero overhead costs to confirm calculation works
+- [ ] Fix dashboard cache invalidation if needed
+
+## Phase 51: Fix Clear All Button Not Functioning
+
+- [x] Investigate why Clear All button is not working
+- [ ] Fix the mutation to properly delete data from database
+- [ ] Ensure dashboard queries are invalidated and refreshed
+- [ ] Add success/error notifications
+- [ ] Test Clear All button end-to-end with user confirmation

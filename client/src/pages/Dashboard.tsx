@@ -49,12 +49,34 @@ export default function Dashboard() {
   }, [loadPreferencesQuery.isLoading, hasLoadedPreferences]);
 
   const [startDate, setStartDate] = useState<string>(() => {
+    try {
+      const storedMonth = localStorage.getItem('selectedMonth');
+      const storedYear = localStorage.getItem('selectedYear');
+      if (storedMonth && storedYear) {
+        const month = String(storedMonth).padStart(2, '0');
+        return `${storedYear}-${month}-01`;
+      }
+    } catch (e) {
+      // localStorage might not be available
+    }
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     return `${year}-${month}-01`;
   });
   const [endDate, setEndDate] = useState<string>(() => {
+    try {
+      const storedMonth = localStorage.getItem('selectedMonth');
+      const storedYear = localStorage.getItem('selectedYear');
+      if (storedMonth && storedYear) {
+        const month = parseInt(storedMonth);
+        const year = parseInt(storedYear);
+        const lastDay = new Date(year, month, 0).toISOString().split('T')[0];
+        return lastDay;
+      }
+    } catch (e) {
+      // localStorage might not be available
+    }
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
@@ -83,6 +105,21 @@ export default function Dashboard() {
 
   const clearAllMutation = trpc.data.clearAll.useMutation();
   const logoutMutation = trpc.auth.logout.useMutation();
+  
+  // Fetch dashboard data - moved before handleClearAll so it can be used in the function
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ 
+    startDate, 
+    endDate,
+    durationDays 
+  });
+  const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
+    startDate, 
+    endDate,
+    durationDays 
+  });
+  const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
+  const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
+  const insightsQuery = trpc.analytics.getKeyInsights.useQuery({ startDate, endDate });
 
   const handleLogout = async () => {
     // Save preferences before logout
@@ -125,33 +162,46 @@ export default function Dashboard() {
   const handleClearAll = async () => {
     setIsClearing(true);
     try {
+      console.log('Starting Clear All process...');
       const [year, month] = startDate.substring(0, 7).split('-');
-      await clearAllMutation.mutateAsync({ month: parseInt(month), year: parseInt(year) });
+      console.log('Calling clearAll mutation with month:', month, 'year:', year);
+      
+      const result = await clearAllMutation.mutateAsync({ month: parseInt(month), year: parseInt(year) });
+      console.log('Clear All result:', result);
+      
       setShowClearConfirm(false);
-      // Invalidate all queries to refresh the dashboard
-      await trpc.useUtils().analytics.invalidate();
+      
+      // Invalidate and refetch all queries to refresh the dashboard
+      console.log('Invalidating and refetching queries...');
+      const utils = trpc.useUtils();
+      
+      // Invalidate all analytics queries
+      await utils.analytics.getDashboardMetrics.invalidate();
+      await utils.analytics.getAlerts.invalidate();
+      await utils.analytics.getTopProducts.invalidate();
+      await utils.analytics.getRevenueTrend.invalidate();
+      await utils.analytics.getKeyInsights.invalidate();
+      
+      // Refetch the dashboard metrics to update the UI immediately
+      console.log('Refetching dashboard metrics...');
+      await metricsQuery.refetch();
+      await alertsQuery.refetch();
+      await topProductsQuery.refetch();
+      await revenueTrendQuery.refetch();
+      await insightsQuery.refetch();
+      
+      console.log('Clear All completed successfully');
+      alert('✓ All data cleared successfully!');
     } catch (error) {
       console.error('Error clearing data:', error);
+      alert('✗ Failed to clear data. Please try again.');
     } finally {
       setIsClearing(false);
     }
   };
 
 
-  // Fetch dashboard data
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ 
-    startDate, 
-    endDate,
-    durationDays 
-  });
-  const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
-    startDate, 
-    endDate,
-    durationDays 
-  });
-  const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
-  const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
-  const insightsQuery = trpc.analytics.getKeyInsights.useQuery({ startDate, endDate });
+
 
   const metrics = metricsQuery.data?.data;
   const previousMetrics = metricsQuery.data?.previousMetrics;
@@ -287,11 +337,20 @@ export default function Dashboard() {
                 const lastDay = new Date(parseInt(year), parseInt(month), 0).toISOString().split('T')[0];
                 setStartDate(firstDay);
                 setEndDate(lastDay);
+                // Store selected month/year in sessionStorage so other pages can access it
+                try {
+                  sessionStorage.setItem('selectedMonth', month);
+                  sessionStorage.setItem('selectedYear', year);
+                  localStorage.setItem('selectedMonth', month);
+                  localStorage.setItem('selectedYear', year);
+                } catch (e) {
+                  console.warn('Failed to store month/year:', e);
+                }
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </div>
-          <div className="flex items-end">
+          <div className="flex items-end gap-2">
             <Button
               onClick={() => handleSaveMetrics()}
               disabled={!metrics || saveMetricsMutation.isPending}
@@ -304,6 +363,24 @@ export default function Dashboard() {
                 </>
               ) : (
                 'Save Metrics'
+              )}
+            </Button>
+            <Button
+              onClick={() => setShowClearConfirm(true)}
+              disabled={isClearing}
+              variant="destructive"
+              className="h-10 px-4"
+            >
+              {isClearing ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Clearing...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Clear All
+                </>
               )}
             </Button>
           </div>
