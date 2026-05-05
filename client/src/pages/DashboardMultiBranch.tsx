@@ -214,6 +214,18 @@ export default function DashboardMultiBranch() {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        <div className="flex items-end">
+          <Button
+            onClick={() => setShowClearConfirm(true)}
+            disabled={isClearing}
+            variant="destructive"
+            className="gap-2 h-10"
+          >
+            <Trash2 size={18} />
+            Clear All
+          </Button>
+        </div>
       </div>
 
       {/* Metrics Cards */}
