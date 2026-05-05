@@ -183,14 +183,6 @@ export default function DashboardMultiBranch() {
             lowMargin: metrics?.lowMarginCount || 0
           }}
         />
-        <Button
-          onClick={() => setShowClearConfirm(true)}
-          variant="destructive"
-          className="gap-2"
-        >
-          <Trash2 size={18} />
-          Clear All
-        </Button>
       </div>
 
       {/* Branch Selector and Month Filter - Only show in multi mode */}
