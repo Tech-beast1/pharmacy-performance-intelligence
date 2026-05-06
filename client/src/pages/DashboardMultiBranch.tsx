@@ -152,17 +152,16 @@ export default function DashboardMultiBranch() {
       console.log('clearAll mutation succeeded:', result);
       setShowClearConfirm(false);
       
-      // Invalidate all queries to force refresh
-      await utils.branches.metrics.consolidated.invalidate();
-      await utils.branches.metrics.branch.invalidate();
-      await utils.branches.metrics.breakdown.invalidate();
-      await utils.overheadCosts.getByMonth.invalidate();
-      await utils.overheadCosts.getConsolidated.invalidate();
-      await utils.analytics.getKeyInsights.invalidate();
+      // Invalidate all queries immediately without awaiting for faster UI update
+      utils.branches.metrics.consolidated.invalidate();
+      utils.branches.metrics.branch.invalidate();
+      utils.branches.metrics.breakdown.invalidate();
+      utils.overheadCosts.getByMonth.invalidate();
+      utils.overheadCosts.getConsolidated.invalidate();
+      utils.analytics.getKeyInsights.invalidate();
       
-      console.log('All queries invalidated, reloading page');
-      // Reload after a brief delay to allow mutation to complete
-      setTimeout(() => window.location.reload(), 500);
+      console.log('All queries invalidated, UI will update immediately');
+      setIsClearing(false);
     } catch (error) {
       console.error('Error clearing data:', error);
       setIsClearing(false);
