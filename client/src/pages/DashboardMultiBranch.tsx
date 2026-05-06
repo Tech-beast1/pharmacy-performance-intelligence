@@ -3,6 +3,15 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle, Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import DownloadReportClean from '@/components/DownloadReportClean';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
@@ -130,14 +139,28 @@ export default function DashboardMultiBranch() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const clearAllMutation = trpc.data.clearAll.useMutation();
+  const utils = trpc.useUtils();
 
   const handleClearAll = async () => {
+    console.log('handleClearAll called');
     setIsClearing(true);
     try {
       // Clear all data by passing current month/year
       const now = new Date();
-      await clearAllMutation.mutateAsync({ month: now.getMonth() + 1, year: now.getFullYear() });
+      console.log('Calling clearAll mutation with:', { month: now.getMonth() + 1, year: now.getFullYear() });
+      const result = await clearAllMutation.mutateAsync({ month: now.getMonth() + 1, year: now.getFullYear() });
+      console.log('clearAll mutation succeeded:', result);
       setShowClearConfirm(false);
+      
+      // Invalidate all queries to force refresh
+      await utils.branches.metrics.consolidated.invalidate();
+      await utils.branches.metrics.branch.invalidate();
+      await utils.branches.metrics.breakdown.invalidate();
+      await utils.overheadCosts.getByMonth.invalidate();
+      await utils.overheadCosts.getConsolidated.invalidate();
+      await utils.analytics.getKeyInsights.invalidate();
+      
+      console.log('All queries invalidated, reloading page');
       // Reload after a brief delay to allow mutation to complete
       setTimeout(() => window.location.reload(), 500);
     } catch (error) {
@@ -532,12 +555,19 @@ export default function DashboardMultiBranch() {
 
 
       {/* Clear All Confirmation Dialog */}
-      {showClearConfirm && (
-        <Card className="p-6 bg-red-50 border-l-4 border-red-500">
-          <h3 className="text-lg font-bold text-gray-900 mb-2">Clear All Data?</h3>
-          <p className="text-gray-600 mb-4">This will permanently delete all inventory, sales, and overhead data. This action cannot be undone.</p>
-          <div className="flex gap-3">
-            <Button
+      <AlertDialog open={showClearConfirm} onOpenChange={setShowClearConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear All Data?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete all inventory, sales, and overhead data. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex gap-3 justify-end">
+            <AlertDialogCancel disabled={isClearing}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
               onClick={() => handleClearAll()}
               disabled={isClearing}
               className="bg-red-600 hover:bg-red-700"
@@ -550,17 +580,10 @@ export default function DashboardMultiBranch() {
               ) : (
                 <>Clear All</>
               )}
-            </Button>
-            <Button
-              onClick={() => setShowClearConfirm(false)}
-              disabled={isClearing}
-              variant="outline"
-            >
-              Cancel
-            </Button>
+            </AlertDialogAction>
           </div>
-        </Card>
-      )}
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Loading State */}
       {(metricsQuery.isLoading || breakdownQuery.isLoading) && (
