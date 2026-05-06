@@ -44,6 +44,11 @@ const CustomLabel = (props: any) => {
 export default function DashboardMultiBranch() {
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    // Try to read from sessionStorage first (set by DataUpload page)
+    const stored = typeof window !== 'undefined' ? sessionStorage.getItem('selectedMonth') : null;
+    if (stored) {
+      return stored;
+    }
     const date = new Date();
     return date.toISOString().slice(0, 7);
   });

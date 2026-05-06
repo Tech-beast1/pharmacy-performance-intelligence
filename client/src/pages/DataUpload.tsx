@@ -4,7 +4,25 @@ import { useState } from 'react';
 import { trpc } from '@/lib/trpc';
 
 export default function DataUpload() {
-  const [selectedMonth, setSelectedMonth] = useState<Date>(() => new Date());
+  const [selectedMonth, setSelectedMonth] = useState<Date>(() => {
+    // Try to read from sessionStorage first
+    const stored = typeof window !== 'undefined' ? sessionStorage.getItem('selectedMonth') : null;
+    if (stored) {
+      try {
+        const parts = stored.split('-');
+        if (parts.length === 2) {
+          const year = parseInt(parts[0]);
+          const month = parseInt(parts[1]);
+          if (!isNaN(year) && !isNaN(month) && year > 0 && month > 0 && month <= 12) {
+            return new Date(year, month - 1, 1);
+          }
+        }
+      } catch (e) {
+        // Fallback to current date if parsing fails
+      }
+    }
+    return new Date();
+  });
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
   
   // Get user type to determine if they're an organization owner
@@ -57,7 +75,12 @@ export default function DataUpload() {
               value={selectedMonth.toISOString().slice(0, 7)}
               onChange={(e) => {
                 const [year, month] = e.target.value.split('-');
-                setSelectedMonth(new Date(parseInt(year), parseInt(month) - 1, 1));
+                const newDate = new Date(parseInt(year), parseInt(month) - 1, 1);
+                setSelectedMonth(newDate);
+                // Store in sessionStorage so dashboard can read it
+                if (typeof window !== 'undefined') {
+                  sessionStorage.setItem('selectedMonth', e.target.value);
+                }
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
