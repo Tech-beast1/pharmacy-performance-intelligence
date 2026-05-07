@@ -464,11 +464,17 @@ export async function getBranchMetrics(branchId: number, month: string) {
         )
       );
 
-    // Get inventory for this branch
+    // Get inventory for this branch in the month
     const inv = await db
       .select()
       .from(inventory)
-      .where(eq(inventory.branchId, branchId));
+      .where(
+        and(
+          eq(inventory.branchId, branchId),
+          gte(inventory.createdAt, startDate),
+          lt(inventory.createdAt, endDate)
+        )
+      );
 
     // Calculate metrics
     let totalRevenue = 0;
