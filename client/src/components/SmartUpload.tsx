@@ -222,11 +222,11 @@ export default function SmartUpload({ uploadDate, branchId }: SmartUploadProps) 
           toast.warning(`${result.errorCount} rows had errors and were skipped`);
         }
         
-        // Invalidate analytics queries to refresh dashboard with new data
-        await utils.analytics.getDashboardMetrics.invalidate();
-        await utils.analytics.getAlerts.invalidate();
-        await utils.analytics.getTopProducts.invalidate();
-        await utils.analytics.getRevenueTrend.invalidate();
+        // Invalidate branches metrics queries to refresh dashboard with new data
+        await utils.branches.metrics.consolidated.invalidate();
+        await utils.branches.metrics.branch.invalidate();
+        await utils.overheadCosts.getByMonth.invalidate();
+        await utils.overheadCosts.getConsolidated.invalidate();
         
         // Reset after 2 seconds
         setTimeout(() => {
