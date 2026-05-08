@@ -447,10 +447,10 @@ export async function getBranchMetrics(branchId: number, month: string) {
     const branch = await getBranch(branchId);
     if (!branch) return null;
 
-    // Parse month (format: YYYY-MM)
+    // Parse month (format: YYYY-MM) using UTC to avoid timezone issues
     const [year, monthNum] = month.split('-').map(Number);
-    const startDate = new Date(year, monthNum - 1, 1);
-    const endDate = new Date(year, monthNum, 1);
+    const startDate = new Date(Date.UTC(year, monthNum - 1, 1, 0, 0, 0, 0));
+    const endDate = new Date(Date.UTC(year, monthNum, 1, 0, 0, 0, 0));
 
     // Get sales transactions for this branch in the month
     const sales = await db

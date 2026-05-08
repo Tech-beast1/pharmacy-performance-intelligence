@@ -256,8 +256,20 @@ export const appRouter = router({
             parseFloat(overheadCosts.others?.toString() || '0');
         }
         
-        let startDate = input.startDate ? new Date(input.startDate) : undefined;
-        let endDate = input.endDate ? new Date(input.endDate) : undefined;
+        let startDate: Date | undefined;
+        let endDate: Date | undefined;
+        
+        if (input.startDate) {
+          // Parse date string in UTC format (YYYY-MM-DD)
+          const [startYear, startMonth, startDay] = input.startDate.split('-').map(Number);
+          startDate = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
+        }
+        
+        if (input.endDate) {
+          // Parse date string in UTC format (YYYY-MM-DD)
+          const [endYear, endMonth, endDay] = input.endDate.split('-').map(Number);
+          endDate = new Date(Date.UTC(endYear, endMonth - 1, endDay, 23, 59, 59, 999));
+        }
         
         const metrics = calculateDashboardMetrics(
           inventory, 
@@ -413,8 +425,20 @@ export const appRouter = router({
         
         // Pass raw data to calculateDashboardMetrics with date range
         // Let calculateDashboardMetrics handle all the filtering
-        let startDate = input.startDate ? new Date(input.startDate) : undefined;
-        let endDate = input.endDate ? new Date(input.endDate) : undefined;
+        let startDate: Date | undefined;
+        let endDate: Date | undefined;
+        
+        if (input.startDate) {
+          // Parse date string in UTC format (YYYY-MM-DD)
+          const [startYear, startMonth, startDay] = input.startDate.split('-').map(Number);
+          startDate = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
+        }
+        
+        if (input.endDate) {
+          // Parse date string in UTC format (YYYY-MM-DD)
+          const [endYear, endMonth, endDay] = input.endDate.split('-').map(Number);
+          endDate = new Date(Date.UTC(endYear, endMonth - 1, endDay, 23, 59, 59, 999));
+        }
         
         const metrics = calculateDashboardMetrics(
           inventory,

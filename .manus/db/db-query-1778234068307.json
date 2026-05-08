@@ -1,0 +1,42 @@
+{
+  "query": "SELECT \n  'Branch 20 - June Sales' as metric,\n  COUNT(*) as count,\n  SUM(totalSaleValue) as total_value,\n  SUM(profit) as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM sales_transactions\nWHERE branchId = 20 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nUNION ALL\nSELECT \n  'Branch 20 - June Inventory' as metric,\n  COUNT(*) as count,\n  SUM(price * quantity) as total_value,\n  0 as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM inventory\nWHERE branchId = 20 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nUNION ALL\nSELECT \n  'Branch 60015 - June Sales' as metric,\n  COUNT(*) as count,\n  SUM(totalSaleValue) as total_value,\n  SUM(profit) as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM sales_transactions\nWHERE branchId = 60015 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nUNION ALL\nSELECT \n  'Branch 60015 - June Inventory' as metric,\n  COUNT(*) as count,\n  SUM(price * quantity) as total_value,\n  0 as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM inventory\nWHERE branchId = 60015 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  'Branch 20 - June Sales' as metric,\n  COUNT(*) as count,\n  SUM(totalSaleValue) as total_value,\n  SUM(profit) as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM sales_transactions\nWHERE branchId = 20 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nUNION ALL\nSELECT \n  'Branch 20 - June Inventory' as metric,\n  COUNT(*) as count,\n  SUM(price * quantity) as total_value,\n  0 as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM inventory\nWHERE branchId = 20 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nUNION ALL\nSELECT \n  'Branch 60015 - June Sales' as metric,\n  COUNT(*) as count,\n  SUM(totalSaleValue) as total_value,\n  SUM(profit) as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM sales_transactions\nWHERE branchId = 60015 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nUNION ALL\nSELECT \n  'Branch 60015 - June Inventory' as metric,\n  COUNT(*) as count,\n  SUM(price * quantity) as total_value,\n  0 as total_profit,\n  MIN(createdAt) as min_date,\n  MAX(createdAt) as max_date\nFROM inventory\nWHERE branchId = 60015 AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-06';",
+  "rows": [
+    {
+      "metric": "Branch 60015 - June Sales",
+      "count": "0",
+      "total_value": "NULL",
+      "total_profit": "NULL",
+      "min_date": "NULL",
+      "max_date": "NULL"
+    },
+    {
+      "metric": "Branch 20 - June Sales",
+      "count": "80",
+      "total_value": "8226.50",
+      "total_profit": "3083.50",
+      "min_date": "2026-06-01 00:00:00",
+      "max_date": "2026-06-01 00:00:00"
+    },
+    {
+      "metric": "Branch 60015 - June Inventory",
+      "count": "0",
+      "total_value": "NULL",
+      "total_profit": "0.00",
+      "min_date": "NULL",
+      "max_date": "NULL"
+    },
+    {
+      "metric": "Branch 20 - June Inventory",
+      "count": "15",
+      "total_value": "1369.50",
+      "total_profit": "0.00",
+      "min_date": "2026-06-01 00:00:00",
+      "max_date": "2026-06-01 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "metric\tcount\ttotal_value\ttotal_profit\tmin_date\tmax_date\nBranch 60015 - June Sales\t0\tNULL\tNULL\tNULL\tNULL\nBranch 20 - June Sales\t80\t8226.50\t3083.50\t2026-06-01 00:00:00\t2026-06-01 00:00:00\nBranch 60015 - June Inventory\t0\tNULL\t0.00\tNULL\tNULL\nBranch 20 - June Inventory\t15\t1369.50\t0.00\t2026-06-01 00:00:00\t2026-06-01 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 270
+}

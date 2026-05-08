@@ -1,0 +1,112 @@
+{
+  "query": "SELECT \n  'Sales' as type,\n  branchId,\n  COUNT(*) as count,\n  SUM(totalSaleValue) as revenue\nFROM sales_transactions\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nGROUP BY branchId\nUNION ALL\nSELECT \n  'Inventory' as type,\n  branchId,\n  COUNT(*) as count,\n  SUM(price * quantity) as revenue\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nGROUP BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  'Sales' as type,\n  branchId,\n  COUNT(*) as count,\n  SUM(totalSaleValue) as revenue\nFROM sales_transactions\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nGROUP BY branchId\nUNION ALL\nSELECT \n  'Inventory' as type,\n  branchId,\n  COUNT(*) as count,\n  SUM(price * quantity) as revenue\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-06'\nGROUP BY branchId;",
+  "rows": [
+    {
+      "type": "Sales",
+      "branchId": "180045",
+      "count": "1",
+      "revenue": "60.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "210001",
+      "count": "1",
+      "revenue": "800.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "150010",
+      "count": "1",
+      "revenue": "60.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "150011",
+      "count": "1",
+      "revenue": "120.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "180035",
+      "count": "1",
+      "revenue": "60.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "210009",
+      "count": "1",
+      "revenue": "60.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "180027",
+      "count": "1",
+      "revenue": "800.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "20",
+      "count": "80",
+      "revenue": "8226.50"
+    },
+    {
+      "type": "Sales",
+      "branchId": "180037",
+      "count": "1",
+      "revenue": "800.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "180015",
+      "count": "1",
+      "revenue": "60.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "180017",
+      "count": "1",
+      "revenue": "800.00"
+    },
+    {
+      "type": "Sales",
+      "branchId": "180025",
+      "count": "1",
+      "revenue": "60.00"
+    },
+    {
+      "type": "Inventory",
+      "branchId": "210009",
+      "count": "1",
+      "revenue": "150.00"
+    },
+    {
+      "type": "Inventory",
+      "branchId": "20",
+      "count": "15",
+      "revenue": "1369.50"
+    },
+    {
+      "type": "Inventory",
+      "branchId": "210001",
+      "count": "1",
+      "revenue": "960.00"
+    },
+    {
+      "type": "Inventory",
+      "branchId": "210010",
+      "count": "1",
+      "revenue": "400.00"
+    },
+    {
+      "type": "Inventory",
+      "branchId": "150011",
+      "count": "1",
+      "revenue": "300.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "type\tbranchId\tcount\trevenue\nSales\t180045\t1\t60.00\nSales\t210001\t1\t800.00\nSales\t150010\t1\t60.00\nSales\t150011\t1\t120.00\nSales\t180035\t1\t60.00\nSales\t210009\t1\t60.00\nSales\t180027\t1\t800.00\nSales\t20\t80\t8226.50\nSales\t180037\t1\t800.00\nSales\t180015\t1\t60.00\nSales\t180017\t1\t800.00\nSales\t180025\t1\t60.00\nInventory\t210009\t1\t150.00\nInventory\t20\t15\t1369.50\nInventory\t210001\t1\t960.00\nInventory\t210010\t1\t400.00\nInventory\t150011\t1\t300.00\n",
+  "stderr": "",
+  "execution_time_ms": 268
+}

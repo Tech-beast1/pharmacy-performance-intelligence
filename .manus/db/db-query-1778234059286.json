@@ -1,0 +1,91 @@
+{
+  "query": "SELECT \n  u.id as userId,\n  u.email,\n  ut.type as userType,\n  o.id as organizationId,\n  o.name as organizationName,\n  b.id as branchId,\n  b.name as branchName\nFROM users u\nLEFT JOIN user_types ut ON u.id = ut.userId\nLEFT JOIN organizations o ON u.id = o.ownerId\nLEFT JOIN branches b ON o.id = b.organizationId\nWHERE u.email = 'dedzocharles37@gmail.com'\nORDER BY u.id, o.id, b.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  u.id as userId,\n  u.email,\n  ut.type as userType,\n  o.id as organizationId,\n  o.name as organizationName,\n  b.id as branchId,\n  b.name as branchName\nFROM users u\nLEFT JOIN user_types ut ON u.id = ut.userId\nLEFT JOIN organizations o ON u.id = o.ownerId\nLEFT JOIN branches b ON o.id = b.organizationId\nWHERE u.email = 'dedzocharles37@gmail.com'\nORDER BY u.id, o.id, b.id;",
+  "rows": [
+    {
+      "userId": "1",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "organization_owner",
+      "organizationId": "11",
+      "organizationName": "Tech beast pharmacy",
+      "branchId": "20",
+      "branchName": "Tema Branch"
+    },
+    {
+      "userId": "1",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "organization_owner",
+      "organizationId": "11",
+      "organizationName": "Tech beast pharmacy",
+      "branchId": "60015",
+      "branchName": "ACRRA BRANCH"
+    },
+    {
+      "userId": "1920004",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    },
+    {
+      "userId": "1980161",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    },
+    {
+      "userId": "2340145",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    },
+    {
+      "userId": "2340317",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    },
+    {
+      "userId": "2460005",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    },
+    {
+      "userId": "3450343",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    },
+    {
+      "userId": "3510026",
+      "email": "dedzocharles37@gmail.com",
+      "userType": "NULL",
+      "organizationId": "NULL",
+      "organizationName": "NULL",
+      "branchId": "NULL",
+      "branchName": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "userId\temail\tuserType\torganizationId\torganizationName\tbranchId\tbranchName\n1\tdedzocharles37@gmail.com\torganization_owner\t11\tTech beast pharmacy\t20\tTema Branch\n1\tdedzocharles37@gmail.com\torganization_owner\t11\tTech beast pharmacy\t60015\tACRRA BRANCH\n1920004\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n1980161\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n2340145\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n2340317\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n2460005\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n3450343\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n3510026\tdedzocharles37@gmail.com\tNULL\tNULL\tNULL\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 274
+}

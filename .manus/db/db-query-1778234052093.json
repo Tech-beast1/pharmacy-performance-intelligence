@@ -1,0 +1,101 @@
+{
+  "query": "SELECT \n  b.id,\n  b.name,\n  b.organizationId,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(s.createdAt, '%Y-%m') = '2026-06' THEN s.id END) as june_sales,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(i.createdAt, '%Y-%m') = '2026-06' THEN i.id END) as june_inventory\nFROM branches b\nLEFT JOIN sales_transactions s ON b.id = s.branchId\nLEFT JOIN inventory i ON b.id = i.branchId\nGROUP BY b.id, b.name, b.organizationId\nHAVING june_sales > 0 OR june_inventory > 0\nORDER BY b.organizationId, b.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  b.id,\n  b.name,\n  b.organizationId,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(s.createdAt, '%Y-%m') = '2026-06' THEN s.id END) as june_sales,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(i.createdAt, '%Y-%m') = '2026-06' THEN i.id END) as june_inventory\nFROM branches b\nLEFT JOIN sales_transactions s ON b.id = s.branchId\nLEFT JOIN inventory i ON b.id = i.branchId\nGROUP BY b.id, b.name, b.organizationId\nHAVING june_sales > 0 OR june_inventory > 0\nORDER BY b.organizationId, b.id;",
+  "rows": [
+    {
+      "id": "20",
+      "name": "Tema Branch",
+      "organizationId": "11",
+      "june_sales": "80",
+      "june_inventory": "15"
+    },
+    {
+      "id": "150010",
+      "name": "Test Branch",
+      "organizationId": "150008",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "150011",
+      "name": "Test Branch 2",
+      "organizationId": "150008",
+      "june_sales": "1",
+      "june_inventory": "1"
+    },
+    {
+      "id": "180015",
+      "name": "Test Branch",
+      "organizationId": "180013",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "180017",
+      "name": "Test Branch",
+      "organizationId": "180014",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "180025",
+      "name": "Test Branch",
+      "organizationId": "180021",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "180027",
+      "name": "Test Branch",
+      "organizationId": "180022",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "180035",
+      "name": "Test Branch",
+      "organizationId": "180029",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "180037",
+      "name": "Test Branch",
+      "organizationId": "180030",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "180045",
+      "name": "Test Branch",
+      "organizationId": "180037",
+      "june_sales": "1",
+      "june_inventory": "0"
+    },
+    {
+      "id": "210001",
+      "name": "Test Branch",
+      "organizationId": "210001",
+      "june_sales": "1",
+      "june_inventory": "1"
+    },
+    {
+      "id": "210009",
+      "name": "Test Branch",
+      "organizationId": "210008",
+      "june_sales": "1",
+      "june_inventory": "1"
+    },
+    {
+      "id": "210010",
+      "name": "Month Filter Test",
+      "organizationId": "210008",
+      "june_sales": "0",
+      "june_inventory": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\torganizationId\tjune_sales\tjune_inventory\n20\tTema Branch\t11\t80\t15\n150010\tTest Branch\t150008\t1\t0\n150011\tTest Branch 2\t150008\t1\t1\n180015\tTest Branch\t180013\t1\t0\n180017\tTest Branch\t180014\t1\t0\n180025\tTest Branch\t180021\t1\t0\n180027\tTest Branch\t180022\t1\t0\n180035\tTest Branch\t180029\t1\t0\n180037\tTest Branch\t180030\t1\t0\n180045\tTest Branch\t180037\t1\t0\n210001\tTest Branch\t210001\t1\t1\n210009\tTest Branch\t210008\t1\t1\n210010\tMonth Filter Test\t210008\t0\t1\n",
+  "stderr": "",
+  "execution_time_ms": 261
+}
