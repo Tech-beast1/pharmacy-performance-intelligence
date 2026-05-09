@@ -1,0 +1,8 @@
+{
+  "query": "SELECT \n  b.id as branchId,\n  b.name as branchName,\n  COUNT(DISTINCT st.id) as sales_count,\n  SUM(st.quantity * st.unitPrice) as total_revenue,\n  DATE_FORMAT(st.createdAt, '%Y-%m') as month\nFROM branches b\nLEFT JOIN sales_transactions st ON b.id = st.branchId \n  AND DATE_FORMAT(st.createdAt, '%Y-%m') = '2026-06'\nWHERE b.organizationId = 11\nGROUP BY b.id, b.name, month\nORDER BY b.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  b.id as branchId,\n  b.name as branchName,\n  COUNT(DISTINCT st.id) as sales_count,\n  SUM(st.quantity * st.unitPrice) as total_revenue,\n  DATE_FORMAT(st.createdAt, '%Y-%m') as month\nFROM branches b\nLEFT JOIN sales_transactions st ON b.id = st.branchId \n  AND DATE_FORMAT(st.createdAt, '%Y-%m') = '2026-06'\nWHERE b.organizationId = 11\nGROUP BY b.id, b.name, month\nORDER BY b.id;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'st.quantity' in 'where clause'"
+  ]
+}

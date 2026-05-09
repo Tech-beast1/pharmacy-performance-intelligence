@@ -572,10 +572,10 @@ export async function getBranchBreakdown(organizationId: number, month: string) 
       return [];
     }
 
-    // Parse month (format: YYYY-MM)
+    // Parse month (format: YYYY-MM) - use UTC to match database timestamps
     const [year, monthNum] = month.split('-').map(Number);
-    const startDate = new Date(year, monthNum - 1, 1);
-    const endDate = new Date(year, monthNum, 1);
+    const startDate = new Date(Date.UTC(year, monthNum - 1, 1));
+    const endDate = new Date(Date.UTC(year, monthNum, 1));
 
     // Get all branch IDs
     const branchIds = orgBranches.map(b => b.id);
