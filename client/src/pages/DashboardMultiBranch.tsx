@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
+import { toast } from 'sonner';
 import { AlertTriangle, Package, TrendingDown, TrendingUp, DollarSign, BarChart3, CheckCircle, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
@@ -159,12 +160,13 @@ export default function DashboardMultiBranch() {
     console.log('handleClearAll called');
     setIsClearing(true);
     try {
-      // Clear all data by passing current month/year
-      const now = new Date();
-      console.log('Calling clearAll mutation with:', { month: now.getMonth() + 1, year: now.getFullYear() });
-      const result = await clearAllMutation.mutateAsync({ month: now.getMonth() + 1, year: now.getFullYear() });
+      // Clear all data from the selected month, not current date
+      const [year, month] = selectedMonth.split('-').map(Number);
+      console.log('Calling clearAll mutation with:', { month, year });
+      const result = await clearAllMutation.mutateAsync({ month, year });
       console.log('clearAll mutation succeeded:', result);
       setShowClearConfirm(false);
+      toast.success(`Data for ${selectedMonth} cleared successfully`);
       
       // Invalidate all queries immediately without awaiting for faster UI update
       utils.branches.metrics.consolidated.invalidate();
