@@ -63,6 +63,15 @@ export default function DashboardMultiBranch() {
     }
   }, [profileQuery.data?.profile?.viewMode]);
 
+  // Save selectedMonth to localStorage whenever it changes (for OverheadCosts page)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedMonth', selectedMonth);
+      const [year, month] = selectedMonth.split('-').map(Number);
+      localStorage.setItem('selectedYear', year.toString());
+    }
+  }, [selectedMonth]);
+
   // In single pharmacy mode, don't fetch branches
   // Get user's organization
   const organizationsQuery = trpc.branches.organization.list.useQuery(

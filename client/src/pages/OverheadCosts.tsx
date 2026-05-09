@@ -47,7 +47,16 @@ export default function OverheadCosts() {
   const getStoredMonth = () => {
     try {
       const stored = localStorage.getItem('selectedMonth');
-      return stored ? parseInt(stored) : currentDate.getMonth() + 1;
+      if (stored) {
+        // Handle both formats: "2026-06" (YYYY-MM) and "6" (month only)
+        if (stored.includes('-')) {
+          const parts = stored.split('-');
+          return parseInt(parts[1]);
+        } else {
+          return parseInt(stored);
+        }
+      }
+      return currentDate.getMonth() + 1;
     } catch {
       return currentDate.getMonth() + 1;
     }

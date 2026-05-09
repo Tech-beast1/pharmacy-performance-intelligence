@@ -1,0 +1,22 @@
+{
+  "query": "SELECT \n  id,\n  userId,\n  month,\n  year,\n  rent,\n  salaries,\n  electricity,\n  others,\n  createdAt,\n  DATE_FORMAT(createdAt, '%Y-%m') as created_month\nFROM overhead_costs\nWHERE userId = 1\nORDER BY year DESC, month DESC\nLIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  id,\n  userId,\n  month,\n  year,\n  rent,\n  salaries,\n  electricity,\n  others,\n  createdAt,\n  DATE_FORMAT(createdAt, '%Y-%m') as created_month\nFROM overhead_costs\nWHERE userId = 1\nORDER BY year DESC, month DESC\nLIMIT 10;",
+  "rows": [
+    {
+      "id": "1230013",
+      "userId": "1",
+      "month": "5",
+      "year": "2026",
+      "rent": "1000.00",
+      "salaries": "0.00",
+      "electricity": "0.00",
+      "others": "0.00",
+      "createdAt": "2026-05-08 09:57:36",
+      "created_month": "2026-05"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tmonth\tyear\trent\tsalaries\telectricity\tothers\tcreatedAt\tcreated_month\n1230013\t1\t5\t2026\t1000.00\t0.00\t0.00\t0.00\t2026-05-08 09:57:36\t2026-05\n",
+  "stderr": "",
+  "execution_time_ms": 263
+}
