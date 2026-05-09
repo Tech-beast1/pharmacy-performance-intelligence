@@ -78,6 +78,8 @@ export default function OverheadCosts() {
   const [electricity, setElectricity] = useState('0');
   const [others, setOthers] = useState('0');
   const [isSaving, setIsSaving] = useState(false);
+  const [userChangedMonth, setUserChangedMonth] = useState(false);
+  const [userChangedYear, setUserChangedYear] = useState(false);
   
 
 
@@ -106,10 +108,10 @@ export default function OverheadCosts() {
   }, [location]);
   
   // Sync with localStorage changes from Dashboard (poll every 500ms)
-  // Note: storage event only fires in different tabs, so we need to poll
+  // BUT: Only sync if user hasn't manually changed the month/year on this page
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!urlMonth) {
+      if (!urlMonth && !userChangedMonth) {
         const storedMonth = getStoredMonth();
         setMonth(prev => {
           const newMonth = storedMonth;
@@ -119,7 +121,7 @@ export default function OverheadCosts() {
           return prev;
         });
       }
-      if (!urlYear) {
+      if (!urlYear && !userChangedYear) {
         const storedYear = getStoredYear();
         setYear(prev => {
           const newYear = storedYear;
@@ -132,7 +134,7 @@ export default function OverheadCosts() {
     }, 500);
     
     return () => clearInterval(interval);
-  }, [urlMonth, urlYear]);
+  }, [urlMonth, urlYear, userChangedMonth, userChangedYear]);
   
   // Also listen for storage event (for cross-tab communication)
   useEffect(() => {
@@ -246,7 +248,10 @@ export default function OverheadCosts() {
             <label className="block text-sm font-medium text-gray-700 mb-2">Month</label>
             <select
               value={month}
-              onChange={(e) => setMonth(parseInt(e.target.value))}
+              onChange={(e) => {
+                setMonth(parseInt(e.target.value));
+                setUserChangedMonth(true);
+              }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {monthNames.map((name, index) => (
@@ -261,7 +266,10 @@ export default function OverheadCosts() {
             <Input
               type="number"
               value={year}
-              onChange={(e) => setYear(parseInt(e.target.value))}
+              onChange={(e) => {
+                setYear(parseInt(e.target.value));
+                setUserChangedYear(true);
+              }}
               className="w-full"
             />
           </div>
