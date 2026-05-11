@@ -670,6 +670,7 @@
 - [x] Update Dashboard Clear All button to pass selected month
 - [x] Test clearing April doesn't affect May data
 - [x] Verify all 66 tests still pass
+- [x] CRITICAL FIX: Multi-branch owner's Clear All was deleting all months - fixed to filter by month/year
 
 
 ## Phase 73: Fix PDF Report to Include Unit Costs and Profits

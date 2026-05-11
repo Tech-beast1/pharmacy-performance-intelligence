@@ -51,7 +51,7 @@ export default function Settings() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Login Method</label>
             <input
               type="text"
-              value={user?.loginMethod || 'Manus OAuth'}
+              value={user?.loginMethod || 'OAuth'}
               disabled
               className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
             />
@@ -98,7 +98,7 @@ export default function Settings() {
         </h3>
         <div className="space-y-4">
           <p className="text-sm text-gray-600">
-            Your account is secured with Manus OAuth authentication. Your data is encrypted and secure.
+            Your account is secured with OAuth authentication. Your data is encrypted and secure.
           </p>
           <Button variant="outline" onClick={handleLogout} className="w-full">
             Logout
