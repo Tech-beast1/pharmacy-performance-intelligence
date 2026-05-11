@@ -222,13 +222,21 @@ export default function InventoryIntelligence() {
     return result;
   }, [branchFilteredItems, alerts, filterAlert]);
 
-  // Calculate branch-specific metrics
+  // Calculate branch-specific metrics using deduplicated items
   const branchMetrics = useMemo(() => {
-    const items = selectedBranchId ? inventory.filter(item => item.branchId === selectedBranchId) : inventory;
+    const expiryRiskItems = branchFilteredItems.filter(item => {
+      const alertStatus = getAlertStatus(item);
+      return alertStatus?.label === 'Expiry Risk';
+    });
     
-    const deadStockItems = items.filter(item => {
+    const deadStockItems = branchFilteredItems.filter(item => {
       const alertStatus = getAlertStatus(item);
       return alertStatus?.label === 'Dead Stock';
+    });
+    
+    const lowMarginItems = branchFilteredItems.filter(item => {
+      const alertStatus = getAlertStatus(item);
+      return alertStatus?.label === 'Low Margin';
     });
     
     const deadStockValue = deadStockItems.reduce((sum, item) => {
@@ -236,11 +244,12 @@ export default function InventoryIntelligence() {
     }, 0);
     
     return {
-      totalItems: items.length,
+      expiryRiskCount: expiryRiskItems.length,
       deadStockCount: deadStockItems.length,
+      lowMarginCount: lowMarginItems.length,
       deadStockValue: deadStockValue
     };
-  }, [inventory, selectedBranchId, alerts]);
+  }, [branchFilteredItems, alerts, getAlertStatus]);
 
   // Sort items
   const sortedItems = useMemo(() => {
@@ -436,7 +445,7 @@ export default function InventoryIntelligence() {
             </div>
             <div>
               <p className="text-sm text-gray-600">Expiry Risk</p>
-              <p className="text-2xl font-bold text-gray-900">{alerts?.expiryRiskProducts.length || 0}</p>
+              <p className="text-2xl font-bold text-gray-900">{branchMetrics.expiryRiskCount}</p>
             </div>
           </div>
         </Card>
@@ -448,7 +457,7 @@ export default function InventoryIntelligence() {
             </div>
             <div>
               <p className="text-sm text-gray-600">Dead Stock</p>
-              <p className="text-2xl font-bold text-gray-900">{alerts?.deadStockProducts.length || 0}</p>
+              <p className="text-2xl font-bold text-gray-900">{branchMetrics.deadStockCount}</p>
             </div>
           </div>
         </Card>
@@ -460,7 +469,7 @@ export default function InventoryIntelligence() {
             </div>
             <div>
               <p className="text-sm text-gray-600">Low Margin</p>
-              <p className="text-2xl font-bold text-gray-900">{alerts?.lowMarginProducts.length || 0}</p>
+              <p className="text-2xl font-bold text-gray-900">{branchMetrics.lowMarginCount}</p>
             </div>
           </div>
         </Card>
