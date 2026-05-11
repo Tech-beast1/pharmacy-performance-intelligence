@@ -501,11 +501,20 @@ export async function getBranchMetrics(branchId: number, month: string) {
     // Estimated profit = Total Revenue - Total Cost Price
     totalProfit = totalRevenue - totalCostPrice;
 
-    // Inventory analysis
+    // Inventory analysis - deduplicate by product name to match frontend behavior
     const now = new Date();
     const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
+    // Deduplicate inventory items by product name (keep first occurrence)
+    const deduplicatedInv = new Map<string, typeof inv[0]>();
     for (const item of inv) {
+      const normalizedName = item.productName?.toLowerCase().trim() || '';
+      if (!deduplicatedInv.has(normalizedName)) {
+        deduplicatedInv.set(normalizedName, item);
+      }
+    }
+
+    for (const item of Array.from(deduplicatedInv.values())) {
       // Expiry risk (products expiring within 30 days from now)
       if (item.expiryDate) {
         const expiryDate = new Date(item.expiryDate);
