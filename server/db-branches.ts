@@ -532,9 +532,9 @@ export async function getBranchMetrics(branchId: number, month: string) {
       if (item.expiryDate) {
         const expiryDate = new Date(item.expiryDate);
         if (expiryDate > now && expiryDate <= thirtyDaysFromNow) {
-          const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
+          const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
           const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
-          expiryRiskLoss += price * quantity;
+          expiryRiskLoss += costPrice * quantity;
           expiryRiskCount++;
         }
       }
@@ -543,9 +543,9 @@ export async function getBranchMetrics(branchId: number, month: string) {
       // Check if this product has any sales transactions
       const hasSales = sales.some(s => s.productName === item.productName);
       if (!hasSales) {
-        const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any) || 0;
+        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
-        deadStockValue += price * quantity;
+        deadStockValue += costPrice * quantity;
         deadStockCount++;
       }
 

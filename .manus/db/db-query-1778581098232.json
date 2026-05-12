@@ -1,0 +1,9 @@
+{
+  "query": "SELECT \n  branchId,\n  COUNT(*) as total_items,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN 1 ELSE 0 END) as dead_stock_count,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN costPrice * quantity ELSE 0 END) as dead_stock_value\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-05' AND branchId IN (20, 300012)\nGROUP BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  COUNT(*) as total_items,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN 1 ELSE 0 END) as dead_stock_count,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN costPrice * quantity ELSE 0 END) as dead_stock_value\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-05' AND branchId IN (20, 300012)\nGROUP BY branchId;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 281
+}

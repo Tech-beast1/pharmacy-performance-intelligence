@@ -1,0 +1,20 @@
+{
+  "query": "SELECT \n  branchId,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(createdAt, '%Y-%m') = '2026-05' THEN id END) as may_sales,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(createdAt, '%Y-%m') = '2026-06' THEN id END) as june_sales\nFROM sales_transactions\nWHERE branchId IN (20, 300012)\nGROUP BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(createdAt, '%Y-%m') = '2026-05' THEN id END) as may_sales,\n  COUNT(DISTINCT CASE WHEN DATE_FORMAT(createdAt, '%Y-%m') = '2026-06' THEN id END) as june_sales\nFROM sales_transactions\nWHERE branchId IN (20, 300012)\nGROUP BY branchId;",
+  "rows": [
+    {
+      "branchId": "300012",
+      "may_sales": "80",
+      "june_sales": "0"
+    },
+    {
+      "branchId": "20",
+      "may_sales": "80",
+      "june_sales": "80"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\tmay_sales\tjune_sales\n300012\t80\t0\n20\t80\t80\n",
+  "stderr": "",
+  "execution_time_ms": 261
+}

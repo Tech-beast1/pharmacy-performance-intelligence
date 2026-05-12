@@ -1,0 +1,35 @@
+{
+  "query": "SELECT \n  branchId,\n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as item_count\nFROM inventory\nWHERE branchId IN (20, 300012)\nGROUP BY branchId, DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY branchId, month;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as item_count\nFROM inventory\nWHERE branchId IN (20, 300012)\nGROUP BY branchId, DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY branchId, month;",
+  "rows": [
+    {
+      "branchId": "20",
+      "month": "2026-04",
+      "item_count": "810"
+    },
+    {
+      "branchId": "20",
+      "month": "2026-05",
+      "item_count": "5"
+    },
+    {
+      "branchId": "20",
+      "month": "2026-06",
+      "item_count": "20"
+    },
+    {
+      "branchId": "300012",
+      "month": "2026-04",
+      "item_count": "794"
+    },
+    {
+      "branchId": "300012",
+      "month": "2026-05",
+      "item_count": "15"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\tmonth\titem_count\n20\t2026-04\t810\n20\t2026-05\t5\n20\t2026-06\t20\n300012\t2026-04\t794\n300012\t2026-05\t15\n",
+  "stderr": "",
+  "execution_time_ms": 263
+}

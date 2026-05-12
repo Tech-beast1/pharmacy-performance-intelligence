@@ -1862,3 +1862,16 @@
 - [x] Fixed date parsing errors in metrics calculations
 - [x] Ensured each month's data is completely independent and isolated
 - [x] All 169 tests passing
+
+
+## Phase 11: Branch Independence Bug Fix
+- [x] Fix branch metric isolation - each branch should have completely independent metrics
+- [x] Verify Tema Branch metrics don't change when Kasoa Branch data is uploaded
+- [x] Verify Kasoa Branch metrics don't change when Tema Branch data is uploaded
+- [x] Fix getConsolidatedMetrics to properly sum metrics from individual branches
+- [x] Test that consolidated metrics = Tema metrics + Kasoa metrics
+- [x] Ensure expiry risk and dead stock values are branch-specific
+- [x] Fixed dead stock value calculation to use costPrice instead of selling price
+- [x] Fixed expiry risk loss calculation to use costPrice instead of selling price
+- [x] Updated test expectations to match cost price calculations
+- [x] All 169 tests passing

@@ -1,0 +1,26 @@
+{
+  "query": "SELECT \n  branchId,\n  COUNT(*) as total_items,\n  SUM(CASE WHEN expiryDate IS NOT NULL AND expiryDate > DATE_SUB(NOW(), INTERVAL 90 DAY) AND expiryDate <= NOW() THEN 1 ELSE 0 END) as expiry_risk_count,\n  SUM(CASE WHEN expiryDate IS NOT NULL AND expiryDate > DATE_SUB(NOW(), INTERVAL 90 DAY) AND expiryDate <= NOW() THEN costPrice * quantity ELSE 0 END) as expiry_risk_loss,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN 1 ELSE 0 END) as dead_stock_count,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN costPrice * quantity ELSE 0 END) as dead_stock_value\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-05' AND branchId IN (20, 300012)\nGROUP BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  COUNT(*) as total_items,\n  SUM(CASE WHEN expiryDate IS NOT NULL AND expiryDate > DATE_SUB(NOW(), INTERVAL 90 DAY) AND expiryDate <= NOW() THEN 1 ELSE 0 END) as expiry_risk_count,\n  SUM(CASE WHEN expiryDate IS NOT NULL AND expiryDate > DATE_SUB(NOW(), INTERVAL 90 DAY) AND expiryDate <= NOW() THEN costPrice * quantity ELSE 0 END) as expiry_risk_loss,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN 1 ELSE 0 END) as dead_stock_count,\n  SUM(CASE WHEN totalSalesQuantity = 0 THEN costPrice * quantity ELSE 0 END) as dead_stock_value\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-05' AND branchId IN (20, 300012)\nGROUP BY branchId;",
+  "rows": [
+    {
+      "branchId": "20",
+      "total_items": "5",
+      "expiry_risk_count": "0",
+      "expiry_risk_loss": "0.00",
+      "dead_stock_count": "5",
+      "dead_stock_value": "2204.00"
+    },
+    {
+      "branchId": "300012",
+      "total_items": "15",
+      "expiry_risk_count": "0",
+      "expiry_risk_loss": "0.00",
+      "dead_stock_count": "15",
+      "dead_stock_value": "863.50"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\ttotal_items\texpiry_risk_count\texpiry_risk_loss\tdead_stock_count\tdead_stock_value\n20\t5\t0\t0.00\t5\t2204.00\n300012\t15\t0\t0.00\t15\t863.50\n",
+  "stderr": "",
+  "execution_time_ms": 258
+}

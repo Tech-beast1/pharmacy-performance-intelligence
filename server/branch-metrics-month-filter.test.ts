@@ -91,7 +91,7 @@ describe('Branch Metrics Month Filtering', () => {
     expect(mayMetrics).not.toBeNull();
     expect(mayMetrics?.totalRevenue).toBe(0); // No May sales
     expect(mayMetrics?.deadStockCount).toBe(1); // Paracetamol May has no sales, so dead stock
-    expect(mayMetrics?.deadStockValue).toBe(500.00); // 100 units * 5.00 price
+    expect(mayMetrics?.deadStockValue).toBe(200.00); // 100 units * 2.00 costPrice
   });
 
   it('should not include May inventory when querying June metrics', async () => {
@@ -134,13 +134,13 @@ describe('Branch Metrics Month Filtering', () => {
     
     // Should only count Product B (June inventory)
     expect(juneMetrics?.deadStockCount).toBe(1); // Only Product B
-    expect(juneMetrics?.deadStockValue).toBe(400.00); // 50 * 8.00
+    expect(juneMetrics?.deadStockValue).toBe(150.00); // 50 * 3.00 costPrice
 
     // Query May metrics
     const mayMetrics = await getBranchMetrics(testBranch.id, '2026-05');
     
     // Should only count Product A (May inventory)
     expect(mayMetrics?.deadStockCount).toBe(1); // Only Product A
-    expect(mayMetrics?.deadStockValue).toBe(1000.00); // 100 * 10.00
+    expect(mayMetrics?.deadStockValue).toBe(500.00); // 100 * 5.00 costPrice
   });
 });
