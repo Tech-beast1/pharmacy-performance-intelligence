@@ -4,7 +4,7 @@
  */
 
 import { eq, and, gte, lt, inArray } from "drizzle-orm";
-import { getDb } from "./db";
+import { getDb, getOverheadCostsByMonth } from "./db";
 import {
   organizations,
   branches,
@@ -398,6 +398,14 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
       };
     }
 
+    // Parse month to get year and month number for overhead cost lookup
+    const parts = month.split('-').map(Number);
+    if (parts.length !== 2 || !parts[0] || !parts[1] || parts[1] < 1 || parts[1] > 12) {
+      console.error("[DB] Invalid month format:", month);
+      return null;
+    }
+    const [year, monthNum] = parts;
+
     // Calculate metrics for each branch
     let totalRevenue = 0;
     let totalProfit = 0;
@@ -406,6 +414,11 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
     let totalExpiryRiskCount = 0;
     let totalDeadStockCount = 0;
     let totalLowMarginCount = 0;
+    let totalOverheadCosts = 0;
+
+    // Get organization owner ID to fetch overhead costs
+    const org = await getOrganization(organizationId);
+    const ownerId = org?.ownerId;
 
     for (const branch of orgBranches) {
       const branchMetrics = await getBranchMetrics(branch.id, month);
@@ -418,11 +431,26 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
         totalDeadStockCount += branchMetrics.deadStockCount || 0;
         totalLowMarginCount += branchMetrics.lowMarginCount || 0;
       }
+
+      // Get overhead costs for this branch
+      if (ownerId) {
+        const overheadCosts = await getOverheadCostsByMonth(ownerId, monthNum, year, branch.id);
+        if (overheadCosts) {
+          totalOverheadCosts += 
+            parseFloat(overheadCosts.rent?.toString() || '0') +
+            parseFloat(overheadCosts.salaries?.toString() || '0') +
+            parseFloat(overheadCosts.electricity?.toString() || '0') +
+            parseFloat(overheadCosts.others?.toString() || '0');
+        }
+      }
     }
+
+    // Deduct total overhead costs from consolidated profit
+    const netProfit = totalProfit - totalOverheadCosts;
 
     return {
       totalRevenue,
-      estimatedProfit: totalProfit,
+      estimatedProfit: netProfit,
       expiryRiskLoss: totalExpiryRiskLoss,
       deadStockValue: totalDeadStockValue,
       expiryRiskCount: totalExpiryRiskCount,

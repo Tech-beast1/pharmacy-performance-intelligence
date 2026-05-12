@@ -402,7 +402,7 @@ export default function InventoryIntelligence() {
                         </span>
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
-                        {alerts && (alerts.deadStockProducts.some((p: any) => p.id === item.id)) ? `₵${(parseFloat(item.price.toString()) * item.quantity).toLocaleString()}` : '₵0'}
+                        {alerts && (alerts.deadStockProducts.some((p: any) => p.id === item.id)) ? `₵${(parseFloat(item.costPrice.toString()) * item.quantity).toLocaleString()}` : '₵0'}
                       </TableCell>
                       <TableCell className="p-4 text-center">
                         {alertStatus ? (
@@ -428,7 +428,7 @@ export default function InventoryIntelligence() {
                   <TableCell colSpan={5} className="p-4 text-right">Total Dead Stock Value:</TableCell>
                   <TableCell className="p-4 text-center text-gray-900">
                     ₵{alerts?.deadStockProducts.reduce((total: number, item: any) => {
-                      return total + (parseFloat(item.price.toString()) * item.quantity);
+                      return total + (parseFloat(item.costPrice.toString()) * item.quantity);
                     }, 0).toLocaleString() || '0'}
                   </TableCell>
                   <TableCell></TableCell>
