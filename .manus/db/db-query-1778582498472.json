@@ -1,0 +1,2380 @@
+{
+  "query": "SELECT id, name, organizationId FROM branches ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT id, name, organizationId FROM branches ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Accra Main",
+      "organizationId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Accra Main",
+      "organizationId": "2"
+    },
+    {
+      "id": "7",
+      "name": "Accra Main",
+      "organizationId": "3"
+    },
+    {
+      "id": "10",
+      "name": "Accra Main",
+      "organizationId": "4"
+    },
+    {
+      "id": "13",
+      "name": "Accra Main",
+      "organizationId": "5"
+    },
+    {
+      "id": "16",
+      "name": "Accra Main",
+      "organizationId": "7"
+    },
+    {
+      "id": "17",
+      "name": "Accra Main",
+      "organizationId": "8"
+    },
+    {
+      "id": "18",
+      "name": "Accra Main",
+      "organizationId": "9"
+    },
+    {
+      "id": "19",
+      "name": "Accra Main",
+      "organizationId": "10"
+    },
+    {
+      "id": "20",
+      "name": "Tema Branch",
+      "organizationId": "11"
+    },
+    {
+      "id": "21",
+      "name": "Accra Main",
+      "organizationId": "12"
+    },
+    {
+      "id": "24",
+      "name": "Accra Main",
+      "organizationId": "14"
+    },
+    {
+      "id": "25",
+      "name": "Accra Main",
+      "organizationId": "15"
+    },
+    {
+      "id": "26",
+      "name": "Accra Main",
+      "organizationId": "16"
+    },
+    {
+      "id": "27",
+      "name": "Accra Main",
+      "organizationId": "17"
+    },
+    {
+      "id": "28",
+      "name": "Accra Main",
+      "organizationId": "18"
+    },
+    {
+      "id": "31",
+      "name": "Accra Main",
+      "organizationId": "20"
+    },
+    {
+      "id": "32",
+      "name": "Accra Main",
+      "organizationId": "21"
+    },
+    {
+      "id": "33",
+      "name": "Accra Main",
+      "organizationId": "22"
+    },
+    {
+      "id": "34",
+      "name": "Accra Main",
+      "organizationId": "23"
+    },
+    {
+      "id": "35",
+      "name": "Accra Main",
+      "organizationId": "24"
+    },
+    {
+      "id": "38",
+      "name": "Accra Main",
+      "organizationId": "26"
+    },
+    {
+      "id": "39",
+      "name": "Accra Main",
+      "organizationId": "27"
+    },
+    {
+      "id": "40",
+      "name": "Accra Main",
+      "organizationId": "28"
+    },
+    {
+      "id": "41",
+      "name": "Accra Main",
+      "organizationId": "29"
+    },
+    {
+      "id": "42",
+      "name": "Accra Main",
+      "organizationId": "30"
+    },
+    {
+      "id": "45",
+      "name": "Accra Main",
+      "organizationId": "32"
+    },
+    {
+      "id": "46",
+      "name": "Accra Main",
+      "organizationId": "33"
+    },
+    {
+      "id": "47",
+      "name": "Accra Main",
+      "organizationId": "34"
+    },
+    {
+      "id": "48",
+      "name": "Accra Main",
+      "organizationId": "35"
+    },
+    {
+      "id": "49",
+      "name": "Accra Main",
+      "organizationId": "36"
+    },
+    {
+      "id": "52",
+      "name": "Accra Main",
+      "organizationId": "38"
+    },
+    {
+      "id": "53",
+      "name": "Accra Main",
+      "organizationId": "39"
+    },
+    {
+      "id": "54",
+      "name": "Accra Main",
+      "organizationId": "40"
+    },
+    {
+      "id": "55",
+      "name": "Accra Main",
+      "organizationId": "41"
+    },
+    {
+      "id": "56",
+      "name": "SHFGYAGRF",
+      "organizationId": "42"
+    },
+    {
+      "id": "57",
+      "name": "Accra Main",
+      "organizationId": "43"
+    },
+    {
+      "id": "60",
+      "name": "Accra Main",
+      "organizationId": "45"
+    },
+    {
+      "id": "61",
+      "name": "Accra Main",
+      "organizationId": "46"
+    },
+    {
+      "id": "62",
+      "name": "Accra Main",
+      "organizationId": "47"
+    },
+    {
+      "id": "63",
+      "name": "Accra Main",
+      "organizationId": "48"
+    },
+    {
+      "id": "30001",
+      "name": "Accra Main",
+      "organizationId": "30001"
+    },
+    {
+      "id": "30004",
+      "name": "Accra Main",
+      "organizationId": "30003"
+    },
+    {
+      "id": "30005",
+      "name": "Accra Main",
+      "organizationId": "30004"
+    },
+    {
+      "id": "30006",
+      "name": "Accra Main",
+      "organizationId": "30005"
+    },
+    {
+      "id": "30007",
+      "name": "Accra Main",
+      "organizationId": "30006"
+    },
+    {
+      "id": "30008",
+      "name": "Accra Main",
+      "organizationId": "30007"
+    },
+    {
+      "id": "30011",
+      "name": "Accra Main",
+      "organizationId": "30009"
+    },
+    {
+      "id": "30012",
+      "name": "Accra Main",
+      "organizationId": "30010"
+    },
+    {
+      "id": "30013",
+      "name": "Accra Main",
+      "organizationId": "30011"
+    },
+    {
+      "id": "30014",
+      "name": "Accra Main",
+      "organizationId": "30012"
+    },
+    {
+      "id": "30015",
+      "name": "Accra Main",
+      "organizationId": "30013"
+    },
+    {
+      "id": "30018",
+      "name": "Accra Main",
+      "organizationId": "30015"
+    },
+    {
+      "id": "30019",
+      "name": "Accra Main",
+      "organizationId": "30016"
+    },
+    {
+      "id": "30020",
+      "name": "Accra Main",
+      "organizationId": "30017"
+    },
+    {
+      "id": "30021",
+      "name": "Accra Main",
+      "organizationId": "30018"
+    },
+    {
+      "id": "30022",
+      "name": "Accra Main",
+      "organizationId": "30019"
+    },
+    {
+      "id": "30025",
+      "name": "Accra Main",
+      "organizationId": "30021"
+    },
+    {
+      "id": "30026",
+      "name": "Accra Main",
+      "organizationId": "30022"
+    },
+    {
+      "id": "30027",
+      "name": "Accra Main",
+      "organizationId": "30023"
+    },
+    {
+      "id": "30028",
+      "name": "Accra Main",
+      "organizationId": "30024"
+    },
+    {
+      "id": "30029",
+      "name": "Accra Main",
+      "organizationId": "30025"
+    },
+    {
+      "id": "30032",
+      "name": "Accra Main",
+      "organizationId": "30027"
+    },
+    {
+      "id": "30033",
+      "name": "Accra Main",
+      "organizationId": "30028"
+    },
+    {
+      "id": "30034",
+      "name": "Accra Main",
+      "organizationId": "30029"
+    },
+    {
+      "id": "30035",
+      "name": "Accra Main",
+      "organizationId": "30030"
+    },
+    {
+      "id": "60001",
+      "name": "Accra Main",
+      "organizationId": "60001"
+    },
+    {
+      "id": "60004",
+      "name": "Accra Main",
+      "organizationId": "60003"
+    },
+    {
+      "id": "60005",
+      "name": "Accra Main",
+      "organizationId": "60004"
+    },
+    {
+      "id": "60006",
+      "name": "Accra Main",
+      "organizationId": "60005"
+    },
+    {
+      "id": "60007",
+      "name": "Accra Main",
+      "organizationId": "60006"
+    },
+    {
+      "id": "60008",
+      "name": "Accra Main",
+      "organizationId": "60007"
+    },
+    {
+      "id": "60011",
+      "name": "Accra Main",
+      "organizationId": "60009"
+    },
+    {
+      "id": "60012",
+      "name": "Accra Main",
+      "organizationId": "60010"
+    },
+    {
+      "id": "60013",
+      "name": "Accra Main",
+      "organizationId": "60011"
+    },
+    {
+      "id": "60014",
+      "name": "Accra Main",
+      "organizationId": "60012"
+    },
+    {
+      "id": "60016",
+      "name": "Accra Main",
+      "organizationId": "60013"
+    },
+    {
+      "id": "60019",
+      "name": "Accra Main",
+      "organizationId": "60015"
+    },
+    {
+      "id": "60020",
+      "name": "Accra Main",
+      "organizationId": "60016"
+    },
+    {
+      "id": "60021",
+      "name": "Accra Main",
+      "organizationId": "60017"
+    },
+    {
+      "id": "60022",
+      "name": "Accra Main",
+      "organizationId": "60018"
+    },
+    {
+      "id": "60023",
+      "name": "Accra Main",
+      "organizationId": "60019"
+    },
+    {
+      "id": "60026",
+      "name": "Accra Main",
+      "organizationId": "60021"
+    },
+    {
+      "id": "60027",
+      "name": "Accra Main",
+      "organizationId": "60022"
+    },
+    {
+      "id": "60028",
+      "name": "Accra Main",
+      "organizationId": "60023"
+    },
+    {
+      "id": "60029",
+      "name": "Accra Main",
+      "organizationId": "60024"
+    },
+    {
+      "id": "60030",
+      "name": "Accra Main",
+      "organizationId": "60025"
+    },
+    {
+      "id": "60033",
+      "name": "Accra Main",
+      "organizationId": "60027"
+    },
+    {
+      "id": "60034",
+      "name": "Accra Main",
+      "organizationId": "60028"
+    },
+    {
+      "id": "60035",
+      "name": "Accra Main",
+      "organizationId": "60029"
+    },
+    {
+      "id": "60036",
+      "name": "Accra Main",
+      "organizationId": "60030"
+    },
+    {
+      "id": "60037",
+      "name": "Accra Main",
+      "organizationId": "60031"
+    },
+    {
+      "id": "60040",
+      "name": "Accra Main",
+      "organizationId": "60033"
+    },
+    {
+      "id": "60041",
+      "name": "Accra Main",
+      "organizationId": "60034"
+    },
+    {
+      "id": "60042",
+      "name": "Accra Main",
+      "organizationId": "60035"
+    },
+    {
+      "id": "60043",
+      "name": "Accra Main",
+      "organizationId": "60036"
+    },
+    {
+      "id": "60044",
+      "name": "Accra Main",
+      "organizationId": "60037"
+    },
+    {
+      "id": "60047",
+      "name": "Accra Main",
+      "organizationId": "60039"
+    },
+    {
+      "id": "60048",
+      "name": "Accra Main",
+      "organizationId": "60040"
+    },
+    {
+      "id": "60049",
+      "name": "Accra Main",
+      "organizationId": "60041"
+    },
+    {
+      "id": "60050",
+      "name": "Accra Main",
+      "organizationId": "60042"
+    },
+    {
+      "id": "60051",
+      "name": "Accra Main",
+      "organizationId": "60043"
+    },
+    {
+      "id": "60054",
+      "name": "Accra Main",
+      "organizationId": "60045"
+    },
+    {
+      "id": "60055",
+      "name": "Accra Main",
+      "organizationId": "60046"
+    },
+    {
+      "id": "60056",
+      "name": "Accra Main",
+      "organizationId": "60047"
+    },
+    {
+      "id": "60057",
+      "name": "Accra Main",
+      "organizationId": "60048"
+    },
+    {
+      "id": "60058",
+      "name": "Accra Main",
+      "organizationId": "60049"
+    },
+    {
+      "id": "60061",
+      "name": "Accra Main",
+      "organizationId": "60051"
+    },
+    {
+      "id": "60062",
+      "name": "Accra Main",
+      "organizationId": "60052"
+    },
+    {
+      "id": "60063",
+      "name": "Accra Main",
+      "organizationId": "60053"
+    },
+    {
+      "id": "60064",
+      "name": "Accra Main",
+      "organizationId": "60054"
+    },
+    {
+      "id": "60065",
+      "name": "Accra Main",
+      "organizationId": "60055"
+    },
+    {
+      "id": "60068",
+      "name": "Accra Main",
+      "organizationId": "60057"
+    },
+    {
+      "id": "60069",
+      "name": "Accra Main",
+      "organizationId": "60058"
+    },
+    {
+      "id": "60070",
+      "name": "Accra Main",
+      "organizationId": "60059"
+    },
+    {
+      "id": "60071",
+      "name": "Accra Main",
+      "organizationId": "60060"
+    },
+    {
+      "id": "90001",
+      "name": "Accra Main",
+      "organizationId": "90001"
+    },
+    {
+      "id": "90004",
+      "name": "Accra Main",
+      "organizationId": "90002"
+    },
+    {
+      "id": "90007",
+      "name": "Accra Main",
+      "organizationId": "90004"
+    },
+    {
+      "id": "90008",
+      "name": "Accra Main",
+      "organizationId": "90005"
+    },
+    {
+      "id": "90009",
+      "name": "Accra Main",
+      "organizationId": "90006"
+    },
+    {
+      "id": "90010",
+      "name": "Accra Main",
+      "organizationId": "90007"
+    },
+    {
+      "id": "90011",
+      "name": "Accra Main",
+      "organizationId": "90008"
+    },
+    {
+      "id": "90013",
+      "name": "Accra Main",
+      "organizationId": "90010"
+    },
+    {
+      "id": "90014",
+      "name": "Accra Main",
+      "organizationId": "90011"
+    },
+    {
+      "id": "90015",
+      "name": "Accra Main",
+      "organizationId": "90013"
+    },
+    {
+      "id": "90017",
+      "name": "Accra Main",
+      "organizationId": "90015"
+    },
+    {
+      "id": "90018",
+      "name": "Accra Main",
+      "organizationId": "90016"
+    },
+    {
+      "id": "90019",
+      "name": "Accra Main",
+      "organizationId": "90017"
+    },
+    {
+      "id": "90021",
+      "name": "Accra Main",
+      "organizationId": "90018"
+    },
+    {
+      "id": "120001",
+      "name": "Accra Main",
+      "organizationId": "120001"
+    },
+    {
+      "id": "120004",
+      "name": "Accra Main",
+      "organizationId": "120003"
+    },
+    {
+      "id": "120005",
+      "name": "Accra Main",
+      "organizationId": "120004"
+    },
+    {
+      "id": "120006",
+      "name": "Accra Main",
+      "organizationId": "120005"
+    },
+    {
+      "id": "120007",
+      "name": "Accra Main",
+      "organizationId": "120006"
+    },
+    {
+      "id": "120008",
+      "name": "Accra Main",
+      "organizationId": "120007"
+    },
+    {
+      "id": "120011",
+      "name": "Accra Main",
+      "organizationId": "120009"
+    },
+    {
+      "id": "120012",
+      "name": "Accra Main",
+      "organizationId": "120010"
+    },
+    {
+      "id": "120013",
+      "name": "Accra Main",
+      "organizationId": "120011"
+    },
+    {
+      "id": "120014",
+      "name": "Accra Main",
+      "organizationId": "120012"
+    },
+    {
+      "id": "150001",
+      "name": "Accra Main",
+      "organizationId": "150001"
+    },
+    {
+      "id": "150003",
+      "name": "Accra Main",
+      "organizationId": "150002"
+    },
+    {
+      "id": "150006",
+      "name": "Accra Main",
+      "organizationId": "150004"
+    },
+    {
+      "id": "150007",
+      "name": "Accra Main",
+      "organizationId": "150005"
+    },
+    {
+      "id": "150008",
+      "name": "Accra Main",
+      "organizationId": "150006"
+    },
+    {
+      "id": "150009",
+      "name": "Accra Main",
+      "organizationId": "150007"
+    },
+    {
+      "id": "150010",
+      "name": "Test Branch",
+      "organizationId": "150008"
+    },
+    {
+      "id": "150011",
+      "name": "Test Branch 2",
+      "organizationId": "150008"
+    },
+    {
+      "id": "150012",
+      "name": "Month Filter Test",
+      "organizationId": "150008"
+    },
+    {
+      "id": "180001",
+      "name": "Accra Main",
+      "organizationId": "180001"
+    },
+    {
+      "id": "180003",
+      "name": "Accra Main",
+      "organizationId": "180003"
+    },
+    {
+      "id": "180004",
+      "name": "Accra Main",
+      "organizationId": "180004"
+    },
+    {
+      "id": "180005",
+      "name": "Accra Main",
+      "organizationId": "180005"
+    },
+    {
+      "id": "180006",
+      "name": "Accra Main",
+      "organizationId": "180006"
+    },
+    {
+      "id": "180008",
+      "name": "Accra Main",
+      "organizationId": "180007"
+    },
+    {
+      "id": "180011",
+      "name": "Accra Main",
+      "organizationId": "180009"
+    },
+    {
+      "id": "180012",
+      "name": "Accra Main",
+      "organizationId": "180010"
+    },
+    {
+      "id": "180013",
+      "name": "Accra Main",
+      "organizationId": "180011"
+    },
+    {
+      "id": "180014",
+      "name": "Accra Main",
+      "organizationId": "180012"
+    },
+    {
+      "id": "180015",
+      "name": "Test Branch",
+      "organizationId": "180013"
+    },
+    {
+      "id": "180016",
+      "name": "Month Filter Test",
+      "organizationId": "180013"
+    },
+    {
+      "id": "180017",
+      "name": "Test Branch",
+      "organizationId": "180014"
+    },
+    {
+      "id": "180018",
+      "name": "Accra Main",
+      "organizationId": "180015"
+    },
+    {
+      "id": "180021",
+      "name": "Accra Main",
+      "organizationId": "180017"
+    },
+    {
+      "id": "180022",
+      "name": "Accra Main",
+      "organizationId": "180018"
+    },
+    {
+      "id": "180023",
+      "name": "Accra Main",
+      "organizationId": "180019"
+    },
+    {
+      "id": "180024",
+      "name": "Accra Main",
+      "organizationId": "180020"
+    },
+    {
+      "id": "180025",
+      "name": "Test Branch",
+      "organizationId": "180021"
+    },
+    {
+      "id": "180026",
+      "name": "Month Filter Test",
+      "organizationId": "180021"
+    },
+    {
+      "id": "180027",
+      "name": "Test Branch",
+      "organizationId": "180022"
+    },
+    {
+      "id": "180028",
+      "name": "Accra Main",
+      "organizationId": "180023"
+    },
+    {
+      "id": "180031",
+      "name": "Accra Main",
+      "organizationId": "180025"
+    },
+    {
+      "id": "180032",
+      "name": "Accra Main",
+      "organizationId": "180026"
+    },
+    {
+      "id": "180033",
+      "name": "Accra Main",
+      "organizationId": "180027"
+    },
+    {
+      "id": "180034",
+      "name": "Accra Main",
+      "organizationId": "180028"
+    },
+    {
+      "id": "180035",
+      "name": "Test Branch",
+      "organizationId": "180029"
+    },
+    {
+      "id": "180036",
+      "name": "Month Filter Test",
+      "organizationId": "180029"
+    },
+    {
+      "id": "180037",
+      "name": "Test Branch",
+      "organizationId": "180030"
+    },
+    {
+      "id": "180038",
+      "name": "Accra Main",
+      "organizationId": "180031"
+    },
+    {
+      "id": "180041",
+      "name": "Accra Main",
+      "organizationId": "180033"
+    },
+    {
+      "id": "180042",
+      "name": "Accra Main",
+      "organizationId": "180034"
+    },
+    {
+      "id": "180043",
+      "name": "Accra Main",
+      "organizationId": "180035"
+    },
+    {
+      "id": "180044",
+      "name": "Accra Main",
+      "organizationId": "180036"
+    },
+    {
+      "id": "180045",
+      "name": "Test Branch",
+      "organizationId": "180037"
+    },
+    {
+      "id": "180046",
+      "name": "Month Filter Test",
+      "organizationId": "180037"
+    },
+    {
+      "id": "210001",
+      "name": "Test Branch",
+      "organizationId": "210001"
+    },
+    {
+      "id": "210002",
+      "name": "Accra Main",
+      "organizationId": "210002"
+    },
+    {
+      "id": "210005",
+      "name": "Accra Main",
+      "organizationId": "210004"
+    },
+    {
+      "id": "210006",
+      "name": "Accra Main",
+      "organizationId": "210005"
+    },
+    {
+      "id": "210007",
+      "name": "Accra Main",
+      "organizationId": "210006"
+    },
+    {
+      "id": "210008",
+      "name": "Accra Main",
+      "organizationId": "210007"
+    },
+    {
+      "id": "210009",
+      "name": "Test Branch",
+      "organizationId": "210008"
+    },
+    {
+      "id": "210010",
+      "name": "Month Filter Test",
+      "organizationId": "210008"
+    },
+    {
+      "id": "210011",
+      "name": "Test Branch",
+      "organizationId": "210009"
+    },
+    {
+      "id": "210012",
+      "name": "Accra Main",
+      "organizationId": "210010"
+    },
+    {
+      "id": "210015",
+      "name": "Accra Main",
+      "organizationId": "210012"
+    },
+    {
+      "id": "210016",
+      "name": "Accra Main",
+      "organizationId": "210013"
+    },
+    {
+      "id": "210017",
+      "name": "Accra Main",
+      "organizationId": "210014"
+    },
+    {
+      "id": "210018",
+      "name": "Accra Main",
+      "organizationId": "210015"
+    },
+    {
+      "id": "210019",
+      "name": "Test Branch",
+      "organizationId": "210016"
+    },
+    {
+      "id": "210020",
+      "name": "Month Filter Test",
+      "organizationId": "210016"
+    },
+    {
+      "id": "240001",
+      "name": "Test Branch",
+      "organizationId": "240001"
+    },
+    {
+      "id": "240002",
+      "name": "Accra Main",
+      "organizationId": "240002"
+    },
+    {
+      "id": "240005",
+      "name": "Accra Main",
+      "organizationId": "240004"
+    },
+    {
+      "id": "240006",
+      "name": "Accra Main",
+      "organizationId": "240005"
+    },
+    {
+      "id": "240007",
+      "name": "Accra Main",
+      "organizationId": "240006"
+    },
+    {
+      "id": "240008",
+      "name": "Accra Main",
+      "organizationId": "240007"
+    },
+    {
+      "id": "240009",
+      "name": "Test Branch",
+      "organizationId": "240008"
+    },
+    {
+      "id": "240010",
+      "name": "Month Filter Test",
+      "organizationId": "240008"
+    },
+    {
+      "id": "240011",
+      "name": "Test Branch",
+      "organizationId": "240009"
+    },
+    {
+      "id": "240012",
+      "name": "Accra Main",
+      "organizationId": "240010"
+    },
+    {
+      "id": "240015",
+      "name": "Accra Main",
+      "organizationId": "240012"
+    },
+    {
+      "id": "240016",
+      "name": "Accra Main",
+      "organizationId": "240013"
+    },
+    {
+      "id": "240017",
+      "name": "Accra Main",
+      "organizationId": "240014"
+    },
+    {
+      "id": "240018",
+      "name": "Accra Main",
+      "organizationId": "240015"
+    },
+    {
+      "id": "240019",
+      "name": "Test Branch",
+      "organizationId": "240016"
+    },
+    {
+      "id": "240020",
+      "name": "Month Filter Test",
+      "organizationId": "240016"
+    },
+    {
+      "id": "240021",
+      "name": "Test Branch",
+      "organizationId": "240017"
+    },
+    {
+      "id": "240022",
+      "name": "Accra Main",
+      "organizationId": "240018"
+    },
+    {
+      "id": "240025",
+      "name": "Accra Main",
+      "organizationId": "240020"
+    },
+    {
+      "id": "240026",
+      "name": "Accra Main",
+      "organizationId": "240021"
+    },
+    {
+      "id": "240027",
+      "name": "Accra Main",
+      "organizationId": "240022"
+    },
+    {
+      "id": "240028",
+      "name": "Accra Main",
+      "organizationId": "240023"
+    },
+    {
+      "id": "240029",
+      "name": "Test Branch",
+      "organizationId": "240024"
+    },
+    {
+      "id": "240030",
+      "name": "Month Filter Test",
+      "organizationId": "240024"
+    },
+    {
+      "id": "240031",
+      "name": "Test Branch",
+      "organizationId": "240025"
+    },
+    {
+      "id": "240032",
+      "name": "Accra Main",
+      "organizationId": "240026"
+    },
+    {
+      "id": "240035",
+      "name": "Accra Main",
+      "organizationId": "240028"
+    },
+    {
+      "id": "240036",
+      "name": "Accra Main",
+      "organizationId": "240029"
+    },
+    {
+      "id": "240037",
+      "name": "Accra Main",
+      "organizationId": "240030"
+    },
+    {
+      "id": "240038",
+      "name": "Accra Main",
+      "organizationId": "240031"
+    },
+    {
+      "id": "240039",
+      "name": "Test Branch",
+      "organizationId": "240032"
+    },
+    {
+      "id": "240040",
+      "name": "Month Filter Test",
+      "organizationId": "240032"
+    },
+    {
+      "id": "240041",
+      "name": "Test Branch",
+      "organizationId": "240033"
+    },
+    {
+      "id": "240042",
+      "name": "Accra Main",
+      "organizationId": "240034"
+    },
+    {
+      "id": "240045",
+      "name": "Accra Main",
+      "organizationId": "240036"
+    },
+    {
+      "id": "240046",
+      "name": "Accra Main",
+      "organizationId": "240037"
+    },
+    {
+      "id": "240047",
+      "name": "Accra Main",
+      "organizationId": "240038"
+    },
+    {
+      "id": "240048",
+      "name": "Accra Main",
+      "organizationId": "240039"
+    },
+    {
+      "id": "240049",
+      "name": "Test Branch",
+      "organizationId": "240040"
+    },
+    {
+      "id": "240050",
+      "name": "Month Filter Test",
+      "organizationId": "240040"
+    },
+    {
+      "id": "240051",
+      "name": "Test Branch",
+      "organizationId": "240041"
+    },
+    {
+      "id": "240052",
+      "name": "Accra Main",
+      "organizationId": "240042"
+    },
+    {
+      "id": "240055",
+      "name": "Accra Main",
+      "organizationId": "240044"
+    },
+    {
+      "id": "240056",
+      "name": "Accra Main",
+      "organizationId": "240045"
+    },
+    {
+      "id": "240057",
+      "name": "Accra Main",
+      "organizationId": "240046"
+    },
+    {
+      "id": "240058",
+      "name": "Accra Main",
+      "organizationId": "240047"
+    },
+    {
+      "id": "240059",
+      "name": "Test Branch",
+      "organizationId": "240048"
+    },
+    {
+      "id": "240060",
+      "name": "Month Filter Test",
+      "organizationId": "240048"
+    },
+    {
+      "id": "240061",
+      "name": "Test Branch",
+      "organizationId": "240049"
+    },
+    {
+      "id": "240062",
+      "name": "Accra Main",
+      "organizationId": "240050"
+    },
+    {
+      "id": "240065",
+      "name": "Accra Main",
+      "organizationId": "240052"
+    },
+    {
+      "id": "240066",
+      "name": "Accra Main",
+      "organizationId": "240053"
+    },
+    {
+      "id": "240067",
+      "name": "Accra Main",
+      "organizationId": "240054"
+    },
+    {
+      "id": "240068",
+      "name": "Accra Main",
+      "organizationId": "240055"
+    },
+    {
+      "id": "240070",
+      "name": "Test Branch",
+      "organizationId": "240057"
+    },
+    {
+      "id": "240071",
+      "name": "Month Filter Test",
+      "organizationId": "240057"
+    },
+    {
+      "id": "240072",
+      "name": "Test Branch",
+      "organizationId": "240058"
+    },
+    {
+      "id": "240073",
+      "name": "Accra Main",
+      "organizationId": "240059"
+    },
+    {
+      "id": "240076",
+      "name": "Accra Main",
+      "organizationId": "240061"
+    },
+    {
+      "id": "240077",
+      "name": "Accra Main",
+      "organizationId": "240062"
+    },
+    {
+      "id": "240078",
+      "name": "Accra Main",
+      "organizationId": "240063"
+    },
+    {
+      "id": "240079",
+      "name": "Accra Main",
+      "organizationId": "240064"
+    },
+    {
+      "id": "240081",
+      "name": "Test Branch",
+      "organizationId": "240066"
+    },
+    {
+      "id": "240082",
+      "name": "Month Filter Test",
+      "organizationId": "240066"
+    },
+    {
+      "id": "240083",
+      "name": "Test Branch",
+      "organizationId": "240067"
+    },
+    {
+      "id": "240084",
+      "name": "Accra Main",
+      "organizationId": "240068"
+    },
+    {
+      "id": "240087",
+      "name": "Accra Main",
+      "organizationId": "240070"
+    },
+    {
+      "id": "240088",
+      "name": "Accra Main",
+      "organizationId": "240071"
+    },
+    {
+      "id": "240089",
+      "name": "Accra Main",
+      "organizationId": "240072"
+    },
+    {
+      "id": "240090",
+      "name": "Accra Main",
+      "organizationId": "240073"
+    },
+    {
+      "id": "240092",
+      "name": "Test Branch",
+      "organizationId": "240075"
+    },
+    {
+      "id": "240093",
+      "name": "Month Filter Test",
+      "organizationId": "240075"
+    },
+    {
+      "id": "240094",
+      "name": "Test Branch",
+      "organizationId": "240076"
+    },
+    {
+      "id": "240095",
+      "name": "Accra Main",
+      "organizationId": "240077"
+    },
+    {
+      "id": "240098",
+      "name": "Accra Main",
+      "organizationId": "240079"
+    },
+    {
+      "id": "240099",
+      "name": "Accra Main",
+      "organizationId": "240080"
+    },
+    {
+      "id": "240100",
+      "name": "Accra Main",
+      "organizationId": "240081"
+    },
+    {
+      "id": "240101",
+      "name": "Accra Main",
+      "organizationId": "240082"
+    },
+    {
+      "id": "240103",
+      "name": "Test Branch",
+      "organizationId": "240084"
+    },
+    {
+      "id": "240105",
+      "name": "Month Filter Test",
+      "organizationId": "240084"
+    },
+    {
+      "id": "240106",
+      "name": "Test Branch",
+      "organizationId": "240086"
+    },
+    {
+      "id": "240107",
+      "name": "Accra Main",
+      "organizationId": "240087"
+    },
+    {
+      "id": "240110",
+      "name": "Accra Main",
+      "organizationId": "240089"
+    },
+    {
+      "id": "240111",
+      "name": "Accra Main",
+      "organizationId": "240090"
+    },
+    {
+      "id": "240112",
+      "name": "Accra Main",
+      "organizationId": "240091"
+    },
+    {
+      "id": "240113",
+      "name": "Accra Main",
+      "organizationId": "240092"
+    },
+    {
+      "id": "240114",
+      "name": "Test Branch",
+      "organizationId": "240093"
+    },
+    {
+      "id": "240116",
+      "name": "Month Filter Test",
+      "organizationId": "240093"
+    },
+    {
+      "id": "270001",
+      "name": "Test Branch",
+      "organizationId": "270001"
+    },
+    {
+      "id": "270002",
+      "name": "Accra Main",
+      "organizationId": "270002"
+    },
+    {
+      "id": "270005",
+      "name": "Accra Main",
+      "organizationId": "270004"
+    },
+    {
+      "id": "270006",
+      "name": "Accra Main",
+      "organizationId": "270005"
+    },
+    {
+      "id": "270007",
+      "name": "Accra Main",
+      "organizationId": "270006"
+    },
+    {
+      "id": "270008",
+      "name": "Accra Main",
+      "organizationId": "270007"
+    },
+    {
+      "id": "270009",
+      "name": "Test Branch",
+      "organizationId": "270008"
+    },
+    {
+      "id": "270011",
+      "name": "Month Filter Test",
+      "organizationId": "270008"
+    },
+    {
+      "id": "270012",
+      "name": "Test Branch",
+      "organizationId": "270010"
+    },
+    {
+      "id": "270013",
+      "name": "Accra Main",
+      "organizationId": "270011"
+    },
+    {
+      "id": "270016",
+      "name": "Accra Main",
+      "organizationId": "270013"
+    },
+    {
+      "id": "270017",
+      "name": "Accra Main",
+      "organizationId": "270014"
+    },
+    {
+      "id": "270018",
+      "name": "Accra Main",
+      "organizationId": "270015"
+    },
+    {
+      "id": "270019",
+      "name": "Accra Main",
+      "organizationId": "270016"
+    },
+    {
+      "id": "270020",
+      "name": "Test Branch",
+      "organizationId": "270017"
+    },
+    {
+      "id": "270021",
+      "name": "Month Filter Test",
+      "organizationId": "270017"
+    },
+    {
+      "id": "270023",
+      "name": "Test Branch",
+      "organizationId": "270019"
+    },
+    {
+      "id": "270024",
+      "name": "Accra Main",
+      "organizationId": "270020"
+    },
+    {
+      "id": "270027",
+      "name": "Accra Main",
+      "organizationId": "270022"
+    },
+    {
+      "id": "270028",
+      "name": "Accra Main",
+      "organizationId": "270023"
+    },
+    {
+      "id": "270029",
+      "name": "Accra Main",
+      "organizationId": "270024"
+    },
+    {
+      "id": "270030",
+      "name": "Accra Main",
+      "organizationId": "270025"
+    },
+    {
+      "id": "270031",
+      "name": "Test Branch",
+      "organizationId": "270026"
+    },
+    {
+      "id": "270033",
+      "name": "Month Filter Test",
+      "organizationId": "270026"
+    },
+    {
+      "id": "270034",
+      "name": "Test Branch",
+      "organizationId": "270028"
+    },
+    {
+      "id": "270035",
+      "name": "Accra Main",
+      "organizationId": "270029"
+    },
+    {
+      "id": "270038",
+      "name": "Accra Main",
+      "organizationId": "270031"
+    },
+    {
+      "id": "270039",
+      "name": "Accra Main",
+      "organizationId": "270032"
+    },
+    {
+      "id": "270040",
+      "name": "Accra Main",
+      "organizationId": "270033"
+    },
+    {
+      "id": "270041",
+      "name": "Accra Main",
+      "organizationId": "270034"
+    },
+    {
+      "id": "270042",
+      "name": "Test Branch",
+      "organizationId": "270035"
+    },
+    {
+      "id": "270044",
+      "name": "Month Filter Test",
+      "organizationId": "270035"
+    },
+    {
+      "id": "300001",
+      "name": "Test Branch",
+      "organizationId": "300001"
+    },
+    {
+      "id": "300002",
+      "name": "Accra Main",
+      "organizationId": "300002"
+    },
+    {
+      "id": "300005",
+      "name": "Accra Main",
+      "organizationId": "300004"
+    },
+    {
+      "id": "300006",
+      "name": "Accra Main",
+      "organizationId": "300005"
+    },
+    {
+      "id": "300007",
+      "name": "Accra Main",
+      "organizationId": "300006"
+    },
+    {
+      "id": "300008",
+      "name": "Accra Main",
+      "organizationId": "300007"
+    },
+    {
+      "id": "300009",
+      "name": "Test Branch",
+      "organizationId": "300008"
+    },
+    {
+      "id": "300011",
+      "name": "Month Filter Test",
+      "organizationId": "300008"
+    },
+    {
+      "id": "300012",
+      "name": "Kasoa Branch",
+      "organizationId": "11"
+    },
+    {
+      "id": "330001",
+      "name": "Test Branch",
+      "organizationId": "330001"
+    },
+    {
+      "id": "330002",
+      "name": "Accra Main",
+      "organizationId": "330002"
+    },
+    {
+      "id": "330005",
+      "name": "Accra Main",
+      "organizationId": "330004"
+    },
+    {
+      "id": "330006",
+      "name": "Accra Main",
+      "organizationId": "330005"
+    },
+    {
+      "id": "330007",
+      "name": "Accra Main",
+      "organizationId": "330006"
+    },
+    {
+      "id": "330008",
+      "name": "Accra Main",
+      "organizationId": "330007"
+    },
+    {
+      "id": "330010",
+      "name": "Test Branch",
+      "organizationId": "330009"
+    },
+    {
+      "id": "330011",
+      "name": "Month Filter Test",
+      "organizationId": "330009"
+    },
+    {
+      "id": "330012",
+      "name": "Test Branch",
+      "organizationId": "330010"
+    },
+    {
+      "id": "330013",
+      "name": "Accra Main",
+      "organizationId": "330011"
+    },
+    {
+      "id": "330016",
+      "name": "Accra Main",
+      "organizationId": "330013"
+    },
+    {
+      "id": "330017",
+      "name": "Accra Main",
+      "organizationId": "330014"
+    },
+    {
+      "id": "330018",
+      "name": "Accra Main",
+      "organizationId": "330015"
+    },
+    {
+      "id": "330019",
+      "name": "Accra Main",
+      "organizationId": "330016"
+    },
+    {
+      "id": "330020",
+      "name": "Test Branch",
+      "organizationId": "330017"
+    },
+    {
+      "id": "330022",
+      "name": "Month Filter Test",
+      "organizationId": "330017"
+    },
+    {
+      "id": "360001",
+      "name": "Test Branch",
+      "organizationId": "360001"
+    },
+    {
+      "id": "360002",
+      "name": "Accra Main",
+      "organizationId": "360002"
+    },
+    {
+      "id": "360005",
+      "name": "Accra Main",
+      "organizationId": "360004"
+    },
+    {
+      "id": "360006",
+      "name": "Accra Main",
+      "organizationId": "360005"
+    },
+    {
+      "id": "360007",
+      "name": "Accra Main",
+      "organizationId": "360006"
+    },
+    {
+      "id": "360008",
+      "name": "Accra Main",
+      "organizationId": "360007"
+    },
+    {
+      "id": "360009",
+      "name": "Test Branch",
+      "organizationId": "360008"
+    },
+    {
+      "id": "360011",
+      "name": "Month Filter Test",
+      "organizationId": "360008"
+    },
+    {
+      "id": "360012",
+      "name": "Test Branch",
+      "organizationId": "360010"
+    },
+    {
+      "id": "360013",
+      "name": "Accra Main",
+      "organizationId": "360011"
+    },
+    {
+      "id": "360016",
+      "name": "Accra Main",
+      "organizationId": "360013"
+    },
+    {
+      "id": "360017",
+      "name": "Accra Main",
+      "organizationId": "360014"
+    },
+    {
+      "id": "360018",
+      "name": "Accra Main",
+      "organizationId": "360015"
+    },
+    {
+      "id": "360019",
+      "name": "Accra Main",
+      "organizationId": "360016"
+    },
+    {
+      "id": "360020",
+      "name": "Test Branch",
+      "organizationId": "360017"
+    },
+    {
+      "id": "360022",
+      "name": "Month Filter Test",
+      "organizationId": "360017"
+    },
+    {
+      "id": "360023",
+      "name": "Test Branch",
+      "organizationId": "360019"
+    },
+    {
+      "id": "360024",
+      "name": "Accra Main",
+      "organizationId": "360020"
+    },
+    {
+      "id": "360027",
+      "name": "Accra Main",
+      "organizationId": "360022"
+    },
+    {
+      "id": "360028",
+      "name": "Accra Main",
+      "organizationId": "360023"
+    },
+    {
+      "id": "360029",
+      "name": "Accra Main",
+      "organizationId": "360024"
+    },
+    {
+      "id": "360030",
+      "name": "Accra Main",
+      "organizationId": "360025"
+    },
+    {
+      "id": "360031",
+      "name": "Test Branch",
+      "organizationId": "360026"
+    },
+    {
+      "id": "360033",
+      "name": "Month Filter Test",
+      "organizationId": "360026"
+    },
+    {
+      "id": "360034",
+      "name": "Test Branch",
+      "organizationId": "360028"
+    },
+    {
+      "id": "360035",
+      "name": "Accra Main",
+      "organizationId": "360029"
+    },
+    {
+      "id": "360038",
+      "name": "Accra Main",
+      "organizationId": "360031"
+    },
+    {
+      "id": "360039",
+      "name": "Accra Main",
+      "organizationId": "360032"
+    },
+    {
+      "id": "360040",
+      "name": "Accra Main",
+      "organizationId": "360033"
+    },
+    {
+      "id": "360041",
+      "name": "Accra Main",
+      "organizationId": "360034"
+    },
+    {
+      "id": "360042",
+      "name": "Test Branch",
+      "organizationId": "360035"
+    },
+    {
+      "id": "360044",
+      "name": "Month Filter Test",
+      "organizationId": "360035"
+    },
+    {
+      "id": "360045",
+      "name": "Test Branch",
+      "organizationId": "360037"
+    },
+    {
+      "id": "360046",
+      "name": "Accra Main",
+      "organizationId": "360038"
+    },
+    {
+      "id": "360049",
+      "name": "Accra Main",
+      "organizationId": "360040"
+    },
+    {
+      "id": "360050",
+      "name": "Accra Main",
+      "organizationId": "360041"
+    },
+    {
+      "id": "360051",
+      "name": "Accra Main",
+      "organizationId": "360042"
+    },
+    {
+      "id": "360052",
+      "name": "Accra Main",
+      "organizationId": "360043"
+    },
+    {
+      "id": "360054",
+      "name": "Test Branch",
+      "organizationId": "360045"
+    },
+    {
+      "id": "360055",
+      "name": "Month Filter Test",
+      "organizationId": "360045"
+    },
+    {
+      "id": "360056",
+      "name": "Test Branch",
+      "organizationId": "360046"
+    },
+    {
+      "id": "360057",
+      "name": "Accra Main",
+      "organizationId": "360047"
+    },
+    {
+      "id": "360060",
+      "name": "Accra Main",
+      "organizationId": "360049"
+    },
+    {
+      "id": "360061",
+      "name": "Accra Main",
+      "organizationId": "360050"
+    },
+    {
+      "id": "360062",
+      "name": "Accra Main",
+      "organizationId": "360051"
+    },
+    {
+      "id": "360063",
+      "name": "Accra Main",
+      "organizationId": "360052"
+    },
+    {
+      "id": "360065",
+      "name": "Test Branch",
+      "organizationId": "360054"
+    },
+    {
+      "id": "360066",
+      "name": "Month Filter Test",
+      "organizationId": "360054"
+    },
+    {
+      "id": "360067",
+      "name": "Test Branch",
+      "organizationId": "360055"
+    },
+    {
+      "id": "360068",
+      "name": "Accra Main",
+      "organizationId": "360056"
+    },
+    {
+      "id": "360071",
+      "name": "Accra Main",
+      "organizationId": "360058"
+    },
+    {
+      "id": "360072",
+      "name": "Accra Main",
+      "organizationId": "360059"
+    },
+    {
+      "id": "360073",
+      "name": "Accra Main",
+      "organizationId": "360060"
+    },
+    {
+      "id": "360074",
+      "name": "Accra Main",
+      "organizationId": "360061"
+    },
+    {
+      "id": "360076",
+      "name": "Test Branch",
+      "organizationId": "360063"
+    },
+    {
+      "id": "360077",
+      "name": "Month Filter Test",
+      "organizationId": "360063"
+    },
+    {
+      "id": "360078",
+      "name": "Test Branch",
+      "organizationId": "360064"
+    },
+    {
+      "id": "360079",
+      "name": "Accra Main",
+      "organizationId": "360065"
+    },
+    {
+      "id": "360082",
+      "name": "Accra Main",
+      "organizationId": "360067"
+    },
+    {
+      "id": "360083",
+      "name": "Accra Main",
+      "organizationId": "360068"
+    },
+    {
+      "id": "360084",
+      "name": "Accra Main",
+      "organizationId": "360069"
+    },
+    {
+      "id": "360085",
+      "name": "Accra Main",
+      "organizationId": "360070"
+    },
+    {
+      "id": "360086",
+      "name": "Test Branch",
+      "organizationId": "360071"
+    },
+    {
+      "id": "360088",
+      "name": "Month Filter Test",
+      "organizationId": "360071"
+    },
+    {
+      "id": "360089",
+      "name": "Test Branch",
+      "organizationId": "360073"
+    },
+    {
+      "id": "360090",
+      "name": "Accra Main",
+      "organizationId": "360074"
+    },
+    {
+      "id": "360093",
+      "name": "Accra Main",
+      "organizationId": "360076"
+    },
+    {
+      "id": "360094",
+      "name": "Accra Main",
+      "organizationId": "360077"
+    },
+    {
+      "id": "360095",
+      "name": "Accra Main",
+      "organizationId": "360078"
+    },
+    {
+      "id": "360096",
+      "name": "Accra Main",
+      "organizationId": "360079"
+    },
+    {
+      "id": "360098",
+      "name": "Test Branch",
+      "organizationId": "360081"
+    },
+    {
+      "id": "360099",
+      "name": "Month Filter Test",
+      "organizationId": "360081"
+    },
+    {
+      "id": "360100",
+      "name": "Test Branch",
+      "organizationId": "360082"
+    },
+    {
+      "id": "360101",
+      "name": "Accra Main",
+      "organizationId": "360083"
+    },
+    {
+      "id": "360104",
+      "name": "Accra Main",
+      "organizationId": "360085"
+    },
+    {
+      "id": "360105",
+      "name": "Accra Main",
+      "organizationId": "360086"
+    },
+    {
+      "id": "360106",
+      "name": "Accra Main",
+      "organizationId": "360087"
+    },
+    {
+      "id": "360107",
+      "name": "Accra Main",
+      "organizationId": "360088"
+    },
+    {
+      "id": "360108",
+      "name": "Test Branch",
+      "organizationId": "360089"
+    },
+    {
+      "id": "360110",
+      "name": "Month Filter Test",
+      "organizationId": "360089"
+    },
+    {
+      "id": "360111",
+      "name": "Test Branch",
+      "organizationId": "360091"
+    },
+    {
+      "id": "360112",
+      "name": "Accra Main",
+      "organizationId": "360092"
+    },
+    {
+      "id": "360115",
+      "name": "Accra Main",
+      "organizationId": "360094"
+    },
+    {
+      "id": "360116",
+      "name": "Accra Main",
+      "organizationId": "360095"
+    },
+    {
+      "id": "360117",
+      "name": "Accra Main",
+      "organizationId": "360096"
+    },
+    {
+      "id": "360118",
+      "name": "Accra Main",
+      "organizationId": "360097"
+    },
+    {
+      "id": "360119",
+      "name": "Test Branch",
+      "organizationId": "360098"
+    },
+    {
+      "id": "360120",
+      "name": "Month Filter Test",
+      "organizationId": "360098"
+    },
+    {
+      "id": "360122",
+      "name": "Test Branch",
+      "organizationId": "360100"
+    },
+    {
+      "id": "360123",
+      "name": "Accra Main",
+      "organizationId": "360101"
+    },
+    {
+      "id": "360126",
+      "name": "Accra Main",
+      "organizationId": "360103"
+    },
+    {
+      "id": "360127",
+      "name": "Accra Main",
+      "organizationId": "360104"
+    },
+    {
+      "id": "360128",
+      "name": "Accra Main",
+      "organizationId": "360105"
+    },
+    {
+      "id": "360129",
+      "name": "Accra Main",
+      "organizationId": "360106"
+    },
+    {
+      "id": "360130",
+      "name": "Test Branch",
+      "organizationId": "360107"
+    },
+    {
+      "id": "360132",
+      "name": "Month Filter Test",
+      "organizationId": "360107"
+    },
+    {
+      "id": "360133",
+      "name": "Test Branch",
+      "organizationId": "360109"
+    },
+    {
+      "id": "360134",
+      "name": "Accra Main",
+      "organizationId": "360110"
+    },
+    {
+      "id": "360137",
+      "name": "Accra Main",
+      "organizationId": "360112"
+    },
+    {
+      "id": "360138",
+      "name": "Accra Main",
+      "organizationId": "360113"
+    },
+    {
+      "id": "360139",
+      "name": "Accra Main",
+      "organizationId": "360114"
+    },
+    {
+      "id": "360140",
+      "name": "Accra Main",
+      "organizationId": "360115"
+    },
+    {
+      "id": "360141",
+      "name": "Test Branch",
+      "organizationId": "360116"
+    },
+    {
+      "id": "360143",
+      "name": "Month Filter Test",
+      "organizationId": "360116"
+    },
+    {
+      "id": "360144",
+      "name": "Test Branch",
+      "organizationId": "360118"
+    },
+    {
+      "id": "360145",
+      "name": "Accra Main",
+      "organizationId": "360119"
+    },
+    {
+      "id": "360148",
+      "name": "Accra Main",
+      "organizationId": "360121"
+    },
+    {
+      "id": "360149",
+      "name": "Accra Main",
+      "organizationId": "360122"
+    },
+    {
+      "id": "360150",
+      "name": "Accra Main",
+      "organizationId": "360123"
+    },
+    {
+      "id": "360151",
+      "name": "Accra Main",
+      "organizationId": "360124"
+    },
+    {
+      "id": "360152",
+      "name": "Test Branch",
+      "organizationId": "360125"
+    },
+    {
+      "id": "360154",
+      "name": "Month Filter Test",
+      "organizationId": "360125"
+    },
+    {
+      "id": "360155",
+      "name": "Test Branch",
+      "organizationId": "360127"
+    },
+    {
+      "id": "360156",
+      "name": "Accra Main",
+      "organizationId": "360128"
+    },
+    {
+      "id": "360159",
+      "name": "Accra Main",
+      "organizationId": "360130"
+    },
+    {
+      "id": "360160",
+      "name": "Accra Main",
+      "organizationId": "360131"
+    },
+    {
+      "id": "360161",
+      "name": "Accra Main",
+      "organizationId": "360132"
+    },
+    {
+      "id": "360162",
+      "name": "Accra Main",
+      "organizationId": "360133"
+    },
+    {
+      "id": "360163",
+      "name": "Test Branch",
+      "organizationId": "360134"
+    },
+    {
+      "id": "360165",
+      "name": "Month Filter Test",
+      "organizationId": "360134"
+    },
+    {
+      "id": "360166",
+      "name": "Test Branch",
+      "organizationId": "360136"
+    },
+    {
+      "id": "360167",
+      "name": "Accra Main",
+      "organizationId": "360137"
+    },
+    {
+      "id": "360170",
+      "name": "Accra Main",
+      "organizationId": "360139"
+    },
+    {
+      "id": "360171",
+      "name": "Accra Main",
+      "organizationId": "360140"
+    },
+    {
+      "id": "360172",
+      "name": "Accra Main",
+      "organizationId": "360141"
+    },
+    {
+      "id": "360173",
+      "name": "Accra Main",
+      "organizationId": "360142"
+    },
+    {
+      "id": "360174",
+      "name": "Test Branch",
+      "organizationId": "360143"
+    },
+    {
+      "id": "360176",
+      "name": "Month Filter Test",
+      "organizationId": "360143"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\torganizationId\n1\tAccra Main\t1\n4\tAccra Main\t2\n7\tAccra Main\t3\n10\tAccra Main\t4\n13\tAccra Main\t5\n16\tAccra Main\t7\n17\tAccra Main\t8\n18\tAccra Main\t9\n19\tAccra Main\t10\n20\tTema Branch\t11\n21\tAccra Main\t12\n24\tAccra Main\t14\n25\tAccra Main\t15\n26\tAccra Main\t16\n27\tAccra Main\t17\n28\tAccra Main\t18\n31\tAccra Main\t20\n32\tAccra Main\t21\n33\tAccra Main\t22\n34\tAccra Main\t23\n35\tAccra Main\t24\n38\tAccra Main\t26\n39\tAccra Main\t27\n40\tAccra Main\t28\n41\tAccra Main\t29\n42\tAccra Main\t30\n45\tAccra Main\t32\n46\tAccra Main\t33\n47\tAccra Main\t34\n48\tAccra Main\t35\n49\tAccra Main\t36\n52\tAccra Main\t38\n53\tAccra Main\t39\n54\tAccra Main\t40\n55\tAccra Main\t41\n56\tSHFGYAGRF\t42\n57\tAccra Main\t43\n60\tAccra Main\t45\n61\tAccra Main\t46\n62\tAccra Main\t47\n63\tAccra Main\t48\n30001\tAccra Main\t30001\n30004\tAccra Main\t30003\n30005\tAccra Main\t30004\n30006\tAccra Main\t30005\n30007\tAccra Main\t30006\n30008\tAccra Main\t30007\n30011\tAccra Main\t30009\n30012\tAccra Main\t30010\n30013\tAccra Main\t30011\n30014\tAccra Main\t30012\n30015\tAccra Main\t30013\n30018\tAccra Main\t30015\n30019\tAccra Main\t30016\n30020\tAccra Main\t30017\n30021\tAccra Main\t30018\n30022\tAccra Main\t30019\n30025\tAccra Main\t30021\n30026\tAccra Main\t30022\n30027\tAccra Main\t30023\n30028\tAccra Main\t30024\n30029\tAccra Main\t30025\n30032\tAccra Main\t30027\n30033\tAccra Main\t30028\n30034\tAccra Main\t30029\n30035\tAccra Main\t30030\n60001\tAccra Main\t60001\n60004\tAccra Main\t60003\n60005\tAccra Main\t60004\n60006\tAccra Main\t60005\n60007\tAccra Main\t60006\n60008\tAccra Main\t60007\n60011\tAccra Main\t60009\n60012\tAccra Main\t60010\n60013\tAccra Main\t60011\n60014\tAccra Main\t60012\n60016\tAccra Main\t60013\n60019\tAccra Main\t60015\n60020\tAccra Main\t60016\n60021\tAccra Main\t60017\n60022\tAccra Main\t60018\n60023\tAccra Main\t60019\n60026\tAccra Main\t60021\n60027\tAccra Main\t60022\n60028\tAccra Main\t60023\n60029\tAccra Main\t60024\n60030\tAccra Main\t60025\n60033\tAccra Main\t60027\n60034\tAccra Main\t60028\n60035\tAccra Main\t60029\n60036\tAccra Main\t60030\n60037\tAccra Main\t60031\n60040\tAccra Main\t60033\n60041\tAccra Main\t60034\n60042\tAccra Main\t60035\n60043\tAccra Main\t60036\n60044\tAccra Main\t60037\n60047\tAccra Main\t60039\n60048\tAccra Main\t60040\n60049\tAccra Main\t60041\n60050\tAccra Main\t60042\n60051\tAccra Main\t60043\n60054\tAccra Main\t60045\n60055\tAccra Main\t60046\n60056\tAccra Main\t60047\n60057\tAccra Main\t60048\n60058\tAccra Main\t60049\n60061\tAccra Main\t60051\n60062\tAccra Main\t60052\n60063\tAccra Main\t60053\n60064\tAccra Main\t60054\n60065\tAccra Main\t60055\n60068\tAccra Main\t60057\n60069\tAccra Main\t60058\n60070\tAccra Main\t60059\n60071\tAccra Main\t60060\n90001\tAccra Main\t90001\n90004\tAccra Main\t90002\n90007\tAccra Main\t90004\n90008\tAccra Main\t90005\n90009\tAccra Main\t90006\n90010\tAccra Main\t90007\n90011\tAccra Main\t90008\n90013\tAccra Main\t90010\n90014\tAccra Main\t90011\n90015\tAccra Main\t90013\n90017\tAccra Main\t90015\n90018\tAccra Main\t90016\n90019\tAccra Main\t90017\n90021\tAccra Main\t90018\n120001\tAccra Main\t120001\n120004\tAccra Main\t120003\n120005\tAccra Main\t120004\n120006\tAccra Main\t120005\n120007\tAccra Main\t120006\n120008\tAccra Main\t120007\n120011\tAccra Main\t120009\n120012\tAccra Main\t120010\n120013\tAccra Main\t120011\n120014\tAccra Main\t120012\n150001\tAccra Main\t150001\n150003\tAccra Main\t150002\n150006\tAccra Main\t150004\n150007\tAccra Main\t150005\n150008\tAccra Main\t150006\n150009\tAccra Main\t150007\n150010\tTest Branch\t150008\n150011\tTest Branch 2\t150008\n150012\tMonth Filter Test\t150008\n180001\tAccra Main\t180001\n180003\tAccra Main\t180003\n180004\tAccra Main\t180004\n180005\tAccra Main\t180005\n180006\tAccra Main\t180006\n180008\tAccra Main\t180007\n180011\tAccra Main\t180009\n180012\tAccra Main\t180010\n180013\tAccra Main\t180011\n180014\tAccra Main\t180012\n180015\tTest Branch\t180013\n180016\tMonth Filter Test\t180013\n180017\tTest Branch\t180014\n180018\tAccra Main\t180015\n180021\tAccra Main\t180017\n180022\tAccra Main\t180018\n180023\tAccra Main\t180019\n180024\tAccra Main\t180020\n180025\tTest Branch\t180021\n180026\tMonth Filter Test\t180021\n180027\tTest Branch\t180022\n180028\tAccra Main\t180023\n180031\tAccra Main\t180025\n180032\tAccra Main\t180026\n180033\tAccra Main\t180027\n180034\tAccra Main\t180028\n180035\tTest Branch\t180029\n180036\tMonth Filter Test\t180029\n180037\tTest Branch\t180030\n180038\tAccra Main\t180031\n180041\tAccra Main\t180033\n180042\tAccra Main\t180034\n180043\tAccra Main\t180035\n180044\tAccra Main\t180036\n180045\tTest Branch\t180037\n180046\tMonth Filter Test\t180037\n210001\tTest Branch\t210001\n210002\tAccra Main\t210002\n210005\tAccra Main\t210004\n210006\tAccra Main\t210005\n210007\tAccra Main\t210006\n210008\tAccra Main\t210007\n210009\tTest Branch\t210008\n210010\tMonth Filter Test\t210008\n210011\tTest Branch\t210009\n210012\tAccra Main\t210010\n210015\tAccra Main\t210012\n210016\tAccra Main\t210013\n210017\tAccra Main\t210014\n210018\tAccra Main\t210015\n210019\tTest Branch\t210016\n210020\tMonth Filter Test\t210016\n240001\tTest Branch\t240001\n240002\tAccra Main\t240002\n240005\tAccra Main\t240004\n240006\tAccra Main\t240005\n240007\tAccra Main\t240006\n240008\tAccra Main\t240007\n240009\tTest Branch\t240008\n240010\tMonth Filter Test\t240008\n240011\tTest Branch\t240009\n240012\tAccra Main\t240010\n240015\tAccra Main\t240012\n240016\tAccra Main\t240013\n240017\tAccra Main\t240014\n240018\tAccra Main\t240015\n240019\tTest Branch\t240016\n240020\tMonth Filter Test\t240016\n240021\tTest Branch\t240017\n240022\tAccra Main\t240018\n240025\tAccra Main\t240020\n240026\tAccra Main\t240021\n240027\tAccra Main\t240022\n240028\tAccra Main\t240023\n240029\tTest Branch\t240024\n240030\tMonth Filter Test\t240024\n240031\tTest Branch\t240025\n240032\tAccra Main\t240026\n240035\tAccra Main\t240028\n240036\tAccra Main\t240029\n240037\tAccra Main\t240030\n240038\tAccra Main\t240031\n240039\tTest Branch\t240032\n240040\tMonth Filter Test\t240032\n240041\tTest Branch\t240033\n240042\tAccra Main\t240034\n240045\tAccra Main\t240036\n240046\tAccra Main\t240037\n240047\tAccra Main\t240038\n240048\tAccra Main\t240039\n240049\tTest Branch\t240040\n240050\tMonth Filter Test\t240040\n240051\tTest Branch\t240041\n240052\tAccra Main\t240042\n240055\tAccra Main\t240044\n240056\tAccra Main\t240045\n240057\tAccra Main\t240046\n240058\tAccra Main\t240047\n240059\tTest Branch\t240048\n240060\tMonth Filter Test\t240048\n240061\tTest Branch\t240049\n240062\tAccra Main\t240050\n240065\tAccra Main\t240052\n240066\tAccra Main\t240053\n240067\tAccra Main\t240054\n240068\tAccra Main\t240055\n240070\tTest Branch\t240057\n240071\tMonth Filter Test\t240057\n240072\tTest Branch\t240058\n240073\tAccra Main\t240059\n240076\tAccra Main\t240061\n240077\tAccra Main\t240062\n240078\tAccra Main\t240063\n240079\tAccra Main\t240064\n240081\tTest Branch\t240066\n240082\tMonth Filter Test\t240066\n240083\tTest Branch\t240067\n240084\tAccra Main\t240068\n240087\tAccra Main\t240070\n240088\tAccra Main\t240071\n240089\tAccra Main\t240072\n240090\tAccra Main\t240073\n240092\tTest Branch\t240075\n240093\tMonth Filter Test\t240075\n240094\tTest Branch\t240076\n240095\tAccra Main\t240077\n240098\tAccra Main\t240079\n240099\tAccra Main\t240080\n240100\tAccra Main\t240081\n240101\tAccra Main\t240082\n240103\tTest Branch\t240084\n240105\tMonth Filter Test\t240084\n240106\tTest Branch\t240086\n240107\tAccra Main\t240087\n240110\tAccra Main\t240089\n240111\tAccra Main\t240090\n240112\tAccra Main\t240091\n240113\tAccra Main\t240092\n240114\tTest Branch\t240093\n240116\tMonth Filter Test\t240093\n270001\tTest Branch\t270001\n270002\tAccra Main\t270002\n270005\tAccra Main\t270004\n270006\tAccra Main\t270005\n270007\tAccra Main\t270006\n270008\tAccra Main\t270007\n270009\tTest Branch\t270008\n270011\tMonth Filter Test\t270008\n270012\tTest Branch\t270010\n270013\tAccra Main\t270011\n270016\tAccra Main\t270013\n270017\tAccra Main\t270014\n270018\tAccra Main\t270015\n270019\tAccra Main\t270016\n270020\tTest Branch\t270017\n270021\tMonth Filter Test\t270017\n270023\tTest Branch\t270019\n270024\tAccra Main\t270020\n270027\tAccra Main\t270022\n270028\tAccra Main\t270023\n270029\tAccra Main\t270024\n270030\tAccra Main\t270025\n270031\tTest Branch\t270026\n270033\tMonth Filter Test\t270026\n270034\tTest Branch\t270028\n270035\tAccra Main\t270029\n270038\tAccra Main\t270031\n270039\tAccra Main\t270032\n270040\tAccra Main\t270033\n270041\tAccra Main\t270034\n270042\tTest Branch\t270035\n270044\tMonth Filter Test\t270035\n300001\tTest Branch\t300001\n300002\tAccra Main\t300002\n300005\tAccra Main\t300004\n300006\tAccra Main\t300005\n300007\tAccra Main\t300006\n300008\tAccra Main\t300007\n300009\tTest Branch\t300008\n300011\tMonth Filter Test\t300008\n300012\tKasoa Branch\t11\n330001\tTest Branch\t330001\n330002\tAccra Main\t330002\n330005\tAccra Main\t330004\n330006\tAccra Main\t330005\n330007\tAccra Main\t330006\n330008\tAccra Main\t330007\n330010\tTest Branch\t330009\n330011\tMonth Filter Test\t330009\n330012\tTest Branch\t330010\n330013\tAccra Main\t330011\n330016\tAccra Main\t330013\n330017\tAccra Main\t330014\n330018\tAccra Main\t330015\n330019\tAccra Main\t330016\n330020\tTest Branch\t330017\n330022\tMonth Filter Test\t330017\n360001\tTest Branch\t360001\n360002\tAccra Main\t360002\n360005\tAccra Main\t360004\n360006\tAccra Main\t360005\n360007\tAccra Main\t360006\n360008\tAccra Main\t360007\n360009\tTest Branch\t360008\n360011\tMonth Filter Test\t360008\n360012\tTest Branch\t360010\n360013\tAccra Main\t360011\n360016\tAccra Main\t360013\n360017\tAccra Main\t360014\n360018\tAccra Main\t360015\n360019\tAccra Main\t360016\n360020\tTest Branch\t360017\n360022\tMonth Filter Test\t360017\n360023\tTest Branch\t360019\n360024\tAccra Main\t360020\n360027\tAccra Main\t360022\n360028\tAccra Main\t360023\n360029\tAccra Main\t360024\n360030\tAccra Main\t360025\n360031\tTest Branch\t360026\n360033\tMonth Filter Test\t360026\n360034\tTest Branch\t360028\n360035\tAccra Main\t360029\n360038\tAccra Main\t360031\n360039\tAccra Main\t360032\n360040\tAccra Main\t360033\n360041\tAccra Main\t360034\n360042\tTest Branch\t360035\n360044\tMonth Filter Test\t360035\n360045\tTest Branch\t360037\n360046\tAccra Main\t360038\n360049\tAccra Main\t360040\n360050\tAccra Main\t360041\n360051\tAccra Main\t360042\n360052\tAccra Main\t360043\n360054\tTest Branch\t360045\n360055\tMonth Filter Test\t360045\n360056\tTest Branch\t360046\n360057\tAccra Main\t360047\n360060\tAccra Main\t360049\n360061\tAccra Main\t360050\n360062\tAccra Main\t360051\n360063\tAccra Main\t360052\n360065\tTest Branch\t360054\n360066\tMonth Filter Test\t360054\n360067\tTest Branch\t360055\n360068\tAccra Main\t360056\n360071\tAccra Main\t360058\n360072\tAccra Main\t360059\n360073\tAccra Main\t360060\n360074\tAccra Main\t360061\n360076\tTest Branch\t360063\n360077\tMonth Filter Test\t360063\n360078\tTest Branch\t360064\n360079\tAccra Main\t360065\n360082\tAccra Main\t360067\n360083\tAccra Main\t360068\n360084\tAccra Main\t360069\n360085\tAccra Main\t360070\n360086\tTest Branch\t360071\n360088\tMonth Filter Test\t360071\n360089\tTest Branch\t360073\n360090\tAccra Main\t360074\n360093\tAccra Main\t360076\n360094\tAccra Main\t360077\n360095\tAccra Main\t360078\n360096\tAccra Main\t360079\n360098\tTest Branch\t360081\n360099\tMonth Filter Test\t360081\n360100\tTest Branch\t360082\n360101\tAccra Main\t360083\n360104\tAccra Main\t360085\n360105\tAccra Main\t360086\n360106\tAccra Main\t360087\n360107\tAccra Main\t360088\n360108\tTest Branch\t360089\n360110\tMonth Filter Test\t360089\n360111\tTest Branch\t360091\n360112\tAccra Main\t360092\n360115\tAccra Main\t360094\n360116\tAccra Main\t360095\n360117\tAccra Main\t360096\n360118\tAccra Main\t360097\n360119\tTest Branch\t360098\n360120\tMonth Filter Test\t360098\n360122\tTest Branch\t360100\n360123\tAccra Main\t360101\n360126\tAccra Main\t360103\n360127\tAccra Main\t360104\n360128\tAccra Main\t360105\n360129\tAccra Main\t360106\n360130\tTest Branch\t360107\n360132\tMonth Filter Test\t360107\n360133\tTest Branch\t360109\n360134\tAccra Main\t360110\n360137\tAccra Main\t360112\n360138\tAccra Main\t360113\n360139\tAccra Main\t360114\n360140\tAccra Main\t360115\n360141\tTest Branch\t360116\n360143\tMonth Filter Test\t360116\n360144\tTest Branch\t360118\n360145\tAccra Main\t360119\n360148\tAccra Main\t360121\n360149\tAccra Main\t360122\n360150\tAccra Main\t360123\n360151\tAccra Main\t360124\n360152\tTest Branch\t360125\n360154\tMonth Filter Test\t360125\n360155\tTest Branch\t360127\n360156\tAccra Main\t360128\n360159\tAccra Main\t360130\n360160\tAccra Main\t360131\n360161\tAccra Main\t360132\n360162\tAccra Main\t360133\n360163\tTest Branch\t360134\n360165\tMonth Filter Test\t360134\n360166\tTest Branch\t360136\n360167\tAccra Main\t360137\n360170\tAccra Main\t360139\n360171\tAccra Main\t360140\n360172\tAccra Main\t360141\n360173\tAccra Main\t360142\n360174\tTest Branch\t360143\n360176\tMonth Filter Test\t360143\n",
+  "stderr": "",
+  "execution_time_ms": 264
+}

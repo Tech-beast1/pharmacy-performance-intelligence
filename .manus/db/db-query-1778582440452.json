@@ -1,0 +1,90 @@
+{
+  "query": "SELECT id, productName, costPrice, quantity, branchId, createdAt FROM inventory WHERE branchId = 20 AND createdAt >= '2026-05-01' AND createdAt < '2026-06-01' LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT id, productName, costPrice, quantity, branchId, createdAt FROM inventory WHERE branchId = 20 AND createdAt >= '2026-05-01' AND createdAt < '2026-06-01' LIMIT 10;",
+  "rows": [
+    {
+      "id": "1530653",
+      "productName": "ORS Sachets",
+      "costPrice": "1.50",
+      "quantity": "250",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530654",
+      "productName": "Metformin 500mg",
+      "costPrice": "6.00",
+      "quantity": "95",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530655",
+      "productName": "Amoxicillin 500mg",
+      "costPrice": "8.50",
+      "quantity": "120",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530656",
+      "productName": "Atorvastatin 20mg",
+      "costPrice": "9.00",
+      "quantity": "70",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530657",
+      "productName": "Metronidazole 400mg",
+      "costPrice": "4.50",
+      "quantity": "90",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530658",
+      "productName": "Ibuprofen 400mg",
+      "costPrice": "3.00",
+      "quantity": "85",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530659",
+      "productName": "Cetirizine 10mg",
+      "costPrice": "3.50",
+      "quantity": "140",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530660",
+      "productName": "Paracetamol 500mg",
+      "costPrice": "2.00",
+      "quantity": "200",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530661",
+      "productName": "Salbutamol Inhaler",
+      "costPrice": "18.00",
+      "quantity": "35",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "id": "1530662",
+      "productName": "Azithromycin 250mg",
+      "costPrice": "12.00",
+      "quantity": "45",
+      "branchId": "20",
+      "createdAt": "2026-05-01 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tproductName\tcostPrice\tquantity\tbranchId\tcreatedAt\n1530653\tORS Sachets\t1.50\t250\t20\t2026-05-01 00:00:00\n1530654\tMetformin 500mg\t6.00\t95\t20\t2026-05-01 00:00:00\n1530655\tAmoxicillin 500mg\t8.50\t120\t20\t2026-05-01 00:00:00\n1530656\tAtorvastatin 20mg\t9.00\t70\t20\t2026-05-01 00:00:00\n1530657\tMetronidazole 400mg\t4.50\t90\t20\t2026-05-01 00:00:00\n1530658\tIbuprofen 400mg\t3.00\t85\t20\t2026-05-01 00:00:00\n1530659\tCetirizine 10mg\t3.50\t140\t20\t2026-05-01 00:00:00\n1530660\tParacetamol 500mg\t2.00\t200\t20\t2026-05-01 00:00:00\n1530661\tSalbutamol Inhaler\t18.00\t35\t20\t2026-05-01 00:00:00\n1530662\tAzithromycin 250mg\t12.00\t45\t20\t2026-05-01 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 264
+}

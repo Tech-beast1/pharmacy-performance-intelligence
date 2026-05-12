@@ -1,0 +1,9 @@
+{
+  "query": "SELECT DISTINCT i.productName, i.costPrice, i.quantity, (i.costPrice * i.quantity) as value,\n  CASE WHEN EXISTS(SELECT 1 FROM sales_transactions s WHERE s.productName = i.productName AND s.branchId = 20 AND s.createdAt >= '2026-05-01' AND s.createdAt < '2026-06-01') THEN 'HAS SALES' ELSE 'NO SALES' END as salesStatus\nFROM inventory i\nWHERE i.branchId = 20 AND i.createdAt >= '2026-05-01' AND i.createdAt < '2026-06-01'\nORDER BY i.productName;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT DISTINCT i.productName, i.costPrice, i.quantity, (i.costPrice * i.quantity) as value,\n  CASE WHEN EXISTS(SELECT 1 FROM sales_transactions s WHERE s.productName = i.productName AND s.branchId = 20 AND s.createdAt >= '2026-05-01' AND s.createdAt < '2026-06-01') THEN 'HAS SALES' ELSE 'NO SALES' END as salesStatus\nFROM inventory i\nWHERE i.branchId = 20 AND i.createdAt >= '2026-05-01' AND i.createdAt < '2026-06-01'\nORDER BY i.productName;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 257
+}

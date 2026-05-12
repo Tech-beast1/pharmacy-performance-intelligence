@@ -1,0 +1,20 @@
+{
+  "query": "SELECT b.id, b.name, b.organizationId FROM branches b WHERE b.organizationId IN (SELECT id FROM organizations WHERE ownerId = (SELECT id FROM users LIMIT 1)) ORDER BY b.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT b.id, b.name, b.organizationId FROM branches b WHERE b.organizationId IN (SELECT id FROM organizations WHERE ownerId = (SELECT id FROM users LIMIT 1)) ORDER BY b.id;",
+  "rows": [
+    {
+      "id": "20",
+      "name": "Tema Branch",
+      "organizationId": "11"
+    },
+    {
+      "id": "300012",
+      "name": "Kasoa Branch",
+      "organizationId": "11"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\torganizationId\n20\tTema Branch\t11\n300012\tKasoa Branch\t11\n",
+  "stderr": "",
+  "execution_time_ms": 262
+}

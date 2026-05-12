@@ -1,0 +1,55 @@
+{
+  "query": "SELECT DISTINCT productName FROM sales_transactions WHERE branchId = 20 AND createdAt >= '2026-05-01' AND createdAt < '2026-06-01' ORDER BY productName;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT DISTINCT productName FROM sales_transactions WHERE branchId = 20 AND createdAt >= '2026-05-01' AND createdAt < '2026-06-01' ORDER BY productName;",
+  "rows": [
+    {
+      "productName": "Amoxicillin 500mg"
+    },
+    {
+      "productName": "Atorvastatin 20mg"
+    },
+    {
+      "productName": "Azithromycin 250mg"
+    },
+    {
+      "productName": "Cetirizine 10mg"
+    },
+    {
+      "productName": "Diclofenac 50mg"
+    },
+    {
+      "productName": "Folic Acid 5mg"
+    },
+    {
+      "productName": "Ibuprofen 400mg"
+    },
+    {
+      "productName": "Lisinopril 10mg"
+    },
+    {
+      "productName": "Metformin 500mg"
+    },
+    {
+      "productName": "Metronidazole 400mg"
+    },
+    {
+      "productName": "ORS Sachets"
+    },
+    {
+      "productName": "Omeprazole 20mg"
+    },
+    {
+      "productName": "Paracetamol 500mg"
+    },
+    {
+      "productName": "Salbutamol Inhaler"
+    },
+    {
+      "productName": "Vitamin C 1000mg"
+    }
+  ],
+  "messages": [],
+  "stdout": "productName\nAmoxicillin 500mg\nAtorvastatin 20mg\nAzithromycin 250mg\nCetirizine 10mg\nDiclofenac 50mg\nFolic Acid 5mg\nIbuprofen 400mg\nLisinopril 10mg\nMetformin 500mg\nMetronidazole 400mg\nORS Sachets\nOmeprazole 20mg\nParacetamol 500mg\nSalbutamol Inhaler\nVitamin C 1000mg\n",
+  "stderr": "",
+  "execution_time_ms": 262
+}

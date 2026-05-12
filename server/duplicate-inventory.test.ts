@@ -29,9 +29,12 @@ describe('Duplicate Inventory Prevention', () => {
   });
 
   it('should update existing inventory item instead of creating duplicate when same SKU is uploaded twice', async () => {
+    const testBranchId = 20; // Tema Branch
+    
     // First upload
     const firstItem = await upsertInventoryItem({
       userId: testUserId,
+      branchId: testBranchId,
       productName: testProductName,
       sku: testSku,
       quantity: 100,
@@ -49,6 +52,7 @@ describe('Duplicate Inventory Prevention', () => {
     // Second upload with same SKU but different quantity
     const secondItem = await upsertInventoryItem({
       userId: testUserId,
+      branchId: testBranchId,
       productName: testProductName,
       sku: testSku,
       quantity: 200, // Different quantity

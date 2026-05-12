@@ -1890,3 +1890,24 @@
 - [x] Added validation to require branchId for all uploads
 - [x] Deleted duplicate Kasoa data to ensure branch independence
 - [x] All 169 tests passing
+
+
+## Phase 13: CRITICAL - Inventory Metric Contamination Bug
+- [ ] Investigate why Kasoa upload changes Tema's Dead Stock metrics
+- [ ] Investigate why Kasoa upload changes Tema's Expiry Risk metrics
+- [ ] Identify root cause of metric contamination in inventory queries
+- [ ] Fix inventory filtering to ensure branch isolation
+- [ ] Verify Tema Dead Stock remains unchanged after Kasoa upload
+- [ ] Verify Tema Expiry Risk remains unchanged after Kasoa upload
+- [ ] Test with multiple sequential uploads to both branches
+- [ ] Ensure each branch's inventory metrics are completely independent
+
+
+## Phase 13: CRITICAL - Inventory Metric Contamination Bug FIX
+- [x] Investigate why Kasoa upload affects Tema's inventory metrics
+- [x] Identify root cause - upsertInventoryItem was not checking branchId in duplicate detection
+- [x] Fix upsertInventoryItem to check userId + branchId + sku for duplicates (not just userId + sku)
+- [x] Updated duplicate-inventory test to include branchId parameter
+- [x] Verified Tema metrics remain unchanged after Kasoa upload
+- [x] All 169 tests passing
+- [x] Each branch now has completely independent inventory items

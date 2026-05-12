@@ -1,0 +1,9 @@
+{
+  "query": "SELECT i.id, i.productName, i.costPrice, i.quantity, (i.costPrice * i.quantity) as deadStockValue\nFROM inventory i\nWHERE i.branchId = 20 \n  AND i.createdAt >= '2026-05-01' AND i.createdAt < '2026-06-01'\n  AND i.productName NOT IN (\n    SELECT DISTINCT productName FROM sales_transactions \n    WHERE branchId = 20 AND createdAt >= '2026-05-01' AND createdAt < '2026-06-01'\n  );",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT i.id, i.productName, i.costPrice, i.quantity, (i.costPrice * i.quantity) as deadStockValue\nFROM inventory i\nWHERE i.branchId = 20 \n  AND i.createdAt >= '2026-05-01' AND i.createdAt < '2026-06-01'\n  AND i.productName NOT IN (\n    SELECT DISTINCT productName FROM sales_transactions \n    WHERE branchId = 20 AND createdAt >= '2026-05-01' AND createdAt < '2026-06-01'\n  );",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 265
+}
