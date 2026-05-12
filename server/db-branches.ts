@@ -486,6 +486,8 @@ export async function getBranchMetrics(branchId: number, month: string) {
           lt(inventory.createdAt, endDate)
         )
       );
+    
+    const activeInv = inv
 
     // Calculate metrics
     let totalRevenue = 0;
@@ -517,8 +519,8 @@ export async function getBranchMetrics(branchId: number, month: string) {
     const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     // Deduplicate inventory items by product name (keep first occurrence)
-    const deduplicatedInv = new Map<string, typeof inv[0]>();
-    for (const item of inv) {
+    const deduplicatedInv = new Map<string, typeof activeInv[0]>();
+    for (const item of activeInv) {
       const normalizedName = item.productName?.toLowerCase().trim() || '';
       if (!deduplicatedInv.has(normalizedName)) {
         deduplicatedInv.set(normalizedName, item);

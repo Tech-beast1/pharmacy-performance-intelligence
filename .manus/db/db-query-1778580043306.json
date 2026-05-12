@@ -1,0 +1,16 @@
+{
+  "query": "SELECT \n  DATE_FORMAT(updatedAt, '%Y-%m') as month,\n  COUNT(*) as item_count,\n  SUM(CAST(quantity AS DECIMAL(10,2))) as total_quantity,\n  SUM(CAST(totalSalesValue AS DECIMAL(10,2))) as total_sales_value\nFROM inventory\nWHERE DATE_FORMAT(updatedAt, '%Y-%m') IN ('2026-05', '2026-06')\nGROUP BY DATE_FORMAT(updatedAt, '%Y-%m')\nORDER BY month;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  DATE_FORMAT(updatedAt, '%Y-%m') as month,\n  COUNT(*) as item_count,\n  SUM(CAST(quantity AS DECIMAL(10,2))) as total_quantity,\n  SUM(CAST(totalSalesValue AS DECIMAL(10,2))) as total_sales_value\nFROM inventory\nWHERE DATE_FORMAT(updatedAt, '%Y-%m') IN ('2026-05', '2026-06')\nGROUP BY DATE_FORMAT(updatedAt, '%Y-%m')\nORDER BY month;",
+  "rows": [
+    {
+      "month": "2026-05",
+      "item_count": "1632",
+      "total_quantity": "14307.00",
+      "total_sales_value": "0.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "month\titem_count\ttotal_quantity\ttotal_sales_value\n2026-05\t1632\t14307.00\t0.00\n",
+  "stderr": "",
+  "execution_time_ms": 260
+}

@@ -1,0 +1,8 @@
+{
+  "query": "SELECT \n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as item_count,\n  SUM(CAST(stockOnHand AS DECIMAL(10,2))) as total_stock,\n  SUM(CAST(expiryRiskValue AS DECIMAL(10,2))) as total_expiry_risk,\n  SUM(CAST(deadStockValue AS DECIMAL(10,2))) as total_dead_stock\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') IN ('2026-05', '2026-06')\nGROUP BY DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY month;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as item_count,\n  SUM(CAST(stockOnHand AS DECIMAL(10,2))) as total_stock,\n  SUM(CAST(expiryRiskValue AS DECIMAL(10,2))) as total_expiry_risk,\n  SUM(CAST(deadStockValue AS DECIMAL(10,2))) as total_dead_stock\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') IN ('2026-05', '2026-06')\nGROUP BY DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY month;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'stockonhand' in 'where clause'"
+  ]
+}

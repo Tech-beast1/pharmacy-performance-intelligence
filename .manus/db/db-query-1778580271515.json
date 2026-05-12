@@ -1,0 +1,22 @@
+{
+  "query": "SELECT \n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as item_count,\n  COUNT(DISTINCT productName) as unique_products,\n  COUNT(DISTINCT sku) as unique_skus\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') IN ('2026-05', '2026-06')\nGROUP BY DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY month;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as item_count,\n  COUNT(DISTINCT productName) as unique_products,\n  COUNT(DISTINCT sku) as unique_skus\nFROM inventory\nWHERE DATE_FORMAT(createdAt, '%Y-%m') IN ('2026-05', '2026-06')\nGROUP BY DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY month;",
+  "rows": [
+    {
+      "month": "2026-05",
+      "item_count": "3",
+      "unique_products": "3",
+      "unique_skus": "3"
+    },
+    {
+      "month": "2026-06",
+      "item_count": "24",
+      "unique_products": "24",
+      "unique_skus": "24"
+    }
+  ],
+  "messages": [],
+  "stdout": "month\titem_count\tunique_products\tunique_skus\n2026-05\t3\t3\t3\n2026-06\t24\t24\t24\n",
+  "stderr": "",
+  "execution_time_ms": 266
+}

@@ -1,0 +1,52 @@
+{
+  "query": "SELECT \n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as sales_count,\n  SUM(totalSaleValue) as total_revenue,\n  MIN(createdAt) as first_sale,\n  MAX(createdAt) as last_sale\nFROM sales_transactions\nGROUP BY DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY month;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  DATE_FORMAT(createdAt, '%Y-%m') as month,\n  COUNT(*) as sales_count,\n  SUM(totalSaleValue) as total_revenue,\n  MIN(createdAt) as first_sale,\n  MAX(createdAt) as last_sale\nFROM sales_transactions\nGROUP BY DATE_FORMAT(createdAt, '%Y-%m')\nORDER BY month;",
+  "rows": [
+    {
+      "month": "2026-01",
+      "sales_count": "27",
+      "total_revenue": "6750.00",
+      "first_sale": "2026-01-15 05:00:00",
+      "last_sale": "2026-01-15 05:00:00"
+    },
+    {
+      "month": "2026-02",
+      "sales_count": "27",
+      "total_revenue": "12150.00",
+      "first_sale": "2026-02-15 05:00:00",
+      "last_sale": "2026-02-15 05:00:00"
+    },
+    {
+      "month": "2026-03",
+      "sales_count": "27",
+      "total_revenue": "2025.00",
+      "first_sale": "2026-03-15 04:00:00",
+      "last_sale": "2026-03-15 04:00:00"
+    },
+    {
+      "month": "2026-04",
+      "sales_count": "776",
+      "total_revenue": "172930.10",
+      "first_sale": "2026-04-15 04:00:00",
+      "last_sale": "2026-04-27 18:55:30"
+    },
+    {
+      "month": "2026-05",
+      "sales_count": "160",
+      "total_revenue": "16453.00",
+      "first_sale": "2026-05-01 00:00:00",
+      "last_sale": "2026-05-12 09:40:42"
+    },
+    {
+      "month": "2026-06",
+      "sales_count": "75",
+      "total_revenue": "31548.70",
+      "first_sale": "2026-06-01 00:00:00",
+      "last_sale": "2026-06-20 04:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "month\tsales_count\ttotal_revenue\tfirst_sale\tlast_sale\n2026-01\t27\t6750.00\t2026-01-15 05:00:00\t2026-01-15 05:00:00\n2026-02\t27\t12150.00\t2026-02-15 05:00:00\t2026-02-15 05:00:00\n2026-03\t27\t2025.00\t2026-03-15 04:00:00\t2026-03-15 04:00:00\n2026-04\t776\t172930.10\t2026-04-15 04:00:00\t2026-04-27 18:55:30\n2026-05\t160\t16453.00\t2026-05-01 00:00:00\t2026-05-12 09:40:42\n2026-06\t75\t31548.70\t2026-06-01 00:00:00\t2026-06-20 04:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 259
+}

@@ -1,0 +1,9 @@
+{
+  "query": "SELECT * FROM monthly_metrics WHERE month IN (5, 6) ORDER BY month, year;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT * FROM monthly_metrics WHERE month IN (5, 6) ORDER BY month, year;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 256
+}

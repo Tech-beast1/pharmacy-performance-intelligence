@@ -44,14 +44,25 @@ const CustomLabel = (props: any) => {
 
 export default function DashboardMultiBranch() {
   const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
+  
+  // Helper function to validate month format (YYYY-MM)
+  const isValidMonth = (month: string): boolean => {
+    if (!month || typeof month !== 'string') return false;
+    const parts = month.split('-');
+    if (parts.length !== 2) return false;
+    const [year, monthNum] = parts.map(Number);
+    return !isNaN(year) && year > 2000 && !isNaN(monthNum) && monthNum >= 1 && monthNum <= 12;
+  };
+  
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
     // Try to read from sessionStorage first (set by DataUpload page)
     const stored = typeof window !== 'undefined' ? sessionStorage.getItem('selectedMonth') : null;
-    if (stored) {
+    if (stored && isValidMonth(stored)) {
       return stored;
     }
     const date = new Date();
-    return date.toISOString().slice(0, 7);
+    const defaultMonth = date.toISOString().slice(0, 7);
+    return defaultMonth;
   });
   const [viewMode, setViewMode] = useState<'single' | 'multi'>('multi');
 
@@ -89,20 +100,23 @@ export default function DashboardMultiBranch() {
   const branches = branchesQuery.data?.data || [];
 
   // Get consolidated or individual metrics
+  // Ensure selectedMonth is always valid before making queries
+  const validMonth = isValidMonth(selectedMonth) ? selectedMonth : new Date().toISOString().slice(0, 7);
+  
   const metricsQuery = selectedBranchId
     ? trpc.branches.metrics.branch.useQuery(
-        { branchId: selectedBranchId, month: selectedMonth },
-        { enabled: !!selectedBranchId }
+        { branchId: selectedBranchId, month: validMonth },
+        { enabled: !!selectedBranchId && isValidMonth(validMonth) }
       )
     : trpc.branches.metrics.consolidated.useQuery(
-        { organizationId: organization?.id || 0, month: selectedMonth },
-        { enabled: !!organization?.id }
+        { organizationId: organization?.id || 0, month: validMonth },
+        { enabled: !!organization?.id && isValidMonth(validMonth) }
       );
 
   const metrics = metricsQuery.data?.data;
 
   // Get overhead costs for the selected branch and month
-  const [year, month] = selectedMonth.split('-').map(Number);
+  const [year, month] = validMonth.split('-').map(Number);
   
   // Use different endpoints for branch-specific vs consolidated overhead
   const overheadQuery = selectedBranchId
@@ -129,14 +143,14 @@ export default function DashboardMultiBranch() {
 
   // Get branch breakdown for comparison table (only in multi mode and when viewing all branches)
   const breakdownQuery = trpc.branches.metrics.breakdown.useQuery(
-    { organizationId: organization?.id || 0, month: selectedMonth },
-    { enabled: !!organization?.id && !selectedBranchId && viewMode === 'multi' }
+    { organizationId: organization?.id || 0, month: validMonth },
+    { enabled: !!organization?.id && !selectedBranchId && viewMode === 'multi' && isValidMonth(validMonth) }
   );
   const breakdown = breakdownQuery.data?.data || [];
 
   // Get AI-powered insights
-  const startDate = `${selectedMonth}-01`;
-  const endDate = new Date(selectedMonth + '-01');
+  const startDate = `${validMonth}-01`;
+  const endDate = new Date(validMonth + '-01');
   endDate.setMonth(endDate.getMonth() + 1);
   endDate.setDate(0);
   const insightsQuery = trpc.analytics.getKeyInsights.useQuery({
@@ -161,12 +175,12 @@ export default function DashboardMultiBranch() {
     setIsClearing(true);
     try {
       // Clear all data from the selected month, not current date
-      const [year, month] = selectedMonth.split('-').map(Number);
+      const [year, month] = validMonth.split('-').map(Number);
       console.log('Calling clearAll mutation with:', { month, year });
       const result = await clearAllMutation.mutateAsync({ month, year });
       console.log('clearAll mutation succeeded:', result);
       setShowClearConfirm(false);
-      toast.success(`Data for ${selectedMonth} cleared successfully`);
+      toast.success(`Data for ${validMonth} cleared successfully`);
       
       // Invalidate all queries immediately without awaiting for faster UI update
       utils.branches.metrics.consolidated.invalidate();
@@ -177,6 +191,9 @@ export default function DashboardMultiBranch() {
       utils.analytics.getKeyInsights.invalidate();
       
       console.log('All queries invalidated, UI will update immediately');
+      // Force a refetch of the metrics after clearing
+      await metricsQuery.refetch();
+      await breakdownQuery.refetch();
       setIsClearing(false);
     } catch (error) {
       console.error('Error clearing data:', error);

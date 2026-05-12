@@ -1,0 +1,26 @@
+{
+  "query": "SELECT * FROM inventory LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT * FROM inventory LIMIT 1;",
+  "rows": [
+    {
+      "id": "150054",
+      "userId": "1590160",
+      "productName": "Other Product",
+      "sku": "SKU-OTHER-1775593114549",
+      "quantity": "20",
+      "price": "200.00",
+      "costPrice": "100.00",
+      "expiryDate": "NULL",
+      "lastSaleDate": "NULL",
+      "totalSalesQuantity": "0",
+      "totalSalesValue": "0.00",
+      "createdAt": "2026-04-07 20:18:34",
+      "updatedAt": "2026-05-12 09:03:10",
+      "branchId": "20"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tproductName\tsku\tquantity\tprice\tcostPrice\texpiryDate\tlastSaleDate\ttotalSalesQuantity\ttotalSalesValue\tcreatedAt\tupdatedAt\tbranchId\n150054\t1590160\tOther Product\tSKU-OTHER-1775593114549\t20\t200.00\t100.00\tNULL\tNULL\t0\t0.00\t2026-04-07 20:18:34\t2026-05-12 09:03:10\t20\n",
+  "stderr": "",
+  "execution_time_ms": 261
+}

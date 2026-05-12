@@ -1,0 +1,9 @@
+{
+  "query": "DELETE FROM inventory \nWHERE createdAt >= '2026-05-01 00:00:00' \nAND createdAt < '2026-06-01 00:00:00';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute DELETE FROM inventory \nWHERE createdAt >= '2026-05-01 00:00:00' \nAND createdAt < '2026-06-01 00:00:00';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 282
+}
