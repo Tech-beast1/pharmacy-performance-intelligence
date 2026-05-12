@@ -1,0 +1,52 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "alerts"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "branch_users"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "branches"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "file_uploads"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "inventory"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "monthly_metrics"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "organizations"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "overhead_costs"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "pharmacy_profiles"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "sales_transactions"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "user_preferences"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "user_types"
+    },
+    {
+      "Tables_in_S4YkwNcqjTUWGj5JFbbkiz": "users"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_S4YkwNcqjTUWGj5JFbbkiz\n__drizzle_migrations\nalerts\nbranch_users\nbranches\nfile_uploads\ninventory\nmonthly_metrics\norganizations\noverhead_costs\npharmacy_profiles\nsales_transactions\nuser_preferences\nuser_types\nusers\n",
+  "stderr": "",
+  "execution_time_ms": 253
+}

@@ -1,0 +1,26 @@
+{
+  "query": "SELECT \n  productName,\n  expiryDate,\n  quantity,\n  costPrice,\n  (costPrice * quantity) as value,\n  createdAt\nFROM inventory \nWHERE MONTH(createdAt) = 5 AND YEAR(createdAt) = 2026\n  AND (productName LIKE '%Azithromycin%' OR productName LIKE '%Doxycycline%')\nORDER BY expiryDate;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  productName,\n  expiryDate,\n  quantity,\n  costPrice,\n  (costPrice * quantity) as value,\n  createdAt\nFROM inventory \nWHERE MONTH(createdAt) = 5 AND YEAR(createdAt) = 2026\n  AND (productName LIKE '%Azithromycin%' OR productName LIKE '%Doxycycline%')\nORDER BY expiryDate;",
+  "rows": [
+    {
+      "productName": "Doxycycline 100mg",
+      "expiryDate": "2026-05-16",
+      "quantity": "40",
+      "costPrice": "9.50",
+      "value": "380.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Azithromycin 250mg",
+      "expiryDate": "2026-06-01",
+      "quantity": "8",
+      "costPrice": "12.00",
+      "value": "96.00",
+      "createdAt": "2026-05-01 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "productName\texpiryDate\tquantity\tcostPrice\tvalue\tcreatedAt\nDoxycycline 100mg\t2026-05-16\t40\t9.50\t380.00\t2026-05-01 00:00:00\nAzithromycin 250mg\t2026-06-01\t8\t12.00\t96.00\t2026-05-01 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 271
+}

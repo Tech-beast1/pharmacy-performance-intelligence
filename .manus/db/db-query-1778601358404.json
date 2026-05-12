@@ -1,0 +1,14 @@
+{
+  "query": "SELECT id, email FROM users LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT id, email FROM users LIMIT 1;",
+  "rows": [
+    {
+      "id": "1",
+      "email": "dedzocharles37@gmail.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\n1\tdedzocharles37@gmail.com\n",
+  "stderr": "",
+  "execution_time_ms": 252
+}

@@ -1,0 +1,9 @@
+{
+  "query": "SELECT \n  productName,\n  expiryDate,\n  quantity,\n  costPrice,\n  (costPrice * quantity) as value\nFROM inventory \nWHERE DATE(createdAt) = '2026-04-26'\n  AND (productName LIKE '%Azithromycin%' OR productName LIKE '%Doxycycline%' OR productName LIKE '%Amoxicillin%')\nORDER BY productName;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  productName,\n  expiryDate,\n  quantity,\n  costPrice,\n  (costPrice * quantity) as value\nFROM inventory \nWHERE DATE(createdAt) = '2026-04-26'\n  AND (productName LIKE '%Azithromycin%' OR productName LIKE '%Doxycycline%' OR productName LIKE '%Amoxicillin%')\nORDER BY productName;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 265
+}

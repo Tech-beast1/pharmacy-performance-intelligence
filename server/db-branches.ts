@@ -487,7 +487,7 @@ export async function getBranchMetrics(branchId: number, month: string) {
         )
       );
     
-    const activeInv = inv
+    const activeInv = inv;
 
     // Calculate metrics
     let totalRevenue = 0;

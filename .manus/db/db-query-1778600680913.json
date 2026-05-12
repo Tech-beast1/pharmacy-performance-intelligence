@@ -1,0 +1,190 @@
+{
+  "query": "SELECT \n  productName,\n  sku,\n  quantity,\n  costPrice,\n  expiryDate,\n  (costPrice * quantity) as value,\n  createdAt\nFROM inventory \nWHERE MONTH(createdAt) = 5 AND YEAR(createdAt) = 2026\n  AND expiryDate IS NOT NULL\nORDER BY expiryDate;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  productName,\n  sku,\n  quantity,\n  costPrice,\n  expiryDate,\n  (costPrice * quantity) as value,\n  createdAt\nFROM inventory \nWHERE MONTH(createdAt) = 5 AND YEAR(createdAt) = 2026\n  AND expiryDate IS NOT NULL\nORDER BY expiryDate;",
+  "rows": [
+    {
+      "productName": "Doxycycline 100mg",
+      "sku": "Doxycycline 100mg-2026-04",
+      "quantity": "40",
+      "costPrice": "9.50",
+      "expiryDate": "2026-05-16",
+      "value": "380.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Azithromycin 250mg",
+      "sku": "Azithromycin 250mg-2026-04",
+      "quantity": "45",
+      "costPrice": "12.00",
+      "expiryDate": "2026-06-01",
+      "value": "540.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Ciprofloxacin 500mg",
+      "sku": "Ciprofloxacin 500mg-2026-04",
+      "quantity": "55",
+      "costPrice": "10.00",
+      "expiryDate": "2026-11-01",
+      "value": "550.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Metformin 500mg",
+      "sku": "Metformin 500mg-2026-04",
+      "quantity": "95",
+      "costPrice": "6.00",
+      "expiryDate": "2026-12-01",
+      "value": "570.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Salbutamol Inhaler",
+      "sku": "Salbutamol Inhaler-2026-04",
+      "quantity": "35",
+      "costPrice": "18.00",
+      "expiryDate": "2027-01-01",
+      "value": "630.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Lisinopril 10mg",
+      "sku": "Lisinopril 10mg-2026-04",
+      "quantity": "60",
+      "costPrice": "7.00",
+      "expiryDate": "2027-04-01",
+      "value": "420.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Metronidazole 400mg",
+      "sku": "Metronidazole 400mg-2026-04",
+      "quantity": "90",
+      "costPrice": "4.50",
+      "expiryDate": "2027-05-01",
+      "value": "405.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Vitamin C 1000mg",
+      "sku": "Vitamin C 1000mg-2026-04",
+      "quantity": "180",
+      "costPrice": "4.00",
+      "expiryDate": "2027-05-21",
+      "value": "720.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Amlodipine 5mg",
+      "sku": "Amlodipine 5mg-2026-04",
+      "quantity": "48",
+      "costPrice": "8.00",
+      "expiryDate": "2027-06-16",
+      "value": "384.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Amoxicillin 500mg",
+      "sku": "Amoxicillin 500mg-2026-04",
+      "quantity": "120",
+      "costPrice": "8.50",
+      "expiryDate": "2027-07-01",
+      "value": "1020.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Omeprazole 20mg",
+      "sku": "Omeprazole 20mg-2026-04",
+      "quantity": "110",
+      "costPrice": "5.50",
+      "expiryDate": "2027-07-21",
+      "value": "605.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Diclofenac 50mg",
+      "sku": "Diclofenac 50mg-2026-04",
+      "quantity": "75",
+      "costPrice": "3.50",
+      "expiryDate": "2027-09-01",
+      "value": "262.50",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Ibuprofen 400mg",
+      "sku": "Ibuprofen 400mg-2026-04",
+      "quantity": "85",
+      "costPrice": "3.00",
+      "expiryDate": "2027-09-16",
+      "value": "255.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Zinc Sulphate 20mg",
+      "sku": "Zinc Sulphate 20mg-2026-04",
+      "quantity": "130",
+      "costPrice": "3.00",
+      "expiryDate": "2027-10-01",
+      "value": "390.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Atorvastatin 20mg",
+      "sku": "Atorvastatin 20mg-2026-04",
+      "quantity": "70",
+      "costPrice": "9.00",
+      "expiryDate": "2027-11-01",
+      "value": "630.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "ORS Sachets",
+      "sku": "ORS Sachets-2026-04",
+      "quantity": "250",
+      "costPrice": "1.50",
+      "expiryDate": "2027-11-16",
+      "value": "375.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Paracetamol 500mg",
+      "sku": "Paracetamol 500mg-2026-04",
+      "quantity": "200",
+      "costPrice": "2.00",
+      "expiryDate": "2028-01-01",
+      "value": "400.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Cetirizine 10mg",
+      "sku": "Cetirizine 10mg-2026-04",
+      "quantity": "140",
+      "costPrice": "3.50",
+      "expiryDate": "2028-01-16",
+      "value": "490.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Folic Acid 5mg",
+      "sku": "Folic Acid 5mg-2026-04",
+      "quantity": "160",
+      "costPrice": "2.00",
+      "expiryDate": "2028-02-29",
+      "value": "320.00",
+      "createdAt": "2026-05-01 00:00:00"
+    },
+    {
+      "productName": "Multivitamin Tabs",
+      "sku": "Multivitamin Tabs-2026-04",
+      "quantity": "100",
+      "costPrice": "5.00",
+      "expiryDate": "2028-07-01",
+      "value": "500.00",
+      "createdAt": "2026-05-01 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "productName\tsku\tquantity\tcostPrice\texpiryDate\tvalue\tcreatedAt\nDoxycycline 100mg\tDoxycycline 100mg-2026-04\t40\t9.50\t2026-05-16\t380.00\t2026-05-01 00:00:00\nAzithromycin 250mg\tAzithromycin 250mg-2026-04\t45\t12.00\t2026-06-01\t540.00\t2026-05-01 00:00:00\nCiprofloxacin 500mg\tCiprofloxacin 500mg-2026-04\t55\t10.00\t2026-11-01\t550.00\t2026-05-01 00:00:00\nMetformin 500mg\tMetformin 500mg-2026-04\t95\t6.00\t2026-12-01\t570.00\t2026-05-01 00:00:00\nSalbutamol Inhaler\tSalbutamol Inhaler-2026-04\t35\t18.00\t2027-01-01\t630.00\t2026-05-01 00:00:00\nLisinopril 10mg\tLisinopril 10mg-2026-04\t60\t7.00\t2027-04-01\t420.00\t2026-05-01 00:00:00\nMetronidazole 400mg\tMetronidazole 400mg-2026-04\t90\t4.50\t2027-05-01\t405.00\t2026-05-01 00:00:00\nVitamin C 1000mg\tVitamin C 1000mg-2026-04\t180\t4.00\t2027-05-21\t720.00\t2026-05-01 00:00:00\nAmlodipine 5mg\tAmlodipine 5mg-2026-04\t48\t8.00\t2027-06-16\t384.00\t2026-05-01 00:00:00\nAmoxicillin 500mg\tAmoxicillin 500mg-2026-04\t120\t8.50\t2027-07-01\t1020.00\t2026-05-01 00:00:00\nOmeprazole 20mg\tOmeprazole 20mg-2026-04\t110\t5.50\t2027-07-21\t605.00\t2026-05-01 00:00:00\nDiclofenac 50mg\tDiclofenac 50mg-2026-04\t75\t3.50\t2027-09-01\t262.50\t2026-05-01 00:00:00\nIbuprofen 400mg\tIbuprofen 400mg-2026-04\t85\t3.00\t2027-09-16\t255.00\t2026-05-01 00:00:00\nZinc Sulphate 20mg\tZinc Sulphate 20mg-2026-04\t130\t3.00\t2027-10-01\t390.00\t2026-05-01 00:00:00\nAtorvastatin 20mg\tAtorvastatin 20mg-2026-04\t70\t9.00\t2027-11-01\t630.00\t2026-05-01 00:00:00\nORS Sachets\tORS Sachets-2026-04\t250\t1.50\t2027-11-16\t375.00\t2026-05-01 00:00:00\nParacetamol 500mg\tParacetamol 500mg-2026-04\t200\t2.00\t2028-01-01\t400.00\t2026-05-01 00:00:00\nCetirizine 10mg\tCetirizine 10mg-2026-04\t140\t3.50\t2028-01-16\t490.00\t2026-05-01 00:00:00\nFolic Acid 5mg\tFolic Acid 5mg-2026-04\t160\t2.00\t2028-02-29\t320.00\t2026-05-01 00:00:00\nMultivitamin Tabs\tMultivitamin Tabs-2026-04\t100\t5.00\t2028-07-01\t500.00\t2026-05-01 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 273
+}

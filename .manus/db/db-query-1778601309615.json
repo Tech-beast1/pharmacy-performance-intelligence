@@ -1,0 +1,70 @@
+{
+  "query": "SELECT DISTINCT productName FROM inventory WHERE DATE(createdAt) = '2026-04-26' LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT DISTINCT productName FROM inventory WHERE DATE(createdAt) = '2026-04-26' LIMIT 20;",
+  "rows": [
+    {
+      "productName": "FUROSEMIDE 40MG"
+    },
+    {
+      "productName": "IBUPROFEN GEL"
+    },
+    {
+      "productName": "SUPIROCIN OINTMENT"
+    },
+    {
+      "productName": "SKYCEF 500MG"
+    },
+    {
+      "productName": "FLEMING SUSP 457MG/5ML 70ML"
+    },
+    {
+      "productName": "BB COCKTAIL"
+    },
+    {
+      "productName": "GLICLAZIDE TAB 80MG"
+    },
+    {
+      "productName": "VISCOF PLAIN"
+    },
+    {
+      "productName": "MENTHODEX COUGH SYR 100ML"
+    },
+    {
+      "productName": "TANZOL SUSP"
+    },
+    {
+      "productName": "ALDOMET 250MG TAB"
+    },
+    {
+      "productName": "GLUCO NAF C 400G"
+    },
+    {
+      "productName": "VITAMIN C SYR 100ML"
+    },
+    {
+      "productName": "ALPHA GARLIC CAPS"
+    },
+    {
+      "productName": "ROBB MENTHOL SWEETS-ALL"
+    },
+    {
+      "productName": "ALWAYS SANITARY PAD S/S- ALL"
+    },
+    {
+      "productName": "METHYLDOPA TABS 250MG 100'"
+    },
+    {
+      "productName": "FOLIGLOW CAPS"
+    },
+    {
+      "productName": "LUMATRONA SUSP 60ML"
+    },
+    {
+      "productName": "POTASSIUM CITRATE"
+    }
+  ],
+  "messages": [],
+  "stdout": "productName\nFUROSEMIDE 40MG\nIBUPROFEN GEL\nSUPIROCIN OINTMENT\nSKYCEF 500MG\nFLEMING SUSP 457MG/5ML 70ML\nBB COCKTAIL\nGLICLAZIDE TAB 80MG\nVISCOF PLAIN\nMENTHODEX COUGH SYR 100ML\nTANZOL SUSP\nALDOMET 250MG TAB\nGLUCO NAF C 400G\nVITAMIN C SYR 100ML\nALPHA GARLIC CAPS\nROBB MENTHOL SWEETS-ALL\nALWAYS SANITARY PAD S/S- ALL\nMETHYLDOPA TABS 250MG 100'\nFOLIGLOW CAPS\nLUMATRONA SUSP 60ML\nPOTASSIUM CITRATE\n",
+  "stderr": "",
+  "execution_time_ms": 257
+}

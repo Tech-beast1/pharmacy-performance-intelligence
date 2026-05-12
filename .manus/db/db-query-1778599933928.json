@@ -1,0 +1,24 @@
+{
+  "query": "SELECT \n  MONTH(createdAt) as month,\n  YEAR(createdAt) as year,\n  COUNT(*) as total_items,\n  SUM(CASE WHEN quantity > 0 THEN 1 ELSE 0 END) as items_with_qty,\n  GROUP_CONCAT(DISTINCT productName) as product_names\nFROM inventory \nWHERE (MONTH(createdAt) = 5 OR MONTH(createdAt) = 6) AND YEAR(createdAt) = 2026\nGROUP BY MONTH(createdAt), YEAR(createdAt)\nORDER BY month;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  MONTH(createdAt) as month,\n  YEAR(createdAt) as year,\n  COUNT(*) as total_items,\n  SUM(CASE WHEN quantity > 0 THEN 1 ELSE 0 END) as items_with_qty,\n  GROUP_CONCAT(DISTINCT productName) as product_names\nFROM inventory \nWHERE (MONTH(createdAt) = 5 OR MONTH(createdAt) = 6) AND YEAR(createdAt) = 2026\nGROUP BY MONTH(createdAt), YEAR(createdAt)\nORDER BY month;",
+  "rows": [
+    {
+      "month": "5",
+      "year": "2026",
+      "total_items": "127",
+      "items_with_qty": "125",
+      "product_names": "Cough Syrup May,Paracetamol May,Product A,Test Product May,Vitamin C,Expiring Product May,Upsert Test Product,Tema Product May,Kasoa Product May,Sequential Test May,May Product,Ibuprofen Tema May,Ibuprofen Kasoa May,ORS Sachets,Metformin 500mg,Amoxicillin 500mg,Atorvastatin 20mg,Metronidazole 400mg,Ibuprofen 400mg,Cetirizine 10mg,Paracetamol 500mg,Salbutamol Inhaler,Azithromycin 250mg,Folic Acid 5mg,Diclofenac 50mg,Vitamin C 1000mg,Lisinopril 10mg,Omeprazole 20mg,Ciprofloxacin 500mg,Amlodipine 5mg,Zinc Sulphate 20mg,Doxycycline 100mg,Multivitamin Tabs"
+    },
+    {
+      "month": "6",
+      "year": "2026",
+      "total_items": "90",
+      "items_with_qty": "90",
+      "product_names": "Aspirin June,Ibuprofen June,Product B,Antibiotic June,Test Product June,Vitamin C,Expiring Product June,Tema Product June,Kasoa Product June,Sequential Test June,June Product,June Expiring Product,Ibuprofen Tema June,Ibuprofen Kasoa June,Metformin 850mg,Ciprofloxacin 250mg,Multivitamin Tablets,Aspirin 100mg"
+    }
+  ],
+  "messages": [],
+  "stdout": "month\tyear\ttotal_items\titems_with_qty\tproduct_names\n5\t2026\t127\t125\tCough Syrup May,Paracetamol May,Product A,Test Product May,Vitamin C,Expiring Product May,Upsert Test Product,Tema Product May,Kasoa Product May,Sequential Test May,May Product,Ibuprofen Tema May,Ibuprofen Kasoa May,ORS Sachets,Metformin 500mg,Amoxicillin 500mg,Atorvastatin 20mg,Metronidazole 400mg,Ibuprofen 400mg,Cetirizine 10mg,Paracetamol 500mg,Salbutamol Inhaler,Azithromycin 250mg,Folic Acid 5mg,Diclofenac 50mg,Vitamin C 1000mg,Lisinopril 10mg,Omeprazole 20mg,Ciprofloxacin 500mg,Amlodipine 5mg,Zinc Sulphate 20mg,Doxycycline 100mg,Multivitamin Tabs\n6\t2026\t90\t90\tAspirin June,Ibuprofen June,Product B,Antibiotic June,Test Product June,Vitamin C,Expiring Product June,Tema Product June,Kasoa Product June,Sequential Test June,June Product,June Expiring Product,Ibuprofen Tema June,Ibuprofen Kasoa June,Metformin 850mg,Ciprofloxacin 250mg,Multivitamin Tablets,Aspirin 100mg\n",
+  "stderr": "",
+  "execution_time_ms": 296
+}

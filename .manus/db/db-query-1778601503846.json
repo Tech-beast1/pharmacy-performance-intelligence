@@ -1,0 +1,40 @@
+{
+  "query": "SELECT DISTINCT branchId FROM inventory LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT DISTINCT branchId FROM inventory LIMIT 10;",
+  "rows": [
+    {
+      "branchId": "390013"
+    },
+    {
+      "branchId": "390014"
+    },
+    {
+      "branchId": "420002"
+    },
+    {
+      "branchId": "420034"
+    },
+    {
+      "branchId": "450031"
+    },
+    {
+      "branchId": "420017"
+    },
+    {
+      "branchId": "420044"
+    },
+    {
+      "branchId": "420016"
+    },
+    {
+      "branchId": "420001"
+    },
+    {
+      "branchId": "450018"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\n390013\n390014\n420002\n420034\n450031\n420017\n420044\n420016\n420001\n450018\n",
+  "stderr": "",
+  "execution_time_ms": 284
+}

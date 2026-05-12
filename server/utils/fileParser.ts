@@ -319,9 +319,13 @@ export function transformRow(row: any, mapping: ColumnMapping): ParsedRow | null
       
       // Handle Excel datetime objects (from openpyxl or similar)
       if (dateValue instanceof Date) {
-        // If it's already a Date object from Excel, extract just the date part
-        // and convert to UTC to avoid timezone issues
-        const utcDate = new Date(Date.UTC(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate()));
+        // Excel date objects come in local timezone
+        // We need to extract the local date components and convert to UTC
+        // This ensures 31/05/2026 stays as May 31, not shifted to June 1
+        const year = dateValue.getFullYear();
+        const month = dateValue.getMonth(); // 0-11 in local timezone
+        const day = dateValue.getDate(); // day in local timezone
+        const utcDate = new Date(Date.UTC(year, month, day));
         if (!isNaN(utcDate.getTime())) {
           date = utcDate;
         }

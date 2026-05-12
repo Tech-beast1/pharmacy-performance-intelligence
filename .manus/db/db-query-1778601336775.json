@@ -1,0 +1,52 @@
+{
+  "query": "SELECT \n  fileName,\n  fileType,\n  rowsProcessed,\n  status,\n  createdAt\nFROM file_uploads \nORDER BY createdAt DESC \nLIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  fileName,\n  fileType,\n  rowsProcessed,\n  status,\n  createdAt\nFROM file_uploads \nORDER BY createdAt DESC \nLIMIT 10;",
+  "rows": [
+    {
+      "fileName": "inventory-data.csv",
+      "fileType": "csv",
+      "rowsProcessed": "50",
+      "status": "completed",
+      "createdAt": "2026-05-07 11:35:34"
+    },
+    {
+      "fileName": "sales-data.xlsx",
+      "fileType": "xlsx",
+      "rowsProcessed": "100",
+      "status": "completed",
+      "createdAt": "2026-05-07 11:35:34"
+    },
+    {
+      "fileName": "sales-data.xlsx",
+      "fileType": "xlsx",
+      "rowsProcessed": "100",
+      "status": "completed",
+      "createdAt": "2026-04-07 20:26:44"
+    },
+    {
+      "fileName": "inventory-data.csv",
+      "fileType": "csv",
+      "rowsProcessed": "50",
+      "status": "completed",
+      "createdAt": "2026-04-07 20:26:44"
+    },
+    {
+      "fileName": "inventory-data.csv",
+      "fileType": "csv",
+      "rowsProcessed": "50",
+      "status": "completed",
+      "createdAt": "2026-04-07 20:26:36"
+    },
+    {
+      "fileName": "sales-data.xlsx",
+      "fileType": "xlsx",
+      "rowsProcessed": "100",
+      "status": "completed",
+      "createdAt": "2026-04-07 20:26:36"
+    }
+  ],
+  "messages": [],
+  "stdout": "fileName\tfileType\trowsProcessed\tstatus\tcreatedAt\ninventory-data.csv\tcsv\t50\tcompleted\t2026-05-07 11:35:34\nsales-data.xlsx\txlsx\t100\tcompleted\t2026-05-07 11:35:34\nsales-data.xlsx\txlsx\t100\tcompleted\t2026-04-07 20:26:44\ninventory-data.csv\tcsv\t50\tcompleted\t2026-04-07 20:26:44\ninventory-data.csv\tcsv\t50\tcompleted\t2026-04-07 20:26:36\nsales-data.xlsx\txlsx\t100\tcompleted\t2026-04-07 20:26:36\n",
+  "stderr": "",
+  "execution_time_ms": 258
+}

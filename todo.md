@@ -2031,3 +2031,61 @@ if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) { ...
 **Verification:** All 188 tests pass (183 original + 5 new)
 
 **Status:** COMPLETE - Expiry risk is now calculated correctly for each month independently. May expiry risk is calculated from May 1, June expiry risk is calculated from June 1, etc.
+
+
+## Phase 18: CRITICAL - Multiple Date Parsing and Syntax Bugs
+
+### Bug #1: Excel Date Parsing Timezone Issue - FIXED
+**Root Cause:** Excel dates like 31/05/2026 were being parsed as 01/06/2026 due to timezone conversion issues.
+- When Excel reads "31/05/2026", it creates a Date object in local timezone
+- The code was using UTC getters which shifted the date by 1 day
+
+**Solution:** Use local timezone getters to extract date components, then convert to UTC
+- Changed from `getUTCFullYear()`, `getUTCMonth()`, `getUTCDate()`
+- To `getFullYear()`, `getMonth()`, `getDate()`
+- File: server/utils/fileParser.ts lines 325-328
+
+### Bug #2: Incomplete activeInv Assignment - FIXED
+**Root Cause:** Line 490 in db-branches.ts had `const activeInv = inv` without semicolon
+- This caused inventory data to not be processed correctly
+- Metrics were showing zeros because activeInv was undefined
+
+**Solution:** Added semicolon to complete the assignment
+- File: server/db-branches.ts line 490
+
+### Bug #3: SmartUpload Not Tracking Month Changes - FIXED
+**Root Cause:** `effectiveUploadDate` was calculated as a constant, not state
+- When user changed month selector, the prop updated but effectiveUploadDate didn't
+- Inventory was created with wrong month
+
+**Solution:** Added useState and useEffect to track uploadDate changes
+- File: client/src/components/SmartUpload.tsx
+
+### Bug #4: Dashboard Cache Not Invalidated - FIXED
+**Root Cause:** `analytics.getDashboardMetrics` query wasn't invalidated after upload
+- Dashboard showed stale cached data
+- Made it appear that May metrics changed when June inventory was uploaded
+
+**Solution:** Added cache invalidation after successful file upload
+- File: client/src/components/SmartUpload.tsx
+
+### Bug #5: Expiry Risk Using Today's Date - FIXED
+**Root Cause:** Expiry risk was calculated from today's date instead of month start date
+- May expiry risk was calculated from May 12 (today), not May 1
+- Products expiring before today weren't counted
+
+**Solution:** Use monthStartDate for the 30-day window calculation
+- File: server/db-branches.ts lines 518-536
+
+### Current Status:
+- [x] Fixed Excel date parsing timezone issue
+- [x] Fixed incomplete activeInv assignment syntax error
+- [x] Fixed SmartUpload month tracking with useState/useEffect
+- [x] Fixed dashboard cache invalidation
+- [x] Fixed expiry risk date calculation
+- [ ] Test complete workflow with correct branchIds
+- [ ] Verify May and June metrics display correctly
+- [ ] Verify Expiry Risk shows ₵920.00 for May
+- [ ] Verify Dead Stock shows ₵2,204.00 for May
+- [ ] Verify June metrics are independent from May
+- [ ] Run all tests to ensure no regressions

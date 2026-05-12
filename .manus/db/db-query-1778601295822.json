@@ -1,0 +1,50 @@
+{
+  "query": "SELECT DISTINCT DATE(createdAt) as upload_date, COUNT(*) as count FROM inventory GROUP BY DATE(createdAt) ORDER BY upload_date DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT DISTINCT DATE(createdAt) as upload_date, COUNT(*) as count FROM inventory GROUP BY DATE(createdAt) ORDER BY upload_date DESC LIMIT 10;",
+  "rows": [
+    {
+      "upload_date": "2026-07-20",
+      "count": "6"
+    },
+    {
+      "upload_date": "2026-07-10",
+      "count": "5"
+    },
+    {
+      "upload_date": "2026-04-27",
+      "count": "19"
+    },
+    {
+      "upload_date": "2026-04-26",
+      "count": "761"
+    },
+    {
+      "upload_date": "2026-04-21",
+      "count": "10"
+    },
+    {
+      "upload_date": "2026-04-15",
+      "count": "10"
+    },
+    {
+      "upload_date": "2026-04-10",
+      "count": "5"
+    },
+    {
+      "upload_date": "2026-04-08",
+      "count": "1"
+    },
+    {
+      "upload_date": "2026-04-07",
+      "count": "19"
+    },
+    {
+      "upload_date": "2026-03-15",
+      "count": "10"
+    }
+  ],
+  "messages": [],
+  "stdout": "upload_date\tcount\n2026-07-20\t6\n2026-07-10\t5\n2026-04-27\t19\n2026-04-26\t761\n2026-04-21\t10\n2026-04-15\t10\n2026-04-10\t5\n2026-04-08\t1\n2026-04-07\t19\n2026-03-15\t10\n",
+  "stderr": "",
+  "execution_time_ms": 262
+}

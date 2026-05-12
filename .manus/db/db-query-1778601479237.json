@@ -1,0 +1,15 @@
+{
+  "query": "SELECT COUNT(*) as count, MIN(createdAt) as min_date, MAX(createdAt) as max_date \nFROM inventory \nWHERE createdAt >= '2026-05-01 00:00:00' AND createdAt < '2026-06-01 00:00:00';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT COUNT(*) as count, MIN(createdAt) as min_date, MAX(createdAt) as max_date \nFROM inventory \nWHERE createdAt >= '2026-05-01 00:00:00' AND createdAt < '2026-06-01 00:00:00';",
+  "rows": [
+    {
+      "count": "20",
+      "min_date": "2026-05-01 00:00:00",
+      "max_date": "2026-05-01 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "count\tmin_date\tmax_date\n20\t2026-05-01 00:00:00\t2026-05-01 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 259
+}
