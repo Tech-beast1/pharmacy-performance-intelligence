@@ -201,10 +201,10 @@ export default function OverheadCosts() {
     ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: monthString }, { enabled: !!selectedBranchId })
     : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: monthString }, { enabled: !!organization?.id });
   
-  // Gross Profit = Revenue - Cost Price (from backend, unchanged)
-  const grossProfit = metricsQuery.data?.data?.estimatedProfit || 0;
-  // Net Profit = Gross Profit - Overhead Costs
-  const netProfit = grossProfit - totalOverhead;
+  // Gross Profit = Revenue - Cost Price (from backend)
+  const grossProfit = metricsQuery.data?.data?.grossProfit || 0;
+  // Net Profit = Estimated Profit (already includes overhead deduction from backend)
+  const netProfit = metricsQuery.data?.data?.estimatedProfit || 0;
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
