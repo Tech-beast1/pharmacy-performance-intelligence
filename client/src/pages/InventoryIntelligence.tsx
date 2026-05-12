@@ -107,7 +107,7 @@ export default function InventoryIntelligence() {
   const branches = (branchesQuery.data?.data && branchesQuery.data.data.length > 0) 
     ? branchesQuery.data.data 
     : branchesFromInventory;
-  const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'lowmargin'>('all');
+  const [filterAlert, setFilterAlert] = useState<'all' | 'expiry' | 'deadstock' | 'both' | 'lowmargin'>('all');
   const [durationDays, setDurationDays] = useState<number>(60);
   const [sortKey, setSortKey] = useState<SortKey>('productName');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
@@ -181,25 +181,17 @@ export default function InventoryIntelligence() {
     ? branches.find(b => b.id === selectedBranchId)?.name 
     : (viewMode === 'single' ? 'Your Pharmacy' : 'All Branches');
 
-  // Define getAlertStatus function
+  // Get alert status for each item
   const getAlertStatus = (item: any) => {
     if (!alerts) return null;
 
-    const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
     const isExpiryRisk = alerts.expiryRiskProducts.some((p: any) => p.id === item.id);
+    const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
     const isLowMargin = alerts.lowMarginProducts.some((p: any) => p.id === item.id);
 
-    if (filterAlert === 'deadstock' && isDeadStock) {
-      return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
-    }
-    if (filterAlert === 'expiry' && isExpiryRisk) {
-      return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
-    }
-    if (filterAlert === 'lowmargin' && isLowMargin) {
-      return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
-    }
-
     if (filterAlert === 'all') {
+      // Show combined status if product is both expiry risk and dead stock
+      if (isExpiryRisk && isDeadStock) return { type: 'both', label: 'Expiry & Dead Stock', color: 'bg-purple-100 text-purple-800' };
       if (isDeadStock) return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
       if (isExpiryRisk) return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
       if (isLowMargin) return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
@@ -219,6 +211,11 @@ export default function InventoryIntelligence() {
     } else if (filterAlert === 'deadstock') {
       const deadstockIds = new Set(alerts.deadStockProducts.map((p: any) => p.id));
       result = result.filter(item => deadstockIds.has(item.id));
+    } else if (filterAlert === 'both') {
+      // Filter for products that are BOTH expiry risk AND dead stock
+      const expiryIds = new Set(alerts.expiryRiskProducts.map((p: any) => p.id));
+      const deadstockIds = new Set(alerts.deadStockProducts.map((p: any) => p.id));
+      result = result.filter(item => expiryIds.has(item.id) && deadstockIds.has(item.id));
     } else if (filterAlert === 'lowmargin') {
       const lowmarginIds = new Set(alerts.lowMarginProducts.map((p: any) => p.id));
       result = result.filter(item => lowmarginIds.has(item.id));
@@ -351,6 +348,7 @@ export default function InventoryIntelligence() {
                 <SelectItem value="all">All Items</SelectItem>
                 <SelectItem value="expiry">Expiry Risk</SelectItem>
                 <SelectItem value="deadstock">Dead Stock</SelectItem>
+                <SelectItem value="both">Expiry & Dead Stock</SelectItem>
                 <SelectItem value="lowmargin">Low Margin</SelectItem>
               </SelectContent>
             </Select>

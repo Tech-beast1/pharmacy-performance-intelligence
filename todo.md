@@ -2089,3 +2089,26 @@ if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) { ...
 - [ ] Verify Dead Stock shows ₵2,204.00 for May
 - [ ] Verify June metrics are independent from May
 - [ ] Run all tests to ensure no regressions
+
+
+## Phase 19: Combined Status Badges for Inventory Items - COMPLETED
+
+### Feature Implemented:
+- [x] Products that are BOTH expiry risk AND dead stock now show "Expiry & Dead Stock" badge in inventory table
+- [x] Filter section now shows separate options:
+  - [x] Expiry Risk (only)
+  - [x] Dead Stock (only)
+  - [x] Expiry & Dead Stock (combined)
+  - [x] Low Margin (only)
+- [x] Combined status badge uses purple color (bg-purple-100 text-purple-800) to distinguish from individual statuses
+- [x] Filter logic updated to handle combined status filtering
+- [x] TypeScript types updated to include 'both' filter option
+
+### Changes Made:
+- client/src/pages/InventoryIntelligence.tsx:
+  - Updated getAlertStatus function to return combined status when product is both expiry risk and dead stock
+  - Added 'both' filter option to SelectContent
+  - Updated filteredItems logic to filter for products with both statuses
+  - Updated filterAlert type to include 'both' as valid option
+
+### Status: COMPLETE - Combined status badges are now working correctly
