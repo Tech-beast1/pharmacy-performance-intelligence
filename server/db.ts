@@ -115,7 +115,12 @@ export async function upsertInventoryItem(item: any) {
     .limit(1);
   
   if (existing.length > 0) {
-    await db.update(inventory).set(item).where(and(
+    // When updating, preserve the original createdAt to maintain month isolation
+    // Only update the data fields, not the timestamp
+    const updateData = { ...item };
+    delete updateData.createdAt;
+    
+    await db.update(inventory).set(updateData).where(and(
       eq(inventory.userId, item.userId),
       eq(inventory.branchId, item.branchId),
       eq(inventory.sku, item.sku)

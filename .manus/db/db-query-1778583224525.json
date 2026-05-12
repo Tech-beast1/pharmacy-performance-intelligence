@@ -1,0 +1,170 @@
+{
+  "query": "SELECT id, productName, branchId, createdAt, MONTH(createdAt) as month, YEAR(createdAt) as year FROM inventory LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT id, productName, branchId, createdAt, MONTH(createdAt) as month, YEAR(createdAt) as year FROM inventory LIMIT 20;",
+  "rows": [
+    {
+      "id": "150054",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:18:34",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150060",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:19:07",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150066",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:19:45",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150072",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:20:27",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150078",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:20:47",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150084",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:21:13",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150090",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:21:22",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150096",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:22:33",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150102",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:22:42",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150108",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:24:14",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150114",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:24:22",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150120",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:24:41",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150126",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:24:49",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150132",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:25:45",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150138",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:25:53",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150142",
+      "productName": "Alert Test Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:26:36",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150144",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:26:36",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150148",
+      "productName": "Alert Test Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:26:44",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "150150",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-07 20:26:44",
+      "month": "4",
+      "year": "2026"
+    },
+    {
+      "id": "180006",
+      "productName": "Other Product",
+      "branchId": "20",
+      "createdAt": "2026-04-08 12:53:15",
+      "month": "4",
+      "year": "2026"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tproductName\tbranchId\tcreatedAt\tmonth\tyear\n150054\tOther Product\t20\t2026-04-07 20:18:34\t4\t2026\n150060\tOther Product\t20\t2026-04-07 20:19:07\t4\t2026\n150066\tOther Product\t20\t2026-04-07 20:19:45\t4\t2026\n150072\tOther Product\t20\t2026-04-07 20:20:27\t4\t2026\n150078\tOther Product\t20\t2026-04-07 20:20:47\t4\t2026\n150084\tOther Product\t20\t2026-04-07 20:21:13\t4\t2026\n150090\tOther Product\t20\t2026-04-07 20:21:22\t4\t2026\n150096\tOther Product\t20\t2026-04-07 20:22:33\t4\t2026\n150102\tOther Product\t20\t2026-04-07 20:22:42\t4\t2026\n150108\tOther Product\t20\t2026-04-07 20:24:14\t4\t2026\n150114\tOther Product\t20\t2026-04-07 20:24:22\t4\t2026\n150120\tOther Product\t20\t2026-04-07 20:24:41\t4\t2026\n150126\tOther Product\t20\t2026-04-07 20:24:49\t4\t2026\n150132\tOther Product\t20\t2026-04-07 20:25:45\t4\t2026\n150138\tOther Product\t20\t2026-04-07 20:25:53\t4\t2026\n150142\tAlert Test Product\t20\t2026-04-07 20:26:36\t4\t2026\n150144\tOther Product\t20\t2026-04-07 20:26:36\t4\t2026\n150148\tAlert Test Product\t20\t2026-04-07 20:26:44\t4\t2026\n150150\tOther Product\t20\t2026-04-07 20:26:44\t4\t2026\n180006\tOther Product\t20\t2026-04-08 12:53:15\t4\t2026\n",
+  "stderr": "",
+  "execution_time_ms": 262
+}

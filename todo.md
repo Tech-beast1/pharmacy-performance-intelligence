@@ -1911,3 +1911,26 @@
 - [x] Verified Tema metrics remain unchanged after Kasoa upload
 - [x] All 169 tests passing
 - [x] Each branch now has completely independent inventory items
+
+
+## Phase 14: CRITICAL - Month Independence Bug
+- [x] Investigate why uploading data for one month affects other months' inventory metrics
+- [x] Identify root cause of cross-month Dead Stock and Expiry Risk contamination
+- [x] Fix inventory filtering to be month-specific (not just branch-specific)
+- [x] Ensure Dead Stock metrics for May are independent from June
+- [x] Ensure Expiry Risk metrics for May are independent from June
+- [x] Verify uploading for Kasoa in June does NOT affect Tema's May metrics
+- [x] Test all combinations: Tema May, Tema June, Kasoa May, Kasoa June
+- [x] Ensure each month has completely independent inventory items
+
+**Root Cause:** The `upsertInventoryItem` function was updating the `createdAt` timestamp when upserting existing inventory items. This caused inventory items to be moved from one month to another when the same product was uploaded for a different month.
+
+**Solution:** Modified `upsertInventoryItem` in server/db.ts to preserve the original `createdAt` timestamp when updating existing items. Now only data fields are updated, not the creation date.
+
+**Verification:** Added 4 comprehensive tests in `month-independence-createdAt.test.ts` that verify:
+1. May inventory remains in May even after June upload
+2. Separate inventory items are maintained for different months
+3. Expiry risk metrics are correctly isolated by month
+4. CreatedAt is not updated during upsert operations
+
+All 173 tests pass (169 original + 4 new).
