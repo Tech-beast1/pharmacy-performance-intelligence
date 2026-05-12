@@ -189,13 +189,13 @@ export default function InventoryIntelligence() {
     const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
     const isLowMargin = alerts.lowMarginProducts.some((p: any) => p.id === item.id);
 
-    if (filterAlert === 'all') {
-      // Show combined status if product is both expiry risk and dead stock
-      if (isExpiryRisk && isDeadStock) return { type: 'both', label: 'Expiry & Dead Stock', color: 'bg-purple-100 text-purple-800' };
-      if (isDeadStock) return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
-      if (isExpiryRisk) return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
-      if (isLowMargin) return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
-    }
+    // Always return the status badge, regardless of filter selection
+    // Show combined status if product is both expiry risk and dead stock
+    if (isExpiryRisk && isDeadStock) return { type: 'both', label: 'Expiry & Dead Stock', color: 'bg-purple-100 text-purple-800' };
+    if (isDeadStock) return { type: 'deadstock', label: 'Dead Stock', color: 'bg-orange-100 text-orange-800' };
+    if (isExpiryRisk) return { type: 'expiry', label: 'Expiry Risk', color: 'bg-red-100 text-red-800' };
+    if (isLowMargin) return { type: 'lowmargin', label: 'Low Margin', color: 'bg-yellow-100 text-yellow-800' };
+    
     return null;
   };
 

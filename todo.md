@@ -2112,3 +2112,17 @@ if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) { ...
   - Updated filterAlert type to include 'both' as valid option
 
 ### Status: COMPLETE - Combined status badges are now working correctly
+
+### Bug Fix: Status Badges Not Showing When Filtered
+**Issue:** When filtering by a specific status (Expiry Risk, Dead Stock, etc.), the status badges were showing "OK" instead of the actual status.
+
+**Root Cause:** The `getAlertStatus` function only returned status badges when `filterAlert === 'all'`. When a specific filter was applied, it returned `null`, displaying "OK".
+
+**Solution:** Removed the `filterAlert === 'all'` condition. Status badges are now returned regardless of the filter selection. The filter only affects which items are displayed, not whether the status badge is shown.
+
+**Changes Made:**
+- client/src/pages/InventoryIntelligence.tsx:
+  - Removed the `if (filterAlert === 'all')` condition from getAlertStatus
+  - Status badges now always display correctly
+
+**Status: COMPLETE - Filter status display is now working correctly**
