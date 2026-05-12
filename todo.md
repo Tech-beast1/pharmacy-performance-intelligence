@@ -1927,10 +1927,16 @@
 
 **Solution:** Modified `upsertInventoryItem` in server/db.ts to preserve the original `createdAt` timestamp when updating existing items. Now only data fields are updated, not the creation date.
 
-**Verification:** Added 4 comprehensive tests in `month-independence-createdAt.test.ts` that verify:
+**Verification:** Added comprehensive tests in `month-independence-createdAt.test.ts` and `month-independence-integration.test.ts` that verify:
 1. May inventory remains in May even after June upload
 2. Separate inventory items are maintained for different months
 3. Expiry risk metrics are correctly isolated by month
 4. CreatedAt is not updated during upsert operations
+5. Full integration test: May=820, June=1440, Total=2260 (complete isolation)
+6. Sequential uploads across multiple months work without cross-contamination
+7. Both branches (Tema and Kasoa) maintain independent data
+8. Consolidated metrics correctly sum individual branch metrics
 
-All 173 tests pass (169 original + 4 new).
+All 178 tests pass (169 original + 9 new tests).
+
+**Status:** COMPLETE - Month independence bug is fully fixed and verified. The system now maintains complete data isolation between months and branches.
