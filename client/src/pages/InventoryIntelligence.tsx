@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-type SortKey = 'productName' | 'price' | 'quantity' | 'margin' | 'expiryDate';
+type SortKey = 'productName' | 'price' | 'costPrice' | 'quantity' | 'margin' | 'expiryDate';
 type SortOrder = 'asc' | 'desc';
 
 // Format date consistently without timezone conversion
@@ -373,7 +373,7 @@ export default function InventoryIntelligence() {
                   <SortHeader label="Product Name" sortBy="productName" />
                 </TableHead>
                 <TableHead className="p-4 text-center">
-                  <SortHeader label="Price" sortBy="price" />
+                  <SortHeader label="Cost Price" sortBy="costPrice" />
                 </TableHead>
                 <TableHead className="p-4 text-center">
                   <SortHeader label="Quantity" sortBy="quantity" />
@@ -393,7 +393,7 @@ export default function InventoryIntelligence() {
                     <TableRow key={item.id} className="hover:bg-gray-50 border-b">
                       <TableCell className="p-4 font-medium text-gray-900 text-center">{item.productName}</TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
-                        ₵{parseFloat(item.price.toString()).toLocaleString()}
+                        ₵{parseFloat(item.costPrice.toString()).toLocaleString()}
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">{item.quantity}</TableCell>
                       <TableCell className="p-4 text-center">

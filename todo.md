@@ -2154,3 +2154,23 @@ The dead stock value calculation logic might be excluding products with both sta
 
 **FIXED:** Dead stock value now displays correctly for products with both Expiry & Dead Stock status. Changed display logic to check if product is in deadStockProducts array instead of checking the status label.
 
+
+
+## Phase 21: Display Cost Price in Inventory Table - COMPLETED
+
+### Change:
+Updated the Inventory Intelligence table to display Cost Price instead of Selling Price in the price column.
+
+### Rationale:
+- Dead Stock Value is calculated as Cost Price × Quantity (the cost to the business)
+- Showing Cost Price helps users understand the actual value at risk
+- The Margin column already shows the markup percentage
+
+### Changes Made:
+- client/src/pages/InventoryIntelligence.tsx:
+  - Line 24: Added 'costPrice' to SortKey type definition
+  - Line 376: Changed table header from "Price" to "Cost Price" with sortBy="costPrice"
+  - Line 396: Changed displayed value from item.price to item.costPrice
+
+### Status: COMPLETE - Cost Price now displays correctly in inventory table
+
