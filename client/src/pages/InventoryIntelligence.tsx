@@ -402,7 +402,7 @@ export default function InventoryIntelligence() {
                         </span>
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
-                        {alertStatus?.label === 'Dead Stock' ? `₵${(parseFloat(item.price.toString()) * item.quantity).toLocaleString()}` : '₵0'}
+                        {alerts && (alerts.deadStockProducts.some((p: any) => p.id === item.id)) ? `₵${(parseFloat(item.price.toString()) * item.quantity).toLocaleString()}` : '₵0'}
                       </TableCell>
                       <TableCell className="p-4 text-center">
                         {alertStatus ? (

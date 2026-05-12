@@ -2126,3 +2126,31 @@ if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) { ...
   - Status badges now always display correctly
 
 **Status: COMPLETE - Filter status display is now working correctly**
+
+
+## Phase 20: CRITICAL - Dead Stock Value Shows ₵0 for Products with Both Expiry & Dead Stock Status
+
+### Issue:
+Products that have BOTH Expiry Risk AND Dead Stock status are showing ₵0 as their dead stock value, when they should show the calculated value (Cost Price × Stock Quantity).
+
+Example: Doxycycline 100mg
+- Cost Price: ₵14.5
+- Stock Quantity: 40
+- Expected Dead Stock Value: ₵580
+- Actual Dead Stock Value: ₵0 (BUG)
+
+### Root Cause:
+The dead stock value calculation logic might be excluding products with both statuses, or there's a condition that prevents the value from being calculated correctly.
+
+### Tasks:
+- [ ] Check the dead stock calculation logic in database queries
+- [ ] Identify why products with both statuses have ₵0 dead stock value
+- [ ] Fix the dead stock value calculation to include all dead stock products
+- [ ] Verify dead stock value displays correctly for all product statuses
+- [ ] Test with actual data to confirm fix works
+- [ ] Save checkpoint with dead stock value fix
+
+
+
+**FIXED:** Dead stock value now displays correctly for products with both Expiry & Dead Stock status. Changed display logic to check if product is in deadStockProducts array instead of checking the status label.
+
