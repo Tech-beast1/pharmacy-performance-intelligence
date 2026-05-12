@@ -84,19 +84,24 @@ export default function InventoryIntelligence() {
   const inventoryQuery = trpc.inventory.getAll.useQuery();
   const inventory = inventoryQuery.data?.data || [];
   
-  // Extract unique branches from inventory if branches query doesn't return data
-  const branchesFromInventory = useMemo(() => {
-    const uniqueBranches = new Map();
+  // Extract unique branch IDs from inventory
+  const branchIdsFromInventory = useMemo(() => {
+    const uniqueIds = new Set<number>();
     inventory.forEach((item: any) => {
-      if (item.branchId && item.branchName && !uniqueBranches.has(item.branchId)) {
-        uniqueBranches.set(item.branchId, {
-          id: item.branchId,
-          name: item.branchName
-        });
+      if (item.branchId) {
+        uniqueIds.add(item.branchId);
       }
     });
-    return Array.from(uniqueBranches.values());
+    return Array.from(uniqueIds);
   }, [inventory]);
+  
+  // Map branch IDs to branch objects from the branches query
+  const branchesFromInventory = useMemo(() => {
+    if (!branchesQuery.data?.data || branchesQuery.data.data.length === 0) {
+      return [];
+    }
+    return branchesQuery.data.data.filter((b: any) => branchIdsFromInventory.includes(b.id));
+  }, [branchesQuery.data?.data, branchIdsFromInventory]);
   
   // Use branches from query if available, otherwise use extracted branches
   const branches = (branchesQuery.data?.data && branchesQuery.data.data.length > 0) 

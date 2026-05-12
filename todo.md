@@ -1829,3 +1829,12 @@
 - [ ] Ensure dashboard queries are invalidated and refreshed
 - [ ] Add success/error notifications
 - [ ] Test Clear All button end-to-end with user confirmation
+
+
+## Phase 79: Add Branch-Level Inventory Filtering to Inventory Intelligence
+- [ ] Add branch selector dropdown to Inventory Intelligence page - ISSUE: Only showing consolidated, not individual branches
+- [ ] Filter inventory data by selected branch
+- [x] Add "Consolidated" option to show all branches combined
+- [ ] Update inventory metrics to reflect selected branch
+- [ ] Test branch filtering works correctly
+- [ ] Verify consolidated view aggregates all branches
