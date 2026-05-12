@@ -55,12 +55,17 @@ export default function SmartUpload({ uploadDate, branchId }: SmartUploadProps) 
   const [isLoading, setIsLoading] = useState(false);
   const [sheets, setSheets] = useState<SheetInfo[]>([]);
   const [selectedSheet, setSelectedSheet] = useState<string>('');
+  const [effectiveUploadDate, setEffectiveUploadDate] = useState<Date>(uploadDate || new Date());
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const effectiveUploadDate = uploadDate || new Date();
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
   const processFileMutation = trpc.upload.processFile.useMutation();
   const utils = trpc.useUtils();
+
+  // Update effectiveUploadDate whenever uploadDate prop changes
+  useEffect(() => {
+    setEffectiveUploadDate(uploadDate || new Date());
+  }, [uploadDate]);
 
   // Helper function to get a safe value for Select (never empty string)
   const getSafeSelectValue = (value: string | undefined, defaultCol: string) => {

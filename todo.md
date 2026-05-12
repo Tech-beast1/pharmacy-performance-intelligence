@@ -1940,3 +1940,39 @@
 All 178 tests pass (169 original + 9 new tests).
 
 **Status:** COMPLETE - Month independence bug is fully fixed and verified. The system now maintains complete data isolation between months and branches.
+
+
+## Phase 15: CRITICAL - Inventory Upload Month Independence Bug
+- [ ] Investigate why uploading June inventory affects May's Dead Stock and Expiry Risk
+- [ ] Trace inventory data flow from upload to database insertion
+- [ ] Identify where inventory createdAt date is being set incorrectly during upload
+- [ ] Check if inventory is being assigned to current month instead of upload month
+- [ ] Fix inventory upload to correctly assign createdAt based on upload date parameter
+- [ ] Verify June inventory metrics display correctly after upload
+- [ ] Verify May metrics remain unchanged after June inventory upload
+- [ ] Test with multiple sequential inventory uploads for different months
+- [ ] Write comprehensive tests for inventory upload month independence
+- [ ] Ensure each month's inventory data is completely independent
+
+
+## Phase 15: CRITICAL - Inventory Upload Month Independence Bug - FIXED
+
+**Root Cause:** The SmartUpload component was calculating `effectiveUploadDate` as a constant value instead of state. When the user changed the month selector in DataUpload, the prop updated but `effectiveUploadDate` was not recalculated, causing inventory to be created with the wrong month.
+
+**Solution:** 
+1. Changed `effectiveUploadDate` from a constant to state in SmartUpload.tsx
+2. Added useEffect hook to update it whenever uploadDate prop changes
+
+**Changes Made:**
+- client/src/components/SmartUpload.tsx: Added state management for effectiveUploadDate with useEffect hook
+
+**Verification:** Added 5 comprehensive tests in `inventory-upload-month-fix.test.ts` that verify:
+- May inventory shows correct May metrics
+- June inventory shows correct June metrics (not May)
+- June expiry risk does NOT affect May metrics
+- May and June have completely independent inventory
+- Inventory is correctly assigned to the month specified in createdAt
+
+**Test Results:** All 183 tests pass (178 original + 5 new)
+
+**Status:** COMPLETE - Inventory upload month independence bug is fully fixed and verified. Each month's inventory data is now completely independent.

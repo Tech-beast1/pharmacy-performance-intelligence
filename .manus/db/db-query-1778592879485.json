@@ -1,0 +1,280 @@
+{
+  "query": "SELECT id, productName, branchId, createdAt, MONTH(createdAt) as month, YEAR(createdAt) as year, sku FROM inventory ORDER BY createdAt DESC LIMIT 30;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT id, productName, branchId, createdAt, MONTH(createdAt) as month, YEAR(createdAt) as year, sku FROM inventory ORDER BY createdAt DESC LIMIT 30;",
+  "rows": [
+    {
+      "id": "1560075",
+      "productName": "Sequential Test July",
+      "branchId": "390014",
+      "createdAt": "2026-07-20 04:00:00",
+      "month": "7",
+      "year": "2026",
+      "sku": "SEQ-TEST-2026-07"
+    },
+    {
+      "id": "1560033",
+      "productName": "Expiring Product June",
+      "branchId": "390005",
+      "createdAt": "2026-06-25 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "EXP-PROD-2026-06"
+    },
+    {
+      "id": "1560081",
+      "productName": "Expiring Product June",
+      "branchId": "390019",
+      "createdAt": "2026-06-25 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "EXP-PROD-2026-06"
+    },
+    {
+      "id": "1560031",
+      "productName": "Vitamin C",
+      "branchId": "390005",
+      "createdAt": "2026-06-20 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "VIT-C-2026-06"
+    },
+    {
+      "id": "1560074",
+      "productName": "Sequential Test June",
+      "branchId": "390014",
+      "createdAt": "2026-06-20 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "SEQ-TEST-2026-06"
+    },
+    {
+      "id": "1560079",
+      "productName": "Vitamin C",
+      "branchId": "390019",
+      "createdAt": "2026-06-20 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "VIT-C-2026-06"
+    },
+    {
+      "id": "1290049",
+      "productName": "Ibuprofen June",
+      "branchId": "150011",
+      "createdAt": "2026-06-20 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "IBU-JUNE-2026"
+    },
+    {
+      "id": "1530712",
+      "productName": "Antibiotic June",
+      "branchId": "360177",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ANTI-JUN-2026"
+    },
+    {
+      "id": "1530758",
+      "productName": "Aspirin June",
+      "branchId": "360196",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ASP-JUNE-2026"
+    },
+    {
+      "id": "1530749",
+      "productName": "Antibiotic June",
+      "branchId": "360188",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ANTI-JUN-2026"
+    },
+    {
+      "id": "1530723",
+      "productName": "Aspirin June",
+      "branchId": "360185",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ASP-JUNE-2026"
+    },
+    {
+      "id": "1560062",
+      "productName": "Kasoa Product June",
+      "branchId": "390015",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "KASOA-PROD-2026-06"
+    },
+    {
+      "id": "1560060",
+      "productName": "Tema Product June",
+      "branchId": "390014",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "TEMA-PROD-2026-06"
+    },
+    {
+      "id": "1560065",
+      "productName": "Antibiotic June",
+      "branchId": "390013",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ANTI-JUN-2026"
+    },
+    {
+      "id": "1560018",
+      "productName": "Antibiotic June",
+      "branchId": "390001",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ANTI-JUN-2026"
+    },
+    {
+      "id": "1290048",
+      "productName": "Aspirin June",
+      "branchId": "360174",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ASP-JUNE-2026"
+    },
+    {
+      "id": "1320084",
+      "productName": "Antibiotic June",
+      "branchId": "360166",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ANTI-JUN-2026"
+    },
+    {
+      "id": "1560084",
+      "productName": "Aspirin June",
+      "branchId": "390024",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ASP-JUNE-2026"
+    },
+    {
+      "id": "1560077",
+      "productName": "Test Product June",
+      "branchId": "390019",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "TEST-PROD-2026-06"
+    },
+    {
+      "id": "1560039",
+      "productName": "Aspirin June",
+      "branchId": "390011",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "ASP-JUNE-2026"
+    },
+    {
+      "id": "1560029",
+      "productName": "Test Product June",
+      "branchId": "390005",
+      "createdAt": "2026-06-15 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "TEST-PROD-2026-06"
+    },
+    {
+      "id": "1530763",
+      "productName": "Product B",
+      "branchId": "360197",
+      "createdAt": "2026-06-10 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "PROD-B-JUNE"
+    },
+    {
+      "id": "1290051",
+      "productName": "Product B",
+      "branchId": "360176",
+      "createdAt": "2026-06-10 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "PROD-B-JUNE"
+    },
+    {
+      "id": "1560041",
+      "productName": "Product B",
+      "branchId": "390012",
+      "createdAt": "2026-06-10 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "PROD-B-JUNE"
+    },
+    {
+      "id": "1530729",
+      "productName": "Product B",
+      "branchId": "360187",
+      "createdAt": "2026-06-10 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "PROD-B-JUNE"
+    },
+    {
+      "id": "1560089",
+      "productName": "Product B",
+      "branchId": "390026",
+      "createdAt": "2026-06-10 04:00:00",
+      "month": "6",
+      "year": "2026",
+      "sku": "PROD-B-JUNE"
+    },
+    {
+      "id": "1560032",
+      "productName": "Expiring Product May",
+      "branchId": "390005",
+      "createdAt": "2026-05-25 04:00:00",
+      "month": "5",
+      "year": "2026",
+      "sku": "EXP-PROD-2026-05"
+    },
+    {
+      "id": "1560080",
+      "productName": "Expiring Product May",
+      "branchId": "390019",
+      "createdAt": "2026-05-25 04:00:00",
+      "month": "5",
+      "year": "2026",
+      "sku": "EXP-PROD-2026-05"
+    },
+    {
+      "id": "1560078",
+      "productName": "Vitamin C",
+      "branchId": "390019",
+      "createdAt": "2026-05-20 04:00:00",
+      "month": "5",
+      "year": "2026",
+      "sku": "VIT-C-2026-05"
+    },
+    {
+      "id": "1560073",
+      "productName": "Sequential Test May",
+      "branchId": "390014",
+      "createdAt": "2026-05-20 04:00:00",
+      "month": "5",
+      "year": "2026",
+      "sku": "SEQ-TEST-2026-05"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tproductName\tbranchId\tcreatedAt\tmonth\tyear\tsku\n1560075\tSequential Test July\t390014\t2026-07-20 04:00:00\t7\t2026\tSEQ-TEST-2026-07\n1560033\tExpiring Product June\t390005\t2026-06-25 04:00:00\t6\t2026\tEXP-PROD-2026-06\n1560081\tExpiring Product June\t390019\t2026-06-25 04:00:00\t6\t2026\tEXP-PROD-2026-06\n1560031\tVitamin C\t390005\t2026-06-20 04:00:00\t6\t2026\tVIT-C-2026-06\n1560074\tSequential Test June\t390014\t2026-06-20 04:00:00\t6\t2026\tSEQ-TEST-2026-06\n1560079\tVitamin C\t390019\t2026-06-20 04:00:00\t6\t2026\tVIT-C-2026-06\n1290049\tIbuprofen June\t150011\t2026-06-20 04:00:00\t6\t2026\tIBU-JUNE-2026\n1530712\tAntibiotic June\t360177\t2026-06-15 04:00:00\t6\t2026\tANTI-JUN-2026\n1530758\tAspirin June\t360196\t2026-06-15 04:00:00\t6\t2026\tASP-JUNE-2026\n1530749\tAntibiotic June\t360188\t2026-06-15 04:00:00\t6\t2026\tANTI-JUN-2026\n1530723\tAspirin June\t360185\t2026-06-15 04:00:00\t6\t2026\tASP-JUNE-2026\n1560062\tKasoa Product June\t390015\t2026-06-15 04:00:00\t6\t2026\tKASOA-PROD-2026-06\n1560060\tTema Product June\t390014\t2026-06-15 04:00:00\t6\t2026\tTEMA-PROD-2026-06\n1560065\tAntibiotic June\t390013\t2026-06-15 04:00:00\t6\t2026\tANTI-JUN-2026\n1560018\tAntibiotic June\t390001\t2026-06-15 04:00:00\t6\t2026\tANTI-JUN-2026\n1290048\tAspirin June\t360174\t2026-06-15 04:00:00\t6\t2026\tASP-JUNE-2026\n1320084\tAntibiotic June\t360166\t2026-06-15 04:00:00\t6\t2026\tANTI-JUN-2026\n1560084\tAspirin June\t390024\t2026-06-15 04:00:00\t6\t2026\tASP-JUNE-2026\n1560077\tTest Product June\t390019\t2026-06-15 04:00:00\t6\t2026\tTEST-PROD-2026-06\n1560039\tAspirin June\t390011\t2026-06-15 04:00:00\t6\t2026\tASP-JUNE-2026\n1560029\tTest Product June\t390005\t2026-06-15 04:00:00\t6\t2026\tTEST-PROD-2026-06\n1530763\tProduct B\t360197\t2026-06-10 04:00:00\t6\t2026\tPROD-B-JUNE\n1290051\tProduct B\t360176\t2026-06-10 04:00:00\t6\t2026\tPROD-B-JUNE\n1560041\tProduct B\t390012\t2026-06-10 04:00:00\t6\t2026\tPROD-B-JUNE\n1530729\tProduct B\t360187\t2026-06-10 04:00:00\t6\t2026\tPROD-B-JUNE\n1560089\tProduct B\t390026\t2026-06-10 04:00:00\t6\t2026\tPROD-B-JUNE\n1560032\tExpiring Product May\t390005\t2026-05-25 04:00:00\t5\t2026\tEXP-PROD-2026-05\n1560080\tExpiring Product May\t390019\t2026-05-25 04:00:00\t5\t2026\tEXP-PROD-2026-05\n1560078\tVitamin C\t390019\t2026-05-20 04:00:00\t5\t2026\tVIT-C-2026-05\n1560073\tSequential Test May\t390014\t2026-05-20 04:00:00\t5\t2026\tSEQ-TEST-2026-05\n",
+  "stderr": "",
+  "execution_time_ms": 264
+}
