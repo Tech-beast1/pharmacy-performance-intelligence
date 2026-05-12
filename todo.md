@@ -2174,26 +2174,3 @@ Updated the Inventory Intelligence table to display Cost Price instead of Sellin
 
 ### Status: COMPLETE - Cost Price now displays correctly in inventory table
 
-
-
-## Phase 22: Fix Dead Stock Value Calculation - COMPLETED
-
-### Change:
-Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
-
-### Rationale:
-- Dead Stock Value should represent the cost to the business, not the selling price
-- Cost Price × Quantity = actual cost of inventory that's not moving
-- This gives accurate financial impact of dead stock
-
-### Changes Made:
-- client/src/pages/InventoryIntelligence.tsx:
-  - Line 405: Changed dead stock value calculation from `item.price` to `item.costPrice`
-  - Line 431: Changed total dead stock sum calculation from `item.price` to `item.costPrice`
-
-### Result:
-- Individual dead stock values now show Cost Price × Quantity
-- Total Dead Stock Value row at bottom sums all dead stock values correctly
-- All 188 tests passing
-
-### Status: COMPLETE - Dead stock values now calculated correctly using cost price
