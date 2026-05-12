@@ -1,0 +1,52 @@
+{
+  "query": "SELECT \n  branchId,\n  COUNT(*) as expiryRiskCount,\n  SUM(quantity * costPrice) as expiryRiskValue,\n  GROUP_CONCAT(CONCAT(productName, ' (expires: ', DATE_FORMAT(expiryDate, '%Y-%m-%d'), ')')) as products\nFROM inventory \nWHERE MONTH(createdAt) = 5 AND YEAR(createdAt) = 2026\n  AND expiryDate BETWEEN '2026-05-12' AND '2026-07-11'\n  AND quantity > 0\nGROUP BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  COUNT(*) as expiryRiskCount,\n  SUM(quantity * costPrice) as expiryRiskValue,\n  GROUP_CONCAT(CONCAT(productName, ' (expires: ', DATE_FORMAT(expiryDate, '%Y-%m-%d'), ')')) as products\nFROM inventory \nWHERE MONTH(createdAt) = 5 AND YEAR(createdAt) = 2026\n  AND expiryDate BETWEEN '2026-05-12' AND '2026-07-11'\n  AND quantity > 0\nGROUP BY branchId;",
+  "rows": [
+    {
+      "branchId": "420022",
+      "expiryRiskCount": "1",
+      "expiryRiskValue": "300.00",
+      "products": "Expiring Product May (expires: 2026-05-27)"
+    },
+    {
+      "branchId": "300012",
+      "expiryRiskCount": "2",
+      "expiryRiskValue": "920.00",
+      "products": "Azithromycin 250mg (expires: 2026-06-01),Doxycycline 100mg (expires: 2026-05-16)"
+    },
+    {
+      "branchId": "390019",
+      "expiryRiskCount": "1",
+      "expiryRiskValue": "300.00",
+      "products": "Expiring Product May (expires: 2026-05-27)"
+    },
+    {
+      "branchId": "390005",
+      "expiryRiskCount": "1",
+      "expiryRiskValue": "300.00",
+      "products": "Expiring Product May (expires: 2026-05-27)"
+    },
+    {
+      "branchId": "420007",
+      "expiryRiskCount": "1",
+      "expiryRiskValue": "300.00",
+      "products": "Expiring Product May (expires: 2026-05-27)"
+    },
+    {
+      "branchId": "420038",
+      "expiryRiskCount": "1",
+      "expiryRiskValue": "300.00",
+      "products": "Expiring Product May (expires: 2026-05-27)"
+    },
+    {
+      "branchId": "20",
+      "expiryRiskCount": "2",
+      "expiryRiskValue": "1271.00",
+      "products": "Azithromycin 250mg (expires: 2026-06-01),Doxycycline 100mg (expires: 2026-05-16)"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\texpiryRiskCount\texpiryRiskValue\tproducts\n420022\t1\t300.00\tExpiring Product May (expires: 2026-05-27)\n300012\t2\t920.00\tAzithromycin 250mg (expires: 2026-06-01),Doxycycline 100mg (expires: 2026-05-16)\n390019\t1\t300.00\tExpiring Product May (expires: 2026-05-27)\n390005\t1\t300.00\tExpiring Product May (expires: 2026-05-27)\n420007\t1\t300.00\tExpiring Product May (expires: 2026-05-27)\n420038\t1\t300.00\tExpiring Product May (expires: 2026-05-27)\n20\t2\t1271.00\tAzithromycin 250mg (expires: 2026-06-01),Doxycycline 100mg (expires: 2026-05-16)\n",
+  "stderr": "",
+  "execution_time_ms": 260
+}

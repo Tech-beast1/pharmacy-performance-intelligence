@@ -105,9 +105,8 @@ describe('Inventory Upload Month Independence Bug Fix', () => {
   });
 
   it('should correctly handle expiry risk for June inventory (not affect May)', async () => {
-    const now = new Date();
-    const expiryDateSoon = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000); // 15 days from now
     const juneDate = new Date(2026, 5, 20); // June 20, 2026
+    const juneExpiryDate = new Date(2026, 5, 21); // June 21 (within 30 days from June 1)
 
     // Get May metrics BEFORE June expiry risk upload
     const mayMetricsBeforeJuneExpiry = await getBranchMetrics(testBranchId, '2026-05');
@@ -122,7 +121,7 @@ describe('Inventory Upload Month Independence Bug Fix', () => {
       quantity: 50,
       price: 8.00,
       costPrice: 4.00,
-      expiryDate: expiryDateSoon,
+      expiryDate: juneExpiryDate,
       createdAt: juneDate,
     });
 

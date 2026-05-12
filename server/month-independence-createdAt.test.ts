@@ -122,8 +122,10 @@ describe('Month Independence - CreatedAt Preservation', () => {
   it('should correctly handle expiry risk across different months', async () => {
     const mayDate = new Date(2026, 4, 25); // May 25, 2026
     const juneDate = new Date(2026, 5, 25); // June 25, 2026
-    const now = new Date();
-    const expiryDateSoon = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000); // 15 days from now
+    // May expiry: May 1 + 20 days = May 21 (within 30-day window from May 1)
+    const mayExpiryDate = new Date(2026, 4, 21); // May 21, 2026
+    // June expiry: June 1 + 20 days = June 21 (within 30-day window from June 1)
+    const juneExpiryDate = new Date(2026, 5, 21); // June 21, 2026
 
     // Upload inventory for May with expiry risk
     await upsertInventoryItem({
@@ -134,7 +136,7 @@ describe('Month Independence - CreatedAt Preservation', () => {
       quantity: 75,
       price: 8.00,
       costPrice: 4.00,
-      expiryDate: expiryDateSoon,
+      expiryDate: mayExpiryDate,
       createdAt: mayDate,
     });
 
@@ -147,7 +149,7 @@ describe('Month Independence - CreatedAt Preservation', () => {
       quantity: 50,
       price: 8.00,
       costPrice: 4.00,
-      expiryDate: expiryDateSoon,
+      expiryDate: juneExpiryDate,
       createdAt: juneDate,
     });
 

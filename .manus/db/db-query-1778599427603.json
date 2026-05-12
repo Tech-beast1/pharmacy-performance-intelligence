@@ -1,0 +1,9 @@
+{
+  "query": "SELECT * FROM monthly_metrics WHERE month = 5 AND year = 2026 LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT * FROM monthly_metrics WHERE month = 5 AND year = 2026 LIMIT 10;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 252
+}

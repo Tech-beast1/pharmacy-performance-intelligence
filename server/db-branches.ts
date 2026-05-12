@@ -515,8 +515,10 @@ export async function getBranchMetrics(branchId: number, month: string) {
     totalProfit = totalRevenue - totalCostPrice;
 
     // Inventory analysis - deduplicate by product name to match frontend behavior
-    const now = new Date();
-    const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+    // Use the START of the selected month for expiry risk calculation, not today's date
+    // This ensures expiry risk is calculated from the month's perspective
+    const monthStartDate = startDate; // Start of the selected month
+    const thirtyDaysFromMonthStart = new Date(monthStartDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     // Deduplicate inventory items by product name (keep first occurrence)
     const deduplicatedInv = new Map<string, typeof activeInv[0]>();
@@ -528,10 +530,10 @@ export async function getBranchMetrics(branchId: number, month: string) {
     }
 
     for (const item of Array.from(deduplicatedInv.values())) {
-      // Expiry risk (products expiring within 30 days from now)
+      // Expiry risk (products expiring within 30 days from the start of the selected month)
       if (item.expiryDate) {
         const expiryDate = new Date(item.expiryDate);
-        if (expiryDate > now && expiryDate <= thirtyDaysFromNow) {
+        if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) {
           const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
           const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
           expiryRiskLoss += costPrice * quantity;

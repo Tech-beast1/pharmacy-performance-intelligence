@@ -1998,3 +1998,36 @@ All 178 tests pass (169 original + 9 new tests).
 **Status:** COMPLETE - Dashboard now properly refreshes after inventory upload. Each month's data is completely independent and metrics display correctly.
 
 **Test Results:** All 183 tests pass (178 original + 5 new)
+
+
+## Phase 17: CRITICAL - Expiry Risk Calculation Bug - FIXED
+
+**Root Cause:** The expiry risk calculation in `getBranchMetrics` was using today's date ("now") instead of the selected month's start date. This caused:
+- May expiry risk to be calculated from today's date, not from May 1
+- June expiry risk to be calculated from today's date, not from June 1
+- Products expiring before today were not counted, even if they're in the selected month
+- Expiry risk values were inconsistent across different months
+
+**Solution:** Changed the expiry risk calculation to use the start date of the selected month instead of today's date.
+
+**Changes Made:**
+- server/db-branches.ts lines 518-536: Changed `now` to `monthStartDate` and `thirtyDaysFromNow` to `thirtyDaysFromMonthStart`
+- Updated test data in inventory-upload-month-fix.test.ts and month-independence-createdAt.test.ts to use proper expiry dates
+
+**Before Fix:**
+```typescript
+const now = new Date();
+const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+if (expiryDate > now && expiryDate <= thirtyDaysFromNow) { ... }
+```
+
+**After Fix:**
+```typescript
+const monthStartDate = startDate; // Start of the selected month
+const thirtyDaysFromMonthStart = new Date(monthStartDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) { ... }
+```
+
+**Verification:** All 188 tests pass (183 original + 5 new)
+
+**Status:** COMPLETE - Expiry risk is now calculated correctly for each month independently. May expiry risk is calculated from May 1, June expiry risk is calculated from June 1, etc.
