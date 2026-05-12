@@ -23,6 +23,7 @@ interface MetricCard {
   icon: React.ReactNode;
   color: string;
   bgColor: string;
+  grossProfit?: number;
 }
 
 export default function Dashboard() {
@@ -242,6 +243,7 @@ export default function Dashboard() {
       icon: <TrendingUp className="w-8 h-8" />,
       color: 'text-green-600',
       bgColor: 'bg-green-100',
+      grossProfit: metrics.grossProfit,
     },
     {
       title: 'Expiry Risk Loss',
@@ -410,6 +412,9 @@ export default function Dashboard() {
                     ? 'text-red-600'
                     : 'text-gray-900'
                 }`}>{card.value}</p>
+                {card.grossProfit !== undefined && card.title === 'Estimated Profit' && (
+                  <p className="text-xs text-gray-500 mt-1">Gross: ₵{card.grossProfit.toLocaleString()}</p>
+                )}
                 <div className={`mt-1 md:mt-2 text-xs md:text-sm font-medium ${getTrendColor(card.trend)}`}>
                   {getTrendIcon(card.trend)} {Math.abs(card.trend).toFixed(1)}% vs last month
                 </div>

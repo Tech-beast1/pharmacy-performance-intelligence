@@ -388,6 +388,7 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
     if (!orgBranches || orgBranches.length === 0) {
       return {
         totalRevenue: 0,
+        grossProfit: 0,
         estimatedProfit: 0,
         expiryRiskLoss: 0,
         deadStockValue: 0,
@@ -400,7 +401,8 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
 
     // Calculate metrics for each branch
     let totalRevenue = 0;
-    let totalProfit = 0;
+    let totalGrossProfit = 0;
+    let totalNetProfit = 0;
     let totalExpiryRiskLoss = 0;
     let totalDeadStockValue = 0;
     let totalExpiryRiskCount = 0;
@@ -411,7 +413,8 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
       const branchMetrics = await getBranchMetrics(branch.id, month);
       if (branchMetrics) {
         totalRevenue += branchMetrics.totalRevenue || 0;
-        totalProfit += branchMetrics.estimatedProfit || 0;
+        totalGrossProfit += branchMetrics.grossProfit || 0;
+        totalNetProfit += branchMetrics.estimatedProfit || 0;
         totalExpiryRiskLoss += branchMetrics.expiryRiskLoss || 0;
         totalDeadStockValue += branchMetrics.deadStockValue || 0;
         totalExpiryRiskCount += branchMetrics.expiryRiskCount || 0;
@@ -422,7 +425,8 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
 
     return {
       totalRevenue,
-      estimatedProfit: totalProfit,
+      grossProfit: totalGrossProfit,
+      estimatedProfit: totalNetProfit,
       expiryRiskLoss: totalExpiryRiskLoss,
       deadStockValue: totalDeadStockValue,
       expiryRiskCount: totalExpiryRiskCount,
@@ -562,14 +566,16 @@ export async function getBranchMetrics(branchId: number, month: string) {
       }
     }
 
-    // Estimated profit is already calculated as Revenue - Cost Price
-    const estimatedProfit = totalProfit;
+    // Gross profit is Revenue - Cost Price
+    const grossProfit = totalProfit;
+    const estimatedProfit = grossProfit;
 
     return {
       branchId,
       branchName: branch.name,
       branchLocation: branch.location,
       totalRevenue,
+      grossProfit: Math.max(0, grossProfit),
       estimatedProfit: Math.max(0, estimatedProfit),
       expiryRiskLoss,
       deadStockValue,
