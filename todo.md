@@ -1875,3 +1875,18 @@
 - [x] Fixed expiry risk loss calculation to use costPrice instead of selling price
 - [x] Updated test expectations to match cost price calculations
 - [x] All 169 tests passing
+
+
+## Phase 12: CRITICAL - Branch Data Isolation Bug
+- [x] Investigate why uploading data for one branch affects the other branch's metrics
+- [x] Identify root cause of cross-branch data contamination - data was uploaded to both branches
+- [x] Fix data isolation in upload process - added branchId validation
+- [x] Fix data isolation in query logic - verified queries are branch-specific
+- [x] Verify Tema Branch shows ONLY Tema data
+- [x] Verify Kasoa Branch shows ONLY Kasoa data
+- [x] Ensure uploading for Tema does NOT affect Kasoa's existing metrics
+- [x] Ensure uploading for Kasoa does NOT affect Tema's existing metrics
+- [x] Test with multiple sequential uploads to different branches
+- [x] Added validation to require branchId for all uploads
+- [x] Deleted duplicate Kasoa data to ensure branch independence
+- [x] All 169 tests passing

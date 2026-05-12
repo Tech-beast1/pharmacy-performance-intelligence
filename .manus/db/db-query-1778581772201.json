@@ -1,0 +1,13 @@
+{
+  "query": "SELECT COUNT(*) as null_branch_count FROM sales_transactions WHERE branchId IS NULL;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT COUNT(*) as null_branch_count FROM sales_transactions WHERE branchId IS NULL;",
+  "rows": [
+    {
+      "null_branch_count": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "null_branch_count\n0\n",
+  "stderr": "",
+  "execution_time_ms": 261
+}

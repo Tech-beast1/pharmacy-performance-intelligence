@@ -1,0 +1,88 @@
+{
+  "query": "SELECT \n  branchId,\n  MIN(createdAt) as first_insert,\n  MAX(createdAt) as last_insert,\n  COUNT(*) as count\nFROM sales_transactions\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-05'\nGROUP BY branchId\nORDER BY first_insert;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  MIN(createdAt) as first_insert,\n  MAX(createdAt) as last_insert,\n  COUNT(*) as count\nFROM sales_transactions\nWHERE DATE_FORMAT(createdAt, '%Y-%m') = '2026-05'\nGROUP BY branchId\nORDER BY first_insert;",
+  "rows": [
+    {
+      "branchId": "20",
+      "first_insert": "2026-05-01 00:00:00",
+      "last_insert": "2026-05-01 00:00:00",
+      "count": "80"
+    },
+    {
+      "branchId": "300012",
+      "first_insert": "2026-05-01 00:00:00",
+      "last_insert": "2026-05-01 00:00:00",
+      "count": "80"
+    },
+    {
+      "branchId": "360111",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360067",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360155",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360122",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360144",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360089",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360078",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360100",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360056",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360045",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    },
+    {
+      "branchId": "360133",
+      "first_insert": "2026-05-15 04:00:00",
+      "last_insert": "2026-05-15 04:00:00",
+      "count": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\tfirst_insert\tlast_insert\tcount\n20\t2026-05-01 00:00:00\t2026-05-01 00:00:00\t80\n300012\t2026-05-01 00:00:00\t2026-05-01 00:00:00\t80\n360111\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360067\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360155\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360122\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360144\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360089\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360078\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360100\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360056\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360045\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n360133\t2026-05-15 04:00:00\t2026-05-15 04:00:00\t1\n",
+  "stderr": "",
+  "execution_time_ms": 264
+}

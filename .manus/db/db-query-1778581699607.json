@@ -1,0 +1,80 @@
+{
+  "query": "SELECT \n  branchId,\n  productName,\n  quantitySold,\n  salePrice,\n  totalSaleValue\nFROM sales_transactions\nWHERE branchId IN (20, 300012) AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-05'\nLIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  productName,\n  quantitySold,\n  salePrice,\n  totalSaleValue\nFROM sales_transactions\nWHERE branchId IN (20, 300012) AND DATE_FORMAT(createdAt, '%Y-%m') = '2026-05'\nLIMIT 10;",
+  "rows": [
+    {
+      "branchId": "20",
+      "productName": "ORS Sachets",
+      "quantitySold": "5",
+      "salePrice": "3.00",
+      "totalSaleValue": "15.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Metformin 500mg",
+      "quantitySold": "6",
+      "salePrice": "9.50",
+      "totalSaleValue": "57.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Amoxicillin 500mg",
+      "quantitySold": "2",
+      "salePrice": "12.00",
+      "totalSaleValue": "24.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Atorvastatin 20mg",
+      "quantitySold": "2",
+      "salePrice": "14.00",
+      "totalSaleValue": "28.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Metformin 500mg",
+      "quantitySold": "16",
+      "salePrice": "9.50",
+      "totalSaleValue": "152.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Metronidazole 400mg",
+      "quantitySold": "7",
+      "salePrice": "7.50",
+      "totalSaleValue": "52.50"
+    },
+    {
+      "branchId": "20",
+      "productName": "Ibuprofen 400mg",
+      "quantitySold": "8",
+      "salePrice": "5.00",
+      "totalSaleValue": "40.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Cetirizine 10mg",
+      "quantitySold": "5",
+      "salePrice": "6.00",
+      "totalSaleValue": "30.00"
+    },
+    {
+      "branchId": "20",
+      "productName": "Metronidazole 400mg",
+      "quantitySold": "3",
+      "salePrice": "7.50",
+      "totalSaleValue": "22.50"
+    },
+    {
+      "branchId": "20",
+      "productName": "Paracetamol 500mg",
+      "quantitySold": "19",
+      "salePrice": "3.50",
+      "totalSaleValue": "66.50"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\tproductName\tquantitySold\tsalePrice\ttotalSaleValue\n20\tORS Sachets\t5\t3.00\t15.00\n20\tMetformin 500mg\t6\t9.50\t57.00\n20\tAmoxicillin 500mg\t2\t12.00\t24.00\n20\tAtorvastatin 20mg\t2\t14.00\t28.00\n20\tMetformin 500mg\t16\t9.50\t152.00\n20\tMetronidazole 400mg\t7\t7.50\t52.50\n20\tIbuprofen 400mg\t8\t5.00\t40.00\n20\tCetirizine 10mg\t5\t6.00\t30.00\n20\tMetronidazole 400mg\t3\t7.50\t22.50\n20\tParacetamol 500mg\t19\t3.50\t66.50\n",
+  "stderr": "",
+  "execution_time_ms": 271
+}

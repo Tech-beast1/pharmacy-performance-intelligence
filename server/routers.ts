@@ -117,6 +117,11 @@ export const appRouter = router({
       )
       .mutation(async ({ input, ctx }) => {
         try {
+          // For organization owners, branchId is REQUIRED
+          if (!input.branchId) {
+            return { success: false, error: 'Branch selection is required' };
+          }
+          
           const validation = validateMapping(input.mapping);
           if (!validation.valid) {
             return { success: false, errors: validation.errors };
