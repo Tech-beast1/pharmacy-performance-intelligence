@@ -49,24 +49,27 @@ export default function DataUpload() {
           <p className="text-gray-600 mt-1">Import your pharmacy sales and inventory data</p>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-4">
-          {userType === 'organization_owner' && branches.length > 0 && (
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Upload for Branch:</label>
-              <select
-                value={selectedBranchId || ''}
-                onChange={(e) => setSelectedBranchId(e.target.value ? parseInt(e.target.value) : null)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select a branch...</option>
-                {branches.map((branch: any) => (
-                  <option key={branch.id} value={branch.id}>
-                    {branch.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+      <div className="flex flex-col sm:flex-row gap-4">
+        {userType === 'organization_owner' && branches.length > 0 && (
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Upload for Branch: <span className="text-red-500">*</span></label>
+            <select
+              value={selectedBranchId || ''}
+              onChange={(e) => setSelectedBranchId(e.target.value ? parseInt(e.target.value) : null)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select a branch...</option>
+              {branches.map((branch: any) => (
+                <option key={branch.id} value={branch.id}>
+                  {branch.name}
+                </option>
+              ))}
+            </select>
+            {userType === 'organization_owner' && !selectedBranchId && (
+              <p className="text-red-500 text-sm mt-1">Branch selection is required for organization owners</p>
+            )}
+          </div>
+        )}
           
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Upload for Month:</label>
@@ -88,7 +91,13 @@ export default function DataUpload() {
         </div>
       </div>
 
-      <SmartUpload uploadDate={selectedMonth} branchId={selectedBranchId} />
+      {userType === 'organization_owner' && branches.length > 0 && !selectedBranchId ? (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+          <p className="text-yellow-800 font-medium">Please select a branch above to upload data</p>
+        </div>
+      ) : (
+        <SmartUpload uploadDate={selectedMonth} branchId={selectedBranchId} />
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">

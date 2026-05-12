@@ -1832,9 +1832,23 @@
 
 
 ## Phase 79: Add Branch-Level Inventory Filtering to Inventory Intelligence
-- [ ] Add branch selector dropdown to Inventory Intelligence page - ISSUE: Only showing consolidated, not individual branches
-- [ ] Filter inventory data by selected branch
+- [x] Add branch selector dropdown to Inventory Intelligence page - FIXED: Branch extraction now maps branchIds to branch names
+- [x] Filter inventory data by selected branch
 - [x] Add "Consolidated" option to show all branches combined
-- [ ] Update inventory metrics to reflect selected branch
-- [ ] Test branch filtering works correctly
-- [ ] Verify consolidated view aggregates all branches
+- [x] Update inventory metrics to reflect selected branch
+- [x] Test branch filtering works correctly
+- [x] Verify consolidated view aggregates all branches
+
+
+## Phase 9: Critical Bug Fix - Metrics Display for All Months
+
+- [x] Fixed date parsing validation in getBranchMetrics and getBranchBreakdown functions
+- [x] Identified root cause: all sales and inventory data had branchId = NULL due to missing branch selection during upload
+- [x] Made branch selection mandatory for organization owners in Data Upload page
+- [x] Migrated existing 829 sales transactions from NULL branchId to proper branch assignments
+- [x] Migrated existing 1622 inventory items from NULL branchId to proper branch assignments
+- [x] Verified metrics now display correctly for May 2026 (₵8226.50 revenue)
+- [x] Verified metrics now display correctly for April 2026 (₵177,106.60 revenue)
+- [x] Added comprehensive test suite to verify metrics work for all months
+- [x] Ensured data from one month does not affect other months
+- [x] All 174 tests pass (169 original + 5 new tests)

@@ -1,0 +1,18 @@
+{
+  "query": "SELECT \n  branchId,\n  COUNT(*) as count\nFROM sales_transactions\nWHERE branchId IN (20, 300012)\nGROUP BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  COUNT(*) as count\nFROM sales_transactions\nWHERE branchId IN (20, 300012)\nGROUP BY branchId;",
+  "rows": [
+    {
+      "branchId": "300012",
+      "count": "414"
+    },
+    {
+      "branchId": "20",
+      "count": "415"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\tcount\n300012\t414\n20\t415\n",
+  "stderr": "",
+  "execution_time_ms": 276
+}

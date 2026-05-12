@@ -1,0 +1,334 @@
+{
+  "query": "SELECT \n  branchId,\n  COUNT(*) as sales_count,\n  SUM(totalSaleValue) as total_revenue,\n  SUM(profit) as gross_profit\nFROM sales_transactions\nGROUP BY branchId\nORDER BY branchId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT \n  branchId,\n  COUNT(*) as sales_count,\n  SUM(totalSaleValue) as total_revenue,\n  SUM(profit) as gross_profit\nFROM sales_transactions\nGROUP BY branchId\nORDER BY branchId;",
+  "rows": [
+    {
+      "branchId": "NULL",
+      "sales_count": "829",
+      "total_revenue": "177106.60",
+      "gross_profit": "56622.50"
+    },
+    {
+      "branchId": "150010",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "150011",
+      "sales_count": "1",
+      "total_revenue": "120.00",
+      "gross_profit": "75.00"
+    },
+    {
+      "branchId": "180015",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "180017",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "180025",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "180027",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "180035",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "180037",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "180045",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "210001",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "210009",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "210011",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "210019",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240001",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240009",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240011",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240019",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240021",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240029",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240031",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240039",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240041",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240049",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240051",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240059",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240061",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240070",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240072",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240081",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240083",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240092",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240094",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240103",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "240106",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "240114",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "270001",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "270009",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "270012",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "270020",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "270023",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "270031",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "270034",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "270042",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "300001",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "300009",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "330001",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "330010",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "330012",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "330020",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "360001",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "360009",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    },
+    {
+      "branchId": "360012",
+      "sales_count": "6",
+      "total_revenue": "2025.00",
+      "gross_profit": "1198.75"
+    },
+    {
+      "branchId": "360020",
+      "sales_count": "1",
+      "total_revenue": "60.00",
+      "gross_profit": "40.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "branchId\tsales_count\ttotal_revenue\tgross_profit\nNULL\t829\t177106.60\t56622.50\n150010\t1\t60.00\t40.00\n150011\t1\t120.00\t75.00\n180015\t1\t60.00\t40.00\n180017\t6\t2025.00\t1198.75\n180025\t1\t60.00\t40.00\n180027\t6\t2025.00\t1198.75\n180035\t1\t60.00\t40.00\n180037\t6\t2025.00\t1198.75\n180045\t1\t60.00\t40.00\n210001\t6\t2025.00\t1198.75\n210009\t1\t60.00\t40.00\n210011\t6\t2025.00\t1198.75\n210019\t1\t60.00\t40.00\n240001\t6\t2025.00\t1198.75\n240009\t1\t60.00\t40.00\n240011\t6\t2025.00\t1198.75\n240019\t1\t60.00\t40.00\n240021\t6\t2025.00\t1198.75\n240029\t1\t60.00\t40.00\n240031\t6\t2025.00\t1198.75\n240039\t1\t60.00\t40.00\n240041\t6\t2025.00\t1198.75\n240049\t1\t60.00\t40.00\n240051\t6\t2025.00\t1198.75\n240059\t1\t60.00\t40.00\n240061\t6\t2025.00\t1198.75\n240070\t1\t60.00\t40.00\n240072\t6\t2025.00\t1198.75\n240081\t1\t60.00\t40.00\n240083\t6\t2025.00\t1198.75\n240092\t1\t60.00\t40.00\n240094\t6\t2025.00\t1198.75\n240103\t1\t60.00\t40.00\n240106\t6\t2025.00\t1198.75\n240114\t1\t60.00\t40.00\n270001\t6\t2025.00\t1198.75\n270009\t1\t60.00\t40.00\n270012\t6\t2025.00\t1198.75\n270020\t1\t60.00\t40.00\n270023\t6\t2025.00\t1198.75\n270031\t1\t60.00\t40.00\n270034\t6\t2025.00\t1198.75\n270042\t1\t60.00\t40.00\n300001\t6\t2025.00\t1198.75\n300009\t1\t60.00\t40.00\n330001\t6\t2025.00\t1198.75\n330010\t1\t60.00\t40.00\n330012\t6\t2025.00\t1198.75\n330020\t1\t60.00\t40.00\n360001\t6\t2025.00\t1198.75\n360009\t1\t60.00\t40.00\n360012\t6\t2025.00\t1198.75\n360020\t1\t60.00\t40.00\n",
+  "stderr": "",
+  "execution_time_ms": 264
+}

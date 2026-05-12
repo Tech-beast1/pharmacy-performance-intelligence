@@ -448,9 +448,20 @@ export async function getBranchMetrics(branchId: number, month: string) {
     if (!branch) return null;
 
     // Parse month (format: YYYY-MM) using UTC to avoid timezone issues
-    const [year, monthNum] = month.split('-').map(Number);
+    const parts = month.split('-').map(Number);
+    if (parts.length !== 2 || !parts[0] || !parts[1] || parts[1] < 1 || parts[1] > 12) {
+      console.error("[DB] Invalid month format:", month);
+      return null;
+    }
+    const [year, monthNum] = parts;
     const startDate = new Date(Date.UTC(year, monthNum - 1, 1, 0, 0, 0, 0));
     const endDate = new Date(Date.UTC(year, monthNum, 1, 0, 0, 0, 0));
+    
+    // Validate dates
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      console.error("[DB] Invalid dates for month:", month, startDate, endDate);
+      return null;
+    }
 
     // Get sales transactions for this branch in the month
     const sales = await db
@@ -582,9 +593,20 @@ export async function getBranchBreakdown(organizationId: number, month: string) 
     }
 
     // Parse month (format: YYYY-MM) - use UTC to match database timestamps
-    const [year, monthNum] = month.split('-').map(Number);
+    const parts = month.split('-').map(Number);
+    if (parts.length !== 2 || !parts[0] || !parts[1] || parts[1] < 1 || parts[1] > 12) {
+      console.error("[DB] Invalid month format:", month);
+      return [];
+    }
+    const [year, monthNum] = parts;
     const startDate = new Date(Date.UTC(year, monthNum - 1, 1));
     const endDate = new Date(Date.UTC(year, monthNum, 1));
+    
+    // Validate dates
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      console.error("[DB] Invalid dates for month:", month, startDate, endDate);
+      return [];
+    }
 
     // Get all branch IDs
     const branchIds = orgBranches.map(b => b.id);
