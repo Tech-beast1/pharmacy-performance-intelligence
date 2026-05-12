@@ -1976,3 +1976,25 @@ All 178 tests pass (169 original + 9 new tests).
 **Test Results:** All 183 tests pass (178 original + 5 new)
 
 **Status:** COMPLETE - Inventory upload month independence bug is fully fixed and verified. Each month's inventory data is now completely independent.
+
+
+## Phase 16: CRITICAL - Dashboard Cache Invalidation Bug - FIXED
+
+**Root Cause:** After uploading inventory data, the SmartUpload component was invalidating `branches.metrics` queries but NOT the `analytics.getDashboardMetrics` query that the dashboard uses. This caused the dashboard to display stale cached data, making it appear that May metrics changed when June inventory was uploaded.
+
+**Solution:** Added `await utils.analytics.getDashboardMetrics.invalidate();` to the SmartUpload component after successful file upload.
+
+**Changes Made:**
+- client/src/components/SmartUpload.tsx: Added analytics.getDashboardMetrics cache invalidation
+
+**Why This Was Happening:**
+1. User uploads June inventory (correctly stored with June dates)
+2. SmartUpload invalidates branches.metrics queries
+3. But analytics.getDashboardMetrics is NOT invalidated
+4. Dashboard continues showing old cached data
+5. User sees May metrics appear to change (because cache is stale)
+6. June metrics don't show (because they're not in the stale cache)
+
+**Status:** COMPLETE - Dashboard now properly refreshes after inventory upload. Each month's data is completely independent and metrics display correctly.
+
+**Test Results:** All 183 tests pass (178 original + 5 new)

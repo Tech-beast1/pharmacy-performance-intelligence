@@ -226,13 +226,12 @@ export default function SmartUpload({ uploadDate, branchId }: SmartUploadProps) 
         if ((result.errorCount || 0) > 0) {
           toast.warning(`${result.errorCount} rows had errors and were skipped`);
         }
-        
-        // Invalidate branches metrics queries to refresh dashboard with new data
+              // Invalidate all dashboard-related queries to refresh with new data
         await utils.branches.metrics.consolidated.invalidate();
         await utils.branches.metrics.branch.invalidate();
         await utils.overheadCosts.getByMonth.invalidate();
         await utils.overheadCosts.getConsolidated.invalidate();
-        
+        await utils.analytics.getDashboardMetrics.invalidate();       
         // Reset after 2 seconds
         setTimeout(() => {
           resetUpload();
