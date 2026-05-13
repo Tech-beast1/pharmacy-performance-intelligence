@@ -411,7 +411,7 @@ export const appRouter = router({
       }
     }),
 
-    getKeyInsights: protectedProcedure
+        getKeyInsights: protectedProcedure
       .input(z.object({ 
         startDate: z.string().optional(),
         endDate: z.string().optional(),
@@ -419,63 +419,24 @@ export const appRouter = router({
       }))
       .query(async ({ ctx, input }) => {
       try {
-        let inventory = await getInventoryByUserId(ctx.user!.id);
-        let sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        // Get ALL inventory and sales data (across all months and branches)
+        // Key insights should be independent and based on overall business metrics
+        const allInventory = await getInventoryByUserId(ctx.user!.id);
+        const allSales = await getSalesTransactionsByUserId(ctx.user!.id);
         
-        // Filter by branch if branchId is provided
-        if (input.branchId) {
-          inventory = inventory.filter(item => item.branchId === input.branchId);
-          sales = sales.filter(s => s.branchId === input.branchId);
-        }
-        
-        // Pass raw data to calculateDashboardMetrics with date range
-        // Let calculateDashboardMetrics handle all the filtering
-        let startDate: Date | undefined;
-        let endDate: Date | undefined;
-        
-        if (input.startDate) {
-          // Parse date string in UTC format (YYYY-MM-DD)
-          const [startYear, startMonth, startDay] = input.startDate.split('-').map(Number);
-          startDate = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
-        }
-        
-        if (input.endDate) {
-          // Parse date string in UTC format (YYYY-MM-DD)
-          const [endYear, endMonth, endDay] = input.endDate.split('-').map(Number);
-          endDate = new Date(Date.UTC(endYear, endMonth - 1, endDay, 23, 59, 59, 999));
-        }
-        
-        // Filter inventory and sales by month to match metrics calculation
-        let monthFilteredInventory = inventory;
-        let monthFilteredSales = sales;
-        
-        if (input.startDate && input.endDate) {
-          const monthStart = new Date(input.startDate);
-          const monthEnd = new Date(input.endDate);
-          monthEnd.setHours(23, 59, 59, 999);
-          
-          monthFilteredInventory = inventory.filter(item => {
-            const createdDate = new Date(item.createdAt);
-            return createdDate >= monthStart && createdDate <= monthEnd;
-          });
-          
-          monthFilteredSales = sales.filter(s => {
-            const createdDate = new Date(s.createdAt);
-            return createdDate >= monthStart && createdDate <= monthEnd;
-          });
-        }
-        
+        // Calculate metrics based on ALL data (not filtered by month/branch)
+        // This ensures insights are independent of current selection
         const metrics = calculateDashboardMetrics(
-          inventory,
-          sales,
+          allInventory,
+          allSales,
           undefined,
           undefined,
-          60,
-          startDate,
-          endDate
+          60
         );
-        const alerts = identifyAlerts(monthFilteredInventory, monthFilteredSales);
-        const insights = generateKeyInsights(metrics, alerts, monthFilteredInventory, monthFilteredSales);
+        
+        // Generate alerts and insights from ALL data
+        const alerts = identifyAlerts(allInventory, allSales);
+        const insights = generateKeyInsights(metrics, alerts, allInventory, allSales);
         return { success: true, data: insights };
       } catch (error) {
         console.error('Key insights error:', error);
