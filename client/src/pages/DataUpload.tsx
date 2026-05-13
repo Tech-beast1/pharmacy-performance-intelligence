@@ -57,7 +57,7 @@ export default function DataUpload() {
         </div>
         
       <div className="flex flex-col sm:flex-row gap-4">
-        {userType === 'organization_owner' && branches.length > 0 && (
+        {userType === 'organization_owner' && branches.length > 1 && (
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Upload for Branch: <span className="text-red-500">*</span></label>
             <select
