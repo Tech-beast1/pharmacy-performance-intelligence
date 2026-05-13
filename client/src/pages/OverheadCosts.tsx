@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Home, Users, Zap, MoreHorizontal, Save, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { trpc } from '@/lib/trpc';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
+import { useState, useEffect } from 'react';
 
 export default function OverheadCosts() {
   const [location] = useLocation();
@@ -194,15 +194,33 @@ export default function OverheadCosts() {
 
   const totalOverhead = (parseFloat(rent) || 0) + (parseFloat(salaries) || 0) + (parseFloat(electricity) || 0) + (parseFloat(others) || 0);
 
-  // Fetch branch-specific metrics for the selected month
-  // If no branch is selected, fetch consolidated metrics
+  // Determine if this is a single pharmacy or multi-branch system
+  const isSinglePharmacy = !organization || branches.length === 0;
+  
+  // For single pharmacy: use dashboard metrics with date range
+  // For multi-branch: use branch-specific metrics
   const monthString = `${year}-${String(month).padStart(2, '0')}`;
-  const metricsQuery = selectedBranchId
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0); // Last day of current month
+  const startDateStr = startDate.toISOString().split('T')[0];
+  const endDateStr = endDate.toISOString().split('T')[0];
+  
+  // Single pharmacy: fetch dashboard metrics for the month
+  const dashboardMetricsQuery = trpc.analytics.getDashboardMetrics.useQuery(
+    { startDate: startDateStr, endDate: endDateStr },
+    { enabled: isSinglePharmacy }
+  );
+  
+  // Multi-branch: fetch branch-specific metrics
+  const branchMetricsQuery = selectedBranchId
     ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: monthString }, { enabled: !!selectedBranchId })
     : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: monthString }, { enabled: !!organization?.id });
   
-  // Gross Profit = Revenue - Cost Price (from backend)
-  const grossProfit = metricsQuery.data?.data?.grossProfit || 0;
+  // Use the appropriate metrics based on system type
+  const grossProfit = isSinglePharmacy 
+    ? dashboardMetricsQuery.data?.data?.grossProfit || 0
+    : branchMetricsQuery.data?.data?.grossProfit || 0;
+  
   // Net Profit = Gross Profit - Total Overhead (calculated locally for real-time display)
   const netProfit = grossProfit - totalOverhead;
 
