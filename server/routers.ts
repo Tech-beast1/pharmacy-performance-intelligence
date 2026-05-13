@@ -473,8 +473,8 @@ export const appRouter = router({
         }
         
         const metrics = calculateDashboardMetrics(
-          inventory,
-          sales,
+          inventory,  // Already filtered by branch if branchId provided
+          sales,      // Already filtered by branch if branchId provided
           undefined,
           undefined,
           60,
