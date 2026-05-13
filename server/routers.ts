@@ -6,7 +6,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
-import { getBranchesByOrganization } from "./db-branches";
+import { getBranchesByOrganization, getUserType } from "./db-branches";
 
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
@@ -117,8 +117,11 @@ export const appRouter = router({
       )
       .mutation(async ({ input, ctx }) => {
         try {
+          // Check user type to determine if branchId is required
+          const userTypeData = await getUserType(ctx.user!.id);
+          
           // For organization owners, branchId is REQUIRED
-          if (!input.branchId) {
+          if (userTypeData?.type === 'organization_owner' && !input.branchId) {
             return { success: false, error: 'Branch selection is required' };
           }
           
