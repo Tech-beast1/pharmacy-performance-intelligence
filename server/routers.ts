@@ -117,9 +117,17 @@ export const appRouter = router({
       )
       .mutation(async ({ input, ctx }) => {
         try {
-          // For organization owners, branchId is REQUIRED
-          if (!input.branchId) {
-            return { success: false, error: 'Branch selection is required' };
+          // branchId is optional - if not provided, use the first available branch
+          let effectiveBranchId = input.branchId;
+          
+          // If no branchId provided, get the user's first/default branch
+          if (!effectiveBranchId) {
+            const branches = await getBranchesByOrganization(ctx.user.id);
+            if (branches.length > 0) {
+              effectiveBranchId = branches[0].id;
+            } else {
+              return { success: false, error: 'No branch found for user' };
+            }
           }
           
           const validation = validateMapping(input.mapping);
@@ -150,7 +158,7 @@ export const appRouter = router({
               
               await upsertInventoryItem({
                 userId: ctx.user!.id,
-                branchId: input.branchId,
+                branchId: effectiveBranchId,
                 productName: parsed.productName,
                 sku: uniqueSku,
                 quantity: parsed.quantity || parsed.stockOnHand || 0,
