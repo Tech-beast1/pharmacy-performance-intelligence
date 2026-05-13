@@ -227,12 +227,19 @@ export const appRouter = router({
       .input(z.object({ 
         startDate: z.string().optional(),
         endDate: z.string().optional(),
-        durationDays: z.number().optional().default(60) 
+        durationDays: z.number().optional().default(60),
+        branchId: z.number().optional()
       }))
       .query(async ({ ctx, input }) => {
       try {
-        const inventory = await getInventoryByUserId(ctx.user!.id);
-        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        let inventory = await getInventoryByUserId(ctx.user!.id);
+        let sales = await getSalesTransactionsByUserId(ctx.user!.id);
+        
+        // Filter by branch if branchId is provided (for multi-branch systems)
+        if (input.branchId) {
+          inventory = inventory.filter(item => item.branchId === input.branchId);
+          sales = sales.filter(s => s.branchId === input.branchId);
+        }
         
         // Determine which month to get overhead costs for
         let month: number;
@@ -249,7 +256,7 @@ export const appRouter = router({
           month = now.getMonth() + 1;
           year = now.getFullYear();
         }
-        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, month, year);
+        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, month, year, input.branchId);
         
         // Calculate total overhead costs for the month
         let monthlyOverheadCosts = 0;
@@ -295,7 +302,7 @@ export const appRouter = router({
           const prevYear = prevMonthDate.getFullYear();
           
           // Get previous month overhead costs
-          const prevOverheadCosts = await getOverheadCostsByMonth(ctx.user!.id, prevMonth, prevYear);
+          const prevOverheadCosts = await getOverheadCostsByMonth(ctx.user!.id, prevMonth, prevYear, input.branchId);
           let prevMonthlyOverheadCosts = 0;
           if (prevOverheadCosts) {
             prevMonthlyOverheadCosts = 

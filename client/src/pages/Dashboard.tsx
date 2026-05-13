@@ -121,12 +121,14 @@ export default function Dashboard() {
   const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery({ 
     startDate, 
     endDate,
-    durationDays 
+    durationDays,
+    branchId: selectedBranchId || undefined
   });
   const alertsQuery = trpc.analytics.getAlerts.useQuery({ 
     startDate, 
     endDate,
-    durationDays 
+    durationDays,
+    branchId: selectedBranchId || undefined
   });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
