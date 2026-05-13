@@ -102,34 +102,11 @@ export async function upsertInventoryItem(item: any) {
   const db = await getDb();
   if (!db) return null;
   
-  // Check for duplicate by userId, branchId, and sku
-  // This ensures each branch has its own separate inventory items
-  const existing = await db
-    .select()
-    .from(inventory)
-    .where(and(
-      eq(inventory.userId, item.userId),
-      eq(inventory.branchId, item.branchId),
-      eq(inventory.sku, item.sku)
-    ))
-    .limit(1);
-  
-  if (existing.length > 0) {
-    // When updating, preserve the original createdAt to maintain month isolation
-    // Only update the data fields, not the timestamp
-    const updateData = { ...item };
-    delete updateData.createdAt;
-    
-    await db.update(inventory).set(updateData).where(and(
-      eq(inventory.userId, item.userId),
-      eq(inventory.branchId, item.branchId),
-      eq(inventory.sku, item.sku)
-    ));
-    return existing[0];
-  } else {
-    const result = await db.insert(inventory).values(item);
-    return result;
-  }
+  // For file uploads: ALWAYS INSERT new records, never UPDATE
+  // This ensures each month's data is completely independent
+  // The SKU already has a month suffix to make it unique per month
+  const result = await db.insert(inventory).values(item);
+  return result;
 }
 
 // Sales transaction queries
