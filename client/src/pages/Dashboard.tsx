@@ -34,6 +34,16 @@ export default function Dashboard() {
   const [selectedPharmacy, setSelectedPharmacy] = useState<string>('');
   const [isLoadingPreferences, setIsLoadingPreferences] = useState(true);
   const [hasLoadedPreferences, setHasLoadedPreferences] = useState(false);
+  const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
+
+  // Get user's organization and branches for multi-branch systems
+  const organizationQuery = trpc.branches.organization.list.useQuery();
+  const organization = organizationQuery.data?.data?.[0];
+  const branchesQuery = trpc.branches.branch.list.useQuery(
+    { organizationId: organization?.id || 0 },
+    { enabled: !!organization?.id }
+  );
+  const branches = branchesQuery.data?.data || [];
 
   // Load preferences from database on mount
   const loadPreferencesQuery = trpc.preferences.load.useQuery();
@@ -120,7 +130,11 @@ export default function Dashboard() {
   });
   const topProductsQuery = trpc.analytics.getTopProducts.useQuery();
   const revenueTrendQuery = trpc.analytics.getRevenueTrend.useQuery();
-  const insightsQuery = trpc.analytics.getKeyInsights.useQuery({ startDate, endDate });
+  const insightsQuery = trpc.analytics.getKeyInsights.useQuery({ 
+    startDate, 
+    endDate,
+    branchId: selectedBranchId || undefined
+  });
 
   const handleLogout = async () => {
     // Save preferences before logout
@@ -328,6 +342,26 @@ export default function Dashboard() {
             pharmacyLocation="Accra, Ghana"
             onPharmacyChange={setSelectedPharmacy}
           />
+          
+          {/* Branch Selector for Multi-Branch Systems */}
+          {organization && branches.length > 0 && (
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-blue-600 mb-2">Select Branch</label>
+              <select
+                value={selectedBranchId || ''}
+                onChange={(e) => setSelectedBranchId(e.target.value ? parseInt(e.target.value) : null)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Branches (Consolidated)</option>
+                {branches.map((branch: any) => (
+                  <option key={branch.id} value={branch.id}>
+                    {branch.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          
           <div className="flex-1">
             <label className="block text-sm font-medium text-blue-600 mb-2">Select Month</label>
             <input
