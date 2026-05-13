@@ -1,6 +1,6 @@
 import SmartUpload from '@/components/SmartUpload';
 import PageHeader from '@/components/PageHeader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { trpc } from '@/lib/trpc';
 
 export default function DataUpload() {
@@ -39,6 +39,13 @@ export default function DataUpload() {
     { enabled: !!organization?.id && userType === 'organization_owner' }
   );
   const branches = branchesQuery.data?.data || [];
+  
+  // Auto-select branch if only one exists
+  useEffect(() => {
+    if (branches.length === 1 && !selectedBranchId) {
+      setSelectedBranchId(branches[0].id);
+    }
+  }, [branches, selectedBranchId]);
 
   return (
     <div className="space-y-6">
@@ -65,7 +72,7 @@ export default function DataUpload() {
                 </option>
               ))}
             </select>
-            {userType === 'organization_owner' && !selectedBranchId && (
+            {userType === 'organization_owner' && !selectedBranchId && branches.length > 1 && (
               <p className="text-red-500 text-sm mt-1">Branch selection is required for organization owners</p>
             )}
           </div>
@@ -91,7 +98,7 @@ export default function DataUpload() {
         </div>
       </div>
 
-      {userType === 'organization_owner' && branches.length > 0 && !selectedBranchId ? (
+      {userType === 'organization_owner' && branches.length > 1 && !selectedBranchId ? (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
           <p className="text-yellow-800 font-medium">Please select a branch above to upload data</p>
         </div>
