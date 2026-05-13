@@ -6,7 +6,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
-import { getBranchesByOrganization, getBranchMetrics } from "./db-branches";
+import { getBranchesByOrganization } from "./db-branches";
 
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
@@ -227,19 +227,12 @@ export const appRouter = router({
       .input(z.object({ 
         startDate: z.string().optional(),
         endDate: z.string().optional(),
-        durationDays: z.number().optional().default(60),
-        branchId: z.number().optional()
+        durationDays: z.number().optional().default(60) 
       }))
       .query(async ({ ctx, input }) => {
       try {
-        let inventory = await getInventoryByUserId(ctx.user!.id);
-        let sales = await getSalesTransactionsByUserId(ctx.user!.id);
-        
-        // Filter by branch if branchId is provided (for multi-branch systems)
-        if (input.branchId) {
-          inventory = inventory.filter(item => item.branchId === input.branchId);
-          sales = sales.filter(s => s.branchId === input.branchId);
-        }
+        const inventory = await getInventoryByUserId(ctx.user!.id);
+        const sales = await getSalesTransactionsByUserId(ctx.user!.id);
         
         // Determine which month to get overhead costs for
         let month: number;
@@ -256,7 +249,7 @@ export const appRouter = router({
           month = now.getMonth() + 1;
           year = now.getFullYear();
         }
-        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, month, year, input.branchId);
+        const overheadCosts = await getOverheadCostsByMonth(ctx.user!.id, month, year);
         
         // Calculate total overhead costs for the month
         let monthlyOverheadCosts = 0;
@@ -302,7 +295,7 @@ export const appRouter = router({
           const prevYear = prevMonthDate.getFullYear();
           
           // Get previous month overhead costs
-          const prevOverheadCosts = await getOverheadCostsByMonth(ctx.user!.id, prevMonth, prevYear, input.branchId);
+          const prevOverheadCosts = await getOverheadCostsByMonth(ctx.user!.id, prevMonth, prevYear);
           let prevMonthlyOverheadCosts = 0;
           if (prevOverheadCosts) {
             prevMonthlyOverheadCosts = 
@@ -426,48 +419,33 @@ export const appRouter = router({
       }))
       .query(async ({ ctx, input }) => {
       try {
-        // For multi-branch systems, use getBranchMetrics which has the correct calculation
-        if (input.branchId && input.startDate) {
-          const branchMetrics = await getBranchMetrics(input.branchId, input.startDate.substring(0, 7));
-          if (!branchMetrics) {
-            return { success: true, data: [] };
-          }
-          
-          // Convert branch metrics to DashboardMetrics format for generateKeyInsights
-          const metrics: any = {
-            totalRevenue: branchMetrics.totalRevenue,
-            revenueTrend: 0,
-            estimatedProfit: branchMetrics.estimatedProfit,
-            profitTrend: 0,
-            expiryRiskLoss: branchMetrics.expiryRiskLoss,
-            expiryRiskTrend: 0,
-            deadStockValue: branchMetrics.deadStockValue,
-            deadStockTrend: 0,
-            grossProfit: branchMetrics.grossProfit
-          };
-          
-          const alerts = { expiryRiskProducts: [], deadStockProducts: [], lowMarginProducts: [] };
-          const insights = generateKeyInsights(metrics, alerts, [], []);
-          return { success: true, data: insights };
-        }
-        
-        // Single pharmacy: use calculateDashboardMetrics
         let inventory = await getInventoryByUserId(ctx.user!.id);
         let sales = await getSalesTransactionsByUserId(ctx.user!.id);
         
+        // Filter by branch if branchId is provided
+        if (input.branchId) {
+          inventory = inventory.filter(item => item.branchId === input.branchId);
+          sales = sales.filter(s => s.branchId === input.branchId);
+        }
+        
+        // Pass raw data to calculateDashboardMetrics with date range
+        // Let calculateDashboardMetrics handle all the filtering
         let startDate: Date | undefined;
         let endDate: Date | undefined;
         
         if (input.startDate) {
+          // Parse date string in UTC format (YYYY-MM-DD)
           const [startYear, startMonth, startDay] = input.startDate.split('-').map(Number);
           startDate = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
         }
         
         if (input.endDate) {
+          // Parse date string in UTC format (YYYY-MM-DD)
           const [endYear, endMonth, endDay] = input.endDate.split('-').map(Number);
           endDate = new Date(Date.UTC(endYear, endMonth - 1, endDay, 23, 59, 59, 999));
         }
         
+        // Filter inventory and sales by month to match metrics calculation
         let monthFilteredInventory = inventory;
         let monthFilteredSales = sales;
         
