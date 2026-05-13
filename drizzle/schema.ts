@@ -255,3 +255,24 @@ export const branchUsers = mysqlTable("branch_users", {
 
 export type BranchUser = typeof branchUsers.$inferSelect;
 export type InsertBranchUser = typeof branchUsers.$inferInsert;
+
+
+/**
+ * MonthlyProfitHistory table stores profit records for each month.
+ * Tracks gross profit and net profit (after overhead deduction) for monthly reporting.
+ * Used by single pharmacy owners to view historical profit trends.
+ */
+export const monthlyProfitHistory = mysqlTable("monthly_profit_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  branchId: int("branchId"), // Optional - null for single pharmacy, set for multi-branch
+  month: int("month").notNull(), // 1-12
+  year: int("year").notNull(),
+  grossProfit: decimal("grossProfit", { precision: 15, scale: 2 }).default("0").notNull(),
+  netProfit: decimal("netProfit", { precision: 15, scale: 2 }).default("0").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MonthlyProfitHistory = typeof monthlyProfitHistory.$inferSelect;
+export type InsertMonthlyProfitHistory = typeof monthlyProfitHistory.$inferInsert;

@@ -1,9 +1,9 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, and, gte, lte, lt, isNull, desc } from "drizzle-orm";
-import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics, userPreferences } from "../drizzle/schema";
+import { InsertUser, users, inventory, salesTransactions, alerts, fileUploads, overheadCosts, pharmacyProfiles, monthlyMetrics, userPreferences, monthlyProfitHistory } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile, MonthlyMetric, InsertMonthlyMetric, UserPreference, InsertUserPreference } from "../drizzle/schema";
+import type { Inventory, SalesTransaction, Alert, FileUpload, OverheadCost, InsertOverheadCost, PharmacyProfile, InsertPharmacyProfile, MonthlyMetric, InsertMonthlyMetric, UserPreference, InsertUserPreference, MonthlyProfitHistory, InsertMonthlyProfitHistory } from "../drizzle/schema";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -509,6 +509,152 @@ export async function removeDuplicateInventory(userId: number): Promise<{ remove
     return { removed: toDelete.length };
   } catch (error) {
     console.error("[Database] Error removing duplicates:", error);
+    throw error;
+  }
+}
+
+
+/**
+ * Save or update monthly profit history record
+ * Upserts based on userId, branchId, month, and year
+ */
+export async function saveMonthlyProfitHistory(
+  data: InsertMonthlyProfitHistory
+): Promise<MonthlyProfitHistory | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save monthly profit history: database not available");
+    return null;
+  }
+
+  try {
+    // Check if record already exists
+    const existing = await db
+      .select()
+      .from(monthlyProfitHistory)
+      .where(
+        and(
+          eq(monthlyProfitHistory.userId, data.userId),
+          eq(monthlyProfitHistory.month, data.month),
+          eq(monthlyProfitHistory.year, data.year),
+          data.branchId
+            ? eq(monthlyProfitHistory.branchId, data.branchId)
+            : isNull(monthlyProfitHistory.branchId)
+        )
+      )
+      .limit(1);
+
+    if (existing.length > 0) {
+      // Update existing record
+      await db
+        .update(monthlyProfitHistory)
+        .set({
+          grossProfit: data.grossProfit,
+          netProfit: data.netProfit,
+          updatedAt: new Date(),
+        })
+        .where(eq(monthlyProfitHistory.id, existing[0].id));
+
+      return existing[0];
+    } else {
+      // Insert new record
+      await db.insert(monthlyProfitHistory).values(data);
+      
+      // Fetch the newly inserted record
+      const newRecord = await db
+        .select()
+        .from(monthlyProfitHistory)
+        .where(
+          and(
+            eq(monthlyProfitHistory.userId, data.userId),
+            eq(monthlyProfitHistory.month, data.month),
+            eq(monthlyProfitHistory.year, data.year),
+            data.branchId
+              ? eq(monthlyProfitHistory.branchId, data.branchId)
+              : isNull(monthlyProfitHistory.branchId)
+          )
+        )
+        .limit(1);
+
+      return newRecord[0] || null;
+    }
+  } catch (error) {
+    console.error("[Database] Error saving monthly profit history:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get all monthly profit history records for a user
+ * Optionally filter by branchId
+ */
+export async function getMonthlyProfitHistory(
+  userId: number,
+  branchId?: number
+): Promise<MonthlyProfitHistory[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot fetch monthly profit history: database not available");
+    return [];
+  }
+
+  try {
+    const conditions = [eq(monthlyProfitHistory.userId, userId)];
+    
+    if (branchId !== undefined) {
+      conditions.push(eq(monthlyProfitHistory.branchId, branchId));
+    } else {
+      conditions.push(isNull(monthlyProfitHistory.branchId));
+    }
+
+    return await db
+      .select()
+      .from(monthlyProfitHistory)
+      .where(and(...conditions))
+      .orderBy(desc(monthlyProfitHistory.year), desc(monthlyProfitHistory.month));
+  } catch (error) {
+    console.error("[Database] Error fetching monthly profit history:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get profit history record for a specific month
+ */
+export async function getMonthlyProfitByMonth(
+  userId: number,
+  month: number,
+  year: number,
+  branchId?: number
+): Promise<MonthlyProfitHistory | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot fetch monthly profit: database not available");
+    return null;
+  }
+
+  try {
+    const conditions = [
+      eq(monthlyProfitHistory.userId, userId),
+      eq(monthlyProfitHistory.month, month),
+      eq(monthlyProfitHistory.year, year),
+    ];
+    
+    if (branchId !== undefined) {
+      conditions.push(eq(monthlyProfitHistory.branchId, branchId));
+    } else {
+      conditions.push(isNull(monthlyProfitHistory.branchId));
+    }
+
+    const result = await db
+      .select()
+      .from(monthlyProfitHistory)
+      .where(and(...conditions))
+      .limit(1);
+
+    return result[0] || null;
+  } catch (error) {
+    console.error("[Database] Error fetching monthly profit:", error);
     throw error;
   }
 }

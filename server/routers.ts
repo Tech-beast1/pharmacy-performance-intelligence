@@ -5,10 +5,12 @@ import { branchesRouter } from "./routers-branches";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
+import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory, saveMonthlyProfitHistory, getMonthlyProfitHistory, getMonthlyProfitByMonth } from "./db";
 import { getBranchesByOrganization } from "./db-branches";
 
-import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
+import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets } from "./utils/fileParser";
+import type { ColumnMapping } from "./utils/fileParser";
+import type { InsertMonthlyProfitHistory } from "../drizzle/schema";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
 import { generateKeyInsights } from "./utils/insights";
 
@@ -603,6 +605,51 @@ export const appRouter = router({
         } catch (error) {
           console.error('Error saving monthly metrics:', error);
           return { success: false, error: 'Failed to save monthly metrics' };
+        }
+      }),
+  }),
+
+  // Monthly profit history management
+  monthlyProfitHistory: router({
+    getHistory: protectedProcedure
+      .input(z.object({ branchId: z.number().optional() }))
+      .query(async ({ ctx, input }) => {
+        try {
+          const history = await getMonthlyProfitHistory(ctx.user!.id, input.branchId);
+          return { success: true, data: history };
+        } catch (error) {
+          console.error('Error fetching monthly profit history:', error);
+          return { success: false, error: 'Failed to fetch monthly profit history', data: [] };
+        }
+      }),
+
+    save: protectedProcedure
+      .input(
+        z.object({
+          month: z.number().min(1).max(12),
+          year: z.number(),
+          branchId: z.number().optional(),
+          grossProfit: z.number(),
+          netProfit: z.number(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        try {
+          const result = await saveMonthlyProfitHistory({
+            userId: ctx.user!.id,
+            branchId: input.branchId,
+            month: input.month,
+            year: input.year,
+            grossProfit: input.grossProfit.toString(),
+            netProfit: input.netProfit.toString(),
+          } as InsertMonthlyProfitHistory);
+          return { success: true, message: 'Monthly profit history saved successfully', data: result };
+        } catch (error) {
+          console.error('Error saving monthly profit history:', error);
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: error instanceof Error ? error.message : 'Failed to save monthly profit history',
+          });
         }
       }),
   }),
