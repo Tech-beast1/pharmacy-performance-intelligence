@@ -81,7 +81,7 @@ export function calculateDashboardMetrics(
       return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
     });
     const expiryRiskLoss = expiryRiskProducts.reduce(
-      (sum, item) => sum + parseFloat(item.price.toString()) * item.quantity,
+      (sum, item) => sum + parseFloat(item.costPrice?.toString() || item.price.toString()) * item.quantity,
       0
     );
     const expiryRiskTrend = 0;

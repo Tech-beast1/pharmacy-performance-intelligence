@@ -1,0 +1,34 @@
+{
+  "query": "SELECT productName, quantity, price, costPrice, expiryDate, createdAt FROM inventory WHERE expiryDate IS NOT NULL AND DATE(expiryDate) >= DATE('2026-05-13') AND DATE(expiryDate) <= DATE('2026-08-11') LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT productName, quantity, price, costPrice, expiryDate, createdAt FROM inventory WHERE expiryDate IS NOT NULL AND DATE(expiryDate) >= DATE('2026-05-13') AND DATE(expiryDate) <= DATE('2026-08-11') LIMIT 10;",
+  "rows": [
+    {
+      "productName": "ATORVASTATIN 10MG 28'S",
+      "quantity": "3",
+      "price": "38.00",
+      "costPrice": "27.50",
+      "expiryDate": "2026-06-01",
+      "createdAt": "2026-04-26 17:00:22"
+    },
+    {
+      "productName": "BONJELA JUNIOR GEL",
+      "quantity": "0",
+      "price": "128.00",
+      "costPrice": "94.75",
+      "expiryDate": "2026-06-01",
+      "createdAt": "2026-04-26 17:00:22"
+    },
+    {
+      "productName": "Amlodipine 5mg",
+      "quantity": "351",
+      "price": "7.00",
+      "costPrice": "3.50",
+      "expiryDate": "2026-05-16",
+      "createdAt": "2026-05-01 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "productName\tquantity\tprice\tcostPrice\texpiryDate\tcreatedAt\nATORVASTATIN 10MG 28'S\t3\t38.00\t27.50\t2026-06-01\t2026-04-26 17:00:22\nBONJELA JUNIOR GEL\t0\t128.00\t94.75\t2026-06-01\t2026-04-26 17:00:22\nAmlodipine 5mg\t351\t7.00\t3.50\t2026-05-16\t2026-05-01 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 293
+}
