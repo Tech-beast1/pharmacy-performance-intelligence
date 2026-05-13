@@ -344,7 +344,7 @@ export default function Dashboard() {
           />
           
           {/* Branch Selector for Multi-Branch Systems */}
-          {organization && branches.length > 0 && (
+          {organization && organization.id && branches.length > 0 && (
             <div className="flex-1">
               <label className="block text-sm font-medium text-blue-600 mb-2">Select Branch</label>
               <select
