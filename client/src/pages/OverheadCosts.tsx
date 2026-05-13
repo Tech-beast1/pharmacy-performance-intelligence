@@ -1,6 +1,5 @@
-'use client';
-
-import { Home, Users, Zap, MoreHorizontal, Save, Loader2, TrendingUp, TrendingDown, Calendar } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Home, Users, Zap, MoreHorizontal, Save, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
@@ -8,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { trpc } from '@/lib/trpc';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
-import { useState, useEffect } from 'react';
 
 export default function OverheadCosts() {
   const [location] = useLocation();
@@ -84,12 +82,11 @@ export default function OverheadCosts() {
   const [userChangedYear, setUserChangedYear] = useState(false);
   
 
+
   // Fetch overhead costs for the selected month/year and branch
   const utils = trpc.useUtils();
   const overheadQuery = trpc.overheadCosts.getByMonth.useQuery({ month, year, branchId: selectedBranchId || undefined });
   const saveMutation = trpc.overheadCosts.save.useMutation();
-  const profitHistorySaveMutation = trpc.monthlyProfitHistory.save.useMutation();
-  const profitHistoryQuery = trpc.monthlyProfitHistory.getHistory.useQuery({ branchId: selectedBranchId || undefined });
 
   // Update month/year when URL parameters or localStorage changes
   useEffect(() => {
@@ -100,7 +97,15 @@ export default function OverheadCosts() {
       const storedMonth = getStoredMonth();
       setMonth(storedMonth);
     }
-    }, [location]);
+    
+    if (urlYear) {
+      setYear(parseInt(urlYear));
+    } else {
+      // Read from localStorage if no URL params
+      const storedYear = getStoredYear();
+      setYear(storedYear);
+    }
+  }, [location]);
   
   // Sync with localStorage changes from Dashboard (poll every 500ms)
   // BUT: Only sync if user hasn't manually changed the month/year on this page
@@ -166,24 +171,18 @@ export default function OverheadCosts() {
         electricity: parseFloat(electricity) || 0,
         others: parseFloat(others) || 0,
       });
-      
-      // Also save the profit history record
-      await profitHistorySaveMutation.mutateAsync({
-        month,
-        year,
-        branchId: selectedBranchId !== null ? selectedBranchId : undefined,
-        grossProfit: grossProfit,
-        netProfit: netProfit,
-      });
-      
-      toast.success('Overhead costs and profit history saved successfully');
+      toast.success('Overhead costs saved successfully');
       // Invalidate all related queries to refresh displays
       await overheadQuery.refetch();
-      await profitHistoryQuery.refetch();
       // Invalidate dashboard metrics to update profit calculations
-      await utils.analytics.getDashboardMetrics.invalidate({ startDate: startDateStr, endDate: endDateStr });
+      await utils.analytics.getDashboardMetrics.invalidate();
       await utils.branches.metrics.branch.invalidate();
       await utils.branches.metrics.consolidated.invalidate();
+      // Reset the input fields to show the saved values
+      setRent('0');
+      setSalaries('0');
+      setElectricity('0');
+      setOthers('0');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save overhead costs';
       toast.error(errorMessage);
@@ -195,17 +194,12 @@ export default function OverheadCosts() {
 
   const totalOverhead = (parseFloat(rent) || 0) + (parseFloat(salaries) || 0) + (parseFloat(electricity) || 0) + (parseFloat(others) || 0);
 
-  // Fetch dashboard metrics for the selected month and branch
-  // This uses the same calculation as the Dashboard
-  const startDate = new Date(year, month - 1, 1);
-  const endDate = new Date(year, month, 0); // Last day of current month
-  const startDateStr = startDate.toISOString().split('T')[0];
-  const endDateStr = endDate.toISOString().split('T')[0];
-  
-  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery(
-    { startDate: startDateStr, endDate: endDateStr },
-    { enabled: true }
-  );
+  // Fetch branch-specific metrics for the selected month
+  // If no branch is selected, fetch consolidated metrics
+  const monthString = `${year}-${String(month).padStart(2, '0')}`;
+  const metricsQuery = selectedBranchId
+    ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: monthString }, { enabled: !!selectedBranchId })
+    : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: monthString }, { enabled: !!organization?.id });
   
   // Gross Profit = Revenue - Cost Price (from backend)
   const grossProfit = metricsQuery.data?.data?.grossProfit || 0;
@@ -216,19 +210,10 @@ export default function OverheadCosts() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  
-  // Get profit history records
-  const profitHistory = profitHistoryQuery.data?.data || [];
-  
-  // Sort history by year and month (newest first)
-  const sortedHistory = [...profitHistory].sort((a, b) => {
-    if (b.year !== a.year) return b.year - a.year;
-    return b.month - a.month;
-  });
 
   return (
     <div className="space-y-6">
-    <PageHeader title="Overhead Costs" description="Manage your pharmacy overhead costs and view profit history" />
+    <PageHeader title="Overhead Costs" description="Manage your pharmacy overhead costs" />
 
       {/* Branch Selector for Organization Owners */}
       {organization && branches.length > 0 && (
@@ -476,52 +461,6 @@ export default function OverheadCosts() {
           Monthly overhead cost is the total operational expenses for the month, applied to profit calculations.
         </p>
       </Card>
-
-      {/* Monthly Profit History Section */}
-      {sortedHistory.length > 0 && (
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Calendar className="w-5 h-5 text-blue-600" />
-            <h2 className="text-lg font-semibold text-gray-900">Monthly Profit History</h2>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Month</th>
-                  <th className="text-right py-3 px-4 font-semibold text-gray-700">Gross Profit</th>
-                  <th className="text-right py-3 px-4 font-semibold text-gray-700">Net Profit</th>
-                  <th className="text-right py-3 px-4 font-semibold text-gray-700">Overhead</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedHistory.map((record, index) => {
-                  const overhead = parseFloat(record.grossProfit.toString()) - parseFloat(record.netProfit.toString());
-                  return (
-                    <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4 text-gray-900">
-                        {monthNames[record.month - 1]} {record.year}
-                      </td>
-                      <td className="text-right py-3 px-4 text-green-700 font-semibold">
-                        ₵{parseFloat(record.grossProfit.toString()).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </td>
-                      <td className={`text-right py-3 px-4 font-semibold ${
-                        parseFloat(record.netProfit.toString()) >= 0 ? 'text-blue-700' : 'text-red-700'
-                      }`}>
-                        ₵{parseFloat(record.netProfit.toString()).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </td>
-                      <td className="text-right py-3 px-4 text-gray-700">
-                        ₵{overhead.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-      )}
     </div>
   );
 }

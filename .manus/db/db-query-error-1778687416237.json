@@ -1,8 +1,0 @@
-{
-  "query": "SELECT DATE_TRUNC('month', uploadedDate) as month, COUNT(*) as count, SUM(quantity) as total_qty FROM inventory GROUP BY DATE_TRUNC('month', uploadedDate) ORDER BY month DESC LIMIT 10",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT DATE_TRUNC('month', uploadedDate) as month, COUNT(*) as count, SUM(quantity) as total_qty FROM inventory GROUP BY DATE_TRUNC('month', uploadedDate) ORDER BY month DESC LIMIT 10",
-  "returncode": 1,
-  "logs": [
-    "ERROR 1054 (42S22) at line 1: Unknown column 'uploadeddate' in 'group statement'"
-  ]
-}

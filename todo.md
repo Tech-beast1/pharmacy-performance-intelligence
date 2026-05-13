@@ -2197,23 +2197,3 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - All 188 tests passing
 
 ### Status: COMPLETE - Dead stock values now calculated correctly using cost price
-
-
-## Phase 51: Bug Fix - Overhead Costs Date Range Calculation
-
-- [x] Fixed endDate calculation in OverheadCosts page (was using first day of next month instead of last day of current month)
-- [x] Changed from `new Date(year, month, 1)` to `new Date(year, month, 0)` to get correct month range
-- [x] Verified Dashboard uses correct calculation already
-- [x] Confirmed fix resolves double gross profit display (₵8,304 → ₵4,152)
-
-## Phase 52: Monthly Profit History Implementation (Single Pharmacy)
-
-- [x] Add monthlyProfitHistory table to schema (month, year, grossProfit, netProfit, branchId, userId)
-- [x] Create backend database functions for saving/fetching profit history
-- [x] Create tRPC procedures for profit history management
-- [x] Update OverheadCosts page to display monthly profit history table
-- [x] Add automatic profit history saving when overhead costs are saved
-- [x] Ensure multi-branch pharmacies are not affected by changes (branch selector preserved)
-- [ ] Write and run comprehensive tests for monthly profit history
-- [ ] Verify single pharmacy users see profit history correctly
-- [ ] Verify multi-branch users can still use branch selector

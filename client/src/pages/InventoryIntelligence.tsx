@@ -60,20 +60,19 @@ const formatDate = (dateValue: any): string => {
 };
 
 export default function InventoryIntelligence() {
-  // Get user type to determine view mode
-  const userTypeQuery = trpc.branches.userType.get.useQuery();
-  const userType = userTypeQuery.data?.data?.type;
-  
-  // Determine view mode based on user type
+  // Get user's profile to check viewMode setting
+  const profileQuery = trpc.pharmacy.getProfile.useQuery();
   const [viewMode, setViewMode] = useState<'single' | 'multi'>('multi');
   
   useEffect(() => {
-    if (userType === 'single_pharmacy') {
-      setViewMode('single');
-    } else if (userType === 'organization_owner') {
-      setViewMode('multi');
+    if (profileQuery.data?.profile?.viewMode) {
+      setViewMode(profileQuery.data.profile.viewMode as 'single' | 'multi');
     }
-  }, [userType]);
+  }, [profileQuery.data?.profile?.viewMode]);
+
+  // Get user type and organization for branch filtering
+  const userTypeQuery = trpc.branches.userType.get.useQuery();
+  const userType = userTypeQuery.data?.data?.type;
   const organizationQuery = trpc.branches.organization.get.useQuery({ organizationId: 0 });
   const organization = organizationQuery.data?.data;
   const branchesQuery = trpc.branches.branch.list.useQuery(
