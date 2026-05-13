@@ -117,18 +117,9 @@ export const appRouter = router({
       )
       .mutation(async ({ input, ctx }) => {
         try {
-          // branchId is optional - if not provided, use the first available branch
-          let effectiveBranchId = input.branchId;
-          
-          // If no branchId provided, get the user's first/default branch
-          if (!effectiveBranchId) {
-            const branches = await getBranchesByOrganization(ctx.user.id);
-            if (branches.length > 0) {
-              effectiveBranchId = branches[0].id;
-            } else {
-              return { success: false, error: 'No branch found for user' };
-            }
-          }
+          // For single pharmacy systems, branchId can be null or undefined
+          // The upload will work without a specific branch
+          const effectiveBranchId = input.branchId || null;
           
           const validation = validateMapping(input.mapping);
           if (!validation.valid) {
@@ -158,7 +149,7 @@ export const appRouter = router({
               
               await upsertInventoryItem({
                 userId: ctx.user!.id,
-                branchId: effectiveBranchId,
+                branchId: effectiveBranchId || undefined,
                 productName: parsed.productName,
                 sku: uniqueSku,
                 quantity: parsed.quantity || parsed.stockOnHand || 0,
