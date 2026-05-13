@@ -175,7 +175,7 @@ export default function OverheadCosts() {
       // Invalidate all related queries to refresh displays
       await overheadQuery.refetch();
       // Invalidate dashboard metrics to update profit calculations
-      await utils.analytics.getDashboardMetrics.invalidate();
+      await utils.analytics.getDashboardMetrics.invalidate({ startDate: startDateStr, endDate: endDateStr });
       await utils.branches.metrics.branch.invalidate();
       await utils.branches.metrics.consolidated.invalidate();
       // Reset the input fields to show the saved values
@@ -194,12 +194,17 @@ export default function OverheadCosts() {
 
   const totalOverhead = (parseFloat(rent) || 0) + (parseFloat(salaries) || 0) + (parseFloat(electricity) || 0) + (parseFloat(others) || 0);
 
-  // Fetch branch-specific metrics for the selected month
-  // If no branch is selected, fetch consolidated metrics
-  const monthString = `${year}-${String(month).padStart(2, '0')}`;
-  const metricsQuery = selectedBranchId
-    ? trpc.branches.metrics.branch.useQuery({ branchId: selectedBranchId, month: monthString }, { enabled: !!selectedBranchId })
-    : trpc.branches.metrics.consolidated.useQuery({ organizationId: organization?.id || 0, month: monthString }, { enabled: !!organization?.id });
+  // Fetch dashboard metrics for the selected month and branch
+  // This uses the same calculation as the Dashboard
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 1);
+  const startDateStr = startDate.toISOString().split('T')[0];
+  const endDateStr = endDate.toISOString().split('T')[0];
+  
+  const metricsQuery = trpc.analytics.getDashboardMetrics.useQuery(
+    { startDate: startDateStr, endDate: endDateStr },
+    { enabled: true }
+  );
   
   // Gross Profit = Revenue - Cost Price (from backend)
   const grossProfit = metricsQuery.data?.data?.grossProfit || 0;
@@ -210,6 +215,9 @@ export default function OverheadCosts() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+  
+  // Format dates for display
+  const monthString = `${year}-${String(month).padStart(2, '0')}`;
 
   return (
     <div className="space-y-6">
