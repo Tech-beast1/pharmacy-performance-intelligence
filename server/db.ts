@@ -327,86 +327,66 @@ export async function clearAllUserData(userId: number, month?: number, year?: nu
       const startDate = new Date(Date.UTC(year, month - 1, 1)); // First day of month
       const endDate = new Date(Date.UTC(year, month, 1)); // First day of next month
       
-      // Delete sales transactions for the selected month
-      await db.delete(salesTransactions).where(
-        and(
-          eq(salesTransactions.userId, userId),
-          gte(salesTransactions.createdAt, startDate),
-          lt(salesTransactions.createdAt, endDate)
-        )
-      );
-      console.log(`[clearAllUserData] Deleted sales transactions for ${month}/${year}`);
-      
-      // Delete inventory items for the selected month
-      await db.delete(inventory).where(
-        and(
-          eq(inventory.userId, userId),
-          gte(inventory.createdAt, startDate),
-          lt(inventory.createdAt, endDate)
-        )
-      );
-      console.log(`[clearAllUserData] Deleted inventory items for ${month}/${year}`);
-      
-      // Delete alerts for the selected month
-      await db.delete(alerts).where(
-        and(
-          eq(alerts.userId, userId),
-          gte(alerts.createdAt, startDate),
-          lt(alerts.createdAt, endDate)
-        )
-      );
-      console.log(`[clearAllUserData] Deleted alerts for ${month}/${year}`);
-      
-      // Delete file uploads for the selected month
-      await db.delete(fileUploads).where(
-        and(
-          eq(fileUploads.userId, userId),
-          gte(fileUploads.createdAt, startDate),
-          lt(fileUploads.createdAt, endDate)
-        )
-      );
-      console.log(`[clearAllUserData] Deleted file uploads for ${month}/${year}`);
-      
-      // Delete overhead costs for the selected month
-      await db.delete(overheadCosts).where(
-        and(
-          eq(overheadCosts.userId, userId),
-          eq(overheadCosts.month, month),
-          eq(overheadCosts.year, year)
-        )
-      );
-      console.log(`[clearAllUserData] Deleted overhead costs for ${month}/${year}`);
-      
-      // Delete monthly metrics for the selected month
-      await db.delete(monthlyMetrics).where(
-        and(
-          eq(monthlyMetrics.userId, userId),
-          eq(monthlyMetrics.month, month),
-          eq(monthlyMetrics.year, year)
-        )
-      );
-      console.log(`[clearAllUserData] Deleted monthly metrics for ${month}/${year}`);
+      // Execute all deletes in parallel for better performance
+      await Promise.all([
+        db.delete(salesTransactions).where(
+          and(
+            eq(salesTransactions.userId, userId),
+            gte(salesTransactions.createdAt, startDate),
+            lt(salesTransactions.createdAt, endDate)
+          )
+        ),
+        db.delete(inventory).where(
+          and(
+            eq(inventory.userId, userId),
+            gte(inventory.createdAt, startDate),
+            lt(inventory.createdAt, endDate)
+          )
+        ),
+        db.delete(alerts).where(
+          and(
+            eq(alerts.userId, userId),
+            gte(alerts.createdAt, startDate),
+            lt(alerts.createdAt, endDate)
+          )
+        ),
+        db.delete(fileUploads).where(
+          and(
+            eq(fileUploads.userId, userId),
+            gte(fileUploads.createdAt, startDate),
+            lt(fileUploads.createdAt, endDate)
+          )
+        ),
+        db.delete(overheadCosts).where(
+          and(
+            eq(overheadCosts.userId, userId),
+            eq(overheadCosts.month, month),
+            eq(overheadCosts.year, year)
+          )
+        ),
+        db.delete(monthlyMetrics).where(
+          and(
+            eq(monthlyMetrics.userId, userId),
+            eq(monthlyMetrics.month, month),
+            eq(monthlyMetrics.year, year)
+          )
+        ),
+      ]);
+      console.log(`[clearAllUserData] Deleted all data for ${month}/${year}`);
     } else {
       // If no month/year provided, delete all data for the user
       console.log(`[clearAllUserData] Clearing ALL data for user ${userId}`);
       
-      await db.delete(salesTransactions).where(eq(salesTransactions.userId, userId));
-      console.log(`[clearAllUserData] Deleted all sales transactions`);
-      
-      await db.delete(inventory).where(eq(inventory.userId, userId));
-      console.log(`[clearAllUserData] Deleted all inventory items`);
-      
-      await db.delete(alerts).where(eq(alerts.userId, userId));
-      console.log(`[clearAllUserData] Deleted all alerts`);
-      
-      await db.delete(fileUploads).where(eq(fileUploads.userId, userId));
-      console.log(`[clearAllUserData] Deleted all file uploads`);
-      
-      await db.delete(overheadCosts).where(eq(overheadCosts.userId, userId));
-      console.log(`[clearAllUserData] Deleted all overhead costs`);
-      
-      await db.delete(monthlyMetrics).where(eq(monthlyMetrics.userId, userId));
-      console.log(`[clearAllUserData] Deleted all monthly metrics`);
+      // Execute all deletes in parallel for better performance
+      await Promise.all([
+        db.delete(salesTransactions).where(eq(salesTransactions.userId, userId)),
+        db.delete(inventory).where(eq(inventory.userId, userId)),
+        db.delete(alerts).where(eq(alerts.userId, userId)),
+        db.delete(fileUploads).where(eq(fileUploads.userId, userId)),
+        db.delete(overheadCosts).where(eq(overheadCosts.userId, userId)),
+        db.delete(monthlyMetrics).where(eq(monthlyMetrics.userId, userId)),
+      ]);
+      console.log(`[clearAllUserData] Deleted all data for user`);
     }
     
     return { success: true };
