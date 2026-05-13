@@ -296,16 +296,35 @@ export function identifyAlerts(
 }
 
 export function getTopProfitableProducts(inventory: Inventory[]): any[] {
-  return inventory
-    .map(item => ({
-      productName: item.productName,
-      costPrice: item.costPrice,
-      profit: (parseFloat(item.price.toString()) - parseFloat(item.costPrice?.toString() || '0')) * item.quantity,
-      margin: ((parseFloat(item.price.toString()) - parseFloat(item.costPrice?.toString() || '0')) / parseFloat(item.costPrice?.toString() || '1')) * 100,
-      quantity: item.quantity,
-      price: item.price,
-      totalProfit: (parseFloat(item.price.toString()) - parseFloat(item.costPrice?.toString() || '0')) * item.quantity,
-    }))
+  const productMap = new Map<string, any>();
+
+  inventory.forEach(item => {
+    const productName = item.productName || 'Unknown';
+    const costPrice = parseFloat(item.costPrice?.toString() || '0');
+    const price = parseFloat(item.price.toString());
+    const quantity = item.quantity || 0;
+    const profitPerUnit = price - costPrice;
+    const profit = profitPerUnit * quantity;
+
+    if (productMap.has(productName)) {
+      const existing = productMap.get(productName);
+      existing.quantity += quantity;
+      existing.profit += profit;
+      existing.totalProfit += profit;
+    } else {
+      productMap.set(productName, {
+        productName,
+        costPrice,
+        price,
+        quantity,
+        profit,
+        margin: costPrice > 0 ? ((price - costPrice) / costPrice) * 100 : 0,
+        totalProfit: profit,
+      });
+    }
+  });
+
+  return Array.from(productMap.values())
     .sort((a, b) => b.profit - a.profit)
     .slice(0, 10);
 }
