@@ -40,6 +40,10 @@ export default function DataUpload() {
   );
   const branches = branchesQuery.data?.data || [];
   
+  // Determine if this is a single pharmacy owner or multi-branch system
+  const isSinglePharmacy = userType !== 'organization_owner' || branches.length <= 1;
+  const isMultiBranch = userType === 'organization_owner' && branches.length > 1;
+
   // Auto-select branch if only one exists
   useEffect(() => {
     if (branches.length === 1 && !selectedBranchId) {
@@ -53,11 +57,16 @@ export default function DataUpload() {
       <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Data Upload</h1>
-          <p className="text-gray-600 mt-1">Import your pharmacy sales and inventory data</p>
+          <p className="text-gray-600 mt-1">
+            {isSinglePharmacy 
+              ? 'Import your pharmacy sales and inventory data' 
+              : 'Select a branch and import your pharmacy sales and inventory data'}
+          </p>
         </div>
         
       <div className="flex flex-col sm:flex-row gap-4">
-        {userType === 'organization_owner' && branches.length > 1 && (
+        {/* Multi-branch system: Show branch selector */}
+        {isMultiBranch && (
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Upload for Branch: <span className="text-red-500">*</span></label>
             <select
@@ -72,9 +81,19 @@ export default function DataUpload() {
                 </option>
               ))}
             </select>
-            {userType === 'organization_owner' && !selectedBranchId && branches.length > 1 && (
-              <p className="text-red-500 text-sm mt-1">Branch selection is required for organization owners</p>
+            {!selectedBranchId && (
+              <p className="text-red-500 text-sm mt-1">Branch selection is required</p>
             )}
+          </div>
+        )}
+        
+        {/* Single pharmacy: Show info message instead of selector */}
+        {isSinglePharmacy && userType === 'organization_owner' && (
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-700 mb-2">Single Pharmacy</p>
+            <div className="w-full px-3 py-2 border border-green-300 rounded-lg bg-green-50">
+              <p className="text-green-700 text-sm">Your data will be uploaded directly</p>
+            </div>
           </div>
         )}
           
@@ -98,7 +117,8 @@ export default function DataUpload() {
         </div>
       </div>
 
-      {userType === 'organization_owner' && branches.length > 1 && !selectedBranchId ? (
+      {/* Multi-branch: Show warning if branch not selected */}
+      {isMultiBranch && !selectedBranchId ? (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
           <p className="text-yellow-800 font-medium">Please select a branch above to upload data</p>
         </div>
