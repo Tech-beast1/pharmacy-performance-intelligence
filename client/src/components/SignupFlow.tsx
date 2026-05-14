@@ -47,20 +47,16 @@ export function SignupFlow({ onComplete }: SignupFlowProps) {
 
   const handleOrganizationComplete = (organizationId: number) => {
     setStep('complete');
-    // Redirect to dashboard after a brief delay
-    setTimeout(() => {
-      setLocation('/');
-      onComplete?.();
-    }, 1000);
+    // Redirect to dashboard immediately (no delay)
+    setLocation('/');
+    onComplete?.();
   };
 
   const handleSinglePharmacyComplete = () => {
     setStep('complete');
-    // Redirect to dashboard after a brief delay
-    setTimeout(() => {
-      setLocation('/');
-      onComplete?.();
-    }, 1000);
+    // Redirect to dashboard immediately (no delay)
+    setLocation('/');
+    onComplete?.();
   };
 
   const handleBack = () => {

@@ -19,6 +19,7 @@ export function OrganizationSetup({ onComplete, onCancel }: OrganizationSetupPro
 
   const createOrgMutation = trpc.branches.organization.create.useMutation();
   const createBranchMutation = trpc.branches.branch.create.useMutation();
+  const setUserTypeMutation = trpc.branches.userType.set.useMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +56,11 @@ export function OrganizationSetup({ onComplete, onCancel }: OrganizationSetupPro
       if (!branchResult.success) {
         throw new Error('Failed to create first branch');
       }
+
+      // Set user type (backend will also do this, but we ensure it's set)
+      await setUserTypeMutation.mutateAsync({
+        type: 'organization_owner',
+      });
 
       // Success
       onComplete(organizationId);

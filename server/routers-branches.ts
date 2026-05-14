@@ -64,10 +64,7 @@ export const branchesRouter = router({
       }))
       .mutation(async ({ ctx, input }) => {
         try {
-          // Set user as organization owner
-          await setUserType(ctx.user!.id, "organization_owner");
-
-          // Create organization
+          // Create organization (setUserType will be called after branch creation)
           const org = await createOrganization(ctx.user!.id, input.name);
           if (!org) {
             throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to create organization" });
@@ -144,6 +141,9 @@ export const branchesRouter = router({
 
           // Add owner to branch
           await addUserToBranch(ctx.user!.id, branch.id, "owner");
+
+          // Set user type to organization_owner (only once after branch creation)
+          await setUserType(ctx.user!.id, "organization_owner");
 
           return { success: true, data: branch };
         } catch (error) {
