@@ -6,7 +6,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
-import { getBranchesByOrganization, getUserType, getBranchMetrics } from "./db-branches";
+import { getBranchesByOrganization, getUserType, getBranchMetrics, getConsolidatedBranchMetrics, getOrganizationsByOwner, getConsolidatedMetrics } from "./db-branches";
 
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend, type DashboardMetrics } from "./utils/analytics";
@@ -468,10 +468,42 @@ export const appRouter = router({
           });
         }
         
-        // For multi-branch systems with branchId, use getBranchMetrics to match dashboard display
+        // For multi-branch systems, use the same metrics calculation as the dashboard
         let metrics: DashboardMetrics;
-        if (input.branchId && startDate) {
-          // Format month as YYYY-MM for getBranchMetrics
+        
+        // Check if this is a multi-branch organization
+        const userType = await getUserType(ctx.user!.id);
+        const isMultiBranch = userType?.type === 'organization_owner';
+        
+        if (isMultiBranch && startDate && !input.branchId) {
+          // Consolidated view for multi-branch - use getConsolidatedMetrics (same as metrics card)
+          // This ensures Key Insights uses the exact same calculation as the metrics cards
+          const orgs = await getOrganizationsByOwner(ctx.user!.id);
+          if (orgs && orgs.length > 0) {
+            const monthStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
+            const consolidatedMetrics = await getConsolidatedMetrics(orgs[0].id, monthStr);
+            metrics = {
+              totalRevenue: consolidatedMetrics?.totalRevenue || 0,
+              estimatedProfit: consolidatedMetrics?.estimatedProfit || 0,
+              grossProfit: consolidatedMetrics?.grossProfit || 0,
+              expiryRiskLoss: consolidatedMetrics?.expiryRiskLoss || 0,
+              deadStockValue: consolidatedMetrics?.deadStockValue || 0,
+              revenueTrend: 0,
+            } as any;
+          } else {
+            // Fallback if no organization found
+            metrics = calculateDashboardMetrics(
+              inventory,
+              sales,
+              undefined,
+              undefined,
+              60,
+              startDate,
+              endDate
+            );
+          }
+        } else if (input.branchId && startDate) {
+          // Single branch view - use getBranchMetrics
           const monthStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
           const branchMetrics = await getBranchMetrics(input.branchId, monthStr);
           // Convert branch metrics to DashboardMetrics format
@@ -484,6 +516,7 @@ export const appRouter = router({
             revenueTrend: 0,
           } as any;
         } else {
+          // Single pharmacy or no startDate - use calculateDashboardMetrics
           metrics = calculateDashboardMetrics(
             inventory,
             sales,

@@ -590,6 +590,155 @@ export async function getBranchMetrics(branchId: number, month: string) {
 }
 
 /**
+ * Get consolidated metrics for all branches in an organization for a given month
+ * Uses the same 30-day expiry calculation as individual branch metrics
+ */
+export async function getConsolidatedBranchMetrics(organizationId: number, month: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const orgBranches = await getBranchesByOrganization(organizationId);
+    if (!orgBranches || orgBranches.length === 0) {
+      return null;
+    }
+
+    // Parse month (format: YYYY-MM) using UTC to avoid timezone issues
+    const parts = month.split('-').map(Number);
+    if (parts.length !== 2 || !parts[0] || !parts[1] || parts[1] < 1 || parts[1] > 12) {
+      console.error("[DB] Invalid month format:", month);
+      return null;
+    }
+    const [year, monthNum] = parts;
+    const startDate = new Date(Date.UTC(year, monthNum - 1, 1, 0, 0, 0, 0));
+    const endDate = new Date(Date.UTC(year, monthNum, 1, 0, 0, 0, 0));
+    
+    // Validate dates
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      console.error("[DB] Invalid dates for month:", month, startDate, endDate);
+      return null;
+    }
+
+    // Get all branch IDs
+    const branchIds = orgBranches.map(b => b.id);
+
+    // Get sales transactions for all branches in the month
+    const allSales = await db
+      .select()
+      .from(salesTransactions)
+      .where(
+        and(
+          inArray(salesTransactions.branchId, branchIds),
+          gte(salesTransactions.createdAt, startDate),
+          lt(salesTransactions.createdAt, endDate)
+        )
+      );
+
+    // Get inventory for all branches in the month
+    const allInv = await db
+      .select()
+      .from(inventory)
+      .where(
+        and(
+          inArray(inventory.branchId, branchIds),
+          gte(inventory.createdAt, startDate),
+          lt(inventory.createdAt, endDate)
+        )
+      );
+
+    // Calculate consolidated metrics
+    let totalRevenue = 0;
+    let totalProfit = 0;
+    let expiryRiskLoss = 0;
+    let deadStockValue = 0;
+    let expiryRiskCount = 0;
+    let deadStockCount = 0;
+    let lowMarginCount = 0;
+
+    // Revenue from sales
+    let totalCostPrice = 0;
+    for (const sale of allSales) {
+      totalRevenue += typeof sale.totalSaleValue === 'number' ? sale.totalSaleValue : parseFloat(sale.totalSaleValue as any) || 0;
+      
+      // Get cost price from sale record if available
+      if (sale.costPrice) {
+        const costPrice = typeof sale.costPrice === 'number' ? sale.costPrice : parseFloat(sale.costPrice as any) || 0;
+        const quantitySold = typeof sale.quantitySold === 'number' ? sale.quantitySold : parseFloat(sale.quantitySold as any) || 0;
+        totalCostPrice += costPrice * quantitySold;
+      }
+    }
+    
+    // Estimated profit = Total Revenue - Total Cost Price
+    totalProfit = totalRevenue - totalCostPrice;
+
+    // Inventory analysis - deduplicate by product name to match frontend behavior
+    // Use the START of the selected month for expiry risk calculation, not today's date
+    const monthStartDate = startDate; // Start of the selected month
+    const thirtyDaysFromMonthStart = new Date(monthStartDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    // Deduplicate inventory items by product name (keep first occurrence)
+    const deduplicatedInv = new Map<string, typeof allInv[0]>();
+    for (const item of allInv) {
+      const normalizedName = item.productName?.toLowerCase().trim() || '';
+      if (!deduplicatedInv.has(normalizedName)) {
+        deduplicatedInv.set(normalizedName, item);
+      }
+    }
+
+    for (const item of Array.from(deduplicatedInv.values())) {
+      // Expiry risk (products expiring within 30 days from the start of the selected month)
+      if (item.expiryDate) {
+        const expiryDate = new Date(item.expiryDate);
+        if (expiryDate > monthStartDate && expiryDate <= thirtyDaysFromMonthStart) {
+          const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
+          const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+          expiryRiskLoss += costPrice * quantity;
+          expiryRiskCount++;
+        }
+      }
+
+      // Dead stock (products that have NOT been purchased - no sales activity)
+      // Check if this product has any sales transactions
+      const hasSales = allSales.some(s => s.productName === item.productName);
+      if (!hasSales) {
+        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+        deadStockValue += costPrice * quantity;
+        deadStockCount++;
+      }
+
+      // Low margin (less than 20%)
+      if (item.price && item.costPrice) {
+        const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any);
+        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any);
+        const margin = ((price - costPrice) / price) * 100;
+        if (margin < 20) {
+          lowMarginCount++;
+        }
+      }
+    }
+
+    // Gross profit is Revenue - Cost Price
+    const grossProfit = totalProfit;
+    const estimatedProfit = grossProfit;
+
+    return {
+      totalRevenue,
+      grossProfit: Math.max(0, grossProfit),
+      estimatedProfit: Math.max(0, estimatedProfit),
+      expiryRiskLoss,
+      deadStockValue,
+      expiryRiskCount,
+      deadStockCount,
+      lowMarginCount
+    };
+  } catch (error) {
+    console.error("[DB] Error getting consolidated branch metrics:", error);
+    return null;
+  }
+}
+
+/**
  * Get branch breakdown/comparison data for all branches in organization
  */
 export async function getBranchBreakdown(organizationId: number, month: string) {
