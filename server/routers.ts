@@ -6,10 +6,10 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
-import { getBranchesByOrganization, getUserType } from "./db-branches";
+import { getBranchesByOrganization, getUserType, getBranchMetrics } from "./db-branches";
 
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
-import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend } from "./utils/analytics";
+import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend, type DashboardMetrics } from "./utils/analytics";
 import { generateKeyInsights } from "./utils/insights";
 
 export const appRouter = router({
@@ -468,15 +468,36 @@ export const appRouter = router({
           });
         }
         
-        const metrics = calculateDashboardMetrics(
-          inventory,
-          sales,
-          undefined,
-          undefined,
-          60,
-          startDate,
-          endDate
-        );
+        // For multi-branch systems with branchId, use getBranchMetrics to match dashboard display
+        let metrics: DashboardMetrics;
+        if (input.branchId && startDate) {
+          // Format month as YYYY-MM for getBranchMetrics
+          const monthStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
+          const branchMetrics = await getBranchMetrics(input.branchId, monthStr);
+          // Convert branch metrics to DashboardMetrics format
+          metrics = {
+            totalRevenue: branchMetrics?.totalRevenue || 0,
+            estimatedProfit: branchMetrics?.estimatedProfit || 0,
+            grossProfit: branchMetrics?.grossProfit || 0,
+            expiryRiskLoss: branchMetrics?.expiryRiskLoss || 0,
+            deadStockValue: branchMetrics?.deadStockValue || 0,
+            revenueTrend: 0,
+          } as any;
+        } else {
+          metrics = calculateDashboardMetrics(
+            inventory,
+            sales,
+            undefined,
+            undefined,
+            60,
+            startDate,
+            endDate
+          );
+        }
+        if (!metrics) {
+          return { success: false, error: 'Failed to calculate metrics' };
+        }
+        // Get alerts for the filtered data
         const alerts = identifyAlerts(monthFilteredInventory, monthFilteredSales);
         const insights = generateKeyInsights(metrics, alerts, monthFilteredInventory, monthFilteredSales);
         return { success: true, data: insights };
