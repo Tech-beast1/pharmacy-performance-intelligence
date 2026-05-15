@@ -99,7 +99,7 @@ export function generateKeyInsights(
       insights.push({
         category: 'Expiry Risk',
         title: 'Critical Expiry Risk',
-        description: `GHS ${metrics.expiryRiskLoss.toFixed(2)} worth of products expiring within 90 days (${expiryRiskPercentage.toFixed(1)}% of revenue). Urgent action needed.`,
+        description: `GHS ${metrics.expiryRiskLoss.toFixed(2)} worth of products expiring within 30 days (${expiryRiskPercentage.toFixed(1)}% of revenue). Urgent action needed.`,
         icon: 'AlertTriangle',
         color: 'red',
         priority: 'high'
@@ -108,7 +108,7 @@ export function generateKeyInsights(
       insights.push({
         category: 'Expiry Risk',
         title: 'Monitor Expiry Dates',
-        description: `GHS ${metrics.expiryRiskLoss.toFixed(2)} worth of products expiring within 90 days. Plan promotions to move stock.`,
+        description: `GHS ${metrics.expiryRiskLoss.toFixed(2)} worth of products expiring within 30 days. Plan promotions to move stock.`,
         icon: 'AlertTriangle',
         color: 'orange',
         priority: 'medium'
@@ -118,7 +118,7 @@ export function generateKeyInsights(
     insights.push({
       category: 'Expiry Risk',
       title: 'No Immediate Expiry Risk',
-      description: 'No products expiring within 90 days. Your expiry management is on track.',
+      description: 'No products expiring within 30 days. Your expiry management is on track.',
       icon: 'CheckCircle',
       color: 'green',
       priority: 'low'
