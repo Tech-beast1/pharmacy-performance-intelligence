@@ -2197,14 +2197,3 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - All 188 tests passing
 
 ### Status: COMPLETE - Dead stock values now calculated correctly using cost price
-
-
-## Phase XX: Fix Multi-Branch Key Insights Expiry Risk Mismatch
-
-- [x] Identified that Key Insights were showing different expiry risk values than metrics cards for multi-branch systems
-- [x] Root cause: calculateDashboardMetrics uses 90-day window from today, but getBranchMetrics uses 30-day window from month start
-- [x] Created getConsolidatedBranchMetrics function in db-branches.ts for consolidated multi-branch metrics
-- [x] Updated getKeyInsights procedure to use getBranchMetrics for individual branches and getConsolidatedBranchMetrics for "All Branches (Consolidated)"
-- [x] Updated insights.ts to display "30 days" instead of "90 days" in expiry risk descriptions
-- [x] Verified Key Insights now show exact same expiry risk loss value as metrics cards (₵2457.00)
-- [x] Confirmed single pharmacy systems remain unaffected
