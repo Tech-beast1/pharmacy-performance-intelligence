@@ -372,7 +372,7 @@ export default function DashboardMultiBranch() {
               <Card className="p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Revenue Distribution by Branch</h3>
                 {hasRevenueData ? (
-                  <div className="w-full" style={{ height: '450px' }}>
+                  <div className="w-full" style={{ height: '500px' }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -381,10 +381,10 @@ export default function DashboardMultiBranch() {
                             value: parseFloat(branch.revenue) || 0,
                           }))}
                           cx="50%"
-                          cy="40%"
+                          cy="35%"
                           labelLine={true}
                           label={CustomLabel}
-                          outerRadius={100}
+                          outerRadius={90}
                           fill="#8884d8"
                           dataKey="value"
                         >
@@ -401,7 +401,7 @@ export default function DashboardMultiBranch() {
                             padding: '8px',
                           }}
                         />
-                        <Legend verticalAlign="bottom" height={36} />
+                        <Legend verticalAlign="bottom" height={60} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
@@ -422,7 +422,7 @@ export default function DashboardMultiBranch() {
               <Card className="p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Profit Distribution by Branch</h3>
                 {hasProfitData ? (
-                  <div className="w-full" style={{ height: '450px' }}>
+                  <div className="w-full" style={{ height: '500px' }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -431,10 +431,10 @@ export default function DashboardMultiBranch() {
                             value: parseFloat(branch.profit) || 0,
                           }))}
                           cx="50%"
-                          cy="40%"
+                          cy="35%"
                           labelLine={true}
                           label={CustomLabel}
-                          outerRadius={100}
+                          outerRadius={90}
                           fill="#8884d8"
                           dataKey="value"
                         >
@@ -451,7 +451,7 @@ export default function DashboardMultiBranch() {
                             padding: '8px',
                           }}
                         />
-                        <Legend verticalAlign="bottom" height={36} />
+                        <Legend verticalAlign="bottom" height={60} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
