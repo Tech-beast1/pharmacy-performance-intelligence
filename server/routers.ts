@@ -480,7 +480,7 @@ export const appRouter = router({
           // This ensures Key Insights uses the exact same calculation as the metrics cards
           const orgs = await getOrganizationsByOwner(ctx.user!.id);
           if (orgs && orgs.length > 0) {
-            const monthStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
+            const monthStr = `${startDate.getUTCFullYear()}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}`;
             const consolidatedMetrics = await getConsolidatedMetrics(orgs[0].id, monthStr);
             metrics = {
               totalRevenue: consolidatedMetrics?.totalRevenue || 0,
@@ -504,7 +504,7 @@ export const appRouter = router({
           }
         } else if (input.branchId && startDate) {
           // Single branch view - use getBranchMetrics
-          const monthStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
+          const monthStr = `${startDate.getUTCFullYear()}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}`;
           const branchMetrics = await getBranchMetrics(input.branchId, monthStr);
           // Convert branch metrics to DashboardMetrics format
           metrics = {

@@ -423,6 +423,7 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
       }
     }
 
+
     return {
       totalRevenue,
       grossProfit: totalGrossProfit,
@@ -444,6 +445,7 @@ export async function getConsolidatedMetrics(organizationId: number, month: stri
  * Get metrics for a specific branch
  */
 export async function getBranchMetrics(branchId: number, month: string) {
+  console.log(`[DEBUG] getBranchMetrics called with branchId=${branchId}, month=${month}`);
   const db = await getDb();
   if (!db) return null;
 
