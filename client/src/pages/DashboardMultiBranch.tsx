@@ -381,10 +381,10 @@ export default function DashboardMultiBranch() {
                             value: parseFloat(branch.revenue) || 0,
                           }))}
                           cx="50%"
-                          cy="35%"
+                          cy="28%"
                           labelLine={true}
                           label={CustomLabel}
-                          outerRadius={90}
+                          outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
                         >
@@ -431,10 +431,10 @@ export default function DashboardMultiBranch() {
                             value: parseFloat(branch.profit) || 0,
                           }))}
                           cx="50%"
-                          cy="35%"
+                          cy="28%"
                           labelLine={true}
                           label={CustomLabel}
-                          outerRadius={90}
+                          outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
                         >
