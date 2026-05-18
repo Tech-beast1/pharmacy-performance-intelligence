@@ -143,18 +143,18 @@ export default function InventoryIntelligence() {
       const productName = item.productName?.toLowerCase().trim() || '';
       const existing = productMap.get(productName);
       
-      // Check if current item has an alert status
+      // Check if current item has an alert status (match by ID or product name)
       const currentHasAlert = alerts && (
-        alerts.expiryRiskProducts.some((p: any) => p.id === item.id) ||
-        alerts.deadStockProducts.some((p: any) => p.id === item.id) ||
-        alerts.lowMarginProducts.some((p: any) => p.id === item.id)
+        alerts.expiryRiskProducts.some((p: any) => p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()) ||
+        alerts.deadStockProducts.some((p: any) => p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()) ||
+        alerts.lowMarginProducts.some((p: any) => p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim())
       );
       
-      // Check if existing item has an alert status
+      // Check if existing item has an alert status (match by ID or product name)
       const existingHasAlert = existing && alerts && (
-        alerts.expiryRiskProducts.some((p: any) => p.id === existing.id) ||
-        alerts.deadStockProducts.some((p: any) => p.id === existing.id) ||
-        alerts.lowMarginProducts.some((p: any) => p.id === existing.id)
+        alerts.expiryRiskProducts.some((p: any) => p.id === existing.id || p.productName?.toLowerCase().trim() === existing.productName?.toLowerCase().trim()) ||
+        alerts.deadStockProducts.some((p: any) => p.id === existing.id || p.productName?.toLowerCase().trim() === existing.productName?.toLowerCase().trim()) ||
+        alerts.lowMarginProducts.some((p: any) => p.id === existing.id || p.productName?.toLowerCase().trim() === existing.productName?.toLowerCase().trim())
       );
       
       // Keep the item with alert status, or the latest if neither/both have alerts
@@ -185,9 +185,16 @@ export default function InventoryIntelligence() {
   const getAlertStatus = (item: any) => {
     if (!alerts) return null;
 
-    const isExpiryRisk = alerts.expiryRiskProducts.some((p: any) => p.id === item.id);
-    const isDeadStock = alerts.deadStockProducts.some((p: any) => p.id === item.id);
-    const isLowMargin = alerts.lowMarginProducts.some((p: any) => p.id === item.id);
+    // Match by ID first, then by product name as fallback
+    const isExpiryRisk = alerts.expiryRiskProducts.some((p: any) => 
+      p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+    );
+    const isDeadStock = alerts.deadStockProducts.some((p: any) => 
+      p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+    );
+    const isLowMargin = alerts.lowMarginProducts.some((p: any) => 
+      p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+    );
 
     // Always return the status badge, regardless of filter selection
     // Show combined status if product is both expiry risk and dead stock

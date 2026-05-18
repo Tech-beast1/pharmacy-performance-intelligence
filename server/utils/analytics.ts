@@ -72,13 +72,13 @@ export function calculateDashboardMetrics(
     const revenueTrend = 0;
     const profitTrend = 0;
     
-    // Expiry risk: products from this month that are expiring within 90 days from today
-    const today = new Date();
-    const ninetyDaysFromNow = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+    // Expiry risk: products from this month that are expiring within 30 days from the start of the month
+    // This matches the dashboard logic in getConsolidatedBranchMetrics
+    const thirtyDaysFromMonthStart = new Date(monthStart.getTime() + 30 * 24 * 60 * 60 * 1000);
     const expiryRiskProducts = monthInventory.filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
-      return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
+      return expiryDate > monthStart && expiryDate <= thirtyDaysFromMonthStart;
     });
     const expiryRiskLoss = expiryRiskProducts.reduce(
       (sum, item) => sum + parseFloat(item.costPrice?.toString() || item.price.toString()) * item.quantity,
@@ -224,13 +224,13 @@ export function identifyAlerts(
       return createdDate >= monthStart && createdDate <= monthEnd;
     });
     
-    // Expiry risk: products from this month that are expiring within 90 days from today
-    const today = new Date();
-    const ninetyDaysFromNow = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+    // Expiry risk: products from this month that are expiring within 30 days from the start of the month
+    // This matches the dashboard logic in getConsolidatedBranchMetrics
+    const thirtyDaysFromMonthStart = new Date(monthStart.getTime() + 30 * 24 * 60 * 60 * 1000);
     const expiryRiskProducts = monthInventory.filter(item => {
       if (!item.expiryDate) return false;
       const expiryDate = new Date(item.expiryDate);
-      return expiryDate >= today && expiryDate <= ninetyDaysFromNow;
+      return expiryDate > monthStart && expiryDate <= thirtyDaysFromMonthStart;
     });
     
     // Dead stock: products with 0 sales in the selected month

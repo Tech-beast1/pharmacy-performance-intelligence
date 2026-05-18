@@ -2258,3 +2258,16 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - Removed DollarSign from lucide-react imports in Dashboard.tsx
 
 ### Status: COMPLETE - Total Revenue icon changed to Ghana Cedi (₵) in both systems
+
+
+## Phase 26: Fix Expiry Status Display in Multi-Branch Inventory - COMPLETED
+
+### Tasks:
+- [x] Identified root cause: Dashboard and Inventory Intelligence using different expiry calculation logic
+- [x] Fixed identifyAlerts function to use 30-day window from month start (matching dashboard)
+- [x] Added product name matching as fallback in InventoryIntelligence.tsx
+- [x] Verified expiry status now displays correctly in inventory table
+- [x] Verified Expiry Risk count matches dashboard (1 product)
+- [x] Verified Amlodipine 5mg shows "Expiry Risk" status badge
+
+### Status: COMPLETE - Expiry status now displays consistently across dashboard and inventory pages
