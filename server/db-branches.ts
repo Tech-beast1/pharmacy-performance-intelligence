@@ -72,14 +72,18 @@ export async function createOrganization(ownerId: number, name: string): Promise
   if (!db) return null;
 
   try {
-    const data: InsertOrganization = { ownerId, name };
-    const result = await db.insert(organizations).values(data);
+    const orgId = (await db.insert(organizations).values({ ownerId, name }))[0]?.insertId as number;
     
-    if (result[0]?.insertId) {
-      const org = await db.select().from(organizations).where(eq(organizations.id, result[0].insertId as number));
-      return org[0] || null;
-    }
-    return null;
+    if (!orgId) return null;
+    
+    // Return the created organization object without additional query
+    return {
+      id: orgId,
+      ownerId,
+      name,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as Organization;
   } catch (error) {
     console.error("[DB] Error creating organization:", error);
     return null;
@@ -131,21 +135,29 @@ export async function createBranch(
   if (!db) return null;
 
   try {
-    const data: InsertBranch = {
+    const branchId = (await db.insert(branches).values({
       organizationId,
       name,
       location: location || null,
       managerName: managerName || null,
       managerPhone: managerPhone || null,
       isActive: true,
-    };
-    const result = await db.insert(branches).values(data);
+    }))[0]?.insertId as number;
     
-    if (result[0]?.insertId) {
-      const branch = await db.select().from(branches).where(eq(branches.id, result[0].insertId as number));
-      return branch[0] || null;
-    }
-    return null;
+    if (!branchId) return null;
+    
+    // Return the created branch object without additional query
+    return {
+      id: branchId,
+      organizationId,
+      name,
+      location: location || null,
+      managerName: managerName || null,
+      managerPhone: managerPhone || null,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as Branch;
   } catch (error) {
     console.error("[DB] Error creating branch:", error);
     return null;

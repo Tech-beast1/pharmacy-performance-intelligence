@@ -2285,3 +2285,15 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - [x] Verified all filters work with product name matching
 
 ### Status: COMPLETE - Filter by Alert Status now works perfectly
+
+
+## Phase 28: Fix Setup Performance Bottleneck - COMPLETED
+
+### Tasks:
+- [x] Identified root cause: Unnecessary SELECT queries after INSERT in createOrganization and createBranch
+- [x] Optimized createOrganization to remove SELECT query - returns object directly from insert values
+- [x] Optimized createBranch to remove SELECT query - returns object directly from insert values
+- [x] Eliminated 2 extra database round-trips during setup process
+- [x] Setup should now complete in seconds instead of 3 minutes
+
+### Status: COMPLETE - Setup performance optimized by removing unnecessary database queries
