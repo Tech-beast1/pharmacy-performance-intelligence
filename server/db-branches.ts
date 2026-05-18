@@ -46,18 +46,34 @@ export async function setUserType(userId: number, type: "organization_owner" | "
   if (!db) return null;
 
   try {
-    // Check if user type already exists
-    const existing = await getUserType(userId);
-    if (existing) {
-      // Update existing
-      await db.update(userTypes).set({ type, updatedAt: new Date() }).where(eq(userTypes.userId, userId));
-      return getUserType(userId);
+    // Try to insert, if it fails due to unique constraint, update instead
+    try {
+      // Attempt insert
+      const result = await db.insert(userTypes).values({ userId, type });
+      if (result[0]?.insertId) {
+        // Return the inserted object directly without additional query
+        return {
+          id: result[0].insertId as number,
+          userId,
+          type,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as UserType;
+      }
+      return null;
+    } catch (insertError: any) {
+      // If unique constraint error, update instead
+      if (insertError?.code === 'ER_DUP_ENTRY' || insertError?.message?.includes('UNIQUE')) {
+        await db.update(userTypes).set({ type, updatedAt: new Date() }).where(eq(userTypes.userId, userId));
+        // Return updated record object without additional query
+        return {
+          userId,
+          type,
+          updatedAt: new Date(),
+        } as UserType;
+      }
+      throw insertError;
     }
-
-    // Insert new
-    const data: InsertUserType = { userId, type };
-    await db.insert(userTypes).values(data);
-    return getUserType(userId);
   } catch (error) {
     console.error("[DB] Error setting user type:", error);
     return null;
@@ -246,37 +262,40 @@ export async function addUserToBranch(
   if (!db) return null;
 
   try {
-    // Check if user already has access to branch
-    const existing = await db
-      .select()
-      .from(branchUsers)
-      .where(and(eq(branchUsers.userId, userId), eq(branchUsers.branchId, branchId)));
-
-    if (existing.length > 0) {
-      // Update existing
-      await db.update(branchUsers).set({ role, updatedAt: new Date() }).where(
-        and(eq(branchUsers.userId, userId), eq(branchUsers.branchId, branchId))
-      );
-      // Return updated record
-      const updated = await db
-        .select()
-        .from(branchUsers)
-        .where(and(eq(branchUsers.userId, userId), eq(branchUsers.branchId, branchId)));
-      return updated[0] || null;
-    }
-
-    // Insert new
+    // Try to insert, if it fails due to unique constraint, update instead
     const data: InsertBranchUser = { userId, branchId, role };
-    const result = await db.insert(branchUsers).values(data);
     
-    if (result[0]?.insertId) {
-      const bu = await db
-        .select()
-        .from(branchUsers)
-        .where(eq(branchUsers.id, result[0].insertId as number));
-      return bu[0] || null;
+    try {
+      // Attempt insert
+      const result = await db.insert(branchUsers).values(data);
+      if (result[0]?.insertId) {
+        // Return the inserted object directly without additional query
+        return {
+          id: result[0].insertId as number,
+          userId,
+          branchId,
+          role,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as BranchUser;
+      }
+      return null;
+    } catch (insertError: any) {
+      // If unique constraint error, update instead
+      if (insertError?.code === 'ER_DUP_ENTRY' || insertError?.message?.includes('UNIQUE')) {
+        await db.update(branchUsers).set({ role, updatedAt: new Date() }).where(
+          and(eq(branchUsers.userId, userId), eq(branchUsers.branchId, branchId))
+        );
+        // Return updated record object without additional query
+        return {
+          userId,
+          branchId,
+          role,
+          updatedAt: new Date(),
+        } as BranchUser;
+      }
+      throw insertError;
     }
-    return null;
   } catch (error) {
     console.error("[DB] Error adding user to branch:", error);
     return null;
