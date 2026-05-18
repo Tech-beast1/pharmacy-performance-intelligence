@@ -292,7 +292,7 @@ export default function DashboardMultiBranch() {
                 <DollarSign className="text-blue-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Total Revenue</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.totalRevenue?.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.totalRevenue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}</p>
                 </div>
               </div>
             </Card>
@@ -302,8 +302,8 @@ export default function DashboardMultiBranch() {
                 <TrendingUp className="text-green-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Estimated Profit</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{netProfit.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500 mt-1">Gross: ₵{grossProfit.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{netProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-gray-500 mt-1">Gross: ₵{grossProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
               </div>
             </Card>
@@ -313,7 +313,7 @@ export default function DashboardMultiBranch() {
                 <AlertTriangle className="text-red-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Expiry Risk Loss</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.expiryRiskLoss?.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.expiryRiskLoss?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}</p>
                 </div>
               </div>
             </Card>
@@ -323,7 +323,7 @@ export default function DashboardMultiBranch() {
                 <Package className="text-orange-500 flex-shrink-0 mt-1" size={32} />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Dead Stock Value</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.deadStockValue?.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.deadStockValue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}</p>
                 </div>
               </div>
             </Card>
@@ -488,8 +488,8 @@ export default function DashboardMultiBranch() {
                     {breakdown.map((branch: any, index: number) => (
                       <tr key={branch.branchId} className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50`}>
                         <td className="py-3 px-4 text-gray-900 font-medium">{branch.branchName}</td>
-                        <td className="text-right py-3 px-4 text-gray-700">₵{branch.revenue?.toFixed(2) || '0.00'}</td>
-                        <td className="text-right py-3 px-4 text-gray-700">₵{branch.profit?.toFixed(2) || '0.00'}</td>
+                        <td className="text-right py-3 px-4 text-gray-700">₵{branch.revenue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}</td>
+                        <td className="text-right py-3 px-4 text-gray-700">₵{branch.profit?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}</td>
                         <td className="text-right py-3 px-4 text-gray-700">{branch.marginPercentage?.toFixed(1) || '0.0'}%</td>
                       </tr>
                     ))}
@@ -551,7 +551,7 @@ export default function DashboardMultiBranch() {
                 <div>
                   <p className="font-medium text-gray-900">Focus on Expiry Management</p>
                   <p className="text-sm text-gray-600 mt-1">
-                    You have ₵{metrics?.expiryRiskLoss?.toLocaleString() || '0'} worth of products expiring soon. Implement promotional strategies to clear these items.
+                    You have ₵{metrics?.expiryRiskLoss?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'} worth of products expiring soon. Implement promotional strategies to clear these items.
                   </p>
                 </div>
               </div>
@@ -563,7 +563,7 @@ export default function DashboardMultiBranch() {
                 <div>
                   <p className="font-medium text-gray-900">Optimize Slow-Moving Stock</p>
                   <p className="text-sm text-gray-600 mt-1">
-                    ₵{metrics?.deadStockValue?.toLocaleString() || '0'} is tied up in products with no recent sales. Consider bundling or discounting these items.
+                    ₵{metrics?.deadStockValue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'} is tied up in products with no recent sales. Consider bundling or discounting these items.
                   </p>
                 </div>
               </div>

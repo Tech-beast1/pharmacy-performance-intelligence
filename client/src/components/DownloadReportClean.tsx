@@ -68,7 +68,7 @@ const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: s
     ctx.fillStyle = colors[index % colors.length];
     ctx.fillRect(10, legendY - 8, 12, 12);
     ctx.fillStyle = '#333';
-    ctx.fillText(`${item.name}: ₵${item.value.toFixed(2)}`, 25, legendY);
+    ctx.fillText(`${item.name}: ₵${item.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 25, legendY);
     legendY += 15;
   });
 };
@@ -107,7 +107,7 @@ export default function DownloadReportClean({
   const formatCurrency = (value: any): string => {
     const num = typeof value === 'string' ? parseFloat(value) : value;
     if (isNaN(num)) return 'GHS 0.00';
-    return `GHS ${num.toFixed(2)}`;
+    return `GHS ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   const generateReport = async () => {

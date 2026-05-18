@@ -2214,3 +2214,27 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - [x] Confirmed single pharmacy systems unaffected by multi-branch changes
 
 ### Status: COMPLETE - All refinements and cleanup tasks completed successfully
+
+
+## Phase 24: Add Number Formatting with Comma Separators - COMPLETED
+
+### Tasks:
+- [x] Add comma separators to all metric cards in DashboardMultiBranch.tsx
+- [x] Format Total Revenue with toLocaleString()
+- [x] Format Estimated Profit (both net and gross) with toLocaleString()
+- [x] Format Expiry Risk Loss with toLocaleString()
+- [x] Format Dead Stock Value with toLocaleString()
+- [x] Format Branch Performance Comparison table (Revenue and Profit columns)
+- [x] Update Recommendations section with proper decimal formatting
+- [x] Update PDF report formatCurrency function to use toLocaleString()
+- [x] Update pie chart legend values in PDF to use toLocaleString()
+- [x] Verify dashboard displays comma formatting (16,177.40, 8,304.00, etc.)
+- [x] Verify PDF report displays comma formatting (GHS 16,177.40, GHS 8,304.00, etc.)
+- [x] Test with actual data to confirm all values format correctly
+
+### Implementation Details:
+- Used `toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })` for consistent formatting
+- Applied to all monetary values in metric cards, tables, recommendations, and PDF reports
+- Ensures values like 1000 display as 1,000.00 for better readability
+
+### Status: COMPLETE - All monetary values now display with comma separators for thousands
