@@ -7,15 +7,15 @@ import jsPDF from 'jspdf';
 // Helper function to draw simple pie charts
 const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: string) => {
   const centerX = ctx.canvas.width / 2;
-  const centerY = ctx.canvas.height / 2;
-  const radius = 80;
+  const centerY = 90; // Move pie chart up to create space for title and legend
+  const radius = 70; // Reduce radius to fit better
   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
 
-  // Draw title
+  // Draw title with more space below
   ctx.font = 'bold 16px Arial';
   ctx.fillStyle = '#333';
   ctx.textAlign = 'center';
-  ctx.fillText(title, centerX, 20);
+  ctx.fillText(title, centerX, 25);
 
   // Calculate total
   const total = data.reduce((sum, item) => sum + item.value, 0);
@@ -39,7 +39,7 @@ const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: s
 
     // Draw label outside the circle
     const labelAngle = currentAngle + sliceAngle / 2;
-    const labelDistance = radius + 30;
+    const labelDistance = radius + 25;
     const labelX = centerX + Math.cos(labelAngle) * labelDistance;
     const labelY = centerY + Math.sin(labelAngle) * labelDistance;
     ctx.font = 'bold 12px Arial';
@@ -59,11 +59,11 @@ const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: s
     currentAngle += sliceAngle;
   });
 
-  // Draw legend
+  // Draw legend below the pie chart with more space
   ctx.font = '11px Arial';
   ctx.fillStyle = '#333';
   ctx.textAlign = 'left';
-  let legendY = 180;
+  let legendY = 200; // Move legend further down
   data.forEach((item, index) => {
     ctx.fillStyle = colors[index % colors.length];
     ctx.fillRect(10, legendY - 8, 12, 12);
