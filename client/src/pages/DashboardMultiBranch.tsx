@@ -289,7 +289,7 @@ export default function DashboardMultiBranch() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="p-6">
               <div className="flex items-start gap-4">
-                <DollarSign className="text-blue-500 flex-shrink-0 mt-1" size={32} />
+                <div className="text-blue-500 flex-shrink-0 mt-1 text-3xl font-bold">₵</div>
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 font-medium">Total Revenue</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">₵{metrics.totalRevenue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}</p>

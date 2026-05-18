@@ -2238,3 +2238,23 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - Ensures values like 1000 display as 1,000.00 for better readability
 
 ### Status: COMPLETE - All monetary values now display with comma separators for thousands
+
+
+## Phase 25: Change Total Revenue Icon from $ to Ghana Cedi (₵) - COMPLETED
+
+### Tasks:
+- [x] Update Total Revenue icon in DashboardMultiBranch.tsx from DollarSign to ₵
+- [x] Update Total Revenue icon in Dashboard.tsx (single pharmacy) from DollarSign to ₵
+- [x] Remove DollarSign import from Dashboard.tsx
+- [x] Replace DollarSign in iconMap with ₵ symbol
+- [x] Verify multi-branch dashboard displays ₵ icon for Total Revenue
+- [x] Verify single pharmacy dashboard code has ₵ icon (code verified)
+- [x] Ensure no other icons or elements were changed
+
+### Implementation Details:
+- DashboardMultiBranch.tsx: Replaced `<DollarSign className="text-blue-500 flex-shrink-0 mt-1" size={32} />` with `<div className="text-blue-500 flex-shrink-0 mt-1 text-3xl font-bold">₵</div>`
+- Dashboard.tsx: Replaced `icon: <DollarSign className="w-8 h-8" />` with `icon: <span className="text-2xl font-bold">₵</span>`
+- Dashboard.tsx: Replaced `'DollarSign': <DollarSign className="w-5 h-5" />` with `'DollarSign': <span className="text-lg font-bold">₵</span>` in iconMap
+- Removed DollarSign from lucide-react imports in Dashboard.tsx
+
+### Status: COMPLETE - Total Revenue icon changed to Ghana Cedi (₵) in both systems

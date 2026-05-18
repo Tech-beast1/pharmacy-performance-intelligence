@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, AlertTriangle, Loader2, Trash2, TrendingDown, BarChart3, CheckCircle, Package } from 'lucide-react';
+import { TrendingUp, AlertTriangle, Loader2, Trash2, TrendingDown, BarChart3, CheckCircle, Package } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
@@ -245,7 +245,7 @@ export default function Dashboard() {
       value: `₵${metrics.totalRevenue.toLocaleString()}`,
       // Ghanaian Cedis currency
       trend: revenueTrendPercent,
-      icon: <DollarSign className="w-8 h-8" />,
+      icon: <span className="text-2xl font-bold">₵</span>,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100',
     },
@@ -576,7 +576,7 @@ export default function Dashboard() {
               'TrendingDown': <TrendingDown className="w-5 h-5" />,
               'Package': <Package className="w-5 h-5" />,
               'AlertTriangle': <AlertTriangle className="w-5 h-5" />,
-              'DollarSign': <DollarSign className="w-5 h-5" />,
+              'DollarSign': <span className="text-lg font-bold">₵</span>,
               'BarChart3': <BarChart3 className="w-5 h-5" />,
               'CheckCircle': <CheckCircle className="w-5 h-5" />,
             };
