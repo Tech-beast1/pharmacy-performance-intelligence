@@ -15,7 +15,7 @@ const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: s
   ctx.font = 'bold 16px Arial';
   ctx.fillStyle = '#333';
   ctx.textAlign = 'center';
-  ctx.fillText(title, centerX, 25);
+  ctx.fillText(title, centerX, 15);
 
   // Calculate total
   const total = data.reduce((sum, item) => sum + item.value, 0);
