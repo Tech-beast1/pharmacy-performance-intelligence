@@ -213,19 +213,33 @@ export default function InventoryIntelligence() {
     let result = branchFilteredItems;
 
     if (filterAlert === 'expiry') {
-      const expiryIds = new Set(alerts.expiryRiskProducts.map((p: any) => p.id));
-      result = result.filter(item => expiryIds.has(item.id));
+      result = result.filter(item => 
+        alerts.expiryRiskProducts.some((p: any) => 
+          p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+        )
+      );
     } else if (filterAlert === 'deadstock') {
-      const deadstockIds = new Set(alerts.deadStockProducts.map((p: any) => p.id));
-      result = result.filter(item => deadstockIds.has(item.id));
+      result = result.filter(item => 
+        alerts.deadStockProducts.some((p: any) => 
+          p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+        )
+      );
     } else if (filterAlert === 'both') {
       // Filter for products that are BOTH expiry risk AND dead stock
-      const expiryIds = new Set(alerts.expiryRiskProducts.map((p: any) => p.id));
-      const deadstockIds = new Set(alerts.deadStockProducts.map((p: any) => p.id));
-      result = result.filter(item => expiryIds.has(item.id) && deadstockIds.has(item.id));
+      result = result.filter(item => 
+        alerts.expiryRiskProducts.some((p: any) => 
+          p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+        ) &&
+        alerts.deadStockProducts.some((p: any) => 
+          p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+        )
+      );
     } else if (filterAlert === 'lowmargin') {
-      const lowmarginIds = new Set(alerts.lowMarginProducts.map((p: any) => p.id));
-      result = result.filter(item => lowmarginIds.has(item.id));
+      result = result.filter(item => 
+        alerts.lowMarginProducts.some((p: any) => 
+          p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()
+        )
+      );
     }
 
     return result;
@@ -235,17 +249,17 @@ export default function InventoryIntelligence() {
   const branchMetrics = useMemo(() => {
     const expiryRiskItems = branchFilteredItems.filter(item => {
       const alertStatus = getAlertStatus(item);
-      return alertStatus?.label === 'Expiry Risk';
+      return alertStatus?.type === 'expiry' || alertStatus?.type === 'both';
     });
     
     const deadStockItems = branchFilteredItems.filter(item => {
       const alertStatus = getAlertStatus(item);
-      return alertStatus?.label === 'Dead Stock';
+      return alertStatus?.type === 'deadstock' || alertStatus?.type === 'both';
     });
     
     const lowMarginItems = branchFilteredItems.filter(item => {
       const alertStatus = getAlertStatus(item);
-      return alertStatus?.label === 'Low Margin';
+      return alertStatus?.type === 'lowmargin';
     });
     
     const deadStockValue = deadStockItems.reduce((sum, item) => {

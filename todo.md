@@ -2271,3 +2271,17 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - [x] Verified Amlodipine 5mg shows "Expiry Risk" status badge
 
 ### Status: COMPLETE - Expiry status now displays consistently across dashboard and inventory pages
+
+
+## Phase 27: Fix Filter by Alert Status - COMPLETED
+
+### Tasks:
+- [x] Updated filter logic to use product name matching (fallback to ID matching)
+- [x] Fixed branchMetrics calculation to use alert status types instead of labels
+- [x] Tested "All Items" filter - shows all 20 items
+- [x] Tested "Expiry Risk" filter - shows 1 item (Amlodipine 5mg)
+- [x] Tested "Dead Stock" filter - shows 2 items (Vitamin C 1000mg, Zinc Sulphate 20mg)
+- [x] Verified filter counts match displayed items
+- [x] Verified all filters work with product name matching
+
+### Status: COMPLETE - Filter by Alert Status now works perfectly
