@@ -251,7 +251,7 @@ export default function DownloadReportClean({
         pdf.text('Branch Distribution Charts', margin, yPosition);
         pdf.setDrawColor(30, 58, 138);
         pdf.line(margin, yPosition + 2, margin + 50, yPosition + 2);
-        yPosition += 12;
+        yPosition += 20;
 
         // Create pie chart data
         const revenueData = breakdown.map((branch: any) => ({
