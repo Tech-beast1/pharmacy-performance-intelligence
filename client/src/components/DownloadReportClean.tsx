@@ -63,7 +63,7 @@ const drawSimplePieChart = (ctx: CanvasRenderingContext2D, data: any[], title: s
   ctx.font = '11px Arial';
   ctx.fillStyle = '#333';
   ctx.textAlign = 'left';
-  let legendY = 200; // Move legend further down
+  let legendY = 220; // Move legend further down to accommodate larger canvas
   data.forEach((item, index) => {
     ctx.fillStyle = colors[index % colors.length];
     ctx.fillRect(10, legendY - 8, 12, 12);
@@ -268,23 +268,23 @@ export default function DownloadReportClean({
         const ctx1 = canvas1.getContext('2d');
         if (ctx1) {
           canvas1.width = 300;
-          canvas1.height = 250;
+          canvas1.height = 320; // Increased height to fit all content
           drawSimplePieChart(ctx1, revenueData, 'Revenue Distribution');
           const imgData1 = canvas1.toDataURL('image/png');
-          pdf.addImage(imgData1, 'PNG', margin, yPosition, 80, 65);
+          pdf.addImage(imgData1, 'PNG', margin, yPosition, 90, 120); // Larger image size
         }
 
         const canvas2 = document.createElement('canvas');
         const ctx2 = canvas2.getContext('2d');
         if (ctx2) {
           canvas2.width = 300;
-          canvas2.height = 250;
+          canvas2.height = 320; // Increased height to fit all content
           drawSimplePieChart(ctx2, profitData, 'Profit Distribution');
           const imgData2 = canvas2.toDataURL('image/png');
-          pdf.addImage(imgData2, 'PNG', margin + 95, yPosition, 80, 65);
+          pdf.addImage(imgData2, 'PNG', margin + 105, yPosition, 90, 120); // Larger image size
         }
 
-        yPosition += 75;
+        yPosition += 130; // Increased spacing for larger charts
       }
 
       // Key Insights Section
