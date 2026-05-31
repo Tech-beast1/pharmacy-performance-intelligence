@@ -384,7 +384,7 @@ export default function DashboardMultiBranch() {
                           cy="35%"
                           labelLine={true}
                           label={CustomLabel}
-                          outerRadius={85}
+                          outerRadius={110}
                           fill="#8884d8"
                           dataKey="value"
                         >
@@ -434,7 +434,7 @@ export default function DashboardMultiBranch() {
                           cy="35%"
                           labelLine={true}
                           label={CustomLabel}
-                          outerRadius={85}
+                          outerRadius={110}
                           fill="#8884d8"
                           dataKey="value"
                         >
