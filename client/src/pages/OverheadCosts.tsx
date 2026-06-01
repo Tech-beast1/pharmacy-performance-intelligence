@@ -178,11 +178,7 @@ export default function OverheadCosts() {
       await utils.analytics.getDashboardMetrics.invalidate();
       await utils.branches.metrics.branch.invalidate();
       await utils.branches.metrics.consolidated.invalidate();
-      // Reset the input fields to show the saved values
-      setRent('0');
-      setSalaries('0');
-      setElectricity('0');
-      setOthers('0');
+      // Keep the input fields as they are - don't clear them
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save overhead costs';
       toast.error(errorMessage);
