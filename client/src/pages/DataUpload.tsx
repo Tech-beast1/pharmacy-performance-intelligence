@@ -58,6 +58,9 @@ export default function DataUpload() {
     }
   }, [subscriptionStatus?.hasReachedLimit, subscriptionStatus?.subscription.status]);
 
+  // Check if user has reached upload limit and is not subscribed
+  const hasReachedLimitWithoutSubscription = subscriptionStatus?.hasReachedLimit && subscriptionStatus?.subscription.status !== 'active';
+
   return (
     <div className="space-y-6">
     <PageHeader title="Data Upload" description="Upload your sales and inventory data" />
@@ -111,7 +114,24 @@ export default function DataUpload() {
         </div>
       </div>
 
-      {userType === 'organization_owner' && branches.length > 1 && !selectedBranchId ? (
+      {hasReachedLimitWithoutSubscription ? (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-1">
+              <h3 className="text-red-900 font-semibold mb-2">Upload Limit Reached</h3>
+              <p className="text-red-800 mb-4">
+                You have used all 4 of your free uploads. Subscribe to continue uploading and managing your pharmacy data.
+              </p>
+              <button
+                onClick={() => setShowSubscriptionModal(true)}
+                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+              >
+                View Subscription Plans
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : userType === 'organization_owner' && branches.length > 1 && !selectedBranchId ? (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
           <p className="text-yellow-800 font-medium">Please select a branch above to upload data</p>
         </div>

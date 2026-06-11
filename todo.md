@@ -2339,6 +2339,12 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - [x] Write comprehensive vitest tests for subscription procedures (21 tests)
 - [x] Write comprehensive integration tests for subscription flow (29 tests)
 - [x] All 50 vitest tests passing
+- [x] Add upload access control to block uploads after 4 free uploads
+- [x] Update DataUpload.tsx to show blocked state when limit reached
+- [x] Add subscription limit check to processFile procedure
+- [x] Add subscription limit check to trackUpload procedure
+- [x] Create upload access control tests (25 tests)
+- [x] All 75 vitest tests passing (21 subscription + 29 integration + 25 access control)
 - [ ] Perform end-to-end test of 4-upload limit
 - [ ] Perform end-to-end test of Paystack payment flow
 - [ ] Verify SubscriptionModal triggers correctly at upload limit
