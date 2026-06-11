@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-type SortKey = 'productName' | 'price' | 'costPrice' | 'quantity' | 'margin' | 'expiryDate';
+type SortKey = 'productName' | 'price' | 'costPrice' | 'quantity' | 'margin' | 'expiryDate' | 'branchId';
 type SortOrder = 'asc' | 'desc';
 
 // Format date consistently without timezone conversion
@@ -135,40 +135,15 @@ export default function InventoryIntelligence() {
   });
   const alerts = alertsQuery.data?.data;
 
-  // Calculate margin for each item and deduplicate by product name
-  // Prioritize items with alert status (expiry risk, dead stock, low margin)
+  // Calculate margin for each item (no deduplication - show all per-branch items)
   const itemsWithMargin = useMemo(() => {
-    const productMap = new Map();
-    inventory.forEach(item => {
-      const productName = item.productName?.toLowerCase().trim() || '';
-      const existing = productMap.get(productName);
-      
-      // Check if current item has an alert status (match by ID or product name)
-      const currentHasAlert = alerts && (
-        alerts.expiryRiskProducts.some((p: any) => p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()) ||
-        alerts.deadStockProducts.some((p: any) => p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim()) ||
-        alerts.lowMarginProducts.some((p: any) => p.id === item.id || p.productName?.toLowerCase().trim() === item.productName?.toLowerCase().trim())
-      );
-      
-      // Check if existing item has an alert status (match by ID or product name)
-      const existingHasAlert = existing && alerts && (
-        alerts.expiryRiskProducts.some((p: any) => p.id === existing.id || p.productName?.toLowerCase().trim() === existing.productName?.toLowerCase().trim()) ||
-        alerts.deadStockProducts.some((p: any) => p.id === existing.id || p.productName?.toLowerCase().trim() === existing.productName?.toLowerCase().trim()) ||
-        alerts.lowMarginProducts.some((p: any) => p.id === existing.id || p.productName?.toLowerCase().trim() === existing.productName?.toLowerCase().trim())
-      );
-      
-      // Keep the item with alert status, or the latest if neither/both have alerts
-      if (!existing || currentHasAlert || !existingHasAlert) {
-        productMap.set(productName, item);
-      }
-    });
-    return Array.from(productMap.values()).map(item => {
+    return inventory.map(item => {
       const costPrice = parseFloat(item.costPrice?.toString() || '0');
       const salePrice = parseFloat(item.price.toString());
       const margin = costPrice > 0 ? ((salePrice - costPrice) / costPrice) * 100 : 0;
       return { ...item, margin: Math.round(margin) };
     });
-  }, [inventory, alerts, selectedBranchId]);
+  }, [inventory]);
 
   // Filter inventory by selected branch
   const branchFilteredItems = useMemo(() => {
@@ -394,6 +369,9 @@ export default function InventoryIntelligence() {
                   <SortHeader label="Product Name" sortBy="productName" />
                 </TableHead>
                 <TableHead className="p-4 text-center">
+                  <SortHeader label="Branch" sortBy="branchId" />
+                </TableHead>
+                <TableHead className="p-4 text-center">
                   <SortHeader label="Cost Price" sortBy="costPrice" />
                 </TableHead>
                 <TableHead className="p-4 text-center">
@@ -414,7 +392,10 @@ export default function InventoryIntelligence() {
                     <TableRow key={item.id} className="hover:bg-gray-50 border-b">
                       <TableCell className="p-4 font-medium text-gray-900 text-center">{item.productName}</TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
-                        ₵{parseFloat(item.costPrice.toString()).toLocaleString()}
+                        {branches.find(b => b.id === item.branchId)?.name || `Branch ${item.branchId}`}
+                      </TableCell>
+                      <TableCell className="p-4 text-center text-gray-700">
+                        ₵{parseFloat((item.costPrice || 0).toString()).toLocaleString()}
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">{item.quantity}</TableCell>
                       <TableCell className="p-4 text-center">
@@ -423,7 +404,7 @@ export default function InventoryIntelligence() {
                         </span>
                       </TableCell>
                       <TableCell className="p-4 text-center text-gray-700">
-                        {alerts && (alerts.deadStockProducts.some((p: any) => p.id === item.id)) ? `₵${(parseFloat(item.costPrice.toString()) * item.quantity).toLocaleString()}` : '₵0'}
+                        {alerts && (alerts.deadStockProducts.some((p: any) => p.id === item.id)) ? `₵${(parseFloat((item.costPrice || 0).toString()) * item.quantity).toLocaleString()}` : '₵0'}
                       </TableCell>
                       <TableCell className="p-4 text-center">
                         {alertStatus ? (
@@ -439,14 +420,14 @@ export default function InventoryIntelligence() {
                 })
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="p-8 text-center text-gray-500">
+                  <TableCell colSpan={7} className="p-8 text-center text-gray-500">
                     No inventory items found
                   </TableCell>
                 </TableRow>
               )}
               {sortedItems.length > 0 && (
                 <TableRow className="bg-gray-100 font-bold">
-                  <TableCell colSpan={5} className="p-4 text-right">Total Dead Stock Value:</TableCell>
+                  <TableCell colSpan={6} className="p-4 text-right">Total Dead Stock Value:</TableCell>
                   <TableCell className="p-4 text-center text-gray-900">
                     ₵{alerts?.deadStockProducts.reduce((total: number, item: any) => {
                       return total + (parseFloat(item.costPrice.toString()) * item.quantity);
