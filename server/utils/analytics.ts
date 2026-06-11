@@ -94,7 +94,7 @@ export function calculateDashboardMetrics(
       !recentSalesProducts.has(item.productName) && item.quantity > 0
     );
     const deadStockValue = deadStockProducts.reduce(
-      (sum, item) => sum + parseFloat(item.price.toString()) * item.quantity,
+      (sum, item) => sum + parseFloat(item.costPrice?.toString() || item.price.toString()) * item.quantity,
       0
     );
     const deadStockTrend = 0;

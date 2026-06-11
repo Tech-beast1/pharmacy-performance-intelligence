@@ -1,0 +1,8 @@
+{
+  "query": "SELECT id, branch_id, branch_name, month, dead_stock_value, expiry_risk_loss FROM branch_metrics WHERE branch_name = 'Tema Branch' AND month LIKE '2026-06%' ORDER BY created_at DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute SELECT id, branch_id, branch_name, month, dead_stock_value, expiry_risk_loss FROM branch_metrics WHERE branch_name = 'Tema Branch' AND month LIKE '2026-06%' ORDER BY created_at DESC LIMIT 5;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 1: Table 's4ykwncqjtuwgj5jfbbkiz.branch_metrics' doesn't exist"
+  ]
+}
