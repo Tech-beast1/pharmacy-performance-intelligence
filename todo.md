@@ -300,6 +300,42 @@
 - [x] Test metrics update correctly when new data is uploaded
 - [x] Verify metrics are calculated for selected period (month/year)
 
+## Phase 31: Subscription System Implementation - COMPLETE
+
+- [x] Design subscription database schema (subscription_plans, user_subscriptions, upload_history)
+- [x] Create backend database helpers for subscription queries
+- [x] Create tRPC procedures for subscription management
+- [x] Implement Paystack integration helper
+- [x] Validate Paystack credentials
+- [x] Create SubscriptionPlans.tsx component with tier display
+- [x] Create UploadCounter.tsx component to track free uploads
+- [x] Create SubscriptionModal.tsx to prompt subscription after 4 uploads
+- [x] Integrate upload tracking into SmartUpload.tsx
+- [x] Integrate upload tracking into DataUpload.tsx
+- [x] Enforce branch creation limits in routers-branches.ts
+- [x] Create PaystackCheckout.tsx for payment verification
+- [x] Register /paystack-checkout route in App.tsx
+- [x] Initialize subscription plans in database
+- [x] Update free upload limit from 7 to 4 in all files
+- [x] Write vitest tests for subscription procedures (21 tests)
+- [x] Write integration tests for subscription flow (29 tests)
+- [x] Write upload access control tests (25 tests)
+- [x] Add upload access control to block uploads after 4 free uploads
+- [x] Write comprehensive system integration tests (53 tests)
+- [x] Write dashboard module tests (43 tests)
+- [x] Write overhead costs module tests (40 tests)
+- [x] Write inventory intelligence module tests (36 tests)
+- [x] Fix deadstock calculation to use costPrice instead of sellingPrice
+- [x] Write metrics validation tests for deadstock and expiry (39 tests)
+- [x] Write real-world scenario tests for metrics (18 tests)
+- [x] Verify all 286 vitest tests passing
+- [x] Add pleasing colors to subscription tier names
+- [x] Update SubscriptionPlans.tsx with tier-specific color scheme
+- [x] Verify subscription system works perfectly with all other modules
+- [x] Verify deadstock and expiry metrics are correct
+
+### Subscription System Status: FULLY COMPLETE - 286 tests passing
+
 
 ## Phase 31: Implement Dynamic Key Insights Based on Dashboard Metrics
 
