@@ -578,9 +578,10 @@ export async function getBranchMetrics(branchId: number, month: string) {
       }
 
       // Dead stock (products that have NOT been purchased - no sales activity)
-      // Check if this product has any sales transactions
-      const hasSales = sales.some(s => s.productName === item.productName);
-      if (!hasSales) {
+      // Check if this product has any sales transactions (case-insensitive)
+      const normalizedItemName = item.productName?.toLowerCase().trim() || '';
+      const hasSales = sales.some(s => (s.productName?.toLowerCase().trim() || '') === normalizedItemName);
+      if (!hasSales && item.quantity > 0) {
         const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
         deadStockValue += costPrice * quantity;
@@ -741,12 +742,14 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
       }
     }
 
-    // Process deadstock (per-branch - count each branch's unsold inventory separately)
-    for (const item of allInv) {
-      // Dead stock (products that have NOT been purchased in this branch)
-      // Check if this product has sales in this specific branch
-      const hasSalesInBranch = allSales.some(s => s.productName === item.productName && s.branchId === item.branchId);
-      if (!hasSalesInBranch && item.quantity > 0) {
+    // Process deadstock (use deduplicated inventory to match Inventory Intelligence view)
+    // For consolidated view, we show unique products with no sales across all branches
+    for (const item of Array.from(deduplicatedInv.values())) {
+      // Dead stock (products that have NOT been purchased anywhere)
+      // Check if this product has any sales across all branches (case-insensitive)
+      const normalizedItemName = item.productName?.toLowerCase().trim() || '';
+      const hasSalesAnywhere = allSales.some(s => (s.productName?.toLowerCase().trim() || '') === normalizedItemName);
+      if (!hasSalesAnywhere && item.quantity > 0) {
         const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
         deadStockValue += costPrice * quantity;
