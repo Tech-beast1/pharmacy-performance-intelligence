@@ -742,13 +742,14 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
       }
     }
 
-    // Process deadstock (per-branch - count each branch's unsold inventory separately)
-    for (const item of allInv) {
-      // Dead stock (products that have NOT been purchased in this branch)
-      // Check if this product has sales in this specific branch (case-insensitive)
+    // Process deadstock (use deduplicated inventory to match Inventory Intelligence view)
+    // For consolidated view, we show unique products with no sales across all branches
+    for (const item of Array.from(deduplicatedInv.values())) {
+      // Dead stock (products that have NOT been purchased anywhere)
+      // Check if this product has any sales across all branches (case-insensitive)
       const normalizedItemName = item.productName?.toLowerCase().trim() || '';
-      const hasSalesInBranch = allSales.some(s => (s.productName?.toLowerCase().trim() || '') === normalizedItemName && s.branchId === item.branchId);
-      if (!hasSalesInBranch && item.quantity > 0) {
+      const hasSalesAnywhere = allSales.some(s => (s.productName?.toLowerCase().trim() || '') === normalizedItemName);
+      if (!hasSalesAnywhere && item.quantity > 0) {
         const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
         deadStockValue += costPrice * quantity;
