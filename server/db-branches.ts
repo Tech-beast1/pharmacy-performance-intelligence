@@ -717,6 +717,7 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
       }
     }
 
+    // Process expiry risk (deduplicated - unique products)
     for (const item of Array.from(deduplicatedInv.values())) {
       // Expiry risk (products expiring within 30 days from the start of the selected month)
       if (item.expiryDate) {
@@ -729,16 +730,6 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
         }
       }
 
-      // Dead stock (products that have NOT been purchased in this branch)
-      // Check if this product has sales in this specific branch
-      const hasSalesInBranch = allSales.some(s => s.productName === item.productName && s.branchId === item.branchId);
-      if (!hasSalesInBranch) {
-        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
-        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
-        deadStockValue += costPrice * quantity;
-        deadStockCount++;
-      }
-
       // Low margin (less than 20%)
       if (item.price && item.costPrice) {
         const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any);
@@ -747,6 +738,19 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
         if (margin < 20) {
           lowMarginCount++;
         }
+      }
+    }
+
+    // Process deadstock (per-branch - count each branch's unsold inventory separately)
+    for (const item of allInv) {
+      // Dead stock (products that have NOT been purchased in this branch)
+      // Check if this product has sales in this specific branch
+      const hasSalesInBranch = allSales.some(s => s.productName === item.productName && s.branchId === item.branchId);
+      if (!hasSalesInBranch && item.quantity > 0) {
+        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+        deadStockValue += costPrice * quantity;
+        deadStockCount++;
       }
     }
 
