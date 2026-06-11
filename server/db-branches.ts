@@ -729,10 +729,10 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
         }
       }
 
-      // Dead stock (products that have NOT been purchased - no sales activity)
-      // Check if this product has any sales transactions
-      const hasSales = allSales.some(s => s.productName === item.productName);
-      if (!hasSales) {
+      // Dead stock (products that have NOT been purchased in this branch)
+      // Check if this product has sales in this specific branch
+      const hasSalesInBranch = allSales.some(s => s.productName === item.productName && s.branchId === item.branchId);
+      if (!hasSalesInBranch) {
         const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
         deadStockValue += costPrice * quantity;
