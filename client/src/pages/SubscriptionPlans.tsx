@@ -195,11 +195,11 @@ export function SubscriptionPlans() {
             </div>
             <div>
               <h3 className="font-semibold text-slate-900 mb-2">
-                What happens after my free uploads?
+                Which plan is right for me?
               </h3>
               <p className="text-slate-600">
-                After 4 free uploads, you'll need to subscribe to continue uploading
-                data to your pharmacy system.
+                Choose based on your needs: Silver for single pharmacies, Gold for small chains (2-3 branches),
+                Diamond for growing chains (4-5 branches), and Platinum for enterprises with unlimited branches.
               </p>
             </div>
             <div>
