@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO subscription_plans (tier, name, description, price, maxBranches, features) VALUES\n('silver', 'Silver', 'Perfect for single pharmacies', 350, 1, 'Unlimited uploads,Full analytics,Email support'),\n('gold', 'Gold', 'For growing pharmacy chains', 850, 3, 'Unlimited uploads,Full analytics,Priority support,Up to 3 branches'),\n('diamond', 'Diamond', 'For established chains', 1500, 5, 'Unlimited uploads,Full analytics,Priority support,Up to 5 branches'),\n('platinum', 'Platinum', 'Enterprise solution', 3000, NULL, 'Unlimited uploads,Full analytics,24/7 support,Unlimited branches,Dedicated manager')\nON DUPLICATE KEY UPDATE name=name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2rNsE53yHctkr9s.root --database S4YkwNcqjTUWGj5JFbbkiz --execute INSERT INTO subscription_plans (tier, name, description, price, maxBranches, features) VALUES\n('silver', 'Silver', 'Perfect for single pharmacies', 350, 1, 'Unlimited uploads,Full analytics,Email support'),\n('gold', 'Gold', 'For growing pharmacy chains', 850, 3, 'Unlimited uploads,Full analytics,Priority support,Up to 3 branches'),\n('diamond', 'Diamond', 'For established chains', 1500, 5, 'Unlimited uploads,Full analytics,Priority support,Up to 5 branches'),\n('platinum', 'Platinum', 'Enterprise solution', 3000, NULL, 'Unlimited uploads,Full analytics,24/7 support,Unlimited branches,Dedicated manager')\nON DUPLICATE KEY UPDATE name=name;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'features' in 'field list'"
+  ]
+}

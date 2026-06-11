@@ -20,6 +20,13 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  // Subscription fields
+  uploadCount: int("uploadCount").default(0).notNull(),
+  subscriptionTier: varchar("subscriptionTier", { length: 50 }).default("free").notNull(),
+  subscriptionStatus: varchar("subscriptionStatus", { length: 50 }).default("inactive").notNull(),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  subscriptionExpiryDate: timestamp("subscriptionExpiryDate"),
 });
 
 export type User = typeof users.$inferSelect;
@@ -255,3 +262,38 @@ export const branchUsers = mysqlTable("branch_users", {
 
 export type BranchUser = typeof branchUsers.$inferSelect;
 export type InsertBranchUser = typeof branchUsers.$inferInsert;
+
+/**
+ * UploadHistory table tracks all file uploads for subscription management.
+ * Used to count free uploads and enforce upload limits.
+ */
+export const uploadHistory = mysqlTable("upload_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  fileName: varchar("fileName", { length: 255 }).notNull(),
+  recordCount: int("recordCount").default(0).notNull(),
+  uploadDate: timestamp("uploadDate").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UploadHistory = typeof uploadHistory.$inferSelect;
+export type InsertUploadHistory = typeof uploadHistory.$inferInsert;
+
+/**
+ * SubscriptionPlans table stores the 4 subscription tiers.
+ * Silver (GHS 350), Gold (GHS 850), Diamond (GHS 1,500), Platinum (GHS 3,000)
+ */
+export const subscriptionPlans = mysqlTable("subscription_plans", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  tier: varchar("tier", { length: 50 }).notNull().unique(),
+  price: int("price").notNull(),
+  maxBranches: int("maxBranches"),
+  stripePriceId: varchar("stripePriceId", { length: 255 }),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;

@@ -60,6 +60,7 @@ export default function SmartUpload({ uploadDate, branchId }: SmartUploadProps) 
 
   const detectColumnsMutation = trpc.upload.detectColumns.useMutation();
   const processFileMutation = trpc.upload.processFile.useMutation();
+  const trackUploadMutation = trpc.subscription.trackUpload.useMutation();
   const utils = trpc.useUtils();
 
   // Update effectiveUploadDate whenever uploadDate prop changes
@@ -226,12 +227,26 @@ export default function SmartUpload({ uploadDate, branchId }: SmartUploadProps) 
         if ((result.errorCount || 0) > 0) {
           toast.warning(`${result.errorCount} rows had errors and were skipped`);
         }
-              // Invalidate all dashboard-related queries to refresh with new data
+        
+        // Track the upload for subscription management
+        try {
+          await trackUploadMutation.mutateAsync({
+            fileName: fileName,
+            recordCount: result.processedCount || 0,
+          });
+        } catch (trackError) {
+          console.error('Failed to track upload:', trackError);
+        }
+        
+        // Invalidate all dashboard-related queries to refresh with new data
         await utils.branches.metrics.consolidated.invalidate();
         await utils.branches.metrics.branch.invalidate();
         await utils.overheadCosts.getByMonth.invalidate();
         await utils.overheadCosts.getConsolidated.invalidate();
-        await utils.analytics.getDashboardMetrics.invalidate();       
+        await utils.analytics.getDashboardMetrics.invalidate();
+        // Invalidate subscription status to update upload count
+        await utils.subscription.getStatus.invalidate();
+        
         // Reset after 2 seconds
         setTimeout(() => {
           resetUpload();

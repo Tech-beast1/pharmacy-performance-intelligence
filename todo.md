@@ -2310,3 +2310,40 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - [x] Setup time should be reduced from 3 minutes to under 30 seconds
 
 ### Status: COMPLETE - Setup performance fully optimized by eliminating unnecessary database queries
+
+
+## Phase 30: Subscription System Implementation - IN PROGRESS
+
+### Tasks:
+- [x] Design database schema for subscriptions (subscription_plans, user_subscriptions, upload_history)
+- [x] Create backend database helpers (db-subscriptions.ts) for subscription queries
+- [x] Create tRPC procedures for subscription management (routers-subscriptions.ts)
+- [x] Implement Paystack integration helper (paystack.ts)
+- [x] Validate Paystack credentials via test script
+- [x] Create SubscriptionPlans.tsx component with tier display
+- [x] Create UploadCounter.tsx component to track free uploads
+- [x] Create SubscriptionModal.tsx to prompt subscription after 4 uploads
+- [x] Integrate upload tracking into SmartUpload.tsx
+- [x] Integrate upload tracking into DataUpload.tsx
+- [x] Enforce branch creation limits in routers-branches.ts
+- [x] Create PaystackCheckout.tsx for payment verification
+- [x] Register /paystack-checkout route in App.tsx
+- [x] Initialize subscription plans in database
+- [x] Update free upload limit from 7 to 4 in all files
+- [x] Update SubscriptionPlans.tsx text to reference 4 free uploads
+- [x] Update db-subscriptions.ts to check for 4-upload limit
+- [x] Update routers-subscriptions.ts calculations for 4-upload limit
+- [x] Write vitest tests for subscription procedures (with 4-upload limit)
+- [ ] Perform end-to-end test of 4-upload limit
+- [ ] Perform end-to-end test of Paystack payment flow
+- [ ] Verify SubscriptionModal triggers correctly at upload limit
+- [ ] Test subscription tier enforcement for branch creation
+- [ ] Verify existing functionality not broken by subscription system
+
+### Implementation Details:
+- 4 free uploads before subscription required (changed from 7)
+- 4 Tiers: Silver (₵350, 1 branch), Gold (₵850, 2-3 branches), Diamond (₵1,500, 4-5 branches), Platinum (₵3,000, unlimited)
+- Paystack payment processing in GHS currency
+- Subscription applies to both single pharmacy and organization users
+
+### Status: NEARLY COMPLETE - Subscription system fully implemented with 4-upload limit. Routes registered, frontend components created, Paystack integration ready, plans initialized. Ready for end-to-end testing.
