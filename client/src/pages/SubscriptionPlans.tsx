@@ -205,11 +205,11 @@ export function SubscriptionPlans() {
             </div>
             <div>
               <h3 className="font-semibold text-slate-900 mb-2">
-                Do you offer refunds?
+                Can I add more branches later?
               </h3>
               <p className="text-slate-600">
-                We offer a 7-day money-back guarantee if you're not satisfied with
-                your subscription.
+                Yes, you can upgrade your plan anytime to add more branches. Simply
+                upgrade your subscription and the new branch limit takes effect immediately.
               </p>
             </div>
           </div>
