@@ -50,6 +50,41 @@ export function SubscriptionPlans() {
     ],
   };
 
+  const tierColors = {
+    silver: {
+      name: "text-slate-700",
+      price: "text-slate-800",
+      border: "border-slate-300",
+      button: "bg-slate-600 hover:bg-slate-700",
+      checkmark: "text-slate-500",
+      badge: "bg-slate-600",
+    },
+    gold: {
+      name: "text-amber-700",
+      price: "text-amber-800",
+      border: "border-amber-300",
+      button: "bg-amber-600 hover:bg-amber-700",
+      checkmark: "text-amber-500",
+      badge: "bg-amber-600",
+    },
+    diamond: {
+      name: "text-cyan-700",
+      price: "text-cyan-800",
+      border: "border-cyan-300",
+      button: "bg-cyan-600 hover:bg-cyan-700",
+      checkmark: "text-cyan-500",
+      badge: "bg-cyan-600",
+    },
+    platinum: {
+      name: "text-purple-700",
+      price: "text-purple-800",
+      border: "border-purple-400",
+      button: "bg-purple-600 hover:bg-purple-700",
+      checkmark: "text-purple-500",
+      badge: "bg-purple-600",
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -65,73 +100,74 @@ export function SubscriptionPlans() {
 
         {/* Plans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {plans?.map((plan) => (
-            <Card
-              key={plan.tier}
-              className={`relative flex flex-col transition-all duration-300 ${
-                plan.tier === "platinum"
-                  ? "lg:scale-105 border-2 border-blue-500 shadow-lg"
-                  : "hover:shadow-lg"
-              }`}
-            >
-              {plan.tier === "platinum" && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    Most Popular
-                  </span>
-                </div>
-              )}
-
-              <CardHeader>
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                <CardDescription>{plan.description}</CardDescription>
-              </CardHeader>
-
-              <CardContent className="flex-1 flex flex-col">
-                {/* Price */}
-                <div className="mb-6">
-                  <div className="text-4xl font-bold text-slate-900">
-                    ₵{plan.price.toLocaleString()}
+          {plans?.map((plan) => {
+            const colors = tierColors[plan.tier as keyof typeof tierColors];
+            return (
+              <Card
+                key={plan.tier}
+                className={`relative flex flex-col transition-all duration-300 border-2 ${colors.border} ${
+                  plan.tier === "platinum"
+                    ? "lg:scale-105 shadow-lg"
+                    : "hover:shadow-lg"
+                }`}
+              >
+                {plan.tier === "platinum" && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span className={`${colors.badge} text-white px-4 py-1 rounded-full text-sm font-semibold`}>
+                      Most Popular
+                    </span>
                   </div>
-                  <p className="text-sm text-slate-600 mt-1">per month</p>
-                </div>
+                )}
 
-                {/* Features */}
-                <div className="mb-6 flex-1">
-                  <ul className="space-y-3">
-                    {planFeatures[plan.tier as keyof typeof planFeatures]?.map(
-                      (feature, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-sm text-slate-700">{feature}</span>
-                        </li>
-                      )
+                <CardHeader>
+                  <CardTitle className={`text-2xl font-bold ${colors.name}`}>
+                    {plan.name}
+                  </CardTitle>
+                  <CardDescription>{plan.description}</CardDescription>
+                </CardHeader>
+
+                <CardContent className="flex-1 flex flex-col">
+                  {/* Price */}
+                  <div className="mb-6">
+                    <div className={`text-4xl font-bold ${colors.price}`}>
+                      ₵{plan.price.toLocaleString()}
+                    </div>
+                    <p className="text-sm text-slate-600 mt-1">per month</p>
+                  </div>
+
+                  {/* Features */}
+                  <div className="mb-6 flex-1">
+                    <ul className="space-y-3">
+                      {planFeatures[plan.tier as keyof typeof planFeatures]?.map(
+                        (feature, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <Check className={`h-5 w-5 flex-shrink-0 mt-0.5 ${colors.checkmark}`} />
+                            <span className="text-sm text-slate-700">{feature}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+
+                  {/* CTA Button */}
+                  <Button
+                    onClick={() => handleSubscribe(plan.tier)}
+                    disabled={loading && selectedTier === plan.tier}
+                    className={`w-full font-semibold text-white ${colors.button}`}
+                  >
+                    {loading && selectedTier === plan.tier ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      "Subscribe Now"
                     )}
-                  </ul>
-                </div>
-
-                {/* CTA Button */}
-                <Button
-                  onClick={() => handleSubscribe(plan.tier)}
-                  disabled={loading && selectedTier === plan.tier}
-                  className={`w-full ${
-                    plan.tier === "platinum"
-                      ? "bg-blue-600 hover:bg-blue-700"
-                      : "bg-slate-800 hover:bg-slate-900"
-                  }`}
-                >
-                  {loading && selectedTier === plan.tier ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    "Subscribe Now"
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {/* FAQ or Info Section */}
