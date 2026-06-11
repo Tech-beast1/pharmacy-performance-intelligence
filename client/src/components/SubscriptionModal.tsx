@@ -31,7 +31,7 @@ export function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
               Upgrade Your Plan
             </CardTitle>
             <CardDescription>
-              You've used all your free uploads
+              You've used all 4 of your free uploads
             </CardDescription>
           </div>
           <button
@@ -45,7 +45,7 @@ export function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
         <CardContent className="space-y-4">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-slate-700 mb-4">
-              You've completed your 7 free uploads. Subscribe to one of our plans to continue uploading and managing your pharmacy data.
+              You've completed your 4 free uploads. Subscribe to one of our plans to continue uploading and managing your pharmacy data.
             </p>
 
             <div className="space-y-2 mb-4">

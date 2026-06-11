@@ -2334,6 +2334,11 @@ Updated Dead Stock Value calculation to use Cost Price instead of Selling Price.
 - [x] Update db-subscriptions.ts to check for 4-upload limit
 - [x] Update routers-subscriptions.ts calculations for 4-upload limit
 - [x] Write vitest tests for subscription procedures (with 4-upload limit)
+- [x] Update UploadCounter.tsx to use 4 free uploads
+- [x] Update SubscriptionModal.tsx to use 4 free uploads
+- [x] Write comprehensive vitest tests for subscription procedures (21 tests)
+- [x] Write comprehensive integration tests for subscription flow (29 tests)
+- [x] All 50 vitest tests passing
 - [ ] Perform end-to-end test of 4-upload limit
 - [ ] Perform end-to-end test of Paystack payment flow
 - [ ] Verify SubscriptionModal triggers correctly at upload limit
