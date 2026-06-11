@@ -9,6 +9,7 @@ export function SubscriptionPlans() {
   const [loading, setLoading] = useState(false);
 
   const { data: plans, isLoading } = trpc.subscription.getPlans.useQuery();
+  const { data: subscriptionStatus } = trpc.subscription.getStatus.useQuery();
   const createCheckoutMutation = trpc.subscription.createCheckoutSession.useMutation();
 
   const handleSubscribe = async (tier: string) => {
@@ -91,11 +92,18 @@ export function SubscriptionPlans() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">
-            Choose Your Plan
+            {subscriptionStatus?.hasReachedLimit ? "Upgrade Your Plan" : "Choose Your Plan"}
           </h1>
-          <p className="text-xl text-slate-600">
-            Start with 4 free uploads, then upgrade to unlock unlimited access
-          </p>
+          {!subscriptionStatus?.hasReachedLimit && (
+            <p className="text-xl text-slate-600">
+              Start with 4 free uploads, then upgrade to unlock unlimited access
+            </p>
+          )}
+          {subscriptionStatus?.hasReachedLimit && (
+            <p className="text-xl text-slate-600">
+              You've used all 4 free uploads. Subscribe now to continue uploading and unlock unlimited features.
+            </p>
+          )}
         </div>
 
         {/* Plans Grid */}
