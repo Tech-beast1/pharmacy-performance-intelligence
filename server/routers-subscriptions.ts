@@ -137,6 +137,15 @@ export const subscriptionRouter = router({
     .input(z.object({ tier: z.string() }))
     .mutation(async ({ ctx, input }) => {
       try {
+        // Validate tier is one of the valid options
+        const validTiers = ["silver", "gold", "diamond", "platinum"];
+        if (!validTiers.includes(input.tier)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Invalid tier: ${input.tier}. Must be one of: ${validTiers.join(", ")}`,
+          });
+        }
+
         const plan = await getSubscriptionPlanByTier(input.tier);
         if (!plan) {
           throw new TRPCError({
@@ -153,17 +162,21 @@ export const subscriptionRouter = router({
           });
         }
 
+        // Create reference that includes user ID for tracking
+        const reference = `${ctx.user.id}-${input.tier}-${Date.now()}`;
+        
         const transaction = await initializeTransaction(
           ctx.user.email,
           plan.price,
-          `${ctx.user.id}-${Date.now()}` // Unique reference
+          reference
         );
 
         return {
           authorizationUrl: transaction.authorization_url,
           accessCode: transaction.access_code,
           reference: transaction.reference,
-          tier: input.tier,
+          // NOTE: tier is NOT returned to client to prevent URL manipulation
+          // tier is determined server-side from payment amount during verification
           amount: plan.price,
         };
       } catch (error) {
@@ -177,9 +190,10 @@ export const subscriptionRouter = router({
 
   /**
    * Verify Paystack payment and activate subscription
+   * SECURITY: Tier is determined from payment amount, not from client input
    */
   verifyAndActivateSubscription: protectedProcedure
-    .input(z.object({ reference: z.string(), tier: z.string() }))
+    .input(z.object({ reference: z.string() }))
     .mutation(async ({ ctx, input }) => {
       try {
         // Verify the transaction with Paystack
@@ -192,10 +206,25 @@ export const subscriptionRouter = router({
           });
         }
 
-        // Activate subscription
+        // Determine tier from payment amount (in pesewas, divide by 100 to get GHS)
+        const amountInGHS = transaction.amount / 100;
+        let tier = "free";
+        
+        if (amountInGHS === 350) tier = "silver";
+        else if (amountInGHS === 850) tier = "gold";
+        else if (amountInGHS === 1500) tier = "diamond";
+        else if (amountInGHS === 3000) tier = "platinum";
+        else {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Invalid payment amount: ₵${amountInGHS}. Expected one of: 350, 850, 1500, 3000`,
+          });
+        }
+
+        // Activate subscription with tier determined from payment amount
         await updateUserSubscription(
           ctx.user.id,
-          input.tier,
+          tier,
           transaction.reference,
           transaction.reference
         );
@@ -203,7 +232,7 @@ export const subscriptionRouter = router({
         return {
           success: true,
           message: "Subscription activated successfully",
-          tier: input.tier,
+          tier,
           reference: transaction.reference,
         };
       } catch (error) {

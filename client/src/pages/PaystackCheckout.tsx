@@ -8,16 +8,17 @@ import { Loader2 } from 'lucide-react';
 export function PaystackCheckout() {
   const [searchParams] = useSearchParams();
   const reference = searchParams.get('reference');
-  const tier = searchParams.get('tier');
+  // NOTE: tier is NOT read from URL - it's determined server-side from payment amount
 
   const verifyMutation = trpc.subscription.verifyAndActivateSubscription.useMutation();
 
   useEffect(() => {
-    if (reference && tier) {
+    if (reference) {
       // Auto-verify payment after redirect from Paystack
-      verifyMutation.mutate({ reference, tier });
+      // Tier will be determined server-side from payment amount
+      verifyMutation.mutate({ reference });
     }
-  }, [reference, tier]);
+  }, [reference]);
 
   if (verifyMutation.isPending) {
     return (
@@ -38,7 +39,7 @@ export function PaystackCheckout() {
           <div className="text-4xl mb-4">✅</div>
           <h1 className="text-2xl font-bold mb-2">Payment Successful!</h1>
           <p className="text-gray-600 mb-6">
-            Your {tier} subscription has been activated. You now have unlimited uploads and access to all features.
+            Your subscription has been activated successfully! You now have unlimited uploads and access to all features.
           </p>
           <Button asChild className="w-full">
             <a href="/">Go to Dashboard</a>
