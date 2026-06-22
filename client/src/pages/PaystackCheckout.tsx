@@ -10,7 +10,13 @@ export function PaystackCheckout() {
   const reference = searchParams.get('reference');
   // NOTE: tier is NOT read from URL - it's determined server-side from payment amount
 
-  const verifyMutation = trpc.subscription.verifyAndActivateSubscription.useMutation();
+  const utils = trpc.useUtils();
+  const verifyMutation = trpc.subscription.verifyAndActivateSubscription.useMutation({
+    onSuccess: async () => {
+      // Invalidate subscription status cache to refresh UI immediately
+      await utils.subscription.getStatus.invalidate();
+    },
+  });
 
   useEffect(() => {
     if (reference) {
@@ -41,8 +47,8 @@ export function PaystackCheckout() {
           <p className="text-gray-600 mb-6">
             Your subscription has been activated successfully! You now have unlimited uploads and access to all features.
           </p>
-          <Button asChild className="w-full">
-            <a href="/">Go to Dashboard</a>
+          <Button onClick={() => window.location.href = '/'} className="w-full">
+            Go to Dashboard
           </Button>
         </Card>
       </div>
@@ -59,11 +65,11 @@ export function PaystackCheckout() {
             {verifyMutation.error?.message || 'There was an error processing your payment. Please try again.'}
           </p>
           <div className="flex gap-3">
-            <Button variant="outline" className="flex-1" asChild>
-              <a href="/subscription">Back to Plans</a>
+            <Button variant="outline" className="flex-1" onClick={() => window.location.href = '/subscription'}>
+              Back to Plans
             </Button>
-            <Button className="flex-1" asChild>
-              <a href="/">Go Home</a>
+            <Button className="flex-1" onClick={() => window.location.href = '/'}>
+              Go Home
             </Button>
           </div>
         </Card>
