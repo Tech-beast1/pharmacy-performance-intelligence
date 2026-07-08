@@ -1,0 +1,46 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [
+    "db",
+    "server",
+    "user"
+  ],
+  "dev_command": "pnpm run dev",
+  "env_vars": {
+    "DATABASE_URL": "mysql://2rNsE53yHctkr9s.root:BA129N3YryqQ44jXdayU@gateway05.us-east-1.prod.aws.tidbcloud.com:4000/S4YkwNcqjTUWGj5JFbbkiz?ssl={\"rejectUnauthorized\":true}"
+  },
+  "experiments": [
+    "no_db_push"
+  ],
+  "git_remote": {
+    "repo_url": "s3://vida-prod-gitrepo/webdev-git/310519663468724713/S4YkwNcqjTUWGj5JFbbkiz",
+    "access_key_id": "ASIAZV3A2ECZN46VB7LA",
+    "secret_access_key": "xeNLKmjU4NRIdiIeQoxMzs4tzt7uvG0I5w1h5CmH",
+    "session_token": "IQoJb3JpZ2luX2VjEL3//////////wEaCXVzLWVhc3QtMSJHMEUCIFIfR4XwdTfbAr5Ej+xKbOmdLkhmoBBANLJiDJR78/SSAiEAydiWd0aoZNttAvTcm8tndpd8r2Qz43fHL7OyXgbRorgq/wMIhf//////////ARAEGgw2NjUzODYwOTg4NjYiDBg4eSBSQkbzolDsJSrTA8mnYt1ox2gaEqdhAUx9Cusa53ORWqRICMD4dsLbEQ9NY/3V7GtjoSLsj2UardB5KOsaZfO6zpUSysnNGcgU/up6vLff9Fr9fhpD88R/L2ecEghIB+5f8MUUrdbl6KD05DaxnvRfzRiH5hZ6Gj+jP4NTsWkYgRXs5Lg61yLQ37TWcSyMDCzfuLUWHuGw/yFKL7Ayka6A5qUNldKAl/uS41EWxw3/bsQuAfPWzY8+o4+v2zeYWsKQGz6bLjMBJW3ScaBtIRey6VyijCtzkwMcAw9dFugafdVROdrReglN6K5F5FzS+thwde9nANrLz5vAgBFax/RrT1CCKJkb5yNK18rZGWnETEBs8NMFopbX4inkmH4umSLvnqoXNwePI27XekkXKEfyfzdeda7TDJZzfHOt9dm7/RNnS8QULLDm5xheT6z3jd4MKGoNor6ZyaBmrz70tS/cIPsvV286Ui+RK2Hc2VVjK1o8K6ImU737GYjHylhJVkQ1f9V6BxTPjSszL7qC9j1p17lughrt+er2OruqSXvUIGxQPkF0WtUQ2co2TRU6YSyo1l39cKVR2SgvCfKMW2jCGl7/aghhRHA/9IAraE6nVlyJufrFqT2vGJNZ4hucMO3+uNIGOp0BwQvbqCidW7GZsjKs7nQ0kKYnFoeyhnJulcDeMs4YBeZqqJyp9ltv+bqnnnSRwLTxyL0UsH3g/mh8GDU02NKqdag5lvYb5g6pnuqx/Y/ZXssszZfWHPS6qbmpD4gkiIojir43TTYVH+Ugt71yTOdcXN/Sic3OAss0zYUg2ZNxGlgwSO9NjRy4l91RuDFB4Z9CNm3XjtFWm9/6zjgKhw==",
+    "expiration": "2026-07-09T00:15:41.000Z",
+    "backend": "GIT_BACKEND_S3"
+  },
+  "name": "pharmacy-performance-intelligence",
+  "path": "/home/ubuntu/pharmacy-performance-intelligence",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "J3n6fKe2wZruPkKEeZDRRm",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "XTAmgwZiKdwyjG5rVzBYVa",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "dedzocharles37",
+    "OWNER_OPEN_ID": "f4ZjSkKY5ouidFYZPubAgg",
+    "PAYSTACK_PUBLIC_KEY": "pk_live_3a9d8198c50a3c92abea82cf3d50fcfd4d2c3f53",
+    "PAYSTACK_SECRET_KEY": "sk_live_f36448090c5a34f2a34f6feb6f38dc7e57eec947",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "cca2e7f1-3048-46d2-8d6f-2dc1e649815c",
+    "VITE_APP_ID": "S4YkwNcqjTUWGj5JFbbkiz",
+    "VITE_APP_LOGO": "https://files.manuscdn.com/user_upload_by_module/web_dev_logo/310519663468724713/XOFhYEoaYOquYmSd.png",
+    "VITE_APP_TITLE": "Pharmacy Performance Intelligence (PPI)",
+    "VITE_FRONTEND_FORGE_API_KEY": "CgTAkb2QCfkpgMeKEza4j7",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-db-user",
+  "test_command": "pnpm test"
+}

@@ -12,8 +12,6 @@ import InventoryIntelligence from "./pages/InventoryIntelligence";
 
 import OverheadCosts from "./pages/OverheadCosts";
 import Settings from "./pages/Settings";
-import { SubscriptionPlans } from "./pages/SubscriptionPlans";
-import { PaystackCheckout } from "./pages/PaystackCheckout";
 import { AnimatedBackground } from "./components/AnimatedBackground";
 import { SignupFlow } from "./components/SignupFlow";
 import { trpc } from "./lib/trpc";
@@ -44,7 +42,6 @@ function Router() {
 
   return (
     <Switch>
-      <Route path="/paystack-checkout" component={PaystackCheckout} />
       <Route path="/" nest>
         <DashboardLayout>
           <Switch>
@@ -54,7 +51,6 @@ function Router() {
 
             <Route path="/overhead" component={OverheadCosts} />
             <Route path="/settings" component={Settings} />
-            <Route path="/subscription" component={SubscriptionPlans} />
             <Route component={NotFound} />
           </Switch>
         </DashboardLayout>

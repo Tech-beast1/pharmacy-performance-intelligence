@@ -27,7 +27,6 @@ import {
   getBranchMetrics,
   getBranchBreakdown,
 } from "./db-branches";
-import { getUserSubscription } from "./db-subscriptions";
 
 export const branchesRouter = router({
   // User Type Management
@@ -127,22 +126,6 @@ export const branchesRouter = router({
           if (!org || org.ownerId !== ctx.user!.id) {
             throw new TRPCError({ code: "FORBIDDEN", message: "You don't have permission to create branches" });
           }
-
-          // Check subscription tier and enforce branch limits
-          const subscription = await getUserSubscription(ctx.user!.id);
-          const userSubscription = subscription || { tier: 'free', status: 'inactive' };
-          const existingBranches = await getBranchesByOrganization(input.organizationId);
-          const branchCount = existingBranches.length;
-
-          // Enforce branch limits based on subscription tier
-          if (userSubscription.tier === 'silver' && branchCount >= 1) {
-            throw new TRPCError({ code: "FORBIDDEN", message: "Silver plan only allows 1 branch. Please upgrade to add more branches." });
-          } else if (userSubscription.tier === 'gold' && branchCount >= 3) {
-            throw new TRPCError({ code: "FORBIDDEN", message: "Gold plan allows up to 3 branches. Please upgrade to add more branches." });
-          } else if (userSubscription.tier === 'diamond' && branchCount >= 5) {
-            throw new TRPCError({ code: "FORBIDDEN", message: "Diamond plan allows up to 5 branches. Please upgrade to add more branches." });
-          }
-          // Platinum tier has unlimited branches
 
           const branch = await createBranch(
             input.organizationId,

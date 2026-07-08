@@ -2,13 +2,11 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { branchesRouter } from "./routers-branches";
-import { subscriptionRouter } from "./routers-subscriptions";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getInventoryByUserId, upsertInventoryItem, getSalesTransactionsByUserId, insertSalesTransaction, getAlertsByUserId, upsertAlert, insertFileUpload, updateFileUploadStatus, getOverheadCostsByMonth, upsertOverheadCosts, getPharmacyProfileByUserId, upsertPharmacyProfile, clearAllUserData, getMonthlyMetricsByMonth, upsertMonthlyMetrics, saveUserPreferences, loadUserPreferences, removeDuplicateInventory } from "./db";
 import { getBranchesByOrganization, getUserType, getBranchMetrics, getConsolidatedBranchMetrics, getOrganizationsByOwner, getConsolidatedMetrics } from "./db-branches";
-import { hasReachedFreeUploadLimit, getUserSubscription } from "./db-subscriptions";
 
 import { parseCSV, transformRow, validateMapping, detectColumns, getExcelSheets, type ColumnMapping } from "./utils/fileParser";
 import { calculateDashboardMetrics, identifyAlerts, getTopProfitableProducts, getRevenueProfitTrend, type DashboardMetrics } from "./utils/analytics";
@@ -18,7 +16,6 @@ export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   branches: branchesRouter,
-  subscription: subscriptionRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -120,17 +117,6 @@ export const appRouter = router({
       )
       .mutation(async ({ input, ctx }) => {
         try {
-          // Check subscription limit BEFORE processing file
-          const hasReachedLimit = await hasReachedFreeUploadLimit(ctx.user!.id);
-          const subscription = await getUserSubscription(ctx.user!.id);
-          
-          if (hasReachedLimit && subscription.status !== 'active') {
-            throw new TRPCError({
-              code: 'FORBIDDEN',
-              message: 'Free upload limit reached. Please subscribe to continue uploading.',
-            });
-          }
-
           // Check user type to determine if branchId is required
           const userTypeData = await getUserType(ctx.user!.id);
           

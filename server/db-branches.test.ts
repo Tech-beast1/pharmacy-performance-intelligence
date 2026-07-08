@@ -25,15 +25,6 @@ let TEST_ORG_ID: number;
 let TEST_BRANCH_ID: number;
 let TEST_BRANCH_ID_2: number;
 
-// Cleanup function to remove test data
-async function cleanupTestData() {
-  try {
-    // Cleanup is handled by database isolation in tests
-  } catch (error) {
-    console.error('Cleanup error:', error);
-  }
-}
-
 describe('Multi-Branch Database Functions', () => {
   describe('User Type Management', () => {
     it('should set user type to organization_owner', async () => {

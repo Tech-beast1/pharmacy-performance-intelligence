@@ -578,10 +578,9 @@ export async function getBranchMetrics(branchId: number, month: string) {
       }
 
       // Dead stock (products that have NOT been purchased - no sales activity)
-      // Check if this product has any sales transactions (case-insensitive)
-      const normalizedItemName = item.productName?.toLowerCase().trim() || '';
-      const hasSales = sales.some(s => (s.productName?.toLowerCase().trim() || '') === normalizedItemName);
-      if (!hasSales && item.quantity > 0) {
+      // Check if this product has any sales transactions
+      const hasSales = sales.some(s => s.productName === item.productName);
+      if (!hasSales) {
         const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
         const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
         deadStockValue += costPrice * quantity;
@@ -718,7 +717,6 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
       }
     }
 
-    // Process expiry risk (deduplicated - unique products)
     for (const item of Array.from(deduplicatedInv.values())) {
       // Expiry risk (products expiring within 30 days from the start of the selected month)
       if (item.expiryDate) {
@@ -731,6 +729,16 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
         }
       }
 
+      // Dead stock (products that have NOT been purchased - no sales activity)
+      // Check if this product has any sales transactions
+      const hasSales = allSales.some(s => s.productName === item.productName);
+      if (!hasSales) {
+        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
+        deadStockValue += costPrice * quantity;
+        deadStockCount++;
+      }
+
       // Low margin (less than 20%)
       if (item.price && item.costPrice) {
         const price = typeof item.price === 'number' ? item.price : parseFloat(item.price as any);
@@ -739,21 +747,6 @@ export async function getConsolidatedBranchMetrics(organizationId: number, month
         if (margin < 20) {
           lowMarginCount++;
         }
-      }
-    }
-
-    // Process deadstock (use deduplicated inventory to match Inventory Intelligence view)
-    // For consolidated view, we show unique products with no sales across all branches
-    for (const item of Array.from(deduplicatedInv.values())) {
-      // Dead stock (products that have NOT been purchased anywhere)
-      // Check if this product has any sales across all branches (case-insensitive)
-      const normalizedItemName = item.productName?.toLowerCase().trim() || '';
-      const hasSalesAnywhere = allSales.some(s => (s.productName?.toLowerCase().trim() || '') === normalizedItemName);
-      if (!hasSalesAnywhere && item.quantity > 0) {
-        const costPrice = typeof item.costPrice === 'number' ? item.costPrice : parseFloat(item.costPrice as any) || 0;
-        const quantity = typeof item.quantity === 'number' ? item.quantity : parseFloat(item.quantity as any) || 0;
-        deadStockValue += costPrice * quantity;
-        deadStockCount++;
       }
     }
 
